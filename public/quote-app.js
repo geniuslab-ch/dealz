@@ -1,8 +1,7 @@
 (function () {
-  const STORAGE_KEY = "dealz_demo_history";
-
   let messages = [];
   let sending = false;
+  let greeted = false;
 
   function el(tag, cls, text) {
     const e = document.createElement(tag);
@@ -16,21 +15,18 @@
   }
 
   function renderUserMessage(container, text) {
-    const bubble = el("div", "dealz-msg user", text);
-    container.appendChild(bubble);
+    container.appendChild(el("div", "dealz-msg user", text));
     scrollToBottom(container);
   }
 
   function renderAssistantText(container, text) {
-    const bubble = el("div", "dealz-msg assistant", text);
-    container.appendChild(bubble);
+    container.appendChild(el("div", "dealz-msg assistant", text));
     scrollToBottom(container);
   }
 
   function renderQuoteCard(container, quote) {
     const card = el("div", "dealz-quote-card");
-    const head = el("div", "qc-head", "ESTIMATED QUOTE");
-    card.appendChild(head);
+    card.appendChild(el("div", "qc-head", "ESTIMATED QUOTE"));
     quote.items.forEach((item) => {
       const row = el("div", "qc-row");
       row.appendChild(el("span", null, item.label));
@@ -84,14 +80,12 @@
 
       for (const msg of data.messages) {
         if (msg.role === "assistant") {
-          const text = extractText(msg.content);
-          if (text) renderAssistantText(container, text);
+          const t = extractText(msg.content);
+          if (t) renderAssistantText(container, t);
         }
       }
 
-      if (data.quote) {
-        renderQuoteCard(container, data.quote);
-      }
+      if (data.quote) renderQuoteCard(container, data.quote);
     } catch (err) {
       typing.remove();
       renderAssistantText(container, "Network error — is the server running?");
@@ -103,48 +97,29 @@
   }
 
   function init() {
-    const launcher = el("button", null, "💬");
-    launcher.id = "dealz-launcher";
-    document.body.appendChild(launcher);
+    const container = document.getElementById("dealz-messages");
+    const input = document.getElementById("dealz-input");
+    const sendBtn = document.getElementById("dealz-send");
+    if (!container || !input || !sendBtn) return;
 
-    const widget = el("div");
-    widget.id = "dealz-widget";
-    widget.innerHTML = `
-      <div class="dealz-header">
-        <div>
-          <div class="title">AI Cleaning Quote</div>
-          <div class="subtitle">Usually replies instantly</div>
-        </div>
-        <button id="dealz-close" aria-label="Close">✕</button>
-      </div>
-      <div class="dealz-messages" id="dealz-messages"></div>
-      <div class="dealz-inputbar">
-        <input id="dealz-input" type="text" placeholder="Describe your cleaning job…" autocomplete="off" />
-        <button id="dealz-send">Send</button>
-      </div>
-    `;
-    document.body.appendChild(widget);
+    function greet() {
+      if (greeted) return;
+      greeted = true;
+      renderAssistantText(
+        container,
+        "Hi! Tell me a bit about the cleaning job you need — apartment size, type of cleaning, " +
+          "and any extras like oven or windows — and I'll work out a price on the spot."
+      );
+    }
 
-    const messagesEl = widget.querySelector("#dealz-messages");
-    const input = widget.querySelector("#dealz-input");
-    const sendBtn = widget.querySelector("#dealz-send");
-    const closeBtn = widget.querySelector("#dealz-close");
-
-    launcher.addEventListener("click", () => {
-      widget.classList.toggle("open");
-      if (widget.classList.contains("open") && messages.length === 0) {
-        renderAssistantText(
-          messagesEl,
-          "Hi! Tell me a bit about the cleaning job you need — for example, apartment size, " +
-            "type of cleaning, and any extras like oven or windows — and I'll work out a price."
-        );
-      }
+    document.addEventListener("dealz:tab", (e) => {
+      if (e.detail.tab === "quote") greet();
     });
-    closeBtn.addEventListener("click", () => widget.classList.remove("open"));
+    if (document.getElementById("tab-quote").classList.contains("active")) greet();
 
-    sendBtn.addEventListener("click", () => sendMessage(messagesEl, input, sendBtn, input.value));
+    sendBtn.addEventListener("click", () => sendMessage(container, input, sendBtn, input.value));
     input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") sendMessage(messagesEl, input, sendBtn, input.value);
+      if (e.key === "Enter") sendMessage(container, input, sendBtn, input.value);
     });
   }
 

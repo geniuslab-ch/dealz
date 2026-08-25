@@ -33,9 +33,10 @@ server.js              Express server, exposes POST /api/chat
 src/claude.js           System prompt, tool definition, Claude API call loop
 src/pricingEngine.js    Deterministic price calculation
 src/pricing.json        The company's pricing rules (stand-in for their Excel sheet)
-public/index.html       A demo "client website" with the widget embedded
-public/widget.js        The embeddable chat widget (vanilla JS, no build step)
-public/styles.css       Widget + demo page styling
+public/index.html       Full demo "client website" — Home / Services / About / Get a Quote / Contact
+public/tabs.js          Tab navigation (no page reloads, no framework)
+public/quote-app.js     The AI quote assistant, mounted inside the "Get a Quote" tab
+public/styles.css       Site + chat styling
 ```
 
 ## Running it locally
@@ -47,8 +48,16 @@ cp .env.example .env
 npm start
 ```
 
-Open http://localhost:3000 — it's a mock cleaning-company homepage with the chat bubble in the
-bottom-right corner. Click it and describe a job.
+Open http://localhost:3000 — it's a mock cleaning-company homepage. Click the **✨ Get a Quote**
+tab in the nav and describe a job.
+
+## Design
+
+The AI assistant lives on its own **"Get a Quote" tab** rather than a floating chat bubble — it
+reads as a real page of the site, sitting alongside Home / Services / About / Contact, with a
+"how it works" panel next to the chat itself. The rest of the site (hero, service cards, about,
+contact) exists to sell the fictional cleaning company and give the assistant real context to sit
+in — colorful, on-brand, not a generic gray demo shell.
 
 ## Swapping in a real client's pricing
 
@@ -71,8 +80,9 @@ This demo is intentionally structured so a new client doesn't require new code:
 
 - **Pricing** is data (`pricing.json`), not logic — a new client's price list becomes a new JSON
   file (or a row in a database, DB-backed, per-tenant in a real multi-tenant deployment).
-- **The widget** (`public/widget.js` + `styles.css`) is a single embeddable script — the same file
-  can be dropped into any client's site, pointed at their own `/api/chat` endpoint or tenant ID.
+- **The assistant** (`public/quote-app.js` + `styles.css`) mounts into any page that has a
+  `#dealz-messages` / `#dealz-input` / `#dealz-send` — drop that markup into a client's own "Get a
+  Quote" page and point it at their `/api/chat` endpoint or tenant ID.
 - **The backend** (`server.js`, `src/claude.js`) is shared infrastructure — one deployment can
   serve many clients by looking up the right pricing file/config per request (not implemented in
   this single-tenant demo, but the natural next step).

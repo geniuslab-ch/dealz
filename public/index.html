@@ -3,26 +3,200 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SwissClean Sàrl — Demo Website</title>
+  <title>SwissClean Sàrl — Residential &amp; Move-Out Cleaning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <header class="site-header">
-    <h1>SwissClean Sàrl</h1>
-    <p>Residential &amp; end-of-tenancy cleaning across the Lake Geneva region</p>
-  </header>
 
-  <main class="site-body">
-    <h2>This is a demo cleaning company's website</h2>
-    <p>
-      It's a stand-in for any real client site. The chat bubble in the bottom-right corner is the
-      AI Cleaning Quote widget — click it and describe a cleaning job to get a live, instant quote
-      calculated from this company's pricing rules (<code>src/pricing.json</code>), via the Claude API.
-    </p>
-    <p>Try: <em>"I need my 85m² apartment cleaned before moving out, 3 rooms, 1 bathroom, plus the oven and windows."</em></p>
-    <span class="badge">AI Cleaning Quote — powered by Claude</span>
-  </main>
+  <nav class="nav">
+    <div class="nav-logo"><span class="dot">🧽</span> SwissClean</div>
+    <div class="nav-links">
+      <button data-tab="home" class="active">Home</button>
+      <button data-tab="services">Services</button>
+      <button data-tab="about">About</button>
+      <button data-tab="quote" class="cta">✨ Get a Quote</button>
+      <button data-tab="contact">Contact</button>
+    </div>
+  </nav>
 
-  <script src="/widget.js"></script>
+  <!-- HOME -->
+  <section id="tab-home" class="tab-section active">
+    <div class="hero">
+      <div class="hero-inner">
+        <span class="eyebrow">Lake Geneva region · Since 2014</span>
+        <h1>Spotless homes,<br />zero hassle.</h1>
+        <p>Residential, move-out, and office cleaning across Vaud &amp; Geneva — booked in minutes with an instant, AI-calculated price.</p>
+        <div class="hero-ctas">
+          <button class="btn btn-primary" data-goto="quote">✨ Get an instant quote</button>
+          <button class="btn btn-secondary" data-goto="services">See our services</button>
+        </div>
+      </div>
+      <div class="hero-strip">
+        <div class="stat"><div class="num">4.9★</div><div class="lbl">CLIENT RATING</div></div>
+        <div class="stat"><div class="num">2,300+</div><div class="lbl">CLEANS DONE</div></div>
+        <div class="stat"><div class="num">&lt; 1 min</div><div class="lbl">TO GET A QUOTE</div></div>
+      </div>
+    </div>
+
+    <div class="section-inner">
+      <span class="eyebrow">Why SwissClean</span>
+      <h2 class="section-title">Pricing you can see, before you book</h2>
+      <p class="section-sub">No call-backs, no guesswork. Our AI quote assistant asks a few quick questions and prices your job instantly, using our real rate card.</p>
+      <div class="cards-grid">
+        <div class="svc-card c-teal">
+          <div class="svc-icon">⚡</div>
+          <h3>Instant pricing</h3>
+          <p>Get an itemized quote in under a minute, any time of day.</p>
+        </div>
+        <div class="svc-card c-coral">
+          <div class="svc-icon">🤖</div>
+          <h3>AI-guided</h3>
+          <p>Answer a few natural questions — no forms, no jargon.</p>
+        </div>
+        <div class="svc-card c-yellow">
+          <div class="svc-icon">🔒</div>
+          <h3>Fixed price</h3>
+          <p>What you're quoted is what you pay — no surprises later.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="tab-services" class="tab-section">
+    <div class="section-inner">
+      <span class="eyebrow">Services</span>
+      <h2 class="section-title">What we clean</h2>
+      <p class="section-sub">Pick a service below, or just tell our AI assistant what you need and let it figure out the rest.</p>
+      <div class="cards-grid">
+        <div class="svc-card c-teal">
+          <div class="svc-icon">🏠</div>
+          <h3>Regular cleaning</h3>
+          <p>Weekly, bi-weekly or one-off home cleaning, billed per hour.</p>
+          <span class="price-tag">from CHF 45/h</span>
+        </div>
+        <div class="svc-card c-coral">
+          <div class="svc-icon">📦</div>
+          <h3>End-of-tenancy</h3>
+          <p>Deep clean for moving out, priced by apartment size.</p>
+          <span class="price-tag">from CHF 220</span>
+        </div>
+        <div class="svc-card c-yellow">
+          <div class="svc-icon">🔥</div>
+          <h3>Oven cleaning</h3>
+          <p>Degreasing and detailing, add-on to any booking.</p>
+          <span class="price-tag">CHF 40</span>
+        </div>
+        <div class="svc-card c-purple">
+          <div class="svc-icon">🪟</div>
+          <h3>Window cleaning</h3>
+          <p>Inside and out, streak-free — add-on to any booking.</p>
+          <span class="price-tag">CHF 60</span>
+        </div>
+        <div class="svc-card c-teal">
+          <div class="svc-icon">🧺</div>
+          <h3>Carpet shampooing</h3>
+          <p>Deep shampoo per room, removes stains &amp; odors.</p>
+          <span class="price-tag">CHF 35/room</span>
+        </div>
+        <div class="svc-card c-coral">
+          <div class="svc-icon">❄️</div>
+          <h3>Fridge cleaning</h3>
+          <p>Full interior clean and degrease — add-on to any booking.</p>
+          <span class="price-tag">CHF 30</span>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top: 40px;">
+        <button class="btn btn-primary" data-goto="quote">✨ Get an instant quote</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="tab-about" class="tab-section">
+    <div class="section-inner">
+      <span class="eyebrow">About us</span>
+      <h2 class="section-title">A local team, run smart</h2>
+      <div class="about-grid">
+        <div class="about-art"></div>
+        <div>
+          <p class="section-sub" style="margin-bottom: 0;">
+            SwissClean has cleaned homes and offices across Vaud and Geneva since 2014. In 2026 we
+            replaced our old quote-request form with an AI assistant that prices jobs instantly
+            from our real rate card — faster for customers, less admin for us.
+          </p>
+          <ul class="about-list">
+            <li><span class="check">✓</span><span><b>Insured &amp; vetted staff</b> — every cleaner background-checked.</span></li>
+            <li><span class="check">✓</span><span><b>Eco-friendly products</b> — safe for kids and pets.</span></li>
+            <li><span class="check">✓</span><span><b>Transparent pricing</b> — the quote you get is the price you pay.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="tab-contact" class="tab-section">
+    <div class="section-inner">
+      <span class="eyebrow">Contact</span>
+      <h2 class="section-title">Talk to a human, or get an instant quote</h2>
+      <p class="section-sub">Prefer to chat with our AI assistant instead? Head to the <b>Get a Quote</b> tab for an instant price.</p>
+      <div class="contact-grid">
+        <div class="contact-card"><div class="lbl">Phone</div><div class="val">022 000 00 00</div></div>
+        <div class="contact-card"><div class="lbl">Email</div><div class="val">hello@swissclean.demo</div></div>
+        <div class="contact-card"><div class="lbl">Service area</div><div class="val">Vaud &amp; Geneva</div></div>
+        <div class="contact-card"><div class="lbl">Hours</div><div class="val">Mon–Sat, 8:00–18:00</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE (AI assistant lives here) -->
+  <section id="tab-quote" class="tab-section">
+    <div class="section-inner">
+      <span class="eyebrow">✨ AI Quote Assistant</span>
+      <h2 class="section-title">Get your price in under a minute</h2>
+      <p class="section-sub">Tell us about the job — apartment size, service type, any extras — and we'll calculate an exact, itemized price live.</p>
+
+      <div class="quote-wrap">
+        <div class="quote-side">
+          <h3>How it works</h3>
+          <div class="flow-steps">
+            <div class="flow-step"><div class="num">1</div><span class="label">You describe the job</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">2</div><span class="label">AI asks a few questions</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">3</div><span class="label">Pricing engine calculates</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">4</div><span class="label">You get an itemized price</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">5</div><span class="label">Book or request the offer</span></div>
+          </div>
+          <div class="note">Try: "85m² apartment, 3 rooms, moving out, plus oven and windows."</div>
+        </div>
+
+        <div class="quote-panel">
+          <div class="quote-panel-head">
+            <div class="title">AI Cleaning Quote</div>
+            <div class="subtitle">Usually replies instantly</div>
+          </div>
+          <div class="dealz-messages" id="dealz-messages"></div>
+          <div class="dealz-inputbar">
+            <input id="dealz-input" type="text" placeholder="Describe your cleaning job…" autocomplete="off" />
+            <button id="dealz-send">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    SwissClean Sàrl — demo website for the AI Cleaning Quote assistant. Not a real business.
+  </footer>
+
+  <script src="/tabs.js"></script>
+  <script src="/quote-app.js"></script>
 </body>
 </html>
