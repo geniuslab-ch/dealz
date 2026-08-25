@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Démo Dealz — Essayez l'assistant de devis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-logo"><img src="/images/dealz-logo-sm.png" alt="Dealz" /></div>
+    <div class="nav-links">
+      <a href="/index.html" class="nav-back">← Retour à l'accueil</a>
+    </div>
+  </nav>
+
+  <section>
+    <div class="section-inner">
+      <div class="demo-intro">
+        <span class="demo-flag">Démo interactive — SwissClean Sàrl, exemple fictif</span>
+        <h2 class="section-title">Voici Dealz en action.</h2>
+        <p class="section-sub" style="margin: 0 auto;">Imaginez que ceci est un client qui visite le site de votre entreprise. Décrivez un besoin de nettoyage et laissez l'assistant vous établir un prix, calculé à partir d'une grille tarifaire d'exemple.</p>
+      </div>
+
+      <div class="quote-wrap">
+        <div class="quote-side">
+          <h3>Comment ça marche</h3>
+          <div class="flow-steps">
+            <div class="flow-step"><div class="num">1</div><span class="label">Le client décrit son besoin</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">2</div><span class="label">Quelques questions rapides</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">3</div><span class="label">Calcul selon la grille tarifaire</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">4</div><span class="label">Devis ferme affiché</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">5</div><span class="label">Accepté ou refusé</span></div>
+          </div>
+          <div class="note">Essayez : « Appartement de 85m², 3 pièces, déménagement, avec four et vitres. »</div>
+        </div>
+
+        <div class="quote-panel">
+          <div class="quote-panel-head">
+            <div class="title">SwissClean · Devis</div>
+            <div class="subtitle">Réponse habituellement instantanée</div>
+          </div>
+          <div class="dealz-messages" id="dealz-messages"></div>
+          <div class="dealz-inputbar">
+            <input id="dealz-input" type="text" placeholder="Décrivez votre besoin de nettoyage…" autocomplete="off" />
+            <button id="dealz-send">Envoyer</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-followup" id="demo-followup">
+        <h2>Imaginez ceci sur VOTRE site.</h2>
+        <div class="imagine-lines">
+          Vos prix. Vos services. Votre marque. Vos clients.<br />
+          Votre assistant de vente IA, disponible 24 heures sur 24.
+        </div>
+        <div class="demo-followup-ctas">
+          <a href="/index.html#contact" class="btn btn-primary">Demander l'installation</a>
+          <a href="/index.html#tarifs" class="btn btn-secondary">Voir les tarifs</a>
+          <a href="/index.html#contact" class="btn btn-secondary">Contacter Dealz</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    Dealz — Assistant de vente IA pour entreprises de nettoyage suisses.
+  </footer>
+
+  <script src="/pricing-engine-client.js"></script>
+  <script src="/mock-client.js"></script>
+  <script src="/quote-app.js"></script>
+  <script>
+    document.addEventListener("dealz:quote-delivered", function () {
+      var el = document.getElementById("demo-followup");
+      if (!el.classList.contains("show")) {
+        el.classList.add("show");
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+  </script>
+</body>
+</html>

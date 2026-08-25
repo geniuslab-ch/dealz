@@ -113,6 +113,7 @@
 
     container.appendChild(card);
     scrollToBottom(container);
+    document.dispatchEvent(new CustomEvent("dealz:quote-delivered", { detail: quote }));
   }
 
   function extractText(content) {
@@ -192,10 +193,7 @@
       );
     }
 
-    document.addEventListener("dealz:tab", (e) => {
-      if (e.detail.tab === "quote") greet();
-    });
-    if (document.getElementById("tab-quote").classList.contains("active")) greet();
+    greet();
 
     sendBtn.addEventListener("click", () => sendMessage(container, input, sendBtn, input.value));
     input.addEventListener("keydown", (e) => {

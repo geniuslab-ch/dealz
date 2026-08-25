@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SwissClean Sàrl — Nettoyage résidentiel &amp; fin de bail</title>
+  <title>Dealz — Transformez votre grille tarifaire en assistant de vente IA</title>
+  <meta name="description" content="Dealz est un assistant de vente IA pour entreprises de nettoyage suisses. Vos tarifs, votre marque, votre site — Dealz pose les questions et génère des devis qualifiés 24/7." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -11,200 +12,326 @@
 </head>
 <body>
 
-  <div class="demo-banner">
-    <span class="tag">DÉMO</span>
-    Site de démonstration pour une entreprise de nettoyage fictive — aucune réservation réelle n'est effectuée.
-  </div>
-
   <nav class="nav">
     <div class="nav-logo"><img src="/images/dealz-logo-sm.png" alt="Dealz" /></div>
     <div class="nav-links">
-      <button data-tab="home" class="active">Accueil</button>
-      <button data-tab="services">Prestations</button>
-      <button data-tab="about">À propos</button>
-      <button data-tab="quote" class="cta">✨ Obtenir un devis</button>
-      <button data-tab="contact">Contact</button>
+      <a href="#probleme">Le problème</a>
+      <a href="#comment-ca-marche">Comment ça marche</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#contact">Contact</a>
+      <a href="/demo.html" class="cta">✨ Essayer la démo</a>
     </div>
   </nav>
 
-  <!-- ACCUEIL -->
-  <section id="tab-home" class="tab-section active">
-    <div class="hero">
-      <div class="hero-inner">
-        <span class="eyebrow">Région lémanique · Depuis 2014</span>
-        <h1>Un intérieur impeccable,<br />sans prise de tête.</h1>
-        <p>Nettoyage résidentiel, fin de bail et bureaux dans le Grand Genève &amp; le canton de Vaud — réservez en quelques minutes avec un prix calculé instantanément.</p>
-        <div class="hero-ctas">
-          <button class="btn btn-primary" data-goto="quote">✨ Obtenir un devis instantané</button>
-          <button class="btn btn-secondary" data-goto="services">Voir nos prestations</button>
-        </div>
-      </div>
-      <div class="hero-strip">
-        <div class="stat"><div class="num">4.9★</div><div class="lbl">SATISFACTION CLIENT</div></div>
-        <div class="stat"><div class="num">2 300+</div><div class="lbl">NETTOYAGES RÉALISÉS</div></div>
-        <div class="stat"><div class="num">&lt; 1 min</div><div class="lbl">POUR OBTENIR UN DEVIS</div></div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Pour les entreprises de nettoyage suisses</span>
+      <h1>Transformez votre grille tarifaire en assistant de vente IA.</h1>
+      <p>Dealz discute avec vos clients, leur pose les bonnes questions, calcule le prix selon <b>vos</b> règles tarifaires, et vous transmet des demandes de devis qualifiées — 24 heures sur 24.</p>
+      <div class="hero-ctas">
+        <a href="#comment-ca-marche" class="btn btn-primary">Voir comment ça marche</a>
+        <a href="#contact" class="btn btn-secondary">Parlez-nous</a>
       </div>
     </div>
+  </section>
 
+  <!-- LE PROBLÈME -->
+  <section id="probleme" class="section-alt">
     <div class="section-inner">
-      <span class="eyebrow">Pourquoi SwissClean</span>
-      <h2 class="section-title">Un prix clair, avant même de réserver</h2>
-      <p class="section-sub">Fini les rappels et les devis approximatifs. Répondez à quelques questions et obtenez immédiatement un prix détaillé, calculé selon notre grille tarifaire réelle.</p>
-      <div class="cards-grid">
-        <div class="svc-card c-blue">
-          <div class="svc-icon">⚡</div>
-          <h3>Prix instantané</h3>
-          <p>Obtenez un devis détaillé en moins d'une minute, à toute heure.</p>
+      <span class="eyebrow">Le problème</span>
+      <h2 class="section-title">Combien de demandes de devis perdez-vous ?</h2>
+      <p class="section-sub">Chaque minute sans réponse est une occasion de plus pour vos concurrents.</p>
+
+      <div class="problem-grid">
+        <div class="problem-card without">
+          <div class="pc-label">Sans Dealz</div>
+          <div class="problem-line q">Client : « Combien coûte un nettoyage de fin de bail ? »</div>
+          <div class="problem-line">Entreprise : « Merci de nous appeler. »</div>
+          <div class="problem-line">Le client appelle. Personne ne répond.</div>
+          <div class="problem-line">Le client envoie un e-mail. Réponse... plus tard.</div>
+          <div class="problem-line">Le client a déjà contacté 3 concurrents.</div>
         </div>
-        <div class="svc-card c-sky">
-          <div class="svc-icon">🎯</div>
-          <h3>Guidé pas à pas</h3>
-          <p>Répondez à quelques questions simples — pas de formulaire compliqué.</p>
-        </div>
-        <div class="svc-card c-navy">
-          <div class="svc-icon">🔒</div>
-          <h3>Devis ferme</h3>
-          <p>Le prix annoncé est le prix payé — aucune mauvaise surprise ensuite.</p>
+        <div class="problem-card with">
+          <div class="pc-label">Avec Dealz</div>
+          <div class="problem-line q">Client : « Combien coûte un nettoyage de fin de bail ? »</div>
+          <div class="problem-line">Dealz répond instantanément, à toute heure.</div>
+          <div class="problem-line">Quelques questions rapides et ciblées.</div>
+          <div class="problem-line">Un prix ferme, calculé selon vos propres tarifs.</div>
+          <div class="problem-line q">Une demande qualifiée arrive directement chez vous.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- PRESTATIONS -->
-  <section id="tab-services" class="tab-section">
+  <!-- VALEUR -->
+  <section>
     <div class="section-inner">
-      <span class="eyebrow">Prestations</span>
-      <h2 class="section-title">Ce que nous nettoyons</h2>
-      <p class="section-sub">Choisissez une prestation ci-dessous, ou décrivez simplement votre besoin dans l'onglet « Obtenir un devis » et laissez-nous faire le reste.</p>
+      <span class="eyebrow">Pourquoi Dealz</span>
+      <h2 class="section-title">Plus de leads. Moins d'interruptions.</h2>
+      <p class="section-sub">Dealz ne remplace pas votre équipe — il filtre et qualifie avant qu'un devis n'atterrisse sur votre bureau.</p>
       <div class="cards-grid">
         <div class="svc-card c-blue">
-          <div class="svc-icon">🏠</div>
-          <h3>Nettoyage régulier</h3>
-          <p>Hebdomadaire, bimensuel ou ponctuel, facturé à l'heure.</p>
-          <span class="price-tag">dès CHF 45/h</span>
+          <div class="svc-icon">📈</div>
+          <h3>Plus de leads</h3>
+          <p>Vos clients peuvent demander un prix 24h/24, y compris le soir et le week-end.</p>
         </div>
         <div class="svc-card c-sky">
-          <div class="svc-icon">📦</div>
-          <h3>Fin de bail</h3>
-          <p>Nettoyage en profondeur pour votre déménagement, selon la taille du logement.</p>
-          <span class="price-tag">dès CHF 220</span>
+          <div class="svc-icon">⚡</div>
+          <h3>Devis plus rapides</h3>
+          <p>Aucun calcul manuel pour les demandes standards — le prix sort en quelques secondes.</p>
         </div>
         <div class="svc-card c-navy">
-          <div class="svc-icon">🔥</div>
-          <h3>Nettoyage du four</h3>
-          <p>Dégraissage complet, en option sur toute réservation.</p>
-          <span class="price-tag">CHF 40</span>
+          <div class="svc-icon">🔕</div>
+          <h3>Moins d'interruptions</h3>
+          <p>Votre équipe n'a plus à répondre à chaque question de prix basique.</p>
         </div>
         <div class="svc-card c-red">
-          <div class="svc-icon">🪟</div>
-          <h3>Nettoyage des vitres</h3>
-          <p>Intérieur et extérieur, sans traces — en option sur toute réservation.</p>
-          <span class="price-tag">CHF 60</span>
+          <div class="svc-icon">✅</div>
+          <h3>Plus de conversions</h3>
+          <p>Une réponse immédiate retient le client avant qu'il n'aille voir ailleurs.</p>
         </div>
         <div class="svc-card c-blue">
-          <div class="svc-icon">🧺</div>
-          <h3>Shampoing moquette</h3>
-          <p>Nettoyage en profondeur par pièce, élimine taches et odeurs.</p>
-          <span class="price-tag">CHF 35/pièce</span>
+          <div class="svc-icon">🏷️</div>
+          <h3>Vos propres tarifs</h3>
+          <p>Dealz utilise votre grille tarifaire existante — pas de prix inventés.</p>
         </div>
         <div class="svc-card c-sky">
-          <div class="svc-icon">❄️</div>
-          <h3>Nettoyage du frigo</h3>
-          <p>Nettoyage intérieur complet et dégraissage — en option sur toute réservation.</p>
-          <span class="price-tag">CHF 30</span>
+          <div class="svc-icon">🌙</div>
+          <h3>Disponible 24/7</h3>
+          <p>L'assistant continue de travailler en dehors de vos heures d'ouverture.</p>
         </div>
-      </div>
-      <div style="text-align:center; margin-top: 40px;">
-        <button class="btn btn-primary" data-goto="quote">✨ Obtenir un devis instantané</button>
       </div>
     </div>
   </section>
 
-  <!-- À PROPOS -->
-  <section id="tab-about" class="tab-section">
+  <!-- COMMENT ÇA MARCHE -->
+  <section id="comment-ca-marche" class="section-alt">
     <div class="section-inner">
-      <span class="eyebrow">À propos</span>
-      <h2 class="section-title">Une équipe locale, organisée intelligemment</h2>
-      <div class="about-grid">
-        <div class="about-art"></div>
+      <span class="eyebrow">Comment ça marche</span>
+      <h2 class="section-title">Quatre étapes, aucune complexité</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">01</div>
+          <h3>Connectez vos tarifs</h3>
+          <p>Importez votre grille tarifaire Excel ou configurez vos règles directement avec nous.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">02</div>
+          <h3>Dealz apprend vos règles</h3>
+          <p>Le moteur de tarification comprend vos services, surfaces, options et frais de déplacement.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">03</div>
+          <h3>L'IA discute avec vos clients</h3>
+          <p>Elle ne pose que les questions nécessaires pour chiffrer précisément le besoin.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">04</div>
+          <h3>Le client reçoit un prix</h3>
+          <p>Devis généré instantanément — vous récupérez une demande qualifiée, prête à convertir.</p>
+        </div>
+      </div>
+      <div style="text-align:center; margin-top: 36px;">
+        <a href="/demo.html" class="btn btn-primary">Découvrir l'expérience →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFFÉRENCIATEUR -->
+  <section>
+    <div class="section-inner">
+      <span class="eyebrow">Ce qui change tout</span>
+      <h2 class="section-title">L'IA pose les questions. Vos règles tarifaires décident.</h2>
+      <div class="diff-panel">
+        <div class="diff-chat">
+          <div class="dealz-msg user" style="align-self:flex-start; max-width: 100%;">« J'ai besoin d'un nettoyage de fin de bail pour mon appartement de 85 m². »</div>
+          <div class="dealz-msg assistant" style="max-width: 100%;">« Dans quelle ville se trouve l'appartement ? »</div>
+          <div class="dealz-msg assistant" style="max-width: 100%;">« Combien de salles de bain ? Meublé ou vide ? »</div>
+          <div class="dealz-msg assistant" style="max-width: 100%;">« Souhaitez-vous inclure le nettoyage du four et des vitres ? »</div>
+        </div>
+        <div class="diff-side">
+          <div class="diff-arrow">↓</div>
+          <div class="diff-box engine">Moteur de tarification<br />(Excel / règles de l'entreprise)</div>
+          <div class="diff-arrow">↓</div>
+          <div class="diff-box result">CHF 490</div>
+        </div>
+      </div>
+      <p class="diff-note"><b>Dealz ne laisse pas l'IA inventer vos prix.</b> C'est votre entreprise qui contrôle entièrement la logique tarifaire.</p>
+    </div>
+  </section>
+
+  <!-- EXCEL → IA -->
+  <section class="section-alt">
+    <div class="section-inner">
+      <span class="eyebrow">La transformation</span>
+      <h2 class="section-title">Votre Excel devient un assistant de vente IA.</h2>
+      <div class="excel-flow">
+        <table class="excel-table">
+          <thead><tr><th>Service</th><th>Condition</th><th>Prix</th></tr></thead>
+          <tbody>
+            <tr><td>Nettoyage fin de bail</td><td>81–100 m²</td><td>CHF 390</td></tr>
+            <tr><td>Four</td><td>Oui</td><td>CHF 40</td></tr>
+            <tr><td>Vitres</td><td>Oui</td><td>CHF 60</td></tr>
+          </tbody>
+        </table>
+        <div class="flow-arrow">→</div>
         <div>
-          <p class="section-sub" style="margin-bottom: 0;">
-            SwissClean nettoie logements et bureaux dans le canton de Vaud et à Genève depuis 2014.
-            En 2026, nous avons remplacé notre ancien formulaire de demande de devis par un parcours
-            de questions guidé qui calcule le prix instantanément à partir de notre grille tarifaire
-            réelle — plus rapide pour vous, moins d'administratif pour nous.
-          </p>
-          <ul class="about-list">
-            <li><span class="check">✓</span><span><b>Personnel assuré et vérifié</b> — chaque intervenant est contrôlé.</span></li>
-            <li><span class="check">✓</span><span><b>Produits écologiques</b> — sans danger pour les enfants et les animaux.</span></li>
-            <li><span class="check">✓</span><span><b>Tarification transparente</b> — le devis reçu est le prix payé.</span></li>
+          <div class="dealz-msg assistant" style="max-width:100%; margin-bottom:8px;">« Combien de m² ? Combien de salles de bain ? »</div>
+          <div class="dealz-msg assistant" style="max-width:100%; margin-bottom:8px;">« Souhaitez-vous inclure le four ? »</div>
+          <div class="diff-box result" style="margin-top:14px;">CHF 490</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUCHE DE VENTE -->
+  <section>
+    <div class="section-inner">
+      <span class="eyebrow">Ce que Dealz n'est pas</span>
+      <h2 class="section-title">Dealz est la couche de vente IA. Pas un remplacement.</h2>
+      <p class="section-sub">Le marché suisse compte déjà de bons logiciels de gestion pour le nettoyage — planning, facturation, employés. Dealz occupe une autre place.</p>
+      <div class="layer-grid">
+        <div class="layer-card keep">
+          <div class="lc-title">Vous gardez</div>
+          <ul>
+            <li>✓ Votre CRM existant</li>
+            <li>✓ Votre comptabilité</li>
+            <li>✓ Votre facturation</li>
+            <li>✓ Votre planning</li>
+            <li>✓ Votre Excel</li>
+            <li>✓ Vos logiciels actuels</li>
+          </ul>
+        </div>
+        <div class="layer-card add">
+          <div class="lc-title">Dealz ajoute</div>
+          <ul>
+            <li>+ Assistant de devis IA</li>
+            <li>+ Estimations instantanées</li>
+            <li>+ Qualification des leads</li>
+            <li>+ Génération de devis</li>
+            <li>+ Relance client</li>
+            <li>+ Conversion client</li>
           </ul>
         </div>
       </div>
+      <p class="diff-note" style="margin-top:24px;"><b>Ne remplacez pas votre logiciel. Ajoutez une couche de vente IA.</b></p>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section id="tab-contact" class="tab-section">
+  <!-- DASHBOARD -->
+  <section class="section-alt">
     <div class="section-inner">
-      <span class="eyebrow">Contact</span>
-      <h2 class="section-title">Parlez à une personne, ou obtenez un devis instantané</h2>
-      <p class="section-sub">Vous préférez répondre à quelques questions plutôt que téléphoner ? Rendez-vous dans l'onglet <b>Obtenir un devis</b> pour un prix immédiat.</p>
-      <div class="contact-grid">
-        <div class="contact-card"><div class="lbl">Téléphone</div><div class="val">022 000 00 00</div></div>
-        <div class="contact-card"><div class="lbl">E-mail</div><div class="val">hello@swissclean.demo</div></div>
-        <div class="contact-card"><div class="lbl">Zone d'intervention</div><div class="val">Vaud &amp; Genève</div></div>
-        <div class="contact-card"><div class="lbl">Horaires</div><div class="val">Lun–Sam, 8h–18h</div></div>
+      <span class="eyebrow">Vision d'ensemble</span>
+      <h2 class="section-title">Chaque devis, suivi au même endroit</h2>
+      <div class="dash-label">Exemple de tableau de bord — données de démonstration</div>
+      <div class="dash-grid">
+        <div class="dash-card"><div class="dv">27</div><div class="dl">Nouvelles demandes</div></div>
+        <div class="dash-card"><div class="dv">23</div><div class="dl">Devis générés</div></div>
+        <div class="dash-card"><div class="dv">11</div><div class="dl">Devis acceptés</div></div>
+        <div class="dash-card"><div class="dv">CHF 8'740</div><div class="dl">Chiffre d'affaires potentiel</div></div>
+        <div class="dash-card"><div class="dv">9</div><div class="dl">Demandes hors horaires</div></div>
+        <div class="dash-card"><div class="dv">42 sec</div><div class="dl">Temps de réponse moyen</div></div>
       </div>
     </div>
   </section>
 
-  <!-- DEVIS -->
-  <section id="tab-quote" class="tab-section">
+  <!-- TARIFS -->
+  <section id="tarifs">
     <div class="section-inner">
-      <span class="eyebrow">✨ Obtenir un devis</span>
-      <h2 class="section-title">Votre prix en moins d'une minute</h2>
-      <p class="section-sub">Répondez à quelques questions sur votre logement et vos besoins — vous recevrez un devis réel et détaillé, que vous pourrez accepter ou refuser directement ici.</p>
-
-      <div class="quote-wrap">
-        <div class="quote-side">
-          <h3>Comment ça marche</h3>
-          <div class="flow-steps">
-            <div class="flow-step"><div class="num">1</div><span class="label">Vous décrivez votre besoin</span></div>
-            <div class="flow-connector"></div>
-            <div class="flow-step"><div class="num">2</div><span class="label">Quelques questions rapides</span></div>
-            <div class="flow-connector"></div>
-            <div class="flow-step"><div class="num">3</div><span class="label">Calcul selon notre grille tarifaire</span></div>
-            <div class="flow-connector"></div>
-            <div class="flow-step"><div class="num">4</div><span class="label">Vous recevez un devis ferme</span></div>
-            <div class="flow-connector"></div>
-            <div class="flow-step"><div class="num">5</div><span class="label">Vous acceptez ou refusez</span></div>
-          </div>
-          <div class="note">Essayez : « Appartement de 85m², 3 pièces, déménagement, avec four et vitres. »</div>
+      <span class="eyebrow">Tarifs</span>
+      <h2 class="section-title">Trois formules, un objectif : simplifier votre démarrage</h2>
+      <p class="section-sub">Le prix exact peut varier selon les intégrations et la complexité de votre grille tarifaire.</p>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="plan-name">Pilot</div>
+          <div class="plan-setup">CHF 490 <span class="lbl">mise en place</span></div>
+          <div class="plan-monthly">CHF 49 / mois</div>
+          <p class="plan-desc">Pour tester Dealz sur votre site sans engagement lourd.</p>
         </div>
-
-        <div class="quote-panel">
-          <div class="quote-panel-head">
-            <div class="title">SwissClean · Devis</div>
-            <div class="subtitle">Réponse habituellement instantanée</div>
-          </div>
-          <div class="dealz-messages" id="dealz-messages"></div>
-          <div class="dealz-inputbar">
-            <input id="dealz-input" type="text" placeholder="Décrivez votre besoin de nettoyage…" autocomplete="off" />
-            <button id="dealz-send">Envoyer</button>
-          </div>
+        <div class="price-card featured">
+          <span class="badge">RECOMMANDÉ</span>
+          <div class="plan-name">Standard</div>
+          <div class="plan-setup">CHF 990 <span class="lbl">mise en place</span></div>
+          <div class="plan-monthly">CHF 79 / mois</div>
+          <p class="plan-desc">La formule la plus choisie par les entreprises de nettoyage.</p>
         </div>
+        <div class="price-card">
+          <div class="plan-name">Pro</div>
+          <div class="plan-setup">CHF 1'490 <span class="lbl">mise en place</span></div>
+          <div class="plan-monthly">CHF 129 / mois</div>
+          <p class="plan-desc">Pour les entreprises avec des besoins avancés et plusieurs sites.</p>
+        </div>
+      </div>
+      <p class="pricing-note">Envie de voir le produit avant de choisir une formule ? <a href="/demo.html" style="color:var(--blue-dark); font-weight:700;">Essayez la démo gratuite →</a></p>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="section-alt">
+    <div class="section-inner">
+      <div class="final-cta">
+        <span class="eyebrow" style="background:rgba(255,255,255,0.15); color:white;">Prêt à essayer ?</span>
+        <h2>Vos clients demandent déjà : « Combien ça coûte ? »</h2>
+        <p class="lead-line">Laissez Dealz répondre — pendant que vous vous concentrez sur le reste.</p>
+        <div class="hero-ctas">
+          <a href="/demo.html" class="btn btn-primary">✨ Essayer la démo gratuite</a>
+          <a href="#contact" class="btn btn-secondary" style="background:transparent; color:white; border-color:rgba(255,255,255,0.4);">Demander l'installation</a>
+        </div>
+        <div class="reassurance">Aucun engagement. Découvrez le parcours client avant de décider.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT / LEAD FORM -->
+  <section id="contact">
+    <div class="section-inner">
+      <span class="eyebrow">Contact</span>
+      <h2 class="section-title">Parlons de votre entreprise</h2>
+      <p class="section-sub">Une question, une demande d'installation, ou juste envie d'en savoir plus — écrivez-nous.</p>
+
+      <form class="lead-form" id="lead-form">
+        <div>
+          <label for="lf-name">Nom</label>
+          <input id="lf-name" type="text" required />
+        </div>
+        <div>
+          <label for="lf-company">Entreprise</label>
+          <input id="lf-company" type="text" required />
+        </div>
+        <div class="full">
+          <label for="lf-email">E-mail professionnel</label>
+          <input id="lf-email" type="email" required />
+        </div>
+        <div class="full">
+          <label for="lf-message">Message</label>
+          <textarea id="lf-message" placeholder="Dites-nous en un peu plus sur votre entreprise…"></textarea>
+        </div>
+        <div class="full">
+          <button type="submit" class="btn btn-primary">Envoyer la demande</button>
+        </div>
+      </form>
+      <div class="lead-confirm" id="lead-confirm">
+        ✓ Merci ! Votre demande a bien été reçue — nous vous recontactons sous 24h.
+      </div>
+
+      <div class="contact-grid" style="margin-top:36px;">
+        <div class="contact-card"><div class="lbl">E-mail</div><div class="val">hello@dealz.swiss</div></div>
+        <div class="contact-card"><div class="lbl">Zone d'intervention</div><div class="val">Toute la Suisse romande</div></div>
       </div>
     </div>
   </section>
 
   <footer class="site-footer">
-    SwissClean Sàrl — site de démonstration. Cette entreprise n'existe pas réellement.
+    Dealz — Assistant de vente IA pour entreprises de nettoyage suisses. 🇨🇭 FR · DE · IT · EN (bientôt)
   </footer>
 
-  <script src="/tabs.js"></script>
-  <script src="/pricing-engine-client.js"></script>
-  <script src="/mock-client.js"></script>
-  <script src="/quote-app.js"></script>
+  <script>
+    document.getElementById("lead-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      document.getElementById("lead-confirm").classList.add("show");
+      this.reset();
+    });
+  </script>
 </body>
 </html>

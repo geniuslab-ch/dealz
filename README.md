@@ -1,25 +1,36 @@
-# Dealz — Devis de nettoyage instantané (demo)
+# Dealz — AI sales assistant for Swiss cleaning companies
 
-A working demo of the quote assistant described in the *AI Cleaning Quote — Commercial Offer*: a
-customer answers a few questions on a cleaning company's website and gets a real, itemized price —
-computed from the company's own pricing rules, that they can accept or decline on the spot.
+A B2B sales site + working product demo for Dealz: an AI-powered quotation assistant that cleaning
+companies embed on their own website. A visitor to *that* site describes a cleaning job, answers a
+few questions, and gets a real, itemized price — computed from the company's own pricing rules —
+that they can accept or decline on the spot.
 
-The **customer-facing site is entirely in French** (SwissClean Sàrl's primary market) and never
-labels the assistant as "AI" — it just reads as the company's normal quote flow. This README is in
-English since it's for the developer.
+**This repo is two things on purpose, kept deliberately separate:**
+
+1. **`docs/index.html`** — the actual product: a B2B sales funnel that sells Dealz *to cleaning
+   company owners*. Problem → value → how it works → pricing → free demo → request installation.
+2. **`docs/demo.html`** — the proof mechanism at the *end* of that funnel: the interactive quote
+   experience a prospect's own customers would see, using an illustrative example company
+   (SwissClean Sàrl, clearly labeled as fictional) and example pricing.
+
+The site never mixes the two — no "I'm a customer / I'm a cleaning company" fork on the homepage.
+Visitors land on the sales pitch first; the interactive demo is the climax, not the entry point.
+
+Both pages are **entirely in French** (the target market) and this README is in English since it's
+for the developer.
 
 ```
-Client → Questions → Moteur de tarification → Prix → Devis accepté / refusé
+Visiteur → Comprendre Dealz → Croire Dealz → Essayer Dealz → Demander l'installation
 ```
 
 ## Live demo (no install, share this with anyone)
 
 **https://geniuslab-ch.github.io/dealz/** — GitHub Pages, static hosting, no server, no API key.
 This is the same `docs/` folder Express serves locally, running with zero backend: `quote-app.js`
-tries the real `/api/chat` first, and when that doesn't exist (static hosting has no server at all)
-it transparently switches to `docs/mock-client.js` — a browser port of `src/mock.js` — for the rest
-of the session. Send this URL to a prospect and the whole devis → accept/refuse flow works, for
-free, forever, with nothing to configure.
+(used only on `demo.html`) tries the real `/api/chat` first, and when that doesn't exist (static
+hosting has no server at all) it transparently switches to `docs/mock-client.js` — a browser port
+of `src/mock.js` — for the rest of the session. Send this URL to a prospect and the whole funnel →
+demo → devis → accept/refuse flow works, for free, forever, with nothing to configure.
 
 *(One-time setup note for the repo owner: GitHub Pages needs enabling once at
 Settings → Pages → Source: Deploy from a branch → Branch: `main`, folder: `/docs` → Save. Takes
@@ -34,15 +45,17 @@ cp .env.example .env
 npm start
 ```
 
-Open http://localhost:3000, click **✨ Obtenir un devis**, and answer the three canned prompts.
-`src/mock.js` (the server-side twin of `docs/mock-client.js`) runs a small scripted conversation
-that reproduces the offer's exact example — 85m², 3 rooms, oven + windows → **CHF 490** — and lets
-you click through Accept/Decline.
+Open http://localhost:3000 for the sales funnel, or http://localhost:3000/demo.html to jump
+straight to the interactive quote experience. `src/mock.js` (the server-side twin of
+`docs/mock-client.js`) runs a small scripted conversation that reproduces the offer's exact
+example — 85m², 3 rooms, oven + windows → **CHF 490** — and lets you click through Accept/Decline;
+accepting or reaching a quote reveals the "Imaginez ceci sur VOTRE site" block with the
+Request-installation / Pricing / Contact CTAs that route back into `index.html`.
 
 To try the real conversational assistant instead, set `MOCK_MODE=false` and paste an
 `ANTHROPIC_API_KEY` with available credit — everything else is identical.
 
-## What's actually happening (real mode)
+## What's actually happening on the demo (real mode)
 
 - **Claude only asks questions and reads the customer's answers.** It never invents a price.
 - Once it has enough information, it calls a `calculate_quote` tool with structured fields
@@ -54,20 +67,32 @@ To try the real conversational assistant instead, set `MOCK_MODE=false` and past
 - The result is returned to the frontend as a structured quote and rendered as a quote card with
   **Accepter / Refuser** buttons. Accepting shows a confirmation that the request was sent to the
   company by email and added to its Google Agenda — text only, no real email/calendar integration
-  in this demo (see "Not included" below).
+  in this demo (see "Not included" below). Either way, `docs/quote-app.js` fires a
+  `dealz:quote-delivered` DOM event that `demo.html` listens for to reveal its closing CTA block.
 
 This is the same example from the offer, reproduced exactly by the pricing table:
 
 > *"85m² apartment, 3-room, 1 bathroom, oven + windows"* → **CHF 490**
 > (390 fin de bail + 40 four + 60 vitres)
 
-## Why the assistant never says "AI"
+## Why the demo assistant never says "AI"
 
-By design — the client asked that the quote flow not be marketed as AI-based. The system prompt
-(`src/claude.js`) tells the model to introduce itself as "the SwissClean quote assistant," never
-volunteer that it's an AI, but answer honestly if a customer directly asks whether they're talking
-to a human or a program. That's a deliberate transparency line: no AI branding in the marketing
-copy, but no dishonesty if asked outright.
+By design — the client asked that the quote flow (as experienced by an end customer on
+`demo.html`) not be marketed as AI-based, even though the surrounding sales site on `index.html`
+is unapologetically about selling an "AI sales assistant." The system prompt (`src/claude.js`)
+tells the model to introduce itself as "the SwissClean quote assistant," never volunteer that it's
+an AI, but answer honestly if a customer directly asks whether they're talking to a human or a
+program. That's a deliberate transparency line: no AI branding in the *customer-facing* quote
+copy, but no dishonesty if asked outright, and full AI branding on the *sales* copy where it's the
+actual selling point.
+
+## No fake social proof
+
+Per the client's explicit direction, `index.html` never claims Dealz has existing customers,
+reviews, or history — no "2 300+ cleanings," no star ratings, no "since 2014." The mock dashboard
+section is clearly labeled **"Exemple de tableau de bord — données de démonstration."** The
+interactive demo is labeled **"Démo interactive — SwissClean Sàrl, exemple fictif."** Credibility
+over fabricated traction.
 
 ## Project layout
 
@@ -78,14 +103,16 @@ src/mock.js                    Scripted offline conversation for server-side MOC
 src/pricingEngine.js           Deterministic price calculation, French item labels
 
 docs/                           Served by Express *and* by GitHub Pages — same files, both places
-docs/index.html                 Full demo site (French) — Accueil / Prestations / À propos / Obtenir un devis / Contact
-docs/tabs.js                    Tab navigation (no page reloads, no framework)
-docs/quote-app.js               The quote assistant UI: talks to /api/chat, falls back to the
-                                 client-side mock when no backend answers (see docs/mock-client.js)
+docs/index.html                 The B2B sales funnel — Dealz's actual homepage
+docs/demo.html                  The standalone interactive demo, linked from index.html's CTAs
+docs/quote-app.js               The quote assistant UI (used on demo.html only): talks to
+                                 /api/chat, falls back to the client-side mock when no backend
+                                 answers, fires `dealz:quote-delivered` once a quote is shown
 docs/mock-client.js             Browser port of src/mock.js — the GitHub Pages fallback engine
 docs/pricing-engine-client.js   Browser port of src/pricingEngine.js — used by mock-client.js
-docs/pricing.json               The company's pricing rules — single source of truth (stand-in for
-                                 their Excel sheet), read by both the server and the browser fallback
+docs/pricing.json               The example company's pricing rules — single source of truth
+                                 (stand-in for a real client's Excel sheet), read by both the
+                                 server and the browser fallback
 docs/styles.css                 Site + chat styling, palette taken from docs/images/dealz-logo.png
 docs/images/                    Dealz logo (full + small nav version)
 ```
@@ -100,15 +127,19 @@ ports — same logic, no shared module, because the browser copy has to run with
 bundler. If you change the pricing logic or the scripted questions, update both pairs. They're
 small and self-contained (~90 and ~60 lines) specifically to keep that hand-sync low-risk.
 
-## Design
+## Funnel structure (`index.html`)
 
-- The quote flow lives on its own **"Obtenir un devis" tab** rather than a floating chat bubble —
-  it reads as a real page of the site, next to Accueil / Prestations / À propos / Contact, with a
-  "comment ça marche" panel next to the chat itself.
-- Colors (navy, blue, light blue, with red used only as a small Swiss accent) are pulled from the
-  Dealz logo rather than an arbitrary palette.
-- A dark **"DÉMO"** banner sits above the nav on every page — this is a fictional company, and that
-  needs to stay obvious.
+Hero (positioning) → problem ("combien de demandes perdez-vous ?") → business value (6 cards) →
+how it works (4 steps) → differentiator ("l'IA pose les questions, vos règles décident") →
+Excel → AI transformation → "couche de vente, pas un remplacement" (vs. existing cleaning
+software) → example dashboard → pricing (Pilot / Standard / Pro) → final CTA → contact / lead
+form (client-side only — see "Not included"). CTA copy changes with funnel position: "Voir comment
+ça marche" in the hero, "Découvrir l'expérience" after How It Works, "Essayer la démo gratuite" at
+pricing and the final CTA, "Demander l'installation" as the closing ask.
+
+`demo.html` is intentionally different: no funnel copy, just the demo intro, the chat panel, and —
+once a quote is delivered — the "Imaginez ceci sur VOTRE site" block with three CTAs (Demander
+l'installation / Voir les tarifs / Contacter Dealz), all linking back into `index.html`'s anchors.
 
 ## Swapping in a real client's pricing
 
@@ -145,6 +176,10 @@ This demo is intentionally structured so a new client doesn't require new code:
 - Real email and Google Calendar integration on Accept (currently just a confirmation message —
   wiring this up is a Gmail/Calendar API call keyed off the accepted quote + customer contact info,
   collected as an extra step before Accept in a production version)
-- Persisted lead/booking storage (currently nothing is saved — it's a stateless demo)
+- Persisted lead/booking storage — the `index.html` contact form and the demo's Accept/Decline are
+  both client-side only right now (a confirmation message, nothing saved); wiring the lead form to
+  a real inbox is a small serverless function or a third-party form backend (the repo has no
+  backend for GitHub Pages to call, so this needs a hosted endpoint either way)
 - Auth, rate limiting, and abuse protection on `/api/chat`
 - A real Excel-upload → `pricing.json` conversion step
+- Real dashboard data — the numbers on `index.html` are hardcoded and clearly labeled as an example
