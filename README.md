@@ -129,13 +129,28 @@ small and self-contained (~90 and ~60 lines) specifically to keep that hand-sync
 
 ## Funnel structure (`index.html`)
 
-Hero (positioning) → problem ("combien de demandes perdez-vous ?") → business value (6 cards) →
-how it works (4 steps) → differentiator ("l'IA pose les questions, vos règles décident") →
-Excel → AI transformation → "couche de vente, pas un remplacement" (vs. existing cleaning
-software) → example dashboard → pricing (Pilot / Standard / Pro) → final CTA → contact / lead
-form (client-side only — see "Not included"). CTA copy changes with funnel position: "Voir comment
-ça marche" in the hero, "Découvrir l'expérience" after How It Works, "Essayer la démo gratuite" at
+Hero (positioning) → problem ("combien de demandes perdez-vous ?") → business value (7 cards,
+incl. the auto-Excel-sync and same-site-integration points) → how it works (4 steps) →
+differentiator ("l'IA pose les questions, vos règles décident") → Excel → AI transformation →
+"couche de vente, pas un remplacement" (vs. existing cleaning software) → **competitor comparison
+table** → example dashboard → pricing (Pilot / Standard / Pro) → final CTA → contact / lead form
+(client-side only — see "Not included"). CTA copy changes with funnel position: "Voir comment ça
+marche" in the hero, "Découvrir l'expérience" after How It Works, "Essayer la démo gratuite" at
 pricing and the final CTA, "Demander l'installation" as the closing ask.
+
+**The comparison table** (Operio, Timean, Flinko, Envestis, SwissOfferten) is built from each
+competitor's own public site, fetched and read directly — not guessed or invented. None of the
+five offer a conversational AI that prices a job live from the company's own rules; the real
+market split is: all-in-one platforms that replace your whole stack at CHF 69–499/month (Operio,
+Timean) vs. Dealz adding one thing to your existing stack at CHF 49–129/month. If any competitor's
+site changes, re-verify before editing the table — don't touch the numbers from memory.
+
+**Two claims worth re-checking before this goes to a real prospect:** the hero/value-grid/step-01
+copy states pricing updates sync from Excel automatically, and that Dealz embeds into the client's
+*existing* site rather than replacing it. Both are true of the *intended* product (this is the
+core pitch from the original commercial offer) but aren't literally wired up in this demo —
+`docs/pricing.json` is a static file, not a live Excel connection. Keep the marketing claim, but
+know it describes the product being sold, not (yet) this repo's current code.
 
 `demo.html` is intentionally different: no funnel copy, just the demo intro, the chat panel, and —
 once a quote is delivered — the "Imaginez ceci sur VOTRE site" block with three CTAs (Demander
