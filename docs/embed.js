@@ -83,6 +83,7 @@
     ".dop-chips{display:flex;flex-wrap:wrap;gap:6px;}",
     ".dop-chip{border:1.5px solid var(--dz-line);background:#fff;border-radius:16px;padding:6px 11px;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--dz-ink);font-family:inherit;}",
     ".dop-chip:disabled{opacity:.4;}",
+    ".dop-chip.selected{border-color:var(--dz-blue);background:var(--dz-sky-light);color:var(--dz-blue-dark);font-weight:700;}",
     ".dop-free{display:flex;gap:6px;}",
     ".dop-free-input{flex:1;border:1.5px solid var(--dz-line);border-radius:16px;padding:7px 12px;font-size:12px;font-family:inherit;outline:none;}",
     ".dop-free-btn{background:var(--dz-navy);color:#fff;border:none;border-radius:16px;padding:0 14px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;}",

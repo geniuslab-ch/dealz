@@ -138,10 +138,22 @@
             <div class="title">SwissClean · Devis</div>
             <div class="subtitle">Réponse habituellement instantanée</div>
           </div>
-          <div class="dealz-messages" id="dealz-messages"></div>
-          <div class="dealz-inputbar">
-            <input id="dealz-input" type="text" placeholder="Décrivez votre besoin de nettoyage…" autocomplete="off" />
-            <button id="dealz-send">Envoyer</button>
+
+          <div class="dealz-lead-gate" id="dealz-lead-gate">
+            <p class="dlg-intro">Avant votre devis instantané, laissez-nous vos coordonnées professionnelles :</p>
+            <input class="dcf-input" id="dlg-company" placeholder="Nom de votre entreprise (optionnel)" />
+            <input class="dcf-input" id="dlg-email" type="email" placeholder="E-mail professionnel" required />
+            <input class="dcf-input" id="dlg-phone" placeholder="Téléphone (optionnel)" />
+            <button class="dcf-submit" id="dlg-submit">Essayer la démo</button>
+            <p class="dlg-msg" id="dlg-msg"></p>
+          </div>
+
+          <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+            <div class="dealz-messages" id="dealz-messages"></div>
+            <div class="dealz-inputbar">
+              <input id="dealz-input" type="text" placeholder="Décrivez votre besoin de nettoyage…" autocomplete="off" />
+              <button id="dealz-send">Envoyer</button>
+            </div>
           </div>
         </div>
       </div>
@@ -170,6 +182,7 @@
   <script src="/pricing-engine-client.js"></script>
   <script src="/mock-client.js"></script>
   <script src="/quote-app.js"></script>
+  <script src="/lead-gate.js"></script>
   <script>
     document.addEventListener("dealz:quote-delivered", function () {
       var el = document.getElementById("demo-followup");

@@ -48,10 +48,10 @@ npm start
 
 Open http://localhost:3000 for the sales funnel, or http://localhost:3000/demo.html to jump
 straight to the interactive quote experience. `src/mock.js` (the server-side twin of
-`docs/mock-client.js`) runs a small scripted conversation that reproduces the offer's exact
-example — 85m², 3 rooms, oven + windows → **CHF 490** — and lets you click through Accept/Decline;
-accepting or reaching a quote reveals the "Imaginez ceci sur VOTRE site" block with the
-Request-installation / Pricing / Contact CTAs that route back into `index.html`.
+`docs/mock-client.js`) runs a fully adaptive question flow — see "The mock-mode question flow is a
+real clickable MCQ" below — and lets you click through Accept/Decline; accepting or reaching a
+quote reveals the "Imaginez ceci sur VOTRE site" block with the Request-installation / Pricing /
+Contact CTAs that route back into `index.html`.
 
 To try the real conversational assistant instead, set `MOCK_MODE=false` and paste an
 `ANTHROPIC_API_KEY` with available credit — everything else is identical.
@@ -63,6 +63,64 @@ sees a broken conversation. It logs a warning server-side (`[/api/chat] Real Cla
 falling back…`) so you notice and can fix the account issue; the visitor sees a working demo either
 way. This was a real reported bug (the live demo failing outright when the API account had no
 billing) — it's fixed at the server level, not worked around in the frontend.
+
+**Why the public demo runs on `MOCK_MODE` at all, on purpose:** this deployment only serves
+prospects evaluating Dealz — there's no real paying-customer traffic hitting it (that's the "natural
+next step" multi-tenant work described later in this file). Paying real Anthropic credit for
+strangers clicking around a marketing demo doesn't make sense, so the recommended setup for the
+public URL is `MOCK_MODE=true` with no `ANTHROPIC_API_KEY` at all — zero API cost, unlimited free
+tries, and (per below) a lead-capture gate that still gives you something for every trial.
+
+## The mock-mode question flow is a real clickable MCQ, not a fixed script
+
+Earlier this asked exactly 3 fixed questions by turn number, regardless of what the customer had
+already said — so answering everything in one message (or even just "3 pièces") still got the same
+canned question echoed back. `src/mock.js` / `docs/mock-client.js` now re-read the whole
+conversation on every turn and only ask about whatever's still missing, covering every pricing
+variable in `docs/pricing.json`: type + size, hours (regular cleaning only), condition, elevator
+access, add-ons (multi-select), difficult-access windows (only if windows was chosen), carpet rooms
+(only if carpet shampoo was chosen), then contact info. Each question comes back from the engine as
+a `question: { type: "single" | "multi", options: [...] }` field alongside the assistant's message;
+`docs/quote-app.js`'s `renderChipQuestion()` renders it as clickable chips (reusing the existing
+objection-picker chip styling). A chip click is sent back as a normal chat message — its label text
+— through the exact same code path as typing, so the free-text input at the bottom always still
+works as a natural "other" fallback with no separate UI needed for it.
+
+## Lead-capture gate on the public demo (`docs/lead-gate.js` + `src/leads.js`)
+
+Since the public demo runs on free `MOCK_MODE` (see above), gating it isn't about protecting API
+cost — it's a lead-gen feature: before the chat widget appears on `demo.html`, a short form asks for
+a professional e-mail (+ optional phone/company name). Submitting posts to `POST /api/lead`, which
+records the attempt in a Supabase `leads` table and caps how many times the *same e-mail* can try
+the demo (`DEMO_TRIAL_LIMIT` in `.env`, default 3) — past the limit it shows a "contact us for a
+personalized demo" message instead of the widget. This is a soft limit: the e-mail is self-reported
+and unverified, so it slows down casual repeat visits rather than stopping a determined one.
+
+Set `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` (the **service role** key — this only ever runs
+server-side in `src/leads.js`, never shipped to the browser) in `.env` to turn the gate on. Create
+the table first:
+
+```sql
+create table leads (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  phone text,
+  company_name text,
+  trial_count int not null default 1,
+  source text default 'demo',
+  created_at timestamptz not null default now(),
+  last_seen_at timestamptz
+);
+```
+
+Leave `SUPABASE_URL`/`SUPABASE_SERVICE_KEY` empty and the gate fails open — `recordTrialAttempt()`
+returns `{ allowed: true, configured: false }` and the widget is revealed with no gate at all — same
+graceful-degradation pattern as `MOCK_MODE` and the SMTP dry-run fallback elsewhere in this repo.
+The gate also fails open on the static/GitHub-Pages build specifically (no backend to call `POST
+/api/lead` at all) — there's no API cost to protect there either, so gating would only add friction.
+`docs/embed.js` (the snippet a real paying client embeds on *their own* site) deliberately does not
+include this gate — it would be nonsensical to ask a cleaning company's own customers for a lead
+form before they can get their own quote.
 
 ## What's actually happening on the demo (real mode)
 
@@ -323,7 +381,10 @@ than looking like one continuous Dealz-branded experience.
 server.js                     Express server: /api/chat, /api/accept, /api/decline,
                                 /api/counteroffer/:token, /api/offer/:token
 src/claude.js                  System prompt (French), tool definition, Claude API call loop
-src/mock.js                    Scripted offline conversation for server-side MOCK_MODE
+src/mock.js                    Adaptive clickable-question offline conversation for server-side
+                                MOCK_MODE — see "The mock-mode question flow is a real clickable MCQ"
+src/leads.js                    Lead-capture gate backing store (Supabase) + trial-limit logic for
+                                 the public demo — see "Lead-capture gate on the public demo"
 src/pricingEngine.js           Deterministic price calculation, French item labels
 src/objections.js              The Objection Engine: 8 categories, each with a subject-line label,
                                 emoji, and configured action (counteroffer/reschedule/revise/
@@ -347,6 +408,8 @@ docs/quote-app.js               The quote assistant UI (used on demo.html's "Dev
                                  /api/chat, falls back to the client-side mock when no backend
                                  answers, fires `dealz:quote-delivered` once a quote is shown
 docs/mock-client.js             Browser port of src/mock.js — the GitHub Pages fallback engine
+docs/lead-gate.js                Lead-capture form in front of the demo widget — posts to
+                                 /api/lead, fails open with no backend or no Supabase configured
 docs/pricing-engine-client.js   Browser port of src/pricingEngine.js — used by mock-client.js
 docs/pricing.json               The example company's pricing rules — single source of truth
                                  (stand-in for a real client's Excel sheet), read by both the

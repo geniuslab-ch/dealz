@@ -577,6 +577,7 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 }
 .dop-chip:hover { border-color: var(--blue); background: var(--sky-light); }
 .dop-chip:disabled { opacity: 0.4; cursor: default; }
+.dop-chip.selected { border-color: var(--blue); background: var(--blue-light); color: var(--blue-dark); font-weight: 700; }
 .dop-free { display: flex; gap: 8px; }
 .dop-free-input {
   flex: 1;
@@ -638,6 +639,22 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 }
 .dcf-submit:disabled { opacity: 0.5; cursor: default; }
 .dealz-msg.system-success a, .dealz-msg.system-decline a { color: inherit; font-weight: 700; }
+
+/* ---------- Lead-capture gate (in front of the demo chat) ---------- */
+.dealz-lead-gate {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 18px;
+  justify-content: center;
+}
+.dlg-intro { font-size: 13.5px; color: var(--muted); margin: 0 0 4px; font-weight: 600; }
+.dlg-msg { font-size: 12.5px; margin: 6px 0 0; display: none; }
+.dlg-msg.show { display: block; }
+.dlg-msg.ok { color: var(--green); }
+.dlg-msg.err { color: var(--red); }
+.dealz-chat-body { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 
 /* ================= B2B funnel sections ================= */
 

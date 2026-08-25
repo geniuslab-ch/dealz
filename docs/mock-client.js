@@ -16,6 +16,7 @@
     if (/\bfour\b|oven/.test(text)) addons.push("oven");
     if (/vitre|fen[êe]tre|window/.test(text)) addons.push("windows");
     if (/frigo|fridge/.test(text)) addons.push("fridge");
+    if (/moquette|tapis|carpet/.test(text)) addons.push("carpet_shampoo");
 
     const roomsMatch = text.match(/(\d(?:[.,]5)?)\s*(?:pi[èe]ces?|rooms?)/);
     const rooms = roomsMatch ? roomsMatch[1].replace(",", ".") : null;
@@ -55,26 +56,78 @@
     return contactMsg ? extractContact(contactMsg.content) : { name: "", email: "", phone: "", address: "" };
   }
 
-  const Q_SIZE_TYPE =
-    "Bien sûr ! Pouvez-vous me préciser la taille de votre logement (nombre de pièces, par ex. « 3.5 pièces ») et le type de nettoyage souhaité (nettoyage régulier ou fin de bail) ?";
-  const Q_ADDONS =
-    "Merci ! Souhaitez-vous ajouter des options comme le nettoyage du four, des vitres ou du frigo ?";
-  const Q_CONTACT =
-    "Parfait ! Pour finaliser votre devis, quel est votre nom, votre e-mail, votre téléphone, et l'adresse du logement à nettoyer ?";
-
-  function alreadyAsked(history, question) {
+  function alreadyAsked(history, questionText) {
     return history.some(
-      (m) => m.role === "assistant" && typeof m.content === "string" && m.content === question
+      (m) => m.role === "assistant" && typeof m.content === "string" && m.content === questionText
     );
   }
 
-  function ask(question, pricing) {
+  // The answer to an already-asked question is whichever customer message
+  // comes right after it in the conversation.
+  function answerFollowing(history, questionText) {
+    const idx = history.findIndex(
+      (m) => m.role === "assistant" && typeof m.content === "string" && m.content === questionText
+    );
+    if (idx === -1) return "";
+    const next = history.slice(idx + 1).find((m) => m.role === "user" && typeof m.content === "string");
+    return next ? next.content : "";
+  }
+
+  function ask(questionText, question, pricing) {
     return {
-      messages: [{ role: "assistant", content: question }],
+      messages: [{ role: "assistant", content: questionText }],
       quote: null,
       model: "mode-demo",
       currency: pricing.currency,
+      question: question || null,
     };
+  }
+
+  const ROOM_TIERS = ["1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5"];
+
+  const Q_TYPE_SIZE =
+    "Bien sûr ! Quel type de nettoyage souhaitez-vous, et pour quelle taille de logement ?";
+  const Q_HOURS = "Combien de temps environ souhaitez-vous prévoir pour chaque nettoyage ?";
+  const Q_CONDITION = "Dans quel état est le logement aujourd'hui ?";
+  const Q_FLOORS = "Le logement est-il accessible sans ascenseur ?";
+  const Q_ADDONS = "Souhaitez-vous ajouter des options ? Vous pouvez en choisir plusieurs.";
+  const Q_WINDOWS_ACCESS = "Les vitres sont-elles difficiles d'accès (baies vitrées, hauteur, etc.) ?";
+  const Q_CARPET_ROOMS = "Combien de pièces avec moquette ou tapis à shampouiner ?";
+  const Q_CONTACT =
+    "Parfait ! Pour finaliser votre devis, quel est votre nom, votre e-mail, votre téléphone, et l'adresse du logement à nettoyer ?";
+
+  function parseHours(text) {
+    const t = text.toLowerCase();
+    if (/1\D+2/.test(t)) return 1.5;
+    if (/2\D+3/.test(t)) return 2.5;
+    if (/3\D+4/.test(t)) return 3.5;
+    if (/4\D+5/.test(t)) return 4.5;
+    if (/plus de 5|5\+/.test(t)) return 5;
+    const m = t.match(/(\d+(?:[.,]\d+)?)/);
+    return m ? parseFloat(m[1].replace(",", ".")) : 4;
+  }
+
+  function parseCondition(text) {
+    const t = text.toLowerCase();
+    if (/tr[èe]s sale|encombr[ée]/.test(t)) return "very_dirty";
+    if (/sale|poussi[èe]reux|plut[ôo]t/.test(t)) return "dirty";
+    return "normal";
+  }
+
+  function parseFloors(text) {
+    const t = text.toLowerCase();
+    if (/rez|ascenseur/.test(t) && !/sans ascenseur/.test(t)) return 0;
+    const m = t.match(/(\d+)/);
+    return m ? Math.min(parseInt(m[1], 10), 3) : 0;
+  }
+
+  function parseWindowsAccess(text) {
+    return /^oui\b/i.test(text.trim()) || /difficile/i.test(text);
+  }
+
+  function parseCarpetRooms(text) {
+    const m = text.match(/(\d+)/);
+    return m ? parseInt(m[1], 10) : 1;
   }
 
   // Unlike a fixed question-by-turn-number script, every turn re-reads
@@ -86,24 +139,138 @@
     const userMessages = history.filter((m) => m.role === "user" && typeof m.content === "string");
 
     const sizeTypeKnown = hints.isRegular || !!hints.rooms;
-    if (!sizeTypeKnown && !alreadyAsked(history, Q_SIZE_TYPE)) {
-      return ask(Q_SIZE_TYPE, pricing);
+    if (!sizeTypeKnown && !alreadyAsked(history, Q_TYPE_SIZE)) {
+      return ask(
+        Q_TYPE_SIZE,
+        {
+          type: "single",
+          options: [
+            ...ROOM_TIERS.map((r) => ({ label: `${r} pièce${r === "1" ? "" : "s"}`, value: r })),
+            { label: "Nettoyage régulier", value: "regular" },
+          ],
+        },
+        pricing
+      );
     }
 
-    if (!hints.addons.length && !alreadyAsked(history, Q_ADDONS)) {
-      return ask(Q_ADDONS, pricing);
+    if (hints.isRegular && !alreadyAsked(history, Q_HOURS)) {
+      return ask(
+        Q_HOURS,
+        {
+          type: "single",
+          options: [
+            { label: "1–2 heures", value: "1-2" },
+            { label: "2–3 heures", value: "2-3" },
+            { label: "3–4 heures", value: "3-4" },
+            { label: "4–5 heures", value: "4-5" },
+            { label: "Plus de 5 heures", value: "5+" },
+          ],
+        },
+        pricing
+      );
     }
+    const hours = hints.isRegular ? parseHours(answerFollowing(history, Q_HOURS)) : undefined;
+
+    if (!alreadyAsked(history, Q_CONDITION)) {
+      return ask(
+        Q_CONDITION,
+        {
+          type: "single",
+          options: [
+            { label: "État normal", value: "normal" },
+            { label: "Plutôt sale", value: "dirty" },
+            { label: "Très sale / encombré", value: "very_dirty" },
+          ],
+        },
+        pricing
+      );
+    }
+    const condition = parseCondition(answerFollowing(history, Q_CONDITION));
+
+    if (!alreadyAsked(history, Q_FLOORS)) {
+      return ask(
+        Q_FLOORS,
+        {
+          type: "single",
+          options: [
+            { label: "Rez-de-chaussée ou ascenseur", value: "0" },
+            { label: "1 étage sans ascenseur", value: "1" },
+            { label: "2 étages sans ascenseur", value: "2" },
+            { label: "3 étages ou plus sans ascenseur", value: "3" },
+          ],
+        },
+        pricing
+      );
+    }
+    const floorsNoElevator = parseFloors(answerFollowing(history, Q_FLOORS));
+
+    if (!hints.addons.length && !alreadyAsked(history, Q_ADDONS)) {
+      return ask(
+        Q_ADDONS,
+        {
+          type: "multi",
+          options: [
+            { label: "Four", value: "oven" },
+            { label: "Vitres", value: "windows" },
+            { label: "Frigo", value: "fridge" },
+            { label: "Moquette", value: "carpet_shampoo" },
+            { label: "Aucune option", value: "none" },
+          ],
+        },
+        pricing
+      );
+    }
+
+    if (hints.addons.includes("windows") && !alreadyAsked(history, Q_WINDOWS_ACCESS)) {
+      return ask(
+        Q_WINDOWS_ACCESS,
+        {
+          type: "single",
+          options: [
+            { label: "Oui", value: "yes" },
+            { label: "Non", value: "no" },
+          ],
+        },
+        pricing
+      );
+    }
+    const difficultAccessWindows = hints.addons.includes("windows")
+      ? parseWindowsAccess(answerFollowing(history, Q_WINDOWS_ACCESS))
+      : false;
+
+    if (hints.addons.includes("carpet_shampoo") && !alreadyAsked(history, Q_CARPET_ROOMS)) {
+      return ask(
+        Q_CARPET_ROOMS,
+        {
+          type: "single",
+          options: [
+            { label: "1 pièce", value: "1" },
+            { label: "2 pièces", value: "2" },
+            { label: "3 pièces", value: "3" },
+            { label: "4 pièces ou plus", value: "4" },
+          ],
+        },
+        pricing
+      );
+    }
+    const carpetRooms = hints.addons.includes("carpet_shampoo")
+      ? parseCarpetRooms(answerFollowing(history, Q_CARPET_ROOMS))
+      : undefined;
 
     const customer = extractContactFromHistory(userMessages);
     if (!customer.email && !alreadyAsked(history, Q_CONTACT)) {
-      return ask(Q_CONTACT, pricing);
+      return ask(Q_CONTACT, null, pricing);
     }
 
     const input = {
       service_type: hints.isRegular ? "regular_cleaning" : "end_of_tenancy",
       rooms: hints.rooms || "3",
-      hours: hints.isRegular ? 4 : undefined,
-      addons: hints.addons.length ? hints.addons : ["oven", "windows"],
+      hours,
+      addons: hints.addons,
+      carpet_rooms: carpetRooms,
+      condition,
+      difficult_access_windows: difficultAccessWindows,
+      floors_no_elevator: floorsNoElevator,
     };
 
     const quote = window.DealzPricingEngine.calculateQuote(pricing, input);
@@ -118,6 +285,7 @@
       quote,
       model: "mode-demo",
       currency: pricing.currency,
+      question: null,
     };
   }
 

@@ -191,6 +191,45 @@
     scrollToBottom(container);
   }
 
+  // ---- Adaptive question chips (mock-mode question flow) ----
+  // Reuses the objection picker's chip styling. The free-text input at the
+  // bottom of the widget stays live the whole time, so typing an answer
+  // instead of clicking a chip always works too — no separate "Autre" chip
+  // needed.
+  function renderChipQuestion(container, question, onAnswer) {
+    const wrap = el("div", "dealz-objection-picker");
+    const chipsRow = el("div", "dop-chips");
+    const selected = new Set();
+
+    question.options.forEach((opt) => {
+      const btn = el("button", "dop-chip", opt.label);
+      btn.addEventListener("click", () => {
+        if (question.type === "multi") {
+          btn.classList.toggle("selected");
+          if (selected.has(opt.label)) selected.delete(opt.label);
+          else selected.add(opt.label);
+        } else {
+          wrap.querySelectorAll("button").forEach((n) => (n.disabled = true));
+          onAnswer(opt.label);
+        }
+      });
+      chipsRow.appendChild(btn);
+    });
+    wrap.appendChild(chipsRow);
+
+    if (question.type === "multi") {
+      const confirmBtn = el("button", "dcf-submit", "Valider mes choix");
+      confirmBtn.addEventListener("click", () => {
+        wrap.querySelectorAll("button").forEach((n) => (n.disabled = true));
+        onAnswer(selected.size ? Array.from(selected).join(", ") : "Aucune option");
+      });
+      wrap.appendChild(confirmBtn);
+    }
+
+    container.appendChild(wrap);
+    scrollToBottom(container);
+  }
+
   // Shows exactly what would be emailed — real dry-run content from the
   // backend when it's simulating (no SMTP configured), or a client-built
   // approximation when there's no backend at all (static fallback).
@@ -488,7 +527,13 @@
         }
       }
 
-      if (data.quote) renderQuoteCard(container, data.quote);
+      if (data.quote) {
+        renderQuoteCard(container, data.quote);
+      } else if (data.question) {
+        renderChipQuestion(container, data.question, (text) =>
+          sendMessage(container, input, sendBtn, text)
+        );
+      }
     } catch (err) {
       typing.remove();
       renderAssistantText(container, "Une erreur est survenue — veuillez réessayer.");

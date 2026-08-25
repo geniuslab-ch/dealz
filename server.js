@@ -14,6 +14,7 @@ const {
   sendBookingConfirmation,
 } = require("./src/notifications");
 const store = require("./src/store");
+const { recordTrialAttempt } = require("./src/leads");
 
 const MOCK_MODE = process.env.MOCK_MODE === "true";
 
@@ -32,6 +33,23 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Headers", "Content-Type");
   if (req.method === "OPTIONS") return res.sendStatus(204);
   next();
+});
+
+// Gate in front of the public demo widget (docs/demo.html + docs/lead-gate.js)
+// — records who's trying it and caps free trials, so the demo doesn't run up
+// real Anthropic API cost from unlimited anonymous use. See src/leads.js.
+app.post("/api/lead", async (req, res) => {
+  try {
+    const { email, phone, companyName } = req.body;
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: "E-mail professionnel requis" });
+    }
+    const result = await recordTrialAttempt({ email, phone: phone || "", companyName: companyName || "" });
+    res.json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Internal error" });
+  }
 });
 
 app.post("/api/chat", async (req, res) => {
