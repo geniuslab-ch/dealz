@@ -9,6 +9,15 @@
     windows: "Nettoyage des vitres",
     fridge: "Nettoyage du frigo",
     carpet_shampoo: "Shampoing moquette",
+    hood: "Nettoyage de la hotte",
+    stovetop: "Nettoyage des plaques de cuisson",
+    microwave: "Nettoyage du micro-ondes",
+    dishwasher: "Nettoyage du lave-vaisselle",
+    freezer: "Nettoyage du congélateur",
+    sofa: "Nettoyage du canapé",
+    armchair: "Nettoyage du fauteuil",
+    mattress: "Nettoyage du matelas",
+    curtains: "Nettoyage des rideaux",
   };
 
   function round(n) {

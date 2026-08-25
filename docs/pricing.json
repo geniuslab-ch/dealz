@@ -17,7 +17,16 @@
     "oven": 40,
     "windows": 60,
     "fridge": 30,
-    "carpet_shampoo_per_room": 35
+    "carpet_shampoo_per_room": 35,
+    "hood": 20,
+    "stovetop": 20,
+    "microwave": 15,
+    "dishwasher": 20,
+    "freezer": 25,
+    "sofa": 45,
+    "armchair": 25,
+    "mattress": 35,
+    "curtains": 30
   },
   "travel_fee": {
     "free_within_km": 20,

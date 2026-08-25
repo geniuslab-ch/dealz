@@ -2,74 +2,21 @@ const { calculateQuote } = require("./pricingEngine");
 const pricing = require("../docs/pricing.json");
 
 /**
- * Offline stand-in for src/claude.js — a fully adaptive, clickable-answer
- * question flow, no API key or credit required. Every turn re-reads
- * everything the customer has answered so far (by content, not by turn
- * count) and only asks about what's still missing, so answering several
- * things at once (or in free text) skips straight past those questions.
+ * Offline stand-in for src/claude.js — a full clickable-MCQ question bank
+ * (25 categories, adapted from the original brief), no API key or credit
+ * required. Walks a fixed, ordered list of steps; each step asks its
+ * question as chips (or free text for a couple of open-ended ones like
+ * dates and contact info) exactly once, and conditional branches (e.g.
+ * fin-de-bail-specific questions, régulier-specific questions) only apply
+ * when relevant — see each step's `applies()`. Deliberately does NOT try to
+ * detect answers from earlier free text and skip ahead: the whole point of
+ * this flow, per an explicit product decision, is to walk the full
+ * structured bank every time rather than guess from what was said upfront.
  *
- * The response optionally carries a `question` field describing the next
- * question as single- or multi-select chips (docs/quote-app.js renders
- * them). A chip click is sent back as a normal user chat message — its
- * label text — so the exact same parsing logic works whether the customer
- * clicks a chip or just types their answer.
+ * Only a subset of steps actually feed calculateQuote() (anything present
+ * in docs/pricing.json); the rest are collected for context/realism and
+ * exposed on quote.details for the PDF/e-mail to show.
  */
-
-function extractHints(history) {
-  // Only ever read what the customer typed — the bot's own canned questions
-  // mention words like "régulier" and "frigo" as example options, and would
-  // otherwise be misread as the customer's answer.
-  const text = history
-    .filter((m) => m.role === "user" && typeof m.content === "string")
-    .map((m) => m.content)
-    .join(" ")
-    .toLowerCase();
-
-  const addons = [];
-  if (/\bfour\b|oven/.test(text)) addons.push("oven");
-  if (/vitre|fen[êe]tre|window/.test(text)) addons.push("windows");
-  if (/frigo|fridge/.test(text)) addons.push("fridge");
-  if (/moquette|tapis|carpet/.test(text)) addons.push("carpet_shampoo");
-
-  const roomsMatch = text.match(/(\d(?:[.,]5)?)\s*(?:pi[èe]ces?|rooms?)/);
-  const rooms = roomsMatch ? roomsMatch[1].replace(",", ".") : null;
-
-  const isRegular = /r[ée]gulier|hebdomadaire|par semaine|\bregular\b/.test(text);
-
-  return { addons, rooms, isRegular };
-}
-
-// Best-effort parse of the customer's free-text answer to the contact
-// question — good enough for the scripted demo, not a real NLU system.
-function extractContact(text) {
-  const emailMatch = text.match(/[\w.+-]+@[\w-]+\.[\w.-]+/);
-  const phoneMatch = text.match(/(\+?\d[\d\s.-]{7,}\d)/);
-  let rest = text;
-  if (emailMatch) rest = rest.replace(emailMatch[0], " ");
-  if (phoneMatch) rest = rest.replace(phoneMatch[0], " ");
-  rest = rest.replace(/[,;]/g, " ").replace(/\s+/g, " ").trim();
-
-  const words = rest.split(" ").filter(Boolean);
-  const name = words.slice(0, 2).join(" ") || "";
-  const address = words.slice(2).join(" ") || rest;
-
-  return {
-    name,
-    email: emailMatch ? emailMatch[0] : "",
-    phone: phoneMatch ? phoneMatch[0].trim() : "",
-    address,
-  };
-}
-
-// The contact answer is whichever customer message actually contains an
-// e-mail address (the clearest signal it's the "here are my details"
-// message) — not just the most recent message, so a stray "merci" sent
-// afterwards doesn't wipe out contact info that was already given.
-function extractContactFromHistory(userMessages) {
-  const emailRe = /[\w.+-]+@[\w-]+\.[\w.-]+/;
-  const contactMsg = [...userMessages].reverse().find((m) => emailRe.test(m.content));
-  return contactMsg ? extractContact(contactMsg.content) : { name: "", email: "", phone: "", address: "" };
-}
 
 function alreadyAsked(history, questionText) {
   return history.some(
@@ -98,21 +45,46 @@ function ask(questionText, question) {
   };
 }
 
+const label = (text) => (text || "").trim();
+const yes = (text) => /^oui\b/i.test((text || "").trim());
+
+function parseCount(text, fallback) {
+  const m = (text || "").match(/(\d+)/);
+  return m ? parseInt(m[1], 10) : fallback;
+}
+
+const KITCHEN_APPLIANCE_KEYS = {
+  Hotte: "hood",
+  "Plaques de cuisson": "stovetop",
+  "Micro-ondes": "microwave",
+  "Lave-vaisselle": "dishwasher",
+  Congélateur: "freezer",
+};
+const TEXTILE_KEYS = {
+  Canapé: "sofa",
+  Fauteuil: "armchair",
+  Matelas: "mattress",
+  Rideaux: "curtains",
+};
+
+function parseMultiKeys(text, table) {
+  return (text || "")
+    .split(",")
+    .map((s) => s.trim())
+    .map((s) => table[s])
+    .filter(Boolean);
+}
+
 const ROOM_TIERS = ["1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5", "5"];
-
-const Q_TYPE_SIZE =
-  "Bien sûr ! Quel type de nettoyage souhaitez-vous, et pour quelle taille de logement ?";
-const Q_HOURS = "Combien de temps environ souhaitez-vous prévoir pour chaque nettoyage ?";
-const Q_CONDITION = "Dans quel état est le logement aujourd'hui ?";
-const Q_FLOORS = "Le logement est-il accessible sans ascenseur ?";
-const Q_ADDONS = "Souhaitez-vous ajouter des options ? Vous pouvez en choisir plusieurs.";
-const Q_WINDOWS_ACCESS = "Les vitres sont-elles difficiles d'accès (baies vitrées, hauteur, etc.) ?";
-const Q_CARPET_ROOMS = "Combien de pièces avec moquette ou tapis à shampouiner ?";
-const Q_CONTACT =
-  "Parfait ! Pour finaliser votre devis, quel est votre nom, votre e-mail, votre téléphone, et l'adresse du logement à nettoyer ?";
-
+const HOURS_OPTIONS = [
+  { label: "1–2 heures", value: "1-2" },
+  { label: "2–3 heures", value: "2-3" },
+  { label: "3–4 heures", value: "3-4" },
+  { label: "4–5 heures", value: "4-5" },
+  { label: "Plus de 5 heures", value: "5+" },
+];
 function parseHours(text) {
-  const t = text.toLowerCase();
+  const t = (text || "").toLowerCase();
   if (/1\D+2/.test(t)) return 1.5;
   if (/2\D+3/.test(t)) return 2.5;
   if (/3\D+4/.test(t)) return 3.5;
@@ -122,145 +94,444 @@ function parseHours(text) {
   return m ? parseFloat(m[1].replace(",", ".")) : 4;
 }
 
-function parseCondition(text) {
-  const t = text.toLowerCase();
-  if (/tr[èe]s sale|encombr[ée]/.test(t)) return "very_dirty";
-  if (/sale|poussi[èe]reux|plut[ôo]t/.test(t)) return "dirty";
-  return "normal";
-}
+// ---- 1. TYPE DE NETTOYAGE ----
+const Q_TYPE_NETTOYAGE = "Quel type de nettoyage souhaitez-vous ?";
+const TYPE_NETTOYAGE_MAP = {
+  "Nettoyage régulier": "regular",
+  "Nettoyage ponctuel": "ponctuel",
+  "Nettoyage en profondeur": "profondeur",
+  "Nettoyage de fin de bail / état des lieux": "fin_de_bail",
+  "Nettoyage après déménagement": "demenagement",
+  "Nettoyage après travaux": "apres_travaux",
+  "Nettoyage professionnel / bureau": "bureau",
+};
 
-function parseFloors(text) {
-  const t = text.toLowerCase();
-  if (/rez|ascenseur/.test(t) && !/sans ascenseur/.test(t)) return 0;
-  const m = t.match(/(\d+)/);
-  return m ? Math.min(parseInt(m[1], 10), 3) : 0;
-}
-
-function parseWindowsAccess(text) {
-  return /^oui\b/i.test(text.trim()) || /difficile/i.test(text);
-}
-
-function parseCarpetRooms(text) {
-  const m = text.match(/(\d+)/);
-  return m ? parseInt(m[1], 10) : 1;
-}
-
-async function runTurnMock(history) {
-  const hints = extractHints(history);
-  const userMessages = history.filter((m) => m.role === "user" && typeof m.content === "string");
-
-  const sizeTypeKnown = hints.isRegular || !!hints.rooms;
-  if (!sizeTypeKnown && !alreadyAsked(history, Q_TYPE_SIZE)) {
-    return ask(Q_TYPE_SIZE, {
-      type: "single",
-      options: [
-        ...ROOM_TIERS.map((r) => ({ label: `${r} pièce${r === "1" ? "" : "s"}`, value: r })),
-        { label: "Nettoyage régulier", value: "regular" },
-      ],
-    });
-  }
-
-  if (hints.isRegular && !alreadyAsked(history, Q_HOURS)) {
-    return ask(Q_HOURS, {
-      type: "single",
-      options: [
-        { label: "1–2 heures", value: "1-2" },
-        { label: "2–3 heures", value: "2-3" },
-        { label: "3–4 heures", value: "3-4" },
-        { label: "4–5 heures", value: "4-5" },
-        { label: "Plus de 5 heures", value: "5+" },
-      ],
-    });
-  }
-  const hours = hints.isRegular ? parseHours(answerFollowing(history, Q_HOURS)) : undefined;
-
-  if (!alreadyAsked(history, Q_CONDITION)) {
-    return ask(Q_CONDITION, {
-      type: "single",
-      options: [
-        { label: "État normal", value: "normal" },
-        { label: "Plutôt sale", value: "dirty" },
-        { label: "Très sale / encombré", value: "very_dirty" },
-      ],
-    });
-  }
-  const condition = parseCondition(answerFollowing(history, Q_CONDITION));
-
-  if (!alreadyAsked(history, Q_FLOORS)) {
-    return ask(Q_FLOORS, {
-      type: "single",
-      options: [
+const STEPS = [
+  {
+    id: "type_nettoyage",
+    question: Q_TYPE_NETTOYAGE,
+    type: "single",
+    options: () => Object.keys(TYPE_NETTOYAGE_MAP).map((l) => ({ label: l, value: TYPE_NETTOYAGE_MAP[l] })),
+    parse: (text) => TYPE_NETTOYAGE_MAP[label(text)] || "ponctuel",
+    applies: () => true,
+  },
+  {
+    id: "type_bien",
+    question: "Quel type de bien souhaitez-vous faire nettoyer ?",
+    type: "single",
+    options: () =>
+      ["Appartement", "Maison", "Studio", "Bureau", "Commerce / local professionnel", "Villa"].map((l) => ({
+        label: l,
+        value: l,
+      })),
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "rooms",
+    question: "Combien de pièces compte votre logement ?",
+    type: "single",
+    options: () => ROOM_TIERS.map((r) => ({ label: `${r} pièce${r === "1" ? "" : "s"}`, value: r })),
+    parse: (text) => {
+      const m = (text || "").match(/(\d(?:[.,]5)?)/);
+      return m ? m[1].replace(",", ".") : "3";
+    },
+    applies: () => true,
+  },
+  {
+    id: "surface",
+    question: "Quelle est approximativement la surface du logement ?",
+    type: "single",
+    options: () =>
+      ["Moins de 50 m²", "50–75 m²", "75–100 m²", "100–150 m²", "150–200 m²", "Plus de 200 m²", "Je ne sais pas"].map(
+        (l) => ({ label: l, value: l })
+      ),
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "etages_niveaux",
+    question: "Le logement comporte-t-il plusieurs niveaux ?",
+    type: "single",
+    options: () =>
+      ["Un seul niveau", "2 niveaux", "3 niveaux ou plus", "Je ne sais pas"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "etages_nombre",
+    question: "Combien d'étages faut-il nettoyer ?",
+    type: "single",
+    options: () => ["2", "3", "4", "5+"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: (a) => a.etages_niveaux === "2 niveaux" || a.etages_niveaux === "3 niveaux ou plus",
+  },
+  {
+    id: "salles_bain",
+    question: "Combien de salles de bains et de WC faut-il nettoyer ?",
+    type: "single",
+    options: () => ["1", "2", "3", "4", "5+"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "cuisine",
+    question: "Y a-t-il une cuisine à nettoyer ?",
+    type: "single",
+    options: () =>
+      ["Oui", "Non", "Cuisine ouverte", "Cuisine fermée", "Plusieurs cuisines"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "condition",
+    question: "Dans quel état se trouve actuellement le logement ?",
+    type: "single",
+    options: () =>
+      [
+        "Entretien normal",
+        "Peu sale",
+        "Très poussiéreux",
+        "Très sale",
+        "Très encrassé",
+        "Nécessite un nettoyage en profondeur",
+      ].map((l) => ({ label: l, value: l })),
+    parse: (text) => {
+      const t = (text || "").toLowerCase();
+      if (/tr[èe]s sale|encrass[ée]|nettoyage en profondeur/.test(t)) return "very_dirty";
+      if (/peu sale|poussi[èe]reux/.test(t)) return "dirty";
+      return "normal";
+    },
+    applies: () => true,
+  },
+  {
+    id: "logement_vide",
+    question: "Le logement sera-t-il vide au moment du nettoyage ?",
+    type: "single",
+    options: () =>
+      ["Oui, complètement vide", "Partiellement vide", "Non, il sera encore occupé", "Je ne sais pas"].map((l) => ({
+        label: l,
+        value: l,
+      })),
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "fenetres",
+    question: "Souhaitez-vous inclure le nettoyage des fenêtres ?",
+    type: "single",
+    options: () => ["Oui", "Non", "Je ne sais pas"].map((l) => ({ label: l, value: l })),
+    parse: (text) => yes(text),
+    applies: () => true,
+  },
+  {
+    id: "fenetres_type",
+    question: "Quel type de nettoyage des fenêtres souhaitez-vous ?",
+    type: "single",
+    options: () =>
+      ["Intérieur uniquement", "Intérieur + extérieur", "Vitres + cadres + rebords", "Nettoyage complet"].map(
+        (l) => ({ label: l, value: l })
+      ),
+    parse: label,
+    applies: (a) => a.fenetres === true,
+  },
+  {
+    id: "fenetres_nombre",
+    question: "Combien de fenêtres environ ?",
+    type: "single",
+    options: () =>
+      ["1–5", "6–10", "11–15", "16–20", "Plus de 20", "Je ne sais pas"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: (a) => a.fenetres === true,
+  },
+  {
+    id: "fenetres_difficiles",
+    question: "Les vitres sont-elles difficiles d'accès (baies vitrées, hauteur, etc.) ?",
+    type: "single",
+    options: () => ["Oui", "Non"].map((l) => ({ label: l, value: l })),
+    parse: (text) => yes(text),
+    applies: (a) => a.fenetres === true,
+  },
+  {
+    id: "four",
+    question: "Souhaitez-vous inclure le nettoyage du four ?",
+    type: "single",
+    options: () => ["Oui", "Non", "Je ne sais pas"].map((l) => ({ label: l, value: l })),
+    parse: (text) => yes(text),
+    applies: () => true,
+  },
+  {
+    id: "four_etat",
+    question: "Dans quel état est le four ?",
+    type: "single",
+    options: () =>
+      ["Entretien normal", "Très graisseux", "Très encrassé", "Je ne sais pas"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: (a) => a.four === true,
+  },
+  {
+    id: "frigo",
+    question: "Souhaitez-vous inclure le nettoyage du réfrigérateur ?",
+    type: "single",
+    options: () =>
+      ["Oui", "Non", "Réfrigérateur + congélateur", "Je ne sais pas"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "autres_appareils",
+    question: "Souhaitez-vous nettoyer d'autres appareils de cuisine ?",
+    type: "multi",
+    options: () =>
+      Object.keys(KITCHEN_APPLIANCE_KEYS)
+        .map((l) => ({ label: l, value: KITCHEN_APPLIANCE_KEYS[l] }))
+        .concat([{ label: "Aucun", value: "none" }]),
+    parse: (text) => parseMultiKeys(text, KITCHEN_APPLIANCE_KEYS),
+    applies: () => true,
+  },
+  {
+    id: "tapis_moquette",
+    question: "Souhaitez-vous un nettoyage de tapis ou de moquette ?",
+    type: "single",
+    options: () =>
+      ["Non", "Tapis", "Moquette", "Tapis + moquette", "Je ne sais pas"].map((l) => ({ label: l, value: l })),
+    parse: (text) => ["Tapis", "Moquette", "Tapis + moquette"].includes(label(text)),
+    applies: () => true,
+  },
+  {
+    id: "tapis_pieces",
+    question: "Quelle est approximativement la surface concernée (en nombre de pièces) ?",
+    type: "single",
+    options: () => ["1", "2", "3", "4+"].map((l) => ({ label: l, value: l })),
+    parse: (text) => parseCount(text, 1),
+    applies: (a) => a.tapis_moquette === true,
+  },
+  {
+    id: "textiles",
+    question: "Souhaitez-vous nettoyer des textiles ou du mobilier ?",
+    type: "multi",
+    options: () =>
+      Object.keys(TEXTILE_KEYS)
+        .map((l) => ({ label: l, value: TEXTILE_KEYS[l] }))
+        .concat([{ label: "Aucun", value: "none" }]),
+    parse: (text) => parseMultiKeys(text, TEXTILE_KEYS),
+    applies: () => true,
+  },
+  {
+    id: "floors_no_elevator",
+    question: "Le logement est-il accessible sans ascenseur ?",
+    type: "single",
+    options: () =>
+      [
         { label: "Rez-de-chaussée ou ascenseur", value: "0" },
         { label: "1 étage sans ascenseur", value: "1" },
         { label: "2 étages sans ascenseur", value: "2" },
         { label: "3 étages ou plus sans ascenseur", value: "3" },
       ],
-    });
-  }
-  const floorsNoElevator = parseFloors(answerFollowing(history, Q_FLOORS));
+    parse: (text) => {
+      const t = (text || "").toLowerCase();
+      if (/rez|ascenseur/.test(t) && !/sans ascenseur/.test(t)) return 0;
+      const m = t.match(/(\d+)/);
+      return m ? Math.min(parseInt(m[1], 10), 3) : 0;
+    },
+    applies: () => true,
+  },
+  {
+    id: "acces_logement",
+    question: "Comment l'équipe pourra-t-elle accéder au logement ?",
+    type: "single",
+    options: () =>
+      ["Je serai présent(e)", "Clés remises à l'équipe", "Boîte à clés", "Concierge / réception"].map((l) => ({
+        label: l,
+        value: l,
+      })),
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "stationnement",
+    question: "Y a-t-il une possibilité de stationner facilement à proximité du logement ?",
+    type: "single",
+    options: () =>
+      ["Oui", "Non", "Parking privé", "Parking public", "Je ne sais pas"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "date_nettoyage",
+    question: "Quand souhaitez-vous effectuer le nettoyage ?",
+    type: "text",
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "date_imperative",
+    question: "Cette date est-elle impérative ?",
+    type: "single",
+    options: () => ["Oui", "Non, je suis flexible"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "travaux_type",
+    question: "Quels travaux ont été réalisés ?",
+    type: "single",
+    options: () =>
+      ["Peinture", "Rénovation", "Construction", "Travaux de cuisine", "Travaux de salle de bains", "Rénovation complète"].map(
+        (l) => ({ label: l, value: l })
+      ),
+    parse: label,
+    applies: (a) => a.type_nettoyage === "apres_travaux",
+  },
+  {
+    id: "niveau_poussiere",
+    question: "Quel est le niveau de poussière ou de saleté après les travaux ?",
+    type: "single",
+    options: () => ["Léger", "Moyen", "Important", "Très important"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: (a) => a.type_nettoyage === "apres_travaux",
+  },
+  {
+    id: "frequence",
+    question: "À quelle fréquence souhaitez-vous le nettoyage ?",
+    type: "single",
+    options: () =>
+      ["Chaque semaine", "Toutes les 2 semaines", "Toutes les 3 semaines", "Une fois par mois", "Ponctuellement"].map(
+        (l) => ({ label: l, value: l })
+      ),
+    parse: label,
+    applies: (a) => a.type_nettoyage === "regular",
+  },
+  {
+    id: "hours",
+    question: "Combien de temps souhaitez-vous prévoir pour chaque nettoyage ?",
+    type: "single",
+    options: () => HOURS_OPTIONS,
+    parse: parseHours,
+    applies: (a) => a.type_nettoyage === "regular",
+  },
+  {
+    id: "vide_avant",
+    question: "Le logement sera-t-il complètement vidé avant le nettoyage ?",
+    type: "single",
+    options: () => ["Oui", "Non", "Partiellement", "Je ne sais pas"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: (a) => a.type_nettoyage === "fin_de_bail",
+  },
+  {
+    id: "date_etat_des_lieux",
+    question: "Quand aura lieu votre état des lieux ?",
+    type: "text",
+    parse: label,
+    applies: (a) => a.type_nettoyage === "fin_de_bail",
+  },
+  {
+    id: "garantie_remise_etat",
+    question: "Avez-vous besoin d'un nettoyage avec garantie de remise en état pour l'état des lieux ?",
+    type: "single",
+    options: () => ["Oui", "Non", "Je ne sais pas"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: (a) => a.type_nettoyage === "fin_de_bail",
+  },
+  {
+    id: "animaux",
+    question: "Y a-t-il des animaux dans le logement ?",
+    type: "single",
+    options: () => ["Non", "Chien", "Chat", "Plusieurs animaux"].map((l) => ({ label: l, value: l })),
+    parse: label,
+    applies: () => true,
+  },
+  {
+    id: "situations_particulieres",
+    question: "Y a-t-il une situation particulière dont notre équipe devrait tenir compte ?",
+    type: "multi",
+    options: () =>
+      [
+        "Aucune",
+        "Forte accumulation de poussière",
+        "Fumée / odeurs",
+        "Beaucoup de poils",
+        "Logement très encombré",
+        "Taches importantes",
+        "Moisissures visibles",
+      ].map((l) => ({ label: l, value: l })),
+    // Deliberately never auto-priced (e.g. moisissures can need a real
+    // procedure, not just a generic surcharge) — recorded for the owner to
+    // review, per the brief's explicit instruction on this category.
+    parse: (text) => (text || "").split(",").map((s) => s.trim()).filter(Boolean),
+    applies: () => true,
+  },
+  {
+    id: "contact",
+    question:
+      "Parfait ! Pour finaliser votre devis, quel est votre nom, votre e-mail, votre téléphone, et l'adresse du logement à nettoyer ? " +
+      "(Vous testez cette démo pour votre entreprise ? Indiquez ici les coordonnées fictives d'un de vos clients — pas les vôtres.)",
+    type: "text",
+    parse: (text) => text,
+    applies: () => true,
+  },
+];
 
-  if (!hints.addons.length && !alreadyAsked(history, Q_ADDONS)) {
-    return ask(Q_ADDONS, {
-      type: "multi",
-      options: [
-        { label: "Four", value: "oven" },
-        { label: "Vitres", value: "windows" },
-        { label: "Frigo", value: "fridge" },
-        { label: "Moquette", value: "carpet_shampoo" },
-        { label: "Aucune option", value: "none" },
-      ],
-    });
+function extractContact(text) {
+  const emailMatch = text.match(/[\w.+-]+@[\w-]+\.[\w.-]+/);
+  const phoneMatch = text.match(/(\+?\d[\d\s.-]{7,}\d)/);
+  let rest = text;
+  if (emailMatch) rest = rest.replace(emailMatch[0], " ");
+  if (phoneMatch) rest = rest.replace(phoneMatch[0], " ");
+  rest = rest.replace(/[,;]/g, " ").replace(/\s+/g, " ").trim();
+
+  const words = rest.split(" ").filter(Boolean);
+  const name = words.slice(0, 2).join(" ") || "";
+  const address = words.slice(2).join(" ") || rest;
+
+  return {
+    name,
+    email: emailMatch ? emailMatch[0] : "",
+    phone: phoneMatch ? phoneMatch[0].trim() : "",
+    address,
+  };
+}
+
+async function runTurnMock(history) {
+  const answers = {};
+
+  for (const step of STEPS) {
+    if (!step.applies(answers)) continue;
+
+    if (!alreadyAsked(history, step.question)) {
+      return ask(step.question, step.type === "text" ? null : { type: step.type, options: step.options() });
+    }
+
+    answers[step.id] = step.parse(answerFollowing(history, step.question), answers);
   }
 
-  if (hints.addons.includes("windows") && !alreadyAsked(history, Q_WINDOWS_ACCESS)) {
-    return ask(Q_WINDOWS_ACCESS, {
-      type: "single",
-      options: [
-        { label: "Oui", value: "yes" },
-        { label: "Non", value: "no" },
-      ],
-    });
-  }
-  const difficultAccessWindows = hints.addons.includes("windows")
-    ? parseWindowsAccess(answerFollowing(history, Q_WINDOWS_ACCESS))
-    : false;
-
-  if (hints.addons.includes("carpet_shampoo") && !alreadyAsked(history, Q_CARPET_ROOMS)) {
-    return ask(Q_CARPET_ROOMS, {
-      type: "single",
-      options: [
-        { label: "1 pièce", value: "1" },
-        { label: "2 pièces", value: "2" },
-        { label: "3 pièces", value: "3" },
-        { label: "4 pièces ou plus", value: "4" },
-      ],
-    });
-  }
-  const carpetRooms = hints.addons.includes("carpet_shampoo")
-    ? parseCarpetRooms(answerFollowing(history, Q_CARPET_ROOMS))
-    : undefined;
-
-  const customer = extractContactFromHistory(userMessages);
-  if (!customer.email && !alreadyAsked(history, Q_CONTACT)) {
-    return ask(Q_CONTACT);
-  }
+  // Every step has been asked and answered — build the quote.
+  const addons = []
+    .concat(answers.four ? ["oven"] : [])
+    .concat(answers.fenetres ? ["windows"] : [])
+    .concat(answers.frigo === "Oui" || answers.frigo === "Réfrigérateur + congélateur" ? ["fridge"] : [])
+    .concat(answers.frigo === "Réfrigérateur + congélateur" ? ["freezer"] : [])
+    .concat(answers.tapis_moquette ? ["carpet_shampoo"] : [])
+    .concat(answers.autres_appareils || [])
+    .concat(answers.textiles || []);
 
   const input = {
-    service_type: hints.isRegular ? "regular_cleaning" : "end_of_tenancy",
-    rooms: hints.rooms || "3",
-    hours,
-    addons: hints.addons,
-    carpet_rooms: carpetRooms,
-    condition,
-    difficult_access_windows: difficultAccessWindows,
-    floors_no_elevator: floorsNoElevator,
+    service_type: answers.type_nettoyage === "regular" ? "regular_cleaning" : "end_of_tenancy",
+    rooms: answers.rooms || "3",
+    hours: answers.type_nettoyage === "regular" ? answers.hours : undefined,
+    addons: [...new Set(addons)],
+    carpet_rooms: answers.tapis_pieces,
+    condition: answers.condition || "normal",
+    difficult_access_windows: !!answers.fenetres_difficiles,
+    floors_no_elevator: answers.floors_no_elevator || 0,
   };
 
   const quote = calculateQuote(input);
-  quote.customer = customer;
+  quote.customer = extractContact(answers.contact || "");
+  quote.details = answers;
 
-  const text = customer.name
-    ? `Merci ${customer.name} ! Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.`
+  const text = quote.customer.name
+    ? `Merci ${quote.customer.name} ! Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.`
     : "Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.";
 
   return {

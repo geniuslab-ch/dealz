@@ -71,20 +71,50 @@ strangers clicking around a marketing demo doesn't make sense, so the recommende
 public URL is `MOCK_MODE=true` with no `ANTHROPIC_API_KEY` at all — zero API cost, unlimited free
 tries, and (per below) a lead-capture gate that still gives you something for every trial.
 
-## The mock-mode question flow is a real clickable MCQ, not a fixed script
+## The mock-mode question flow is the full 25-category clickable MCQ bank
 
-Earlier this asked exactly 3 fixed questions by turn number, regardless of what the customer had
-already said — so answering everything in one message (or even just "3 pièces") still got the same
-canned question echoed back. `src/mock.js` / `docs/mock-client.js` now re-read the whole
-conversation on every turn and only ask about whatever's still missing, covering every pricing
-variable in `docs/pricing.json`: type + size, hours (regular cleaning only), condition, elevator
-access, add-ons (multi-select), difficult-access windows (only if windows was chosen), carpet rooms
-(only if carpet shampoo was chosen), then contact info. Each question comes back from the engine as
-a `question: { type: "single" | "multi", options: [...] }` field alongside the assistant's message;
-`docs/quote-app.js`'s `renderChipQuestion()` renders it as clickable chips (reusing the existing
-objection-picker chip styling). A chip click is sent back as a normal chat message — its label text
-— through the exact same code path as typing, so the free-text input at the bottom always still
-works as a natural "other" fallback with no separate UI needed for it.
+This started as 3 fixed questions asked by turn number regardless of what the customer had already
+said (so answering everything in one message still got the same canned question echoed back), then
+became a shorter adaptive ~8-question flow scoped to only what `pricing.json` actually prices. Per
+an explicit product decision, it's now the **full 25-category question bank** (type de nettoyage,
+type de bien, pièces, surface, niveaux, salles de bains, cuisine, état général, logement vide,
+fenêtres, four, frigo, autres appareils de cuisine, tapis/moquette, canapé/textiles, accès sans
+ascenseur, accès au logement, stationnement, date, animaux, situations particulières, plus
+conditional blocks for fin-de-bail/après-travaux/nettoyage régulier, then contact info) — `src/mock.js`
+/ `docs/mock-client.js` walk this as a declarative, ordered `STEPS` array, each step asked exactly
+once as chips (single- or multi-select) or free text, with `applies(answers)` gating conditional
+branches so a régulier-cleaning customer never sees fin-de-bail questions and vice versa.
+
+**Deliberately not "smart skip-ahead" from free text.** Earlier versions tried to detect answers
+already given in free text and skip that question — good for minimizing friction, bad for a
+prospect trying to *evaluate* the tool, who wants to see it actually walk the full flow, and bad for
+upsell (skipping the add-ons question because "four" was mentioned means never surfacing vitres/
+frigo/moquette as options). So the full bank asks every applicable step regardless of what's already
+been said, with one exception: the add-ons/textiles multi-select steps come back pre-selected with
+whatever was already mentioned (via `question.preselected`), so nothing has to be re-typed to keep
+it — they just stay visible to catch upsell opportunities the customer wouldn't have thought to ask
+for. Category 24 ("Services supplémentaires") from the original brief was dropped as a literal
+duplicate of categories 10–15 already asked individually.
+
+Only the subset of steps that map to a `docs/pricing.json` variable feed `calculateQuote()`
+(type/size → service_type+rooms, hours, état général → condition, fenêtres → windows add-on +
+difficult-access surcharge, four/frigo/autres appareils/tapis/canapé → add-ons, accès sans ascenseur
+→ floor surcharge). Everything else (type de bien, surface, cuisine, logement vide, animaux,
+stationnement, date, situations particulières, etc.) is genuinely informational — it doesn't affect
+the total, but it's collected on `quote.details` and printed as a "Détails complémentaires" section
+in the PDF (`docs/pdf-generator.js`), so all those extra questions still pay off in the document the
+customer receives. Nine new add-on line items were added to `pricing.json` to price the appliance/
+textile categories the original bank listed alongside four/vitres/frigo (hotte, plaques de cuisson,
+micro-ondes, lave-vaisselle, congélateur, canapé, fauteuil, matelas, rideaux) — same treatment as the
+existing add-ons, and now also offered by the real Claude assistant (`src/claude.js`).
+
+Each question comes back from the engine as a `question: { type: "single" | "multi", options: [...],
+preselected?: [...] }` field alongside the assistant's message; `docs/quote-app.js`'s
+`renderChipQuestion()` renders it as clickable chips (reusing the existing objection-picker chip
+styling, plus a `.selected` state for multi-select and pre-selected chips). A chip click is sent back
+as a normal chat message — its label text — through the exact same code path as typing, so the
+free-text input at the bottom always still works as a natural fallback with no separate "Autre" UI
+needed for it.
 
 ## Lead-capture gate on the public demo (`docs/lead-gate.js` + `src/leads.js`)
 

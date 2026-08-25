@@ -200,9 +200,14 @@
     const wrap = el("div", "dealz-objection-picker");
     const chipsRow = el("div", "dop-chips");
     const selected = new Set();
+    const preselected = new Set(question.preselected || []);
 
     question.options.forEach((opt) => {
       const btn = el("button", "dop-chip", opt.label);
+      if (question.type === "multi" && preselected.has(opt.value)) {
+        btn.classList.add("selected");
+        selected.add(opt.label);
+      }
       btn.addEventListener("click", () => {
         if (question.type === "multi") {
           btn.classList.toggle("selected");

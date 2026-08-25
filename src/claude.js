@@ -30,7 +30,11 @@ Prestations disponibles :
   estime nécessaires, ou estime à partir de la surface (environ 25-30m² par heure).
 
 Options disponibles : nettoyage du four, nettoyage des vitres, nettoyage du frigo, shampoing
-moquette (demande combien de pièces sont concernées).
+moquette (demande combien de pièces sont concernées), hotte, plaques de cuisson, micro-ondes,
+lave-vaisselle, congélateur, canapé, fauteuil, matelas, rideaux. Ne les propose pas toutes en bloc —
+mentionne-les brièvement au moment où tu demandes les options ("four, vitres, frigo, ou d'autres
+équipements comme la hotte, le canapé, les rideaux...") pour laisser le client compléter s'il le
+souhaite, sans en faire une longue liste imposée.
 
 Ne demande la distance de déplacement que si le client mentionne un lieu éloigné de la zone
 habituelle de l'entreprise ; sinon, ignore ce point.
@@ -84,7 +88,24 @@ const CALCULATE_QUOTE_TOOL = {
       },
       addons: {
         type: "array",
-        items: { type: "string", enum: ["oven", "windows", "fridge", "carpet_shampoo"] },
+        items: {
+          type: "string",
+          enum: [
+            "oven",
+            "windows",
+            "fridge",
+            "carpet_shampoo",
+            "hood",
+            "stovetop",
+            "microwave",
+            "dishwasher",
+            "freezer",
+            "sofa",
+            "armchair",
+            "mattress",
+            "curtains",
+          ],
+        },
       },
       carpet_rooms: {
         type: "number",

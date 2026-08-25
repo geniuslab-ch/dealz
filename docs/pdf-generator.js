@@ -20,6 +20,57 @@
     return d.toLocaleDateString("fr-CH", { year: "numeric", month: "long", day: "numeric" });
   }
 
+  // Labels for the extra, non-pricing context collected by the full MCQ
+  // question flow (docs/mock-client.js) — shown as a compact recap so all
+  // those questions actually pay off in the document, not just the total.
+  const TYPE_NETTOYAGE_LABELS = {
+    regular: "Nettoyage régulier",
+    ponctuel: "Nettoyage ponctuel",
+    profondeur: "Nettoyage en profondeur",
+    fin_de_bail: "Nettoyage de fin de bail / état des lieux",
+    demenagement: "Nettoyage après déménagement",
+    apres_travaux: "Nettoyage après travaux",
+    bureau: "Nettoyage professionnel / bureau",
+  };
+  const DETAIL_LABELS = {
+    type_nettoyage: "Type de nettoyage",
+    type_bien: "Type de bien",
+    surface: "Surface",
+    etages_niveaux: "Niveaux du logement",
+    etages_nombre: "Étages à nettoyer",
+    salles_bain: "Salles de bains / WC",
+    cuisine: "Cuisine",
+    logement_vide: "Logement vide ?",
+    fenetres_type: "Type de nettoyage des fenêtres",
+    fenetres_nombre: "Nombre de fenêtres",
+    four_etat: "État du four",
+    frigo: "Réfrigérateur",
+    acces_logement: "Accès au logement",
+    stationnement: "Stationnement",
+    date_nettoyage: "Date souhaitée",
+    date_imperative: "Date impérative ?",
+    travaux_type: "Travaux réalisés",
+    niveau_poussiere: "Niveau de poussière après travaux",
+    frequence: "Fréquence souhaitée",
+    vide_avant: "Logement vidé avant nettoyage ?",
+    date_etat_des_lieux: "Date de l'état des lieux",
+    garantie_remise_etat: "Garantie de remise en état",
+    animaux: "Animaux",
+    situations_particulieres: "Situations particulières",
+  };
+
+  function detailLines(details) {
+    if (!details) return [];
+    return Object.keys(DETAIL_LABELS)
+      .map((key) => {
+        let value = details[key];
+        if (key === "type_nettoyage" && value) value = TYPE_NETTOYAGE_LABELS[value] || value;
+        if (Array.isArray(value)) value = value.join(", ");
+        return value ? `${DETAIL_LABELS[key]} : ${value}` : null;
+      })
+      .filter(Boolean);
+  }
+
   // Returns { doc, blobUrl } — doc is the jsPDF instance (for .save()),
   // blobUrl is for previewing in an <iframe> without triggering a download.
   function generate(quote, customer) {
@@ -77,7 +128,33 @@
 
     y += 8;
 
+    // --- Extra context collected by the question flow (optional) ---
+    const extraLines = detailLines(quote.details);
+    if (extraLines.length) {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(10);
+      doc.setTextColor(11, 18, 32);
+      doc.text("Détails complémentaires", marginX, y);
+      y += 6;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.5);
+      doc.setTextColor(91, 100, 114);
+      extraLines.forEach((line) => {
+        if (y > 275) {
+          doc.addPage();
+          y = 20;
+        }
+        doc.text(line, marginX, y);
+        y += 4.6;
+      });
+      y += 6;
+    }
+
     // --- Itemized table ---
+    if (y > 250) {
+      doc.addPage();
+      y = 20;
+    }
     doc.setFont("helvetica", "bold");
     doc.setFontSize(10);
     doc.setTextColor(255, 255, 255);
@@ -91,6 +168,10 @@
     doc.setTextColor(16, 19, 26);
     quote.items.forEach((item, idx) => {
       const rowH = 9;
+      if (y > 280) {
+        doc.addPage();
+        y = 20;
+      }
       if (idx % 2 === 1) {
         doc.setFillColor(247, 249, 253);
         doc.rect(marginX, y, pageWidth - marginX * 2, rowH, "F");
@@ -101,6 +182,10 @@
       y += rowH;
     });
 
+    if (y > 270) {
+      doc.addPage();
+      y = 20;
+    }
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
     doc.setFillColor(232, 241, 255); // blue-light
