@@ -515,20 +515,34 @@ a mock chat conversation → a mock PDF offer with Accepter/Refuser buttons, cap
 that the CHF shown is *the cleaning customer's* price, not Dealz's own price (this used to be two
 separate, redundant sections — merged into one linear 3-panel story) → "couche de vente, pas un
 remplacement" (vs. existing cleaning software) → **competitor comparison table** (3×2 dashboard
-grid — `.dash-grid`) → **pricing (Capture / Convert / Automate)** → final CTA → contact / lead form
+grid — `.dash-grid`) → **pricing (CAPTURE / CLOSE / SCALE)** → final CTA → contact / lead form
 (client-side only — see "Not included"). CTA copy changes with funnel position: "Voir comment ça
 marche" in the hero, "Découvrir l'expérience" after How It Works, "Essayer la démo gratuite" at
 pricing and the final CTA, "Demander l'installation" as the closing ask.
 
-**Pricing is outcome-based, not feature-count-based** (per the pricing-specialist critique this
-shipped from): Capture (CHF 49/mo) covers the whole core loop — integration, AI conversation,
-deterministic pricing, itemized quote, accept/decline, e-mail confirmation, calendar link. Convert
-(CHF 79/mo, recommended) adds the actual differentiator — the objection → counteroffer sales loop.
-Automate (CHF 149/mo) is deliberately narrow: only things that become real needs once a company has
-more than one person taking bookings (shared calendar, real Excel sync, white-glove install,
-priority support) — not a grab-bag of unrelated features padded on to make the top tier look
-bigger. A single unified one-time setup fee (CHF 199–499, scaled by pricing-grid complexity) applies
-across all three tiers, shown once below the cards rather than baked into each one.
+**Pricing tells a progression, not a feature-count comparison** (rewritten from an earlier
+Capture/Convert/Automate version per an explicit product brief — plan names are deliberately short,
+untranslated, and stable across FR/DE/IT/EN). CAPTURE (CHF 49/mo, *"Ne manquez plus jamais une
+demande"*) covers the whole core loop end to end — integration, AI conversation, deterministic
+pricing, itemized quote, PDF, accept/decline, e-mail confirmation, calendar link — not a stripped
+demo tier; accept/decline and the calendar link were deliberately never gated behind a higher plan.
+CLOSE (CHF 79/mo, recommended, *"Ne laissez plus un « non » devenir une vente perdue"*) adds the
+actual differentiator: the objection → counteroffer sales loop, framed as revenue recovered rather
+than as more features. SCALE (CHF 149/mo, *"Quand une personne ne suffit plus pour gérer vos
+réservations"*) is explicitly **not** "the plan where bookings become automatic" — they already are,
+starting at CAPTURE (accept → confirmation → e-mail → calendar, no gate on any of it). SCALE is
+about the complexity that shows up once a company has more than one person or calendar: multiple
+collaborators, shared calendars, booking routing, multiple teams/locations, real Excel sync,
+priority support.
+
+**Installation is a separate, one-time, flat fee — not a bundled or ranged cost.** CHF 390 once,
+shown as its own panel below the three cards (`.install-panel`) with what it actually covers
+(pricing-grid mapping, widget integration, e-mail/Calendar config, testing, go-live) — replacing an
+earlier CHF 199–499 range that read as ambiguous about whether setup was included in a plan's
+monthly price. The panel also shows installation waived on an annual subscription (illustrated with
+CLOSE: CHF 948/yr vs. CHF 79/mo + CHF 390) as informational copy only — there's no real annual-vs-
+monthly billing toggle or payment system in this repo, so this is presented as a stated offer, not a
+working checkout path.
 
 **Why CHF 490 (the example client quote) still gets an explicit caption:** it's the canonical
 worked example from the original commercial offer (390 fin de bail + 40 four + 60 vitres = 490,
@@ -549,7 +563,7 @@ site changes, re-verify before editing the table — don't touch the numbers fro
 counteroffer/e-mail/calendar loop below is now real, working code — these two aren't yet): the
 hero/value-grid/step-01 copy states pricing updates sync from Excel automatically, and that Dealz
 embeds into the client's *existing* site rather than replacing it. Both are true of the *intended*
-product (this is the core pitch from the original commercial offer, and "Automate" tier explicitly
+product (this is the core pitch from the original commercial offer, and the SCALE tier explicitly
 sells real Excel sync) but aren't literally wired up yet — `docs/pricing.json` is a static file, not
 a live Excel connection, and there's no generic "embed on any CMS" installer built. Keep the
 marketing claim, but know it describes the product being sold, not (yet) this repo's current code.

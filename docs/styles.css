@@ -977,6 +977,70 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 }
 .pricing-setup-note b { color: var(--ink); }
 
+.price-card .plan-cta {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  padding: 12px 20px;
+}
+.pricing-roi-note {
+  text-align: center;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--blue-dark);
+  margin: 28px 0 0;
+}
+
+/* ---------- Installation panel ---------- */
+.install-panel {
+  margin-top: 24px;
+  background: #f7f9fd;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 26px 24px;
+}
+.install-label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.install-price { font-size: 30px; font-weight: 800; margin: 8px 0 2px; color: var(--ink); }
+.install-price .lbl { font-size: 13px; font-weight: 600; color: var(--muted); }
+.install-desc { font-size: 13.5px; color: var(--muted); max-width: 580px; margin: 8px 0 18px; line-height: 1.55; }
+.install-checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 22px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px 20px;
+}
+.install-checklist li { font-size: 13px; color: var(--ink); display: flex; gap: 7px; align-items: flex-start; line-height: 1.4; }
+.install-checklist li span.chk { color: var(--blue); flex-shrink: 0; font-weight: 800; }
+.install-offer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  border-top: 1px dashed var(--line);
+  padding-top: 20px;
+}
+.install-offer-col {
+  background: white;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+.install-offer-col.highlight { border-color: var(--blue); background: var(--blue-light); }
+.install-offer-label { font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.install-offer-price { font-size: 22px; font-weight: 800; color: var(--ink); margin: 6px 0 2px; }
+.install-offer-price .per { font-size: 12px; font-weight: 600; color: var(--muted); }
+.install-offer-line { font-size: 13px; color: var(--muted); }
+.install-offer-free { font-size: 13.5px; font-weight: 800; color: var(--blue-dark); margin-top: 2px; }
+.install-offer-caption { font-size: 12px; color: var(--muted); margin: 14px 0 0; }
+
+.pricing-usp { text-align: center; margin-top: 28px; }
+.pricing-usp-headline { font-size: 16px; font-weight: 800; color: var(--ink); margin: 0 0 6px; }
+.pricing-usp-sub { font-size: 13.5px; color: var(--muted); max-width: 640px; margin: 0 auto; line-height: 1.6; }
+
 /* ---------- Final CTA ---------- */
 .final-cta {
   background: linear-gradient(160deg, var(--navy), var(--blue-dark));
