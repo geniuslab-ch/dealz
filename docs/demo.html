@@ -3,42 +3,132 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Démo Dealz — Essayez l'assistant de devis</title>
+  <title>SwissClean Sàrl — Site de démonstration (propulsé par Dealz)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/demo.css" />
 </head>
-<body>
+<body class="swissclean">
 
-  <nav class="nav">
-    <div class="nav-logo"><img src="/images/dealz-logo-sm.png" alt="Dealz" /></div>
-    <div class="nav-links">
-      <a href="/index.html" class="nav-back">← Retour à l'accueil</a>
+  <div class="sc-demo-banner">
+    <span class="tag">DÉMO</span>
+    Ceci est le site fictif d'une entreprise de nettoyage ayant intégré Dealz.
+    <a href="/index.html">Découvrir Dealz →</a>
+  </div>
+
+  <nav class="sc-nav">
+    <div class="sc-nav-logo"><span class="dot">🧽</span> SwissClean</div>
+    <div class="sc-nav-links">
+      <button data-tab="accueil" class="active">Accueil</button>
+      <button data-tab="prestations">Prestations</button>
+      <button data-tab="apropos">À propos</button>
+      <button data-tab="devis" class="cta">✨ Obtenir un devis</button>
+      <button data-tab="contact">Contact</button>
     </div>
   </nav>
 
-  <section>
-    <div class="section-inner">
-      <div class="demo-intro">
-        <span class="demo-flag">Démo interactive — SwissClean Sàrl, exemple fictif</span>
-        <h2 class="section-title">Voici Dealz en action.</h2>
-        <p class="section-sub" style="margin: 0 auto;">Imaginez que ceci est un client qui visite le site de votre entreprise. Décrivez un besoin de nettoyage et laissez l'assistant vous établir un prix, calculé à partir d'une grille tarifaire d'exemple.</p>
+  <!-- ACCUEIL -->
+  <section id="sc-tab-accueil" class="sc-tab active">
+    <div class="sc-hero">
+      <div class="sc-hero-inner">
+        <span class="sc-eyebrow">Région lémanique · Exemple fictif</span>
+        <h1>Un intérieur impeccable, sans prise de tête.</h1>
+        <p>Nettoyage résidentiel, fin de bail et bureaux dans le Grand Genève &amp; le canton de Vaud — obtenez un prix en quelques secondes, directement sur ce site.</p>
+        <div>
+          <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Obtenir un devis instantané</button>
+          <button class="sc-btn sc-btn-secondary" data-goto="prestations">Voir nos prestations</button>
+        </div>
       </div>
+      <div class="sc-hero-strip">
+        <div class="stat"><div class="num">4.9★</div><div class="lbl">SATISFACTION CLIENT</div></div>
+        <div class="stat"><div class="num">2 300+</div><div class="lbl">NETTOYAGES RÉALISÉS</div></div>
+        <div class="stat"><div class="num">&lt; 1 min</div><div class="lbl">POUR UN DEVIS</div></div>
+      </div>
+    </div>
+
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Pourquoi SwissClean</span>
+      <h2 class="sc-title">Un prix clair, avant même de réserver</h2>
+      <p class="sc-sub">Répondez à quelques questions et obtenez immédiatement un devis détaillé.</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">⚡</div><h3>Prix instantané</h3><p>Devis détaillé en moins d'une minute, à toute heure.</p></div>
+        <div class="sc-card"><div class="icon">🎯</div><h3>Guidé pas à pas</h3><p>Quelques questions simples — pas de formulaire compliqué.</p></div>
+        <div class="sc-card"><div class="icon">🔒</div><h3>Devis ferme</h3><p>Le prix annoncé est le prix payé.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRESTATIONS -->
+  <section id="sc-tab-prestations" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Prestations</span>
+      <h2 class="sc-title">Ce que nous nettoyons</h2>
+      <p class="sc-sub">Choisissez une prestation, ou décrivez simplement votre besoin dans l'onglet « Obtenir un devis ».</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">🏠</div><h3>Nettoyage régulier</h3><p>Hebdomadaire, bimensuel ou ponctuel, facturé à l'heure.</p><span class="tag">dès CHF 45/h</span></div>
+        <div class="sc-card"><div class="icon">📦</div><h3>Fin de bail</h3><p>Nettoyage en profondeur pour votre déménagement.</p><span class="tag">dès CHF 220</span></div>
+        <div class="sc-card"><div class="icon">🔥</div><h3>Nettoyage du four</h3><p>Dégraissage complet, en option.</p><span class="tag">CHF 40</span></div>
+        <div class="sc-card"><div class="icon">🪟</div><h3>Nettoyage des vitres</h3><p>Intérieur et extérieur, sans traces.</p><span class="tag">CHF 60</span></div>
+        <div class="sc-card"><div class="icon">🧺</div><h3>Shampoing moquette</h3><p>Nettoyage en profondeur par pièce.</p><span class="tag">CHF 35/pièce</span></div>
+        <div class="sc-card"><div class="icon">❄️</div><h3>Nettoyage du frigo</h3><p>Nettoyage intérieur complet et dégraissage.</p><span class="tag">CHF 30</span></div>
+      </div>
+      <div style="text-align:center; margin-top: 32px;">
+        <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Obtenir un devis instantané</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- À PROPOS -->
+  <section id="sc-tab-apropos" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">À propos</span>
+      <h2 class="sc-title">Une équipe locale, organisée intelligemment</h2>
+      <p class="sc-sub" style="margin-bottom:0;">SwissClean nettoie logements et bureaux dans le canton de Vaud et à Genève depuis 2014. En 2026, nous avons ajouté un assistant de devis instantané à notre site — plus rapide pour vous, moins d'administratif pour nous.</p>
+      <ul class="sc-about-list">
+        <li><span class="sc-check">✓</span><span><b>Personnel assuré et vérifié</b> — chaque intervenant est contrôlé.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Produits écologiques</b> — sans danger pour les enfants et les animaux.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Tarification transparente</b> — le devis reçu est le prix payé.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="sc-tab-contact" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Contact</span>
+      <h2 class="sc-title">Parlez à une personne, ou obtenez un devis instantané</h2>
+      <p class="sc-sub">Vous préférez répondre à quelques questions plutôt que téléphoner ? Rendez-vous dans l'onglet <b>Obtenir un devis</b>.</p>
+      <div class="sc-contact-grid">
+        <div class="sc-contact-card"><div class="lbl">Téléphone</div><div class="val">022 000 00 00</div></div>
+        <div class="sc-contact-card"><div class="lbl">E-mail</div><div class="val">hello@swissclean.demo</div></div>
+        <div class="sc-contact-card"><div class="lbl">Zone d'intervention</div><div class="val">Vaud &amp; Genève</div></div>
+        <div class="sc-contact-card"><div class="lbl">Horaires</div><div class="val">Lun–Sam, 8h–18h</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEVIS (Dealz widget embedded here) -->
+  <section id="sc-tab-devis" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">✨ Obtenir un devis</span>
+      <h2 class="sc-title">Votre prix en moins d'une minute</h2>
+      <p class="sc-devis-note">Répondez à quelques questions sur votre logement — vous recevrez un devis réel, que vous pourrez accepter ou refuser directement ici.</p>
 
       <div class="quote-wrap">
         <div class="quote-side">
           <h3>Comment ça marche</h3>
           <div class="flow-steps">
-            <div class="flow-step"><div class="num">1</div><span class="label">Le client décrit son besoin</span></div>
+            <div class="flow-step"><div class="num">1</div><span class="label">Vous décrivez votre besoin</span></div>
             <div class="flow-connector"></div>
             <div class="flow-step"><div class="num">2</div><span class="label">Quelques questions rapides</span></div>
             <div class="flow-connector"></div>
-            <div class="flow-step"><div class="num">3</div><span class="label">Calcul selon la grille tarifaire</span></div>
+            <div class="flow-step"><div class="num">3</div><span class="label">Calcul selon notre grille tarifaire</span></div>
             <div class="flow-connector"></div>
             <div class="flow-step"><div class="num">4</div><span class="label">Devis ferme affiché</span></div>
             <div class="flow-connector"></div>
-            <div class="flow-step"><div class="num">5</div><span class="label">Accepté ou refusé</span></div>
+            <div class="flow-step"><div class="num">5</div><span class="label">Vous acceptez ou refusez</span></div>
           </div>
           <div class="note">Essayez : « Appartement de 85m², 3 pièces, déménagement, avec four et vitres. »</div>
         </div>
@@ -71,10 +161,12 @@
     </div>
   </section>
 
-  <footer class="site-footer">
-    Dealz — Assistant de vente IA pour entreprises de nettoyage suisses.
+  <footer class="sc-footer">
+    SwissClean Sàrl — site de démonstration, cette entreprise n'existe pas réellement.
+    Propulsé par <a href="/index.html">⚡ Dealz</a>.
   </footer>
 
+  <script src="/demo-tabs.js"></script>
   <script src="/pricing-engine-client.js"></script>
   <script src="/mock-client.js"></script>
   <script src="/quote-app.js"></script>

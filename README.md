@@ -9,9 +9,10 @@ that they can accept or decline on the spot.
 
 1. **`docs/index.html`** — the actual product: a B2B sales funnel that sells Dealz *to cleaning
    company owners*. Problem → value → how it works → pricing → free demo → request installation.
-2. **`docs/demo.html`** — the proof mechanism at the *end* of that funnel: the interactive quote
-   experience a prospect's own customers would see, using an illustrative example company
-   (SwissClean Sàrl, clearly labeled as fictional) and example pricing.
+2. **`docs/demo.html`** — the proof mechanism at the *end* of that funnel: a full illustrative
+   cleaning-company website (SwissClean Sàrl, clearly labeled as fictional) with the Dealz quote
+   widget embedded in it — the exact experience a prospect's own customers would see, styled
+   differently from Dealz's own brand on purpose (see "Two visual identities" below).
 
 The site never mixes the two — no "I'm a customer / I'm a cleaning company" fork on the homepage.
 Visitors land on the sales pitch first; the interactive demo is the climax, not the entry point.
@@ -86,13 +87,24 @@ program. That's a deliberate transparency line: no AI branding in the *customer-
 copy, but no dishonesty if asked outright, and full AI branding on the *sales* copy where it's the
 actual selling point.
 
-## No fake social proof
+## No fake social proof (on `index.html` — Dealz's own site)
 
 Per the client's explicit direction, `index.html` never claims Dealz has existing customers,
 reviews, or history — no "2 300+ cleanings," no star ratings, no "since 2014." The mock dashboard
-section is clearly labeled **"Exemple de tableau de bord — données de démonstration."** The
-interactive demo is labeled **"Démo interactive — SwissClean Sàrl, exemple fictif."** Credibility
-over fabricated traction.
+section is clearly labeled **"Exemple de tableau de bord — données de démonstration."** This rule
+is specifically about Dealz's own traction claims. `demo.html`'s fictional SwissClean company *does*
+show illustrative flavor text like "4.9★ / 2 300+ nettoyages / depuis 2014" — that's fine, it's
+plausible content for a hypothetical example company, not a claim about Dealz, and the page is
+bannered as a demo throughout.
+
+## Two visual identities, on purpose
+
+`index.html` (Dealz's own site) uses Dealz's navy/blue palette (`styles.css`). `demo.html` (the
+fictional SwissClean site) uses a distinct teal/coral/yellow palette (`docs/demo.css`) — a
+different "host site" brand. The chat widget itself (`.dealz-*`, `.quote-panel`, `.quote-side`)
+keeps its Dealz navy/blue look regardless of which page it's on. The contrast is the point: it
+visually proves "this is a different company's site, with the Dealz widget embedded in it," rather
+than looking like one continuous Dealz-branded experience.
 
 ## Project layout
 
@@ -104,8 +116,13 @@ src/pricingEngine.js           Deterministic price calculation, French item labe
 
 docs/                           Served by Express *and* by GitHub Pages — same files, both places
 docs/index.html                 The B2B sales funnel — Dealz's actual homepage
-docs/demo.html                  The standalone interactive demo, linked from index.html's CTAs
-docs/quote-app.js               The quote assistant UI (used on demo.html only): talks to
+docs/demo.html                  The fictional SwissClean website with the Dealz widget embedded —
+                                 tabs (Accueil/Prestations/À propos/Devis/Contact), its own demo
+                                 banner, its own tab-switcher (docs/demo-tabs.js)
+docs/demo.css                   SwissClean's distinct teal/coral/yellow "host site" chrome — kept
+                                 separate from styles.css on purpose (see "Two visual identities")
+docs/demo-tabs.js               Minimal tab-switcher scoped to demo.html's nav
+docs/quote-app.js               The quote assistant UI (used on demo.html's "Devis" tab): talks to
                                  /api/chat, falls back to the client-side mock when no backend
                                  answers, fires `dealz:quote-delivered` once a quote is shown
 docs/mock-client.js             Browser port of src/mock.js — the GitHub Pages fallback engine
@@ -113,7 +130,8 @@ docs/pricing-engine-client.js   Browser port of src/pricingEngine.js — used by
 docs/pricing.json               The example company's pricing rules — single source of truth
                                  (stand-in for a real client's Excel sheet), read by both the
                                  server and the browser fallback
-docs/styles.css                 Site + chat styling, palette taken from docs/images/dealz-logo.png
+docs/styles.css                 Dealz's own site + the shared chat-widget styling, palette taken
+                                 from docs/images/dealz-logo.png
 docs/images/                    Dealz logo (full + small nav version)
 ```
 
@@ -129,14 +147,28 @@ small and self-contained (~90 and ~60 lines) specifically to keep that hand-sync
 
 ## Funnel structure (`index.html`)
 
-Hero (positioning) → problem ("combien de demandes perdez-vous ?") → business value (7 cards,
-incl. the auto-Excel-sync and same-site-integration points) → how it works (4 steps) →
-differentiator ("l'IA pose les questions, vos règles décident") → Excel → AI transformation →
-"couche de vente, pas un remplacement" (vs. existing cleaning software) → **competitor comparison
-table** → example dashboard → pricing (Pilot / Standard / Pro) → final CTA → contact / lead form
+Hero (positioning) → problem ("combien de demandes perdez-vous ?") → business value (8 cards in a
+4×2 grid — `.cols-4`, incl. the auto-Excel-sync, same-site-integration, and no-per-lead-fee points)
+→ how it works (4 steps) → **"Excel → IA → devis" transform-flow**: a real-Excel-styled sheet →
+a mock chat conversation → a mock PDF offer with Accepter/Refuser buttons, captioned explicitly
+that the CHF shown is *the cleaning customer's* price, not Dealz's own price (this used to be two
+separate, redundant sections — merged into one linear 3-panel story) → "couche de vente, pas un
+remplacement" (vs. existing cleaning software) → **competitor comparison table** (3×2 dashboard
+grid — `.dash-grid`) → pricing (Pilot / Standard / Pro) → final CTA → contact / lead form
 (client-side only — see "Not included"). CTA copy changes with funnel position: "Voir comment ça
 marche" in the hero, "Découvrir l'expérience" after How It Works, "Essayer la démo gratuite" at
 pricing and the final CTA, "Demander l'installation" as the closing ask.
+
+**Why CHF 490 gets an explicit caption:** it's both the example cleaning job's price *and*
+suspiciously close to Dealz's own Pilot setup fee (also CHF 490, from the original commercial
+offer). Rather than silently changing one of the two real numbers — which would either break the
+live demo's actual computed total (390 fin de bail + 40 four + 60 vitres = 490, matching the
+original PDF example everywhere else in this project) or Dealz's real pricing tier — every place
+CHF 490 appears as an example result is labeled "prix pour votre client," with a line pointing at
+the real Dealz pricing section. If this reads as still-too-close in practice, the safer fix is
+bumping the *demo pricing.json* numbers (not the marketing copy) so the illustrative total lands on
+something like CHF 590 — but that means updating `docs/pricing.json` and re-verifying every place
+that quotes "CHF 490" as the worked example, including this README.
 
 **The comparison table** (Operio, Timean, Flinko, Envestis, SwissOfferten) is built from each
 competitor's own public site, fetched and read directly — not guessed or invented. None of the
@@ -152,9 +184,13 @@ core pitch from the original commercial offer) but aren't literally wired up in 
 `docs/pricing.json` is a static file, not a live Excel connection. Keep the marketing claim, but
 know it describes the product being sold, not (yet) this repo's current code.
 
-`demo.html` is intentionally different: no funnel copy, just the demo intro, the chat panel, and —
-once a quote is delivered — the "Imaginez ceci sur VOTRE site" block with three CTAs (Demander
-l'installation / Voir les tarifs / Contacter Dealz), all linking back into `index.html`'s anchors.
+`demo.html` is intentionally a different kind of page: a full illustrative cleaning-company site
+(Accueil / Prestations / À propos / Devis / Contact tabs, its own teal/coral chrome), not funnel
+copy. The "Devis" tab hosts the actual Dealz widget; once a quote is delivered, the "Imaginez ceci
+sur VOTRE site" block appears with three CTAs (Demander l'installation / Voir les tarifs /
+Contacter Dealz), all linking back into `index.html`'s anchors. A sticky dark banner
+("Ceci est le site fictif d'une entreprise de nettoyage ayant intégré Dealz") stays visible on
+every tab so nobody mistakes the illustrative company for a real Dealz customer.
 
 ## Swapping in a real client's pricing
 

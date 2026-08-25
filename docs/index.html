@@ -71,7 +71,7 @@
       <span class="eyebrow">Pourquoi Dealz</span>
       <h2 class="section-title">Plus de leads. Moins d'interruptions.</h2>
       <p class="section-sub">Dealz ne remplace pas votre équipe — il filtre et qualifie avant qu'un devis n'atterrisse sur votre bureau.</p>
-      <div class="cards-grid">
+      <div class="cards-grid cols-4">
         <div class="svc-card c-blue">
           <div class="svc-icon">📈</div>
           <h3>Plus de leads</h3>
@@ -106,6 +106,11 @@
           <div class="svc-icon">🔗</div>
           <h3>Intégré à votre site actuel</h3>
           <p>Pas un nouveau site, pas de redirection — Dealz s'ajoute directement au vôtre, avec votre marque.</p>
+        </div>
+        <div class="svc-card c-red">
+          <div class="svc-icon">💸</div>
+          <h3>Pas de commission par lead</h3>
+          <p>Contrairement aux plateformes de mise en relation, vos demandes restent chez vous — tarif fixe, jamais de coût variable par lead généré.</p>
         </div>
       </div>
     </div>
@@ -144,50 +149,56 @@
     </div>
   </section>
 
-  <!-- DIFFÉRENCIATEUR -->
+  <!-- EXCEL → IA → DEVIS -->
   <section>
     <div class="section-inner">
       <span class="eyebrow">Ce qui change tout</span>
-      <h2 class="section-title">L'IA pose les questions. Vos règles tarifaires décident.</h2>
-      <div class="diff-panel">
+      <h2 class="section-title">De votre Excel à un devis accepté — en une conversation.</h2>
+      <p class="section-sub">L'IA pose les questions. Vos règles tarifaires décident. Elle n'invente jamais un prix.</p>
+
+      <div class="transform-flow">
+        <div class="real-excel">
+          <div class="excel-titlebar">📗 tarifs-nettoyage.xlsx</div>
+          <table class="excel-grid">
+            <thead>
+              <tr><th class="rn"></th><th>A</th><th>B</th><th>C</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="rn">1</td><td class="hdr">Service</td><td class="hdr">Condition</td><td class="hdr">Prix</td></tr>
+              <tr><td class="rn">2</td><td>Nettoyage fin de bail</td><td>81–100 m²</td><td>CHF 390</td></tr>
+              <tr><td class="rn">3</td><td>Four</td><td>Oui</td><td>CHF 40</td></tr>
+              <tr><td class="rn">4</td><td>Vitres</td><td>Oui</td><td>CHF 60</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flow-arrow">→</div>
+
         <div class="diff-chat">
           <div class="dealz-msg user" style="align-self:flex-start; max-width: 100%;">« J'ai besoin d'un nettoyage de fin de bail pour mon appartement de 85 m². »</div>
-          <div class="dealz-msg assistant" style="max-width: 100%;">« Dans quelle ville se trouve l'appartement ? »</div>
           <div class="dealz-msg assistant" style="max-width: 100%;">« Combien de salles de bain ? Meublé ou vide ? »</div>
-          <div class="dealz-msg assistant" style="max-width: 100%;">« Souhaitez-vous inclure le nettoyage du four et des vitres ? »</div>
+          <div class="dealz-msg assistant" style="max-width: 100%;">« Souhaitez-vous inclure le four et les vitres ? »</div>
         </div>
-        <div class="diff-side">
-          <div class="diff-arrow">↓</div>
-          <div class="diff-box engine">Moteur de tarification<br />(Excel / règles de l'entreprise)</div>
-          <div class="diff-arrow">↓</div>
-          <div class="diff-box result">CHF 490</div>
-        </div>
-      </div>
-      <p class="diff-note"><b>Dealz ne laisse pas l'IA inventer vos prix.</b> C'est votre entreprise qui contrôle entièrement la logique tarifaire.</p>
-    </div>
-  </section>
 
-  <!-- EXCEL → IA -->
-  <section class="section-alt">
-    <div class="section-inner">
-      <span class="eyebrow">La transformation</span>
-      <h2 class="section-title">Votre Excel devient un assistant de vente IA.</h2>
-      <div class="excel-flow">
-        <table class="excel-table">
-          <thead><tr><th>Service</th><th>Condition</th><th>Prix</th></tr></thead>
-          <tbody>
-            <tr><td>Nettoyage fin de bail</td><td>81–100 m²</td><td>CHF 390</td></tr>
-            <tr><td>Four</td><td>Oui</td><td>CHF 40</td></tr>
-            <tr><td>Vitres</td><td>Oui</td><td>CHF 60</td></tr>
-          </tbody>
-        </table>
         <div class="flow-arrow">→</div>
-        <div>
-          <div class="dealz-msg assistant" style="max-width:100%; margin-bottom:8px;">« Combien de m² ? Combien de salles de bain ? »</div>
-          <div class="dealz-msg assistant" style="max-width:100%; margin-bottom:8px;">« Souhaitez-vous inclure le four ? »</div>
-          <div class="diff-box result" style="margin-top:14px;">CHF 490</div>
+
+        <div class="pdf-offer">
+          <div class="pdf-head">📄 Devis — SwissClean Sàrl</div>
+          <div class="pdf-body">
+            <div class="pdf-row"><span>Nettoyage fin de bail</span><span>CHF 390.00</span></div>
+            <div class="pdf-row"><span>Four</span><span>CHF 40.00</span></div>
+            <div class="pdf-row"><span>Vitres</span><span>CHF 60.00</span></div>
+            <div class="pdf-total"><span>Prix pour votre client</span><span>CHF 490.00</span></div>
+          </div>
+          <div class="pdf-actions">
+            <button class="qc-accept" id="pdf-accept">✓ Client : Accepter</button>
+            <button class="qc-decline" id="pdf-decline">Refuser</button>
+          </div>
+          <div class="pdf-result" id="pdf-result"></div>
         </div>
       </div>
+
+      <p class="diff-note">☝️ <b>CHF 490 est le prix payé par le client de l'entreprise de nettoyage — pas le tarif de Dealz.</b> Les formules Dealz (dès CHF 49/mois) sont plus bas sur cette page.</p>
     </div>
   </section>
 
@@ -406,6 +417,25 @@
       document.getElementById("lead-confirm").classList.add("show");
       this.reset();
     });
+
+    (function () {
+      var acceptBtn = document.getElementById("pdf-accept");
+      var declineBtn = document.getElementById("pdf-decline");
+      var result = document.getElementById("pdf-result");
+      if (!acceptBtn) return;
+      acceptBtn.addEventListener("click", function () {
+        acceptBtn.disabled = true;
+        declineBtn.disabled = true;
+        result.textContent = "✓ Devis accepté par le client — confirmation envoyée par e-mail, rendez-vous ajouté à l'agenda Google de l'entreprise.";
+        result.className = "pdf-result show success";
+      });
+      declineBtn.addEventListener("click", function () {
+        acceptBtn.disabled = true;
+        declineBtn.disabled = true;
+        result.textContent = "Le client a refusé ce devis — il peut ajuster sa demande et en recevoir un nouveau instantanément.";
+        result.className = "pdf-result show decline";
+      });
+    })();
   </script>
 </body>
 </html>
