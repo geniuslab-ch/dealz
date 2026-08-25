@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nouvelle offre — SwissClean Sàrl</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .of-wrap { max-width: 460px; margin: 60px auto; padding: 0 20px; }
+    .of-card { background: white; border: 1px solid var(--line); border-radius: 20px; padding: 26px; box-shadow: 0 20px 50px rgba(11,18,32,0.08); text-align: center; }
+    .of-amount { font-size: 34px; font-weight: 800; color: var(--blue-dark); margin: 10px 0; }
+    .of-msg { font-size: 13.5px; color: var(--muted); margin-bottom: 18px; }
+    .of-input { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; font-family: inherit; font-size: 14px; margin-top: 6px; text-align: left; }
+    .of-label { font-size: 12px; font-weight: 700; color: var(--muted); text-align: left; margin-top: 10px; }
+    .of-actions { display: flex; gap: 10px; margin-top: 18px; }
+    .of-actions button { flex: 1; border: none; border-radius: 22px; padding: 11px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; }
+    .of-accept { background: linear-gradient(135deg, var(--green), #0d8f5f); color: white; }
+    .of-decline { background: white; border: 1.5px solid var(--line) !important; color: var(--muted); }
+    .of-result { display: none; margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 13.5px; }
+    .of-result.show { display: block; }
+    .of-result.ok { background: var(--green-light); color: #0d6b4b; }
+    .of-result a { color: inherit; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="nav-logo"><img src="/images/dealz-logo-sm.png" alt="Dealz" /></div></nav>
+
+  <div class="of-wrap">
+    <div class="of-card" id="of-card">Chargement…</div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const token = params.get("token");
+    const card = document.getElementById("of-card");
+
+    function fmt(n) { return "CHF " + Number(n).toFixed(2); }
+
+    async function load() {
+      if (!token) { card.innerHTML = "<p>Lien invalide.</p>"; return; }
+      try {
+        const res = await fetch(`/api/offer/${token}`);
+        if (!res.ok) { card.innerHTML = "<p>Cette offre n'est plus disponible.</p>"; return; }
+        render(await res.json());
+      } catch (e) {
+        card.innerHTML = "<p><b>Cette page nécessite le serveur Dealz en ligne.</b></p>";
+      }
+    }
+
+    function render(data) {
+      card.innerHTML = `
+        <div style="font-size:13px; color:var(--muted); font-weight:700;">SWISSCLEAN SÀRL VOUS PROPOSE</div>
+        <div class="of-amount">${fmt(data.amount)}</div>
+        ${data.message ? `<div class="of-msg">${data.message}</div>` : ""}
+        <div class="of-label">Adresse (pour la réservation)</div>
+        <input class="of-input" id="of-address" placeholder="Rue, numéro, ville" />
+        <div class="of-actions">
+          <button class="of-accept" id="of-accept">✓ Accepter</button>
+          <button class="of-decline" id="of-decline">Refuser</button>
+        </div>
+        <div class="of-result" id="of-result"></div>
+      `;
+
+      async function respond(action) {
+        document.getElementById("of-accept").disabled = true;
+        document.getElementById("of-decline").disabled = true;
+        const resEl = document.getElementById("of-result");
+        try {
+          const res = await fetch(`/api/offer/${token}/respond`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action,
+              customer: { address: document.getElementById("of-address").value },
+            }),
+          });
+          const result = await res.json();
+          if (!res.ok) throw new Error(result.error || "Erreur");
+          if (action === "accept") {
+            resEl.innerHTML =
+              "✓ Réservation confirmée ! Vous recevrez un e-mail de confirmation." +
+              (result.calendarLink
+                ? `<br/><br/><a href="${result.calendarLink}" target="_blank" rel="noopener">📅 Ajouter à mon Google Agenda</a>`
+                : "");
+          } else {
+            resEl.textContent = "Pas de souci — merci pour votre réponse.";
+          }
+          resEl.className = "of-result show ok";
+        } catch (e) {
+          resEl.textContent = "Erreur : " + e.message;
+          resEl.className = "of-result show ok";
+        }
+      }
+
+      document.getElementById("of-accept").addEventListener("click", () => respond("accept"));
+      document.getElementById("of-decline").addEventListener("click", () => respond("decline"));
+    }
+
+    load();
+  </script>
+</body>
+</html>

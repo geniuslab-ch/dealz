@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dealz — Envoyer une contre-offre</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .ao-wrap { max-width: 480px; margin: 60px auto; padding: 0 20px; }
+    .ao-card { background: white; border: 1px solid var(--line); border-radius: 20px; padding: 26px; box-shadow: 0 20px 50px rgba(11,18,32,0.08); }
+    .ao-label { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 14px 0 4px; }
+    .ao-value { font-size: 14.5px; }
+    .ao-quote { border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin-top: 6px; font-size: 13.5px; }
+    .ao-quote .row { display: flex; justify-content: space-between; padding: 4px 0; }
+    .ao-quote .total { font-weight: 800; border-top: 1px solid var(--line); margin-top: 6px; padding-top: 6px; }
+    .ao-input { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; font-family: inherit; font-size: 15px; margin-top: 6px; }
+    .ao-textarea { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; font-family: inherit; font-size: 13.5px; margin-top: 6px; min-height: 70px; resize: vertical; }
+    .ao-btn { margin-top: 18px; width: 100%; background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: white; border: none; border-radius: 24px; padding: 12px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+    .ao-btn:disabled { opacity: 0.5; }
+    .ao-msg { margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 13.5px; display: none; }
+    .ao-msg.show { display: block; }
+    .ao-msg.ok { background: var(--green-light); color: #0d6b4b; }
+    .ao-msg.err { background: var(--red-light); color: var(--red-dark); }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="nav-logo"><img src="/images/dealz-logo-sm.png" alt="Dealz" /></div></nav>
+
+  <div class="ao-wrap">
+    <div class="ao-card" id="ao-card">Chargement…</div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const token = params.get("token");
+    const card = document.getElementById("ao-card");
+
+    function fmt(n) { return "CHF " + Number(n).toFixed(2); }
+
+    async function load() {
+      if (!token) { card.innerHTML = "<p>Lien invalide — aucun jeton fourni.</p>"; return; }
+      try {
+        const res = await fetch(`/api/counteroffer/${token}`);
+        if (!res.ok) {
+          card.innerHTML = "<p>Ce lien n'est plus valide ou a expiré.</p>";
+          return;
+        }
+        const data = await res.json();
+        render(data);
+      } catch (e) {
+        card.innerHTML =
+          "<p><b>Cette page nécessite le serveur Dealz en ligne.</b><br/>Elle ne fonctionne pas en hébergement statique seul (ex. GitHub Pages sans backend).</p>";
+      }
+    }
+
+    function render(data) {
+      const itemsHtml = data.quote.items
+        .map((i) => `<div class="row"><span>${i.label}</span><span>${fmt(i.amount)}</span></div>`)
+        .join("");
+      card.innerHTML = `
+        <h2 style="margin:0 0 4px;">Envoyer une contre-offre</h2>
+        <p style="color:var(--muted); font-size:13.5px; margin:0 0 10px;">Devis refusé par ${data.customer.name || "le client"}</p>
+
+        <div class="ao-label">Motif du refus</div>
+        <div class="ao-value">${data.categoryLabel}</div>
+        ${data.rawText ? `<div class="ao-label">Message du client</div><div class="ao-value">« ${data.rawText} »</div>` : ""}
+
+        <div class="ao-label">Devis original</div>
+        <div class="ao-quote">${itemsHtml}<div class="row total"><span>TOTAL</span><span>${fmt(data.quote.total)}</span></div></div>
+
+        <div class="ao-label">Votre contre-offre (CHF)</div>
+        <input type="number" class="ao-input" id="ao-amount" placeholder="ex. ${Math.round(data.quote.total * 0.9)}" />
+
+        <div class="ao-label">Message (optionnel)</div>
+        <textarea class="ao-textarea" id="ao-message" placeholder="Nous pouvons vous faire ce prix exceptionnellement…"></textarea>
+
+        <button class="ao-btn" id="ao-submit">Envoyer au client</button>
+        <div class="ao-msg" id="ao-msg"></div>
+      `;
+
+      document.getElementById("ao-submit").addEventListener("click", async () => {
+        const amountInput = document.getElementById("ao-amount");
+        const amount = Number(amountInput.value);
+        const msgEl = document.getElementById("ao-msg");
+        if (!amount || amount <= 0) {
+          amountInput.focus();
+          return;
+        }
+        const btn = document.getElementById("ao-submit");
+        btn.disabled = true;
+        try {
+          const res = await fetch(`/api/counteroffer/${token}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount, message: document.getElementById("ao-message").value }),
+          });
+          const result = await res.json();
+          if (!res.ok) throw new Error(result.error || "Erreur");
+          msgEl.textContent = "✓ Contre-offre envoyée au client par e-mail.";
+          msgEl.className = "ao-msg show ok";
+        } catch (e) {
+          msgEl.textContent = "Erreur : " + e.message;
+          msgEl.className = "ao-msg show err";
+          btn.disabled = false;
+        }
+      });
+    }
+
+    load();
+  </script>
+</body>
+</html>

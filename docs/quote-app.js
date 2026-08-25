@@ -1,6 +1,14 @@
 (function () {
   const COMPANY_NAME = "SwissClean Sàrl";
-  const COMPANY_EMAIL = "reservations@swissclean.demo";
+
+  const OBJECTION_CHIPS = [
+    { category: "price", label: "💰 Le prix est trop élevé" },
+    { category: "timing", label: "📅 La date ne convient pas" },
+    { category: "scope", label: "🧹 Je n'ai pas besoin de tout" },
+    { category: "thinking", label: "🤔 Je dois réfléchir" },
+    { category: "competitor", label: "🆚 J'ai reçu une autre offre" },
+    { category: "question", label: "❓ J'ai une autre question" },
+  ];
 
   let messages = [];
   let sending = false;
@@ -40,6 +48,27 @@
     return data;
   }
 
+  // Same shape as callBackend, for the decline/accept/counteroffer endpoints.
+  async function postJSON(url, body) {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    let data;
+    try {
+      data = await res.json();
+    } catch (e) {
+      throw new Error("no-backend");
+    }
+    if (!res.ok) {
+      const err = new Error(data.error || "une erreur est survenue");
+      err.isAppError = true;
+      throw err;
+    }
+    return data;
+  }
+
   function el(tag, cls, text) {
     const e = document.createElement(tag);
     if (cls) e.className = cls;
@@ -61,9 +90,180 @@
     scrollToBottom(container);
   }
 
-  function renderSystemMessage(container, text, kind) {
-    container.appendChild(el("div", `dealz-msg ${kind}`, text));
+  function renderSystemMessage(container, text, kind, html) {
+    const bubble = el("div", `dealz-msg ${kind}`);
+    if (html) bubble.innerHTML = html;
+    else bubble.textContent = text;
+    container.appendChild(bubble);
     scrollToBottom(container);
+  }
+
+  // ---- Contact capture (name/email/phone/address) ----
+  function renderContactForm(container, { intro, submitLabel, needAddress }, onSubmit) {
+    const wrap = el("div", "dealz-contact-form");
+    if (intro) wrap.appendChild(el("p", "dcf-intro", intro));
+
+    const nameInput = el("input", "dcf-input");
+    nameInput.placeholder = "Nom";
+    const emailInput = el("input", "dcf-input");
+    emailInput.type = "email";
+    emailInput.placeholder = "E-mail";
+    emailInput.required = true;
+    const phoneInput = el("input", "dcf-input");
+    phoneInput.placeholder = "Téléphone (optionnel)";
+
+    wrap.appendChild(nameInput);
+    wrap.appendChild(emailInput);
+    wrap.appendChild(phoneInput);
+
+    let addressInput = null;
+    if (needAddress) {
+      addressInput = el("input", "dcf-input");
+      addressInput.placeholder = "Adresse (optionnel)";
+      wrap.appendChild(addressInput);
+    }
+
+    const submitBtn = el("button", "dcf-submit", submitLabel);
+    wrap.appendChild(submitBtn);
+
+    submitBtn.addEventListener("click", () => {
+      if (!emailInput.value.trim()) {
+        emailInput.focus();
+        return;
+      }
+      submitBtn.disabled = true;
+      wrap.querySelectorAll("input").forEach((i) => (i.disabled = true));
+      onSubmit({
+        name: nameInput.value.trim(),
+        email: emailInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        address: addressInput ? addressInput.value.trim() : "",
+      });
+    });
+
+    container.appendChild(wrap);
+    scrollToBottom(container);
+  }
+
+  // ---- Objection picker (chips + free text) ----
+  function renderObjectionPicker(container, onPick) {
+    const wrap = el("div", "dealz-objection-picker");
+    const chipsRow = el("div", "dop-chips");
+    OBJECTION_CHIPS.forEach((chip) => {
+      const btn = el("button", "dop-chip", chip.label);
+      btn.addEventListener("click", () => {
+        wrap.querySelectorAll("button, input").forEach((n) => (n.disabled = true));
+        onPick({ category: chip.category, text: chip.label });
+      });
+      chipsRow.appendChild(btn);
+    });
+    wrap.appendChild(chipsRow);
+
+    const freeRow = el("div", "dop-free");
+    const freeInput = el("input", "dop-free-input");
+    freeInput.placeholder = "Ou décrivez avec vos mots (ex: « Autre entreprise à CHF 420 »)";
+    const freeBtn = el("button", "dop-free-btn", "Envoyer");
+    freeRow.appendChild(freeInput);
+    freeRow.appendChild(freeBtn);
+    wrap.appendChild(freeRow);
+
+    function submitFree() {
+      if (!freeInput.value.trim()) return;
+      wrap.querySelectorAll("button, input").forEach((n) => (n.disabled = true));
+      onPick({ category: null, text: freeInput.value.trim() });
+    }
+    freeBtn.addEventListener("click", submitFree);
+    freeInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") submitFree();
+    });
+
+    container.appendChild(wrap);
+    scrollToBottom(container);
+  }
+
+  function simulatedAcceptHtml() {
+    return (
+      `✓ Merci ! Votre devis a été transmis à ${COMPANY_NAME}. Vous recevrez la confirmation ` +
+      `par e-mail, et le rendez-vous a été ajouté à l'agenda Google de l'entreprise. Une personne ` +
+      `de l'équipe vous contactera si besoin pour finaliser les détails.` +
+      `<br/><br/><i style="opacity:.7">(Mode démonstration statique — aucun e-mail réel n'est envoyé ici.)</i>`
+    );
+  }
+
+  function handleAccept(container, quote) {
+    renderContactForm(
+      container,
+      { intro: "Pour confirmer votre réservation :", submitLabel: "✓ Confirmer la réservation", needAddress: true },
+      async (customer) => {
+        if (useStaticFallback) {
+          renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
+          return;
+        }
+        try {
+          const data = await postJSON("/api/accept", { quote, customer });
+          renderSystemMessage(
+            container,
+            null,
+            "system-success",
+            `✓ Réservation confirmée ! Un e-mail de confirmation a été envoyé, et le rendez-vous ` +
+              `est prêt à être ajouté à l'agenda de l'entreprise.` +
+              (data.calendarLink
+                ? `<br/><br/><a href="${data.calendarLink}" target="_blank" rel="noopener">📅 Ajouter à mon Google Agenda</a>`
+                : "")
+          );
+        } catch (err) {
+          if (err.isAppError) {
+            renderSystemMessage(container, `Erreur : ${err.message}`, "system-decline");
+          } else {
+            renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
+          }
+        }
+      }
+    );
+  }
+
+  function handleDecline(container, quote) {
+    renderAssistantText(
+      container,
+      "Bien sûr. Auriez-vous deux minutes pour me dire ce qui ne convenait pas dans notre offre ?"
+    );
+    renderObjectionPicker(container, ({ category, text }) => {
+      renderUserMessage(container, text);
+
+      if (useStaticFallback) {
+        renderSystemMessage(
+          container,
+          null,
+          "system-decline",
+          `Merci pour votre retour ! En conditions réelles, ce message serait transmis à ` +
+            `${COMPANY_NAME} par e-mail, avec une proposition de contre-offre possible.` +
+            `<br/><br/><i style="opacity:.7">(Mode démonstration statique — aucun e-mail réel n'est envoyé ici.)</i>`
+        );
+        return;
+      }
+
+      renderContactForm(
+        container,
+        { intro: "Pour vous recontacter si besoin, laissez-nous vos coordonnées :", submitLabel: "Envoyer" },
+        async (customer) => {
+          try {
+            await postJSON("/api/decline", { quote, category, text, customer });
+            renderSystemMessage(
+              container,
+              "Merci pour votre retour ! Nous avons transmis votre message à l'équipe — vous serez " +
+                "recontacté(e) rapidement si une meilleure offre est possible.",
+              "system-decline"
+            );
+          } catch (err) {
+            renderSystemMessage(
+              container,
+              err.isAppError ? `Erreur : ${err.message}` : "Une erreur est survenue.",
+              "system-decline"
+            );
+          }
+        }
+      );
+    });
   }
 
   function renderQuoteCard(container, quote) {
@@ -90,25 +290,13 @@
     acceptBtn.addEventListener("click", () => {
       acceptBtn.disabled = true;
       declineBtn.disabled = true;
-      renderSystemMessage(
-        container,
-        `✓ Merci ! Votre devis a été transmis à ${COMPANY_NAME}. Vous recevrez la confirmation ` +
-          `par e-mail à l'adresse fournie, et le rendez-vous a été ajouté à l'agenda Google de ` +
-          `l'entreprise (${COMPANY_EMAIL}). Une personne de l'équipe vous contactera si besoin pour ` +
-          `finaliser les détails.`,
-        "system-success"
-      );
+      handleAccept(container, quote);
     });
 
     declineBtn.addEventListener("click", () => {
       acceptBtn.disabled = true;
       declineBtn.disabled = true;
-      renderSystemMessage(
-        container,
-        "Pas de souci ! Vous pouvez ajuster votre demande ci-dessous — par exemple changer la " +
-          "taille du logement ou les options — et obtenir un nouveau devis.",
-        "system-decline"
-      );
+      handleDecline(container, quote);
     });
 
     container.appendChild(card);

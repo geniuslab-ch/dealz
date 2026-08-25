@@ -439,6 +439,90 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 }
 .dealz-inputbar button:disabled { opacity: 0.5; cursor: default; }
 
+/* ---------- Objection picker (decline flow) ---------- */
+.dealz-objection-picker {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dop-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.dop-chip {
+  border: 1.5px solid var(--line);
+  background: white;
+  border-radius: 20px;
+  padding: 7px 13px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--ink);
+  transition: border-color 0.15s, background 0.15s;
+}
+.dop-chip:hover { border-color: var(--blue); background: var(--sky-light); }
+.dop-chip:disabled { opacity: 0.4; cursor: default; }
+.dop-free { display: flex; gap: 8px; }
+.dop-free-input {
+  flex: 1;
+  border: 1.5px solid var(--line);
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+.dop-free-input:focus { border-color: var(--blue); }
+.dop-free-btn {
+  background: var(--navy);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0 16px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.dop-free-btn:disabled, .dop-free-input:disabled { opacity: 0.5; cursor: default; }
+
+/* ---------- Contact capture form (accept / decline flows) ---------- */
+.dealz-contact-form {
+  align-self: stretch;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dcf-intro { font-size: 13px; color: var(--muted); margin: 0 0 2px; font-weight: 600; }
+.dcf-input {
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 13.5px;
+  outline: none;
+  width: 100%;
+}
+.dcf-input:focus { border-color: var(--blue); }
+.dcf-input:disabled { opacity: 0.5; }
+.dcf-submit {
+  margin-top: 4px;
+  background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 9px 14px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.dcf-submit:disabled { opacity: 0.5; cursor: default; }
+.dealz-msg.system-success a, .dealz-msg.system-decline a { color: inherit; font-weight: 700; }
+
 /* ================= B2B funnel sections ================= */
 
 .section-alt { background: #f7f9fd; }
@@ -739,7 +823,26 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 .price-card .plan-setup .lbl { font-size: 12px; font-weight: 600; color: var(--muted); }
 .price-card .plan-monthly { font-size: 15px; color: var(--blue-dark); font-weight: 700; margin: 4px 0 16px; }
 .price-card .plan-desc { font-size: 13.5px; color: var(--muted); margin: 0 0 18px; }
+.price-card .plan-price { font-size: 32px; font-weight: 800; margin: 10px 0 2px; color: var(--ink); }
+.price-card .plan-price .per { font-size: 13px; font-weight: 600; color: var(--muted); }
+.price-card .plan-tagline { font-size: 13.5px; font-style: italic; color: var(--blue-dark); margin: 0 0 16px; font-weight: 600; }
+.price-card .plan-included-label { font-size: 11.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin: 0 0 8px; }
+.price-card .plan-features { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.price-card .plan-features li { font-size: 13px; color: var(--ink); display: flex; gap: 7px; align-items: flex-start; line-height: 1.4; }
+.price-card .plan-features li span.chk { color: var(--blue); flex-shrink: 0; font-weight: 800; }
+.pricing-philosophy { font-size: 15px; color: var(--muted); max-width: 640px; margin: 0 0 32px; line-height: 1.6; }
 .pricing-note { text-align: center; font-size: 13px; color: var(--muted); margin-top: 24px; }
+.pricing-setup-note {
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-top: 28px;
+  background: #f7f9fd;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+.pricing-setup-note b { color: var(--ink); }
 
 /* ---------- Final CTA ---------- */
 .final-cta {
