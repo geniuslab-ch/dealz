@@ -5,11 +5,12 @@ const pricing = require("../docs/pricing.json");
  * Offline stand-in for src/claude.js — same runTurn(history) shape, no API
  * key or credit required. Lets you click through the full quote → accept
  * flow without spending anything. Enable with MOCK_MODE=true in .env.
+ *
+ * Unlike a fixed question-by-turn-number script, every turn re-reads
+ * everything the customer has said so far and only asks about what's still
+ * missing — so giving several details up front (or all of them in one
+ * message) skips straight ahead instead of being asked to repeat them.
  */
-
-function countUserTurns(history) {
-  return history.filter((m) => m.role === "user" && typeof m.content === "string").length;
-}
 
 function extractHints(history) {
   // Only ever read what the customer typed — the bot's own canned questions
@@ -56,37 +57,62 @@ function extractContact(text) {
   };
 }
 
-const QUESTIONS = [
-  "Bien sûr ! Pouvez-vous me préciser la taille de votre logement (nombre de pièces, par ex. « 3.5 pièces ») et le type de nettoyage souhaité (nettoyage régulier ou fin de bail) ?",
-  "Merci ! Souhaitez-vous ajouter des options comme le nettoyage du four, des vitres ou du frigo ?",
-  "Parfait ! Pour finaliser votre devis, quel est votre nom, votre e-mail, votre téléphone, et l'adresse du logement à nettoyer ?",
-];
+// The contact answer is whichever customer message actually contains an
+// e-mail address (the clearest signal it's the "here are my details"
+// message) — not just the most recent message, so a stray "merci" sent
+// afterwards doesn't wipe out contact info that was already given.
+function extractContactFromHistory(userMessages) {
+  const emailRe = /[\w.+-]+@[\w-]+\.[\w.-]+/;
+  const contactMsg = [...userMessages].reverse().find((m) => emailRe.test(m.content));
+  return contactMsg ? extractContact(contactMsg.content) : { name: "", email: "", phone: "", address: "" };
+}
+
+const Q_SIZE_TYPE =
+  "Bien sûr ! Pouvez-vous me préciser la taille de votre logement (nombre de pièces, par ex. « 3.5 pièces ») et le type de nettoyage souhaité (nettoyage régulier ou fin de bail) ?";
+const Q_ADDONS =
+  "Merci ! Souhaitez-vous ajouter des options comme le nettoyage du four, des vitres ou du frigo ?";
+const Q_CONTACT =
+  "Parfait ! Pour finaliser votre devis, quel est votre nom, votre e-mail, votre téléphone, et l'adresse du logement à nettoyer ?";
+
+function alreadyAsked(history, question) {
+  return history.some(
+    (m) => m.role === "assistant" && typeof m.content === "string" && m.content === question
+  );
+}
+
+function ask(question) {
+  return {
+    messages: [{ role: "assistant", content: question }],
+    quote: null,
+    model: "mode-demo",
+    currency: pricing.currency,
+  };
+}
 
 async function runTurnMock(history) {
-  const turn = countUserTurns(history);
+  const hints = extractHints(history);
+  const userMessages = history.filter((m) => m.role === "user" && typeof m.content === "string");
 
-  if (turn < QUESTIONS.length + 1) {
-    return {
-      messages: [{ role: "assistant", content: QUESTIONS[turn - 1] }],
-      quote: null,
-      model: "mode-demo",
-      currency: pricing.currency,
-    };
+  const sizeTypeKnown = hints.isRegular || !!hints.rooms;
+  if (!sizeTypeKnown && !alreadyAsked(history, Q_SIZE_TYPE)) {
+    return ask(Q_SIZE_TYPE);
   }
 
-  const hints = extractHints(history);
+  if (!hints.addons.length && !alreadyAsked(history, Q_ADDONS)) {
+    return ask(Q_ADDONS);
+  }
+
+  const customer = extractContactFromHistory(userMessages);
+  if (!customer.email && !alreadyAsked(history, Q_CONTACT)) {
+    return ask(Q_CONTACT);
+  }
+
   const input = {
     service_type: hints.isRegular ? "regular_cleaning" : "end_of_tenancy",
     rooms: hints.rooms || "3",
     hours: hints.isRegular ? 4 : undefined,
     addons: hints.addons.length ? hints.addons : ["oven", "windows"],
   };
-
-  // The contact question was the last assistant turn — its answer is the
-  // most recent user message.
-  const userMessages = history.filter((m) => m.role === "user" && typeof m.content === "string");
-  const contactAnswer = userMessages[userMessages.length - 1]?.content || "";
-  const customer = extractContact(contactAnswer);
 
   const quote = calculateQuote(input);
   quote.customer = customer;
