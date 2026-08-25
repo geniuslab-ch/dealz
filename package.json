@@ -1,0 +1,16 @@
+{
+  "name": "dealz-ai-cleaning-quote-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Demo: AI-powered conversational quote assistant for cleaning companies, using the Claude API.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2"
+  }
+}

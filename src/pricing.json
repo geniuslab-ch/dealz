@@ -1,0 +1,29 @@
+{
+  "currency": "CHF",
+  "minimum_price": 150,
+  "end_of_tenancy_by_rooms": {
+    "1": 220,
+    "1.5": 250,
+    "2": 280,
+    "2.5": 320,
+    "3": 390,
+    "3.5": 430,
+    "4": 480,
+    "4.5": 520,
+    "5": 580
+  },
+  "regular_cleaning_per_hour": 45,
+  "addons": {
+    "oven": 40,
+    "windows": 60,
+    "fridge": 30,
+    "carpet_shampoo_per_room": 35
+  },
+  "travel_fee": {
+    "free_within_km": 20,
+    "tiers": [
+      { "max_km": 40, "fee": 30 },
+      { "max_km": 999, "fee": 60 }
+    ]
+  }
+}

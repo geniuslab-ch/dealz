@@ -1,0 +1,197 @@
+:root {
+  --navy: #12263a;
+  --teal: #0e7c7b;
+  --teal-dark: #0b5e5d;
+  --gold: #c9971c;
+  --bg: #f4f7f7;
+  --line: #d9e1e4;
+  --text: #2c3a42;
+  --muted: #6b7680;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.site-header {
+  background: var(--navy);
+  color: white;
+  padding: 28px 40px;
+}
+.site-header h1 { margin: 0 0 6px; font-size: 22px; }
+.site-header p { margin: 0; color: #cfe4e3; font-size: 14px; }
+
+.site-body {
+  max-width: 720px;
+  margin: 60px auto;
+  padding: 0 24px;
+  text-align: center;
+}
+.site-body h2 { font-size: 28px; margin-bottom: 8px; }
+.site-body p { color: var(--muted); line-height: 1.6; }
+.badge {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 8px 16px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--teal-dark);
+}
+
+/* Chat launcher bubble */
+#dealz-launcher {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 26px;
+  box-shadow: 0 6px 18px rgba(14, 124, 123, 0.4);
+  z-index: 9999;
+}
+#dealz-launcher:hover { background: var(--teal-dark); }
+
+/* Chat window */
+#dealz-widget {
+  position: fixed;
+  bottom: 96px;
+  right: 24px;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  height: 520px;
+  max-height: calc(100vh - 140px);
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(18, 38, 58, 0.25);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 9999;
+}
+#dealz-widget.open { display: flex; }
+
+.dealz-header {
+  background: var(--navy);
+  color: white;
+  padding: 14px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dealz-header .title { font-weight: bold; font-size: 14px; }
+.dealz-header .subtitle { font-size: 11px; color: #b9d6d5; }
+.dealz-header button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.dealz-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #fafcfc;
+}
+
+.dealz-msg {
+  max-width: 82%;
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+.dealz-msg.user {
+  align-self: flex-end;
+  background: var(--teal);
+  color: white;
+  border-bottom-right-radius: 3px;
+}
+.dealz-msg.assistant {
+  align-self: flex-start;
+  background: #eef3f3;
+  color: var(--text);
+  border-bottom-left-radius: 3px;
+}
+.dealz-msg.typing {
+  align-self: flex-start;
+  background: #eef3f3;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.dealz-quote-card {
+  align-self: stretch;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  font-size: 13px;
+}
+.dealz-quote-card .qc-head {
+  background: var(--navy);
+  color: white;
+  padding: 8px 12px;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 0.03em;
+}
+.dealz-quote-card .qc-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px 12px;
+  border-bottom: 1px solid #f0f2f3;
+}
+.dealz-quote-card .qc-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 12px;
+  font-weight: bold;
+  background: #eaf5f4;
+  color: var(--teal-dark);
+}
+
+.dealz-inputbar {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid var(--line);
+  background: white;
+}
+.dealz-inputbar input {
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 9px 14px;
+  font-size: 13.5px;
+  outline: none;
+}
+.dealz-inputbar input:focus { border-color: var(--teal); }
+.dealz-inputbar button {
+  background: var(--teal);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 0 16px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.dealz-inputbar button:disabled { opacity: 0.5; cursor: default; }
