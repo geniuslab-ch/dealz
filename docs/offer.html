@@ -10,6 +10,10 @@
     .of-wrap { max-width: 460px; margin: 60px auto; padding: 0 20px; }
     .of-card { background: white; border: 1px solid var(--line); border-radius: 20px; padding: 26px; box-shadow: 0 20px 50px rgba(11,18,32,0.08); text-align: center; }
     .of-amount { font-size: 34px; font-weight: 800; color: var(--blue-dark); margin: 10px 0; }
+    .of-date { font-size: 22px; font-weight: 800; color: var(--blue-dark); margin: 10px 0; }
+    .of-items { text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin: 10px 0; font-size: 13.5px; }
+    .of-items .row { display: flex; justify-content: space-between; padding: 4px 0; }
+    .of-items .total { font-weight: 800; border-top: 1px solid var(--line); margin-top: 6px; padding-top: 6px; }
     .of-msg { font-size: 13.5px; color: var(--muted); margin-bottom: 18px; }
     .of-input { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; font-family: inherit; font-size: 14px; margin-top: 6px; text-align: left; }
     .of-label { font-size: 12px; font-weight: 700; color: var(--muted); text-align: left; margin-top: 10px; }
@@ -49,9 +53,25 @@
     }
 
     function render(data) {
+      let headline = "SWISSCLEAN SÀRL VOUS PROPOSE";
+      let centerHtml = `<div class="of-amount">${fmt(data.amount)}</div>`;
+
+      if (data.kind === "date") {
+        headline = "NOUVELLE DATE PROPOSÉE";
+        centerHtml = `<div class="of-date">${data.date}</div>`;
+      } else if (data.kind === "revise" && data.revisedQuote) {
+        headline = "DEVIS RÉVISÉ";
+        const rows = data.revisedQuote.items
+          .map((i) => `<div class="row"><span>${i.label}</span><span>${fmt(i.amount)}</span></div>`)
+          .join("");
+        centerHtml = `<div class="of-items">${rows}<div class="row total"><span>TOTAL</span><span>${fmt(data.revisedQuote.total)}</span></div></div>`;
+      } else if (data.kind === "followup") {
+        headline = "VOTRE DEVIS RESTE DISPONIBLE";
+      }
+
       card.innerHTML = `
-        <div style="font-size:13px; color:var(--muted); font-weight:700;">SWISSCLEAN SÀRL VOUS PROPOSE</div>
-        <div class="of-amount">${fmt(data.amount)}</div>
+        <div style="font-size:13px; color:var(--muted); font-weight:700;">${headline}</div>
+        ${centerHtml}
         ${data.message ? `<div class="of-msg">${data.message}</div>` : ""}
         <div class="of-label">Adresse (pour la réservation)</div>
         <input class="of-input" id="of-address" placeholder="Rue, numéro, ville" />

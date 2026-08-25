@@ -77,24 +77,39 @@ function googleCalendarLink({ title, details, location, startISO, endISO }) {
   return `https://calendar.google.com/calendar/render?${params.toString()}`;
 }
 
+// ---- Objection Engine: subject line + owner notification ----
+
+function buildDeclineSubject({ category, customer, quote }) {
+  const cfg = CATEGORIES[category] || CATEGORIES.other;
+  const parts = [`${cfg.emoji} Devis refusé`, cfg.label, customer.name || "un client"];
+  if (cfg.showTotal && quote && quote.total) parts.push(fmtCHF(quote.total));
+  return parts.join(" — ");
+}
+
 async function sendDeclineNotification({ quote, category, summary, rawText, customer, declineToken }) {
-  const counterofferUrl = `${APP_BASE_URL}/counteroffer.html?token=${declineToken}`;
+  const cfg = CATEGORIES[category] || CATEGORIES.other;
+  const actionUrl = `${APP_BASE_URL}/counteroffer.html?token=${declineToken}`;
+
   const html = `
-    <h2>🔴 Devis refusé — action possible</h2>
+    <h2>${cfg.emoji} Devis refusé — action possible</h2>
     <p><b>Client :</b> ${customer.name || "(non fourni)"}<br/>
-       <b>E-mail :</b> ${customer.email || "(non fourni)"}</p>
-    <p><b>Devis original :</b> ${fmtCHF(quote.total)}</p>
-    <table>${quoteItemsHtml(quote)}</table>
-    <p><b>Motif du refus :</b> ${CATEGORIES[category] || category}</p>
+       <b>E-mail :</b> ${customer.email || "(non fourni)"}<br/>
+       <b>Téléphone :</b> ${customer.phone || "(non fourni)"}<br/>
+       <b>Adresse :</b> ${customer.address || "(non fournie)"}</p>
+    ${cfg.showTotal ? `<p><b>Devis original :</b> ${fmtCHF(quote.total)}</p><table>${quoteItemsHtml(quote)}</table>` : ""}
+    <p><b>Motif du refus :</b> ${cfg.label}</p>
     ${rawText ? `<p><b>Message du client :</b><br/>« ${rawText} »</p>` : ""}
-    <p><a href="${counterofferUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Envoyer une contre-offre</a></p>
+    <p><a href="${actionUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">${cfg.primaryCta}</a></p>
   `;
+
   return sendEmail({
     to: COMPANY_NOTIFY_EMAIL,
-    subject: `🔴 Devis refusé — ${customer.name || "un client"} (${CATEGORIES[category] || category})`,
+    subject: buildDeclineSubject({ category, customer, quote }),
     html,
   });
 }
+
+// ---- Owner actions, one per objection type ----
 
 async function sendCounterofferToCustomer({ quote, amount, message, customer, offerToken }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
@@ -108,6 +123,58 @@ async function sendCounterofferToCustomer({ quote, amount, message, customer, of
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir l'offre</a></p>
   `;
   return sendEmail({ to: customer.email, subject: `Nouvelle offre — ${fmtCHF(amount)}`, html });
+}
+
+async function sendRescheduleToCustomer({ date, message, customer, offerToken }) {
+  if (!customer.email) return { simulated: true, skipped: "no customer email" };
+  const offerUrl = `${APP_BASE_URL}/offer.html?token=${offerToken}`;
+  const html = `
+    <h2>Nouvelle date proposée — ${COMPANY_NAME}</h2>
+    <p>Bonjour ${customer.name || ""},</p>
+    <p>Nous vous proposons la date suivante pour votre nettoyage :</p>
+    <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${date}</p>
+    ${message ? `<p>${message}</p>` : ""}
+    <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir la proposition</a></p>
+  `;
+  return sendEmail({ to: customer.email, subject: `Nouvelle date proposée`, html });
+}
+
+async function sendRevisedOfferToCustomer({ quote, message, customer, offerToken }) {
+  if (!customer.email) return { simulated: true, skipped: "no customer email" };
+  const offerUrl = `${APP_BASE_URL}/offer.html?token=${offerToken}`;
+  const html = `
+    <h2>Offre révisée — ${COMPANY_NAME}</h2>
+    <p>Bonjour ${customer.name || ""},</p>
+    <p>Voici votre devis révisé :</p>
+    <table>${quoteItemsHtml(quote)}</table>
+    <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${fmtCHF(quote.total)}</p>
+    ${message ? `<p>${message}</p>` : ""}
+    <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir l'offre révisée</a></p>
+  `;
+  return sendEmail({ to: customer.email, subject: `Devis révisé — ${fmtCHF(quote.total)}`, html });
+}
+
+async function sendReplyToCustomer({ message, customer }) {
+  if (!customer.email) return { simulated: true, skipped: "no customer email" };
+  const html = `
+    <h2>Réponse de ${COMPANY_NAME}</h2>
+    <p>Bonjour ${customer.name || ""},</p>
+    <p>${message}</p>
+  `;
+  return sendEmail({ to: customer.email, subject: `Réponse à votre question`, html });
+}
+
+async function sendFollowupToCustomer({ quote, customer, offerToken }) {
+  if (!customer.email) return { simulated: true, skipped: "no customer email" };
+  const offerUrl = `${APP_BASE_URL}/offer.html?token=${offerToken}`;
+  const html = `
+    <h2>Toujours intéressé(e) ?</h2>
+    <p>Bonjour ${customer.name || ""},</p>
+    <p>Nous voulions juste nous assurer que vous aviez toutes les informations nécessaires. Votre devis reste disponible :</p>
+    <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${fmtCHF(quote.total)}</p>
+    <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Revoir le devis</a></p>
+  `;
+  return sendEmail({ to: customer.email, subject: `Toujours intéressé(e) par notre offre ?`, html });
 }
 
 async function sendBookingConfirmation({ quote, customer }) {
@@ -153,6 +220,10 @@ module.exports = {
   sendEmail,
   sendDeclineNotification,
   sendCounterofferToCustomer,
+  sendRescheduleToCustomer,
+  sendRevisedOfferToCustomer,
+  sendReplyToCustomer,
+  sendFollowupToCustomer,
   sendBookingConfirmation,
   googleCalendarLink,
   COMPANY_NOTIFY_EMAIL,

@@ -36,7 +36,14 @@ Ne demande la distance de déplacement que si le client mentionne un lieu éloig
 habituelle de l'entreprise ; sinon, ignore ce point.
 
 Pose des questions courtes et naturelles — une ou deux à la fois, jamais un long formulaire. Une
-fois que tu as appelé calculate_quote et reçu un résultat, présente-le clairement comme un devis
+fois que tu as tous les détails du service (type de prestation, taille, options), demande le nom du
+client, son e-mail, son téléphone, et l'adresse du logement à nettoyer — en une ou deux questions
+groupées, pas un formulaire — avant d'appeler calculate_quote. Ces informations servent à
+personnaliser le devis et à pouvoir recontacter le client ; inclus-les dans l'appel à
+calculate_quote. Si le client refuse de les donner ou ne répond pas clairement, n'insiste pas plus
+de deux fois — appelle quand même calculate_quote avec les champs que tu as, le reste vide.
+
+Une fois que tu as appelé calculate_quote et reçu un résultat, présente-le clairement comme un devis
 détaillé et chiffré. Précise explicitement qu'il s'agit d'un devis ferme et réel (pas juste une
 estimation indicative) et que le client peut l'accepter ou le refuser directement dans la
 conversation. Si l'outil renvoie des avertissements, mentionne-les brièvement et simplement, sans
@@ -77,6 +84,13 @@ const CALCULATE_QUOTE_TOOL = {
         type: "number",
         description: "Approximate travel distance in km from the company's base, if known.",
       },
+      customer_name: { type: "string", description: "Customer's name, if provided." },
+      customer_email: { type: "string", description: "Customer's email, if provided." },
+      customer_phone: { type: "string", description: "Customer's phone number, if provided." },
+      customer_address: {
+        type: "string",
+        description: "Address of the property to be cleaned, if provided.",
+      },
     },
     required: ["service_type"],
   },
@@ -111,7 +125,15 @@ async function runTurn(history) {
 
     for (const block of toolUseBlocks) {
       if (block.name === "calculate_quote") {
-        quote = calculateQuote(block.input);
+        const { customer_name, customer_email, customer_phone, customer_address, ...pricingInput } =
+          block.input;
+        quote = calculateQuote(pricingInput);
+        quote.customer = {
+          name: customer_name || "",
+          email: customer_email || "",
+          phone: customer_phone || "",
+          address: customer_address || "",
+        };
         toolResults.push({
           type: "tool_result",
           tool_use_id: block.id,

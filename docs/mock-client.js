@@ -29,9 +29,30 @@
     return { addons, rooms, isRegular };
   }
 
+  function extractContact(text) {
+    const emailMatch = text.match(/[\w.+-]+@[\w-]+\.[\w.-]+/);
+    const phoneMatch = text.match(/(\+?\d[\d\s.-]{7,}\d)/);
+    let rest = text;
+    if (emailMatch) rest = rest.replace(emailMatch[0], " ");
+    if (phoneMatch) rest = rest.replace(phoneMatch[0], " ");
+    rest = rest.replace(/[,;]/g, " ").replace(/\s+/g, " ").trim();
+
+    const words = rest.split(" ").filter(Boolean);
+    const name = words.slice(0, 2).join(" ") || "";
+    const address = words.slice(2).join(" ") || rest;
+
+    return {
+      name,
+      email: emailMatch ? emailMatch[0] : "",
+      phone: phoneMatch ? phoneMatch[0].trim() : "",
+      address,
+    };
+  }
+
   const QUESTIONS = [
     "Bien sûr ! Pouvez-vous me préciser la taille de votre logement (nombre de pièces, par ex. « 3.5 pièces ») et le type de nettoyage souhaité (nettoyage régulier ou fin de bail) ?",
     "Merci ! Souhaitez-vous ajouter des options comme le nettoyage du four, des vitres ou du frigo ?",
+    "Parfait ! Pour finaliser votre devis, quel est votre nom, votre e-mail, votre téléphone, et l'adresse du logement à nettoyer ?",
   ];
 
   function runTurnMock(pricing, history) {
@@ -54,9 +75,16 @@
       addons: hints.addons.length ? hints.addons : ["oven", "windows"],
     };
 
+    const userMessages = history.filter((m) => m.role === "user" && typeof m.content === "string");
+    const contactAnswer = (userMessages[userMessages.length - 1] || {}).content || "";
+    const customer = extractContact(contactAnswer);
+
     const quote = window.DealzPricingEngine.calculateQuote(pricing, input);
-    const text =
-      "Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.";
+    quote.customer = customer;
+
+    const text = customer.name
+      ? `Merci ${customer.name} ! Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.`
+      : "Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.";
 
     return {
       messages: [{ role: "assistant", content: text }],

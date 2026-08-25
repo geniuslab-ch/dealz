@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dealz — Envoyer une contre-offre</title>
+  <title>Dealz — Devis refusé</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/styles.css" />
   <style>
@@ -12,16 +12,19 @@
     .ao-label { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 14px 0 4px; }
     .ao-value { font-size: 14.5px; }
     .ao-quote { border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin-top: 6px; font-size: 13.5px; }
-    .ao-quote .row { display: flex; justify-content: space-between; padding: 4px 0; }
+    .ao-quote .row { display: flex; justify-content: space-between; padding: 4px 0; align-items: center; }
+    .ao-quote .row input[type="checkbox"] { margin-right: 8px; }
     .ao-quote .total { font-weight: 800; border-top: 1px solid var(--line); margin-top: 6px; padding-top: 6px; }
     .ao-input { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; font-family: inherit; font-size: 15px; margin-top: 6px; }
     .ao-textarea { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; font-family: inherit; font-size: 13.5px; margin-top: 6px; min-height: 70px; resize: vertical; }
     .ao-btn { margin-top: 18px; width: 100%; background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: white; border: none; border-radius: 24px; padding: 12px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+    .ao-btn.secondary { margin-top: 8px; background: white; color: var(--muted); border: 1.5px solid var(--line); }
     .ao-btn:disabled { opacity: 0.5; }
     .ao-msg { margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 13.5px; display: none; }
     .ao-msg.show { display: block; }
     .ao-msg.ok { background: var(--green-light); color: #0d6b4b; }
     .ao-msg.err { background: var(--red-light); color: var(--red-dark); }
+    .ao-badge { display: inline-block; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 20px; background: var(--blue-light); color: var(--blue-dark); margin-bottom: 6px; }
   </style>
 </head>
 <body>
@@ -46,65 +49,127 @@
           card.innerHTML = "<p>Ce lien n'est plus valide ou a expiré.</p>";
           return;
         }
-        const data = await res.json();
-        render(data);
+        render(await res.json());
       } catch (e) {
         card.innerHTML =
           "<p><b>Cette page nécessite le serveur Dealz en ligne.</b><br/>Elle ne fonctionne pas en hébergement statique seul (ex. GitHub Pages sans backend).</p>";
       }
     }
 
-    function render(data) {
+    function contextHtml(data) {
       const itemsHtml = data.quote.items
         .map((i) => `<div class="row"><span>${i.label}</span><span>${fmt(i.amount)}</span></div>`)
         .join("");
-      card.innerHTML = `
-        <h2 style="margin:0 0 4px;">Envoyer une contre-offre</h2>
+      return `
+        <span class="ao-badge">${data.emoji} ${data.categoryLabel}</span>
+        <h2 style="margin:6px 0 4px;">${data.primaryCta}</h2>
         <p style="color:var(--muted); font-size:13.5px; margin:0 0 10px;">Devis refusé par ${data.customer.name || "le client"}</p>
-
-        <div class="ao-label">Motif du refus</div>
-        <div class="ao-value">${data.categoryLabel}</div>
         ${data.rawText ? `<div class="ao-label">Message du client</div><div class="ao-value">« ${data.rawText} »</div>` : ""}
+        ${data.showTotal ? `<div class="ao-label">Devis original</div><div class="ao-quote">${itemsHtml}<div class="row total"><span>TOTAL</span><span>${fmt(data.quote.total)}</span></div></div>` : ""}
+      `;
+    }
 
-        <div class="ao-label">Devis original</div>
-        <div class="ao-quote">${itemsHtml}<div class="row total"><span>TOTAL</span><span>${fmt(data.quote.total)}</span></div></div>
+    async function submit(btn, msgEl, body, successText) {
+      btn.disabled = true;
+      try {
+        const res = await fetch(`/api/counteroffer/${token}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const result = await res.json();
+        if (!res.ok) throw new Error(result.error || "Erreur");
+        msgEl.textContent = successText;
+        msgEl.className = "ao-msg show ok";
+      } catch (e) {
+        msgEl.textContent = "Erreur : " + e.message;
+        msgEl.className = "ao-msg show err";
+        btn.disabled = false;
+      }
+    }
 
-        <div class="ao-label">Votre contre-offre (CHF)</div>
-        <input type="number" class="ao-input" id="ao-amount" placeholder="ex. ${Math.round(data.quote.total * 0.9)}" />
+    function render(data) {
+      let extraFields = "";
+      if (data.action === "counteroffer") {
+        extraFields = `
+          <div class="ao-label">Votre contre-offre (CHF)</div>
+          <input type="number" class="ao-input" id="ao-amount" placeholder="ex. ${Math.round(data.quote.total * 0.9)}" />
+          <div class="ao-label">Message (optionnel)</div>
+          <textarea class="ao-textarea" id="ao-message" placeholder="Nous pouvons vous faire ce prix exceptionnellement…"></textarea>
+        `;
+      } else if (data.action === "reschedule") {
+        extraFields = `
+          <div class="ao-label">Nouvelle date proposée</div>
+          <input type="text" class="ao-input" id="ao-date" placeholder="ex. Lundi 8 septembre, 14h" />
+          <div class="ao-label">Message (optionnel)</div>
+          <textarea class="ao-textarea" id="ao-message" placeholder="Cette date vous conviendrait-elle ?"></textarea>
+        `;
+      } else if (data.action === "revise") {
+        const checks = data.quote.items
+          .map(
+            (i, idx) =>
+              `<label class="row"><span><input type="checkbox" data-label="${i.label}" id="ao-item-${idx}" /> ${i.label}</span><span>${fmt(i.amount)}</span></label>`
+          )
+          .join("");
+        extraFields = `
+          <div class="ao-label">Cochez les prestations à retirer</div>
+          <div class="ao-quote">${checks}</div>
+          <div class="ao-label">Message (optionnel)</div>
+          <textarea class="ao-textarea" id="ao-message" placeholder="Voici votre devis sans le nettoyage des vitres…"></textarea>
+        `;
+      } else if (data.action === "reply") {
+        extraFields = `
+          <div class="ao-label">Votre réponse</div>
+          <textarea class="ao-textarea" id="ao-message" placeholder="Répondez à la question du client…"></textarea>
+        `;
+      }
+      // followup / close / review: no extra fields, just the primary button.
 
-        <div class="ao-label">Message (optionnel)</div>
-        <textarea class="ao-textarea" id="ao-message" placeholder="Nous pouvons vous faire ce prix exceptionnellement…"></textarea>
-
-        <button class="ao-btn" id="ao-submit">Envoyer au client</button>
+      card.innerHTML = `
+        ${contextHtml(data)}
+        ${extraFields}
+        <button class="ao-btn" id="ao-submit">${data.action === "followup" ? "Relancer maintenant" : data.action === "close" || data.action === "review" ? "Clôturer la demande" : "Envoyer au client"}</button>
+        ${data.secondaryCta ? `<button class="ao-btn secondary" id="ao-secondary">${data.secondaryCta}</button>` : ""}
         <div class="ao-msg" id="ao-msg"></div>
       `;
 
-      document.getElementById("ao-submit").addEventListener("click", async () => {
-        const amountInput = document.getElementById("ao-amount");
-        const amount = Number(amountInput.value);
-        const msgEl = document.getElementById("ao-msg");
-        if (!amount || amount <= 0) {
-          amountInput.focus();
-          return;
-        }
-        const btn = document.getElementById("ao-submit");
-        btn.disabled = true;
-        try {
-          const res = await fetch(`/api/counteroffer/${token}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount, message: document.getElementById("ao-message").value }),
-          });
-          const result = await res.json();
-          if (!res.ok) throw new Error(result.error || "Erreur");
-          msgEl.textContent = "✓ Contre-offre envoyée au client par e-mail.";
-          msgEl.className = "ao-msg show ok";
-        } catch (e) {
-          msgEl.textContent = "Erreur : " + e.message;
-          msgEl.className = "ao-msg show err";
-          btn.disabled = false;
+      const msgEl = document.getElementById("ao-msg");
+      const submitBtn = document.getElementById("ao-submit");
+
+      submitBtn.addEventListener("click", () => {
+        const message = document.getElementById("ao-message")?.value || "";
+
+        if (data.action === "counteroffer") {
+          const amountInput = document.getElementById("ao-amount");
+          const amount = Number(amountInput.value);
+          if (!amount || amount <= 0) return amountInput.focus();
+          submit(submitBtn, msgEl, { amount, message }, "✓ Contre-offre envoyée au client par e-mail.");
+        } else if (data.action === "reschedule") {
+          const dateInput = document.getElementById("ao-date");
+          if (!dateInput.value.trim()) return dateInput.focus();
+          submit(submitBtn, msgEl, { date: dateInput.value.trim(), message }, "✓ Nouvelle date envoyée au client.");
+        } else if (data.action === "revise") {
+          const removeItems = Array.from(document.querySelectorAll('[id^="ao-item-"]:checked')).map(
+            (el) => el.dataset.label
+          );
+          submit(submitBtn, msgEl, { removeItems, message }, "✓ Offre révisée envoyée au client.");
+        } else if (data.action === "reply") {
+          if (!message.trim()) return document.getElementById("ao-message").focus();
+          submit(submitBtn, msgEl, { message }, "✓ Réponse envoyée au client.");
+        } else if (data.action === "followup") {
+          submit(submitBtn, msgEl, {}, "✓ Relance envoyée au client.");
+        } else {
+          submit(submitBtn, msgEl, {}, "✓ Demande clôturée.");
         }
       });
+
+      const secondaryBtn = document.getElementById("ao-secondary");
+      if (secondaryBtn) {
+        secondaryBtn.addEventListener("click", () => {
+          submit(secondaryBtn, msgEl, { action: "keep" }, "✓ Prix maintenu — demande clôturée.");
+          submitBtn.disabled = true;
+        });
+      }
     }
 
     load();

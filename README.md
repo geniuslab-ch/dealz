@@ -56,11 +56,24 @@ Request-installation / Pricing / Contact CTAs that route back into `index.html`.
 To try the real conversational assistant instead, set `MOCK_MODE=false` and paste an
 `ANTHROPIC_API_KEY` with available credit — everything else is identical.
 
+**The live demo never breaks, even with an empty Anthropic account.** With `MOCK_MODE=false`, if
+the real Claude call fails for any reason — no credit, rate limit, transient outage — `server.js`
+catches it and silently falls back to the same scripted engine `MOCK_MODE` uses, so a visitor never
+sees a broken conversation. It logs a warning server-side (`[/api/chat] Real Claude call failed —
+falling back…`) so you notice and can fix the account issue; the visitor sees a working demo either
+way. This was a real reported bug (the live demo failing outright when the API account had no
+billing) — it's fixed at the server level, not worked around in the frontend.
+
 ## What's actually happening on the demo (real mode)
 
 - **Claude only asks questions and reads the customer's answers.** It never invents a price.
-- Once it has enough information, it calls a `calculate_quote` tool with structured fields
-  (service type, room count, add-ons, distance…).
+- Once it has enough information (service type, room count, add-ons), it asks for the customer's
+  **name, e-mail, phone, and the cleaning address** — before showing the quote, not after — so the
+  quote itself is personalized ("DEVIS DÉTAILLÉ — MARIE DUPONT") and the contact info is already on
+  hand for the accept/decline/counteroffer loop that follows (no redundant second form). It then
+  calls a `calculate_quote` tool with structured fields (service type, room count, add-ons,
+  distance, plus the customer fields, which are split out before pricing math — see
+  `src/claude.js`).
 - **The pricing engine** (plain JavaScript, [`src/pricingEngine.js`](src/pricingEngine.js)) is a
   deterministic function that reads [`docs/pricing.json`](docs/pricing.json) and computes the exact
   total. This is the "moteur de tarification" box in the flow — it's the source of truth, not the
@@ -89,30 +102,54 @@ Devis → Client refuse → Dealz demande pourquoi → E-mail à l'entreprise av
 → L'entreprise décide → Contre-offre → Dealz recontacte le client → Accepté → E-mail + Agenda
 ```
 
-**1. Objection capture** (`docs/quote-app.js`) — clicking Refuser shows six objection chips (prix /
-date / périmètre / réflexion / concurrent / question) plus a free-text field, in a soft,
-non-aggressive tone ("Auriez-vous deux minutes pour me dire ce qui ne convenait pas…").
+**1. Objection capture** (`docs/quote-app.js`) — clicking Refuser shows **seven** objection chips
+(prix / date / périmètre / réflexion / concurrent / besoin d'infos / n'a plus besoin) plus a
+free-text field, in a soft, non-aggressive tone ("Auriez-vous deux minutes pour me dire ce qui ne
+convenait pas…").
 
-**2. Classification** (`src/objections.js`) — a chip click already carries its category; free text
-gets classified into the same six categories via a cheap Claude Haiku call in real mode, or a
-keyword heuristic in `MOCK_MODE` (zero API key needed either way).
+**2. Classification — the "Objection Engine"** (`src/objections.js`) — a chip click already
+carries its category; free text gets classified into the same categories via a cheap Claude Haiku
+call in real mode, or a keyword heuristic in `MOCK_MODE` (zero API key needed either way). **Never
+guesses when uncertain** — an unmatched or ambiguous message falls to `other` rather than picking a
+specific-sounding wrong category, because a wrong CTA (e.g. offering a discount for what was
+actually a scope objection) is worse than a generic "review the conversation" one. The raw customer
+text is always included in the company email regardless of category, so the owner can override the
+classification by reading it themselves.
 
-**3. Human handoff by e-mail, no dashboard** (`src/notifications.js`, `POST /api/decline`) — the
-company receives "🔴 Devis refusé — action possible": customer info, the original quote, the
-objection category, the client's own words, and a **counteroffer link**. This is the entire
-"company interface" for this feature — no login, no list to check.
+**3. Human handoff by e-mail, no dashboard — different action per objection** (`src/notifications.js`,
+`POST /api/decline`) — the company receives an email whose **subject line alone says what
+happened**, e.g. `📅 Devis refusé — Date indisponible — Marie Dupont — CHF 490.00`, so the owner
+understands without opening it. The one action link in the email adapts to the objection — this is
+the actual point of the Objection Engine, not just classification:
 
-**4. Counteroffer, owner-controlled** (`docs/counteroffer.html`, `GET/POST /api/counteroffer/:token`)
-— a single-purpose page (not a dashboard) showing the context and one input: the CHF amount to
-counter with, plus an optional message. Nothing is suggested or auto-calculated — the business
-owner always decides the number, deliberately (an AI-suggested discount that a rushed owner
-approves without checking margin is a real way to erode a business's own pricing — deferred on
-purpose). Submitting emails
-the customer a link to `docs/offer.html`.
+| Objection | Primary action (`counteroffer.html`) | What the customer sees |
+|---|---|---|
+| Prix trop élevé | Faire une contre-offre (CHF amount) | New price, accept/decline |
+| Date indisponible | Proposer une autre date | New date, accept/decline |
+| Périmètre du service | Envoyer une offre révisée (checkboxes to remove line items — total recalculates server-side) | Revised itemized quote, accept/decline |
+| A choisi un autre prestataire | Faire une contre-offre, or "Maintenir le prix" (closes with no customer email) | Same as price |
+| A besoin d'informations | Répondre au client (free-text reply) | A plain answer, no accept/decline — nothing is pushed |
+| A besoin de réfléchir | Relancer le client (one click, capped at once — no repeated nagging) | The original quote again |
+| N'a plus besoin du service | Clôturer la demande (one click, no customer contact) | Nothing — closing, not selling, per the brief this shipped from |
+| Autre raison | Voir la conversation | — |
+
+Only `docs/counteroffer.html` exists as a page — it's **one adaptive form**, not eight different
+pages, rendering different fields based on the category's configured `action` from the same
+`CATEGORIES` table in `src/objections.js`. Same for the customer side: **one** `docs/offer.html`
+renders a price, a date, a revised item list, or nothing, based on what the owner actually sent.
+This was a deliberate simplification over building a dedicated page per objection type — the
+"simplest implementation that preserves the intelligence" the brief asked for.
+
+**4. Owner is always in control of anything committal** — nothing here auto-sends a price, a date,
+or a scope change. `calculate_quote`/counteroffer amounts are always typed by a human before
+sending (an AI-suggested discount that a rushed owner approves without checking margin is a real
+way to erode a business's own pricing — deferred on purpose, not an oversight). Only the
+*classification*, *subject line*, and *which form to show* are automated — that's where the
+"intelligence" actually lives; the money decisions stay human.
 
 **5. Customer responds** (`docs/offer.html`, `GET /api/offer/:token`, `POST /api/offer/:token/respond`)
-— shows the new price, Accepter/Refuser. Accepting triggers the same booking-confirmation flow as
-a direct accept.
+— shows whatever changed (price/date/scope), Accepter/Refuser. Accepting triggers the same
+booking-confirmation flow as a direct accept, using the *new* terms.
 
 **6. Booking confirmation** (`sendBookingConfirmation` in `src/notifications.js`) — e-mails both
 parties and includes a **Google Calendar "add event" link**
@@ -137,6 +174,85 @@ are inherently server-side. The static/GitHub-Pages version of `demo.html` still
 click through objection chips (good UX, real product feel) but shows an honest "en conditions
 réelles, ceci serait envoyé par e-mail…" message instead of calling the API, since there's no
 server there to call.
+
+## Setting up real Gmail sending and real Google Calendar
+
+Two different questions with two very different answers:
+
+**Sending real email through Gmail — no Google Cloud project needed.** `src/notifications.js`
+already sends real email via standard SMTP (`nodemailer`), and Gmail's own SMTP server accepts
+that directly:
+
+1. On the Google Account that will send mail: Security → 2-Step Verification (turn it on if it
+   isn't already) → App passwords → generate one for "Mail"
+2. In `.env`: `SMTP_HOST=smtp.gmail.com`, `SMTP_PORT=587`, `SMTP_SECURE=false`,
+   `SMTP_USER=<that gmail address>`, `SMTP_PASS=<the 16-character app password>`
+3. Restart the server — `src/notifications.js` picks up `SMTP_HOST` automatically and every
+   "simulated" email in the console log starts actually sending
+
+No OAuth, no API key, no Cloud project. This works with any SMTP provider, not just Gmail (Resend,
+Postmark, your own mail server) — Gmail is just the fastest thing to try with an existing account.
+
+**Real Google Calendar API writes (creating an event directly in a specific calendar) — this is a
+different, bigger thing**, and this repo deliberately doesn't do it (see "Not included yet" below).
+The current approach — a one-click "add to Google Calendar" link generated by
+`googleCalendarLink()` in `src/notifications.js` — needs none of what follows. If you want real
+API writes instead, here's what that actually requires, so the scope is clear before starting:
+
+1. A Google Cloud project, with the **Google Calendar API** enabled
+2. OAuth 2.0 credentials (Cloud Console → APIs & Services → Credentials) — a client ID/secret
+3. A consent flow where each company grants Dealz access to *their own* calendar once (this is
+   real, per-company scope — one company's OAuth grant doesn't give access to anyone else's
+   calendar); the refresh token that results needs to be stored securely per company
+4. Server-side: the `googleapis` npm package, `calendar.events.insert()` calls authenticated with
+   that company's stored refresh token
+
+None of this is wired up. If it's the next priority, it's a real, bounded piece of work — but it's
+meaningfully bigger than the SMTP setup above, and multi-tenant credential storage (`src/store.js`
+is in-memory only) would need solving first.
+
+## The generic embed snippet (`docs/embed.js`)
+
+This is the actual "add this to your existing website" artifact — the thing a real client pastes
+into their real site, on a domain that isn't this one:
+
+```html
+<script src="https://YOUR-DEALZ-DOMAIN/embed.js" async></script>
+```
+
+One script tag, works on any CMS (WordPress, Wix, Squarespace, Webflow, a hand-written site) —
+anywhere a `<script>` tag can go. It injects a floating launcher bubble + chat panel with
+**self-contained CSS** (all rules scoped under `#dealz-embed-*` / `.dealz-*` class names, no
+dependency on `styles.css`, so it can't clash with or be overridden by the host page's own styles),
+then dynamically loads `pricing-engine-client.js`, `mock-client.js`, and `quote-app.js` from
+wherever `embed.js` itself was loaded from — so the exact same conversation logic (Claude/mock
+fallback, the full Objection Engine, accept/decline) runs identically to `demo.html`'s "Devis" tab.
+
+**Why this is a separate file from `demo.html`, not a shared one:** `demo.html` shows the *ideal*
+integration for the sales pitch — a "Devis" tab living inside a real site's own navigation, which
+looks the most natural but assumes you can edit that site's markup/nav structure. `embed.js` is
+what actually ships to a client's arbitrary site, where you can't assume that — a floating bubble
+is the only pattern that reliably works with zero assumptions about the host page, which is exactly
+how Intercom/Drift/Tidio-style widgets are built for the same reason.
+
+**Cross-origin, for real:** a client's site and the Dealz server are different domains, so two
+things had to be added beyond just injecting markup:
+
+- `quote-app.js`'s API calls go through an `apiUrl(path)` helper that prefixes every request with
+  `window.DEALZ_API_BASE` when it's set (same-origin pages like `demo.html` never set it, so
+  nothing changes there); `embed.js` sets it to its own script origin before loading `quote-app.js`
+- `server.js` sends permissive CORS headers (`Access-Control-Allow-Origin: *`) on every route, since
+  the whole point is being called from a domain the server doesn't control ahead of time — a real
+  multi-tenant deployment should allow-list each client's actual domain instead of `*`
+
+**Verified working end-to-end**, not just plausible: served `docs/` on `localhost:3000` and a
+separate bare-HTML test page (no styling, no framework) on `localhost:5050` with only
+`<script src="http://localhost:3000/embed.js" async>` in it, then ran the full chat → personalized
+quote flow through the browser from the `5050` origin — the widget rendered correctly on top of the
+unstyled host page and the API calls reached the `3000` backend successfully.
+
+`data-dealz-company="..."` on the script tag is read by `embed.js` but not yet used server-side —
+this demo is single-tenant, so there's nothing yet to route by; see "Not included yet."
 
 ## Why the demo assistant never says "AI"
 
@@ -176,10 +292,13 @@ server.js                     Express server: /api/chat, /api/accept, /api/decli
 src/claude.js                  System prompt (French), tool definition, Claude API call loop
 src/mock.js                    Scripted offline conversation for server-side MOCK_MODE
 src/pricingEngine.js           Deterministic price calculation, French item labels
-src/objections.js              Classifies a decline reason into 6 categories (Claude Haiku in real
-                                mode, keyword heuristic in MOCK_MODE)
+src/objections.js              The Objection Engine: 8 categories, each with a subject-line label,
+                                emoji, and configured action (counteroffer/reschedule/revise/
+                                reply/followup/close/review) — classifies via Claude Haiku in real
+                                mode, keyword heuristic in MOCK_MODE
 src/notifications.js           E-mail sending (real via SMTP, or logged to console when SMTP isn't
-                                configured) + Google Calendar "add event" link builder
+                                configured), one send function per objection action, + Google
+                                Calendar "add event" link builder
 src/store.js                   In-memory token store for pending decline/counteroffer state —
                                 swap for a real DB before production traffic (see "The sales loop")
 
@@ -199,10 +318,13 @@ docs/pricing-engine-client.js   Browser port of src/pricingEngine.js — used by
 docs/pricing.json               The example company's pricing rules — single source of truth
                                  (stand-in for a real client's Excel sheet), read by both the
                                  server and the browser fallback
-docs/counteroffer.html          Owner-facing single-action page: view objection context, send a
-                                 counteroffer. Needs the real backend (no static fallback)
-docs/offer.html                 Customer-facing page for a countered offer: view + accept/decline.
-                                 Needs the real backend (no static fallback)
+docs/counteroffer.html          Owner-facing single-action page — one adaptive form covering all
+                                 8 objection actions. Needs the real backend (no static fallback)
+docs/offer.html                 Customer-facing response page — adapts to price/date/revised-scope/
+                                 followup. Needs the real backend (no static fallback)
+docs/embed.js                   The generic "add this to your real website" snippet — self-
+                                 contained CSS, floating launcher, cross-origin (see "The generic
+                                 embed snippet")
 docs/styles.css                 Dealz's own site + the shared chat-widget styling, palette taken
                                  from docs/images/dealz-logo.png
 docs/images/                    Dealz logo (full + small nav version)
@@ -311,14 +433,17 @@ This demo is intentionally structured so a new client doesn't require new code:
   data to defend the suggestion logic (see "The sales loop" above)
 - **Real Google Calendar API writes** (OAuth, per-company consent) — using one-click
   "add to calendar" links instead is a deliberate MVP simplification, not a placeholder; see
-  "The sales loop"
+  "Setting up real Gmail sending and real Google Calendar" for exactly what real writes would need
 - **Excel-upload auto-parsing** — arbitrary pricing spreadsheets vary too much in structure for
   reliable automated detection; the realistic MVP is a human manually mapping a client's Excel into
   `pricing.json` during paid onboarding (this is what the setup fee is partly for), not an AI parser
-- **Multi-tenant routing** (one pricing config per client, selected by domain/API key) — the
-  architecture supports it (pricing is already just data), but this demo is single-tenant
-- **A generic "embed on any CMS" installer** — the widget mounts on `#dealz-messages` /
-  `#dealz-input` / `#dealz-send`, but there's no drop-in script for Wix/Squarespace/WordPress yet
+- **Multi-tenant routing** (one pricing config per client, selected by domain/API key or the
+  `data-dealz-company` attribute `docs/embed.js` already reads and stores) — the architecture
+  supports it (pricing is already just data), but this demo is single-tenant, and the CORS policy
+  is wide-open (`*`) rather than allow-listing specific client domains
+- **Automatic follow-up scheduling** — "Relancer le client" on a `thinking` objection sends
+  immediately when the owner clicks it; there's no job queue to actually wait until "tomorrow" and
+  send on its own. Real delayed scheduling needs a cron/queue and is capped-by-owner-click for now
 - **Persisted lead/booking storage** — `src/store.js` is in-memory only (see "The sales loop"); the
   `index.html` contact form is client-side only (a confirmation message, nothing saved) — wiring it
   to a real inbox is a small serverless function or a third-party form backend

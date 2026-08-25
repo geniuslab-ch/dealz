@@ -7,7 +7,8 @@
     { category: "scope", label: "🧹 Je n'ai pas besoin de tout" },
     { category: "thinking", label: "🤔 Je dois réfléchir" },
     { category: "competitor", label: "🆚 J'ai reçu une autre offre" },
-    { category: "question", label: "❓ J'ai une autre question" },
+    { category: "information", label: "❓ J'ai une autre question" },
+    { category: "not_needed", label: "⚪ Je n'ai plus besoin du service" },
   ];
 
   let messages = [];
@@ -16,9 +17,17 @@
   let useStaticFallback = false;
   let pricingPromise = null;
 
+  // Set by embed.js when this widget is loaded on a third-party site (a
+  // different origin than the Dealz backend) — API calls need an absolute
+  // URL in that case. Same-origin pages (demo.html served by this repo's
+  // own server) leave this unset and every call stays relative, unchanged.
+  function apiUrl(path) {
+    return (window.DEALZ_API_BASE || "") + path;
+  }
+
   function loadPricing() {
     if (!pricingPromise) {
-      pricingPromise = fetch("/pricing.json").then((r) => r.json());
+      pricingPromise = fetch(apiUrl("/pricing.json")).then((r) => r.json());
     }
     return pricingPromise;
   }
@@ -29,7 +38,7 @@
   // as opposed to a *reachable* backend returning a real error (bad API key,
   // no credit, etc.), which should be shown to the user as-is.
   async function callBackend(payloadMessages) {
-    const res = await fetch("/api/chat", {
+    const res = await fetch(apiUrl("/api/chat"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ messages: payloadMessages }),
@@ -49,8 +58,8 @@
   }
 
   // Same shape as callBackend, for the decline/accept/counteroffer endpoints.
-  async function postJSON(url, body) {
-    const res = await fetch(url, {
+  async function postJSON(path, body) {
+    const res = await fetch(apiUrl(path), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
@@ -190,36 +199,63 @@
     );
   }
 
+  async function confirmBooking(container, quote, customer) {
+    if (useStaticFallback) {
+      renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
+      return;
+    }
+    try {
+      const data = await postJSON("/api/accept", { quote, customer });
+      renderSystemMessage(
+        container,
+        null,
+        "system-success",
+        `✓ Réservation confirmée ! Un e-mail de confirmation a été envoyé, et le rendez-vous ` +
+          `est prêt à être ajouté à l'agenda de l'entreprise.` +
+          (data.calendarLink
+            ? `<br/><br/><a href="${data.calendarLink}" target="_blank" rel="noopener">📅 Ajouter à mon Google Agenda</a>`
+            : "")
+      );
+    } catch (err) {
+      if (err.isAppError) {
+        renderSystemMessage(container, `Erreur : ${err.message}`, "system-decline");
+      } else {
+        renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
+      }
+    }
+  }
+
   function handleAccept(container, quote) {
+    // Contact info is normally already captured earlier in the conversation
+    // (the assistant asks for it before delivering the quote) — only fall
+    // back to asking again here if that didn't happen for some reason.
+    if (quote.customer && quote.customer.email) {
+      confirmBooking(container, quote, quote.customer);
+      return;
+    }
     renderContactForm(
       container,
       { intro: "Pour confirmer votre réservation :", submitLabel: "✓ Confirmer la réservation", needAddress: true },
-      async (customer) => {
-        if (useStaticFallback) {
-          renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
-          return;
-        }
-        try {
-          const data = await postJSON("/api/accept", { quote, customer });
-          renderSystemMessage(
-            container,
-            null,
-            "system-success",
-            `✓ Réservation confirmée ! Un e-mail de confirmation a été envoyé, et le rendez-vous ` +
-              `est prêt à être ajouté à l'agenda de l'entreprise.` +
-              (data.calendarLink
-                ? `<br/><br/><a href="${data.calendarLink}" target="_blank" rel="noopener">📅 Ajouter à mon Google Agenda</a>`
-                : "")
-          );
-        } catch (err) {
-          if (err.isAppError) {
-            renderSystemMessage(container, `Erreur : ${err.message}`, "system-decline");
-          } else {
-            renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
-          }
-        }
-      }
+      (customer) => confirmBooking(container, quote, customer)
     );
+  }
+
+  async function submitDecline(container, quote, category, text, customer) {
+    try {
+      await postJSON("/api/decline", { quote, category, text, customer });
+      renderSystemMessage(
+        container,
+        "Merci pour votre retour ! Nous avons transmis votre message à l'équipe — vous serez " +
+          "recontacté(e) rapidement si une meilleure offre est possible.",
+        "system-decline"
+      );
+    } catch (err) {
+      renderSystemMessage(
+        container,
+        err.isAppError ? `Erreur : ${err.message}` : "Une erreur est survenue.",
+        "system-decline"
+      );
+    }
   }
 
   function handleDecline(container, quote) {
@@ -236,39 +272,33 @@
           null,
           "system-decline",
           `Merci pour votre retour ! En conditions réelles, ce message serait transmis à ` +
-            `${COMPANY_NAME} par e-mail, avec une proposition de contre-offre possible.` +
+            `${COMPANY_NAME} par e-mail, avec une action adaptée à votre motif de refus.` +
             `<br/><br/><i style="opacity:.7">(Mode démonstration statique — aucun e-mail réel n'est envoyé ici.)</i>`
         );
+        return;
+      }
+
+      // Contact info is normally already captured earlier, before the quote
+      // was delivered — only ask again here if that didn't happen.
+      if (quote.customer && quote.customer.email) {
+        submitDecline(container, quote, category, text, quote.customer);
         return;
       }
 
       renderContactForm(
         container,
         { intro: "Pour vous recontacter si besoin, laissez-nous vos coordonnées :", submitLabel: "Envoyer" },
-        async (customer) => {
-          try {
-            await postJSON("/api/decline", { quote, category, text, customer });
-            renderSystemMessage(
-              container,
-              "Merci pour votre retour ! Nous avons transmis votre message à l'équipe — vous serez " +
-                "recontacté(e) rapidement si une meilleure offre est possible.",
-              "system-decline"
-            );
-          } catch (err) {
-            renderSystemMessage(
-              container,
-              err.isAppError ? `Erreur : ${err.message}` : "Une erreur est survenue.",
-              "system-decline"
-            );
-          }
-        }
+        (customer) => submitDecline(container, quote, category, text, customer)
       );
     });
   }
 
   function renderQuoteCard(container, quote) {
     const card = el("div", "dealz-quote-card");
-    card.appendChild(el("div", "qc-head", "DEVIS DÉTAILLÉ"));
+    const headLabel = quote.customer && quote.customer.name
+      ? `DEVIS DÉTAILLÉ — ${quote.customer.name.toUpperCase()}`
+      : "DEVIS DÉTAILLÉ";
+    card.appendChild(el("div", "qc-head", headLabel));
     quote.items.forEach((item) => {
       const row = el("div", "qc-row");
       row.appendChild(el("span", null, item.label));
