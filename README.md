@@ -108,13 +108,32 @@ textile categories the original bank listed alongside four/vitres/frigo (hotte, 
 micro-ondes, lave-vaisselle, congélateur, canapé, fauteuil, matelas, rideaux) — same treatment as the
 existing add-ons, and now also offered by the real Claude assistant (`src/claude.js`).
 
-Each question comes back from the engine as a `question: { type: "single" | "multi", options: [...],
-preselected?: [...] }` field alongside the assistant's message; `docs/quote-app.js`'s
-`renderChipQuestion()` renders it as clickable chips (reusing the existing objection-picker chip
-styling, plus a `.selected` state for multi-select and pre-selected chips). A chip click is sent back
-as a normal chat message — its label text — through the exact same code path as typing, so the
-free-text input at the bottom always still works as a natural fallback with no separate "Autre" UI
-needed for it.
+Each question comes back from the engine as a `question: { type: "single" | "multi" | "date",
+options?: [...], preselected?: [...], minDate?: "YYYY-MM-DD" }` field alongside the assistant's
+message; `docs/quote-app.js`'s `renderChipQuestion()` renders single/multi as clickable chips
+(reusing the existing objection-picker chip styling, plus a `.selected` state for multi-select and
+pre-selected chips) and `date` as a native `<input type="date">`. A chip click is sent back as a
+normal chat message — its label text — through the exact same code path as typing, so the free-text
+input at the bottom always still works as a natural fallback with no separate "Autre" UI needed for
+it.
+
+## The date question is a real calendar, gated by a per-company lead time
+
+The "when do you want the cleaning?" question is a native date picker (not free text), and its `min`
+attribute — and a defensive server/mock-side clamp behind it, in case that attribute gets bypassed —
+comes from `pricing.min_lead_time_hours`. That's a per-company setting (documented as "set once
+during onboarding" in `pricing.json`, next to the other company-level config like `minimum_price`):
+some companies can send someone the same day, others need 24–72h notice, and this is what encodes
+that difference deterministically, the same way pricing itself is a rule rather than a guess. Today's
+demo default is `24`; a real company chooses their own value once, not per booking.
+
+For **régulier** (recurring) cleaning, the date question asks for a *start date* instead of a single
+appointment, and two more questions appear that a one-time booking doesn't need: which day of the
+week (`jour_semaine`, Lundi–Samedi) and which time-of-day window (`heure_passage`, matin/après-midi/
+fin de journée) the team should come — alongside the existing `frequence` question (chaque semaine /
+toutes les 2 semaines / etc.), that's everything needed to actually schedule a recurring slot, not
+just note that one exists. A one-time booking skips those and just asks whether its single date is
+firm or flexible.
 
 ## Lead-capture gate on the public demo (`docs/lead-gate.js` + `src/leads.js`)
 

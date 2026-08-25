@@ -52,6 +52,8 @@
     travaux_type: "Travaux réalisés",
     niveau_poussiere: "Niveau de poussière après travaux",
     frequence: "Fréquence souhaitée",
+    jour_semaine: "Jour de passage préféré",
+    heure_passage: "Heure de passage préférée",
     vide_avant: "Logement vidé avant nettoyage ?",
     date_etat_des_lieux: "Date de l'état des lieux",
     garantie_remise_etat: "Garantie de remise en état",

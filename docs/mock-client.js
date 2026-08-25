@@ -101,6 +101,24 @@
     return m ? parseFloat(m[1].replace(",", ".")) : 4;
   }
 
+  // The earliest bookable date, as an ISO "YYYY-MM-DD" string — how far in
+  // advance a booking must be made is a per-company setting
+  // (pricing.min_lead_time_hours), set once during onboarding: some
+  // companies can send someone the same day, others need 24-72h notice.
+  function computeMinDate(pricingConfig) {
+    const leadHours = Number(pricingConfig.min_lead_time_hours) || 0;
+    const min = new Date(Date.now() + leadHours * 60 * 60 * 1000);
+    return min.toISOString().slice(0, 10);
+  }
+
+  // Defensive clamp in case a client bypasses the date picker's own `min`
+  // attribute — never accept a date before what the company's lead time
+  // allows.
+  function clampDate(text, minDate) {
+    const value = (text || "").trim();
+    return value && value >= minDate ? value : minDate;
+  }
+
   const Q_TYPE_NETTOYAGE = "Quel type de nettoyage souhaitez-vous ?";
   const TYPE_NETTOYAGE_MAP = {
     "Nettoyage régulier": "regular",
@@ -364,14 +382,19 @@
     },
     {
       id: "date_nettoyage",
-      question: "Quand souhaitez-vous effectuer le nettoyage ?",
-      type: "text",
-      parse: lbl,
+      question: (a) =>
+        a.type_nettoyage === "regular"
+          ? "À partir de quelle date souhaitez-vous démarrer le nettoyage régulier ?"
+          : "Quand souhaitez-vous effectuer le nettoyage ?",
+      type: "date",
       applies: () => true,
     },
     {
       id: "date_imperative",
-      question: "Cette date est-elle impérative ?",
+      question: (a) =>
+        a.type_nettoyage === "regular"
+          ? "Cette date de démarrage est-elle impérative ?"
+          : "Cette date est-elle impérative ?",
       type: "single",
       options: () => ["Oui", "Non, je suis flexible"].map((l) => ({ label: l, value: l })),
       parse: lbl,
@@ -404,6 +427,24 @@
         ["Chaque semaine", "Toutes les 2 semaines", "Toutes les 3 semaines", "Une fois par mois", "Ponctuellement"].map(
           (l) => ({ label: l, value: l })
         ),
+      parse: lbl,
+      applies: (a) => a.type_nettoyage === "regular",
+    },
+    {
+      id: "jour_semaine",
+      question: "Quel jour de la semaine préférez-vous pour le passage de l'équipe ?",
+      type: "single",
+      options: () =>
+        ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"].map((l) => ({ label: l, value: l })),
+      parse: lbl,
+      applies: (a) => a.type_nettoyage === "regular",
+    },
+    {
+      id: "heure_passage",
+      question: "À quelle heure de la journée souhaitez-vous que l'équipe passe ?",
+      type: "single",
+      options: () =>
+        ["Matin (8h–12h)", "Après-midi (12h–17h)", "Fin de journée (17h–19h)"].map((l) => ({ label: l, value: l })),
       parse: lbl,
       applies: (a) => a.type_nettoyage === "regular",
     },
@@ -488,15 +529,21 @@
     for (const step of STEPS) {
       if (!step.applies(answers)) continue;
 
-      if (!alreadyAsked(history, step.question)) {
-        return ask(
-          step.question,
-          step.type === "text" ? null : { type: step.type, options: step.options() },
-          pricing
-        );
+      const questionText = typeof step.question === "function" ? step.question(answers) : step.question;
+
+      if (!alreadyAsked(history, questionText)) {
+        let question = null;
+        if (step.type === "single" || step.type === "multi") {
+          question = { type: step.type, options: step.options() };
+        } else if (step.type === "date") {
+          question = { type: "date", minDate: computeMinDate(pricing) };
+        }
+        return ask(questionText, question, pricing);
       }
 
-      answers[step.id] = step.parse(answerFollowing(history, step.question), answers);
+      const rawAnswer = answerFollowing(history, questionText);
+      answers[step.id] =
+        step.type === "date" ? clampDate(rawAnswer, computeMinDate(pricing)) : step.parse(rawAnswer, answers);
     }
 
     const addons = []

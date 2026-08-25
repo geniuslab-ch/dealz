@@ -197,6 +197,30 @@
   // instead of clicking a chip always works too — no separate "Autre" chip
   // needed.
   function renderChipQuestion(container, question, onAnswer) {
+    if (question.type === "date") {
+      const dateWrap = el("div", "dealz-objection-picker");
+      const dateInput = el("input", "dcf-input");
+      dateInput.type = "date";
+      dateInput.min = question.minDate;
+      dateWrap.appendChild(dateInput);
+      const dateMsg = el("p", "dlg-msg");
+      dateWrap.appendChild(dateMsg);
+      const confirmDateBtn = el("button", "dcf-submit", "Confirmer la date");
+      confirmDateBtn.addEventListener("click", () => {
+        if (!dateInput.value || dateInput.value < question.minDate) {
+          dateMsg.textContent = "Merci de choisir une date valide (au plus tôt : " + question.minDate + ").";
+          dateMsg.className = "dlg-msg show err";
+          return;
+        }
+        dateWrap.querySelectorAll("input, button").forEach((n) => (n.disabled = true));
+        onAnswer(dateInput.value);
+      });
+      dateWrap.appendChild(confirmDateBtn);
+      container.appendChild(dateWrap);
+      scrollToBottom(container);
+      return;
+    }
+
     const wrap = el("div", "dealz-objection-picker");
     const chipsRow = el("div", "dop-chips");
     const selected = new Set();

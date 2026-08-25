@@ -41,5 +41,6 @@
     "very_dirty": 90
   },
   "difficult_access_windows_fee": 45,
-  "floor_fee_per_floor_no_elevator": 15
+  "floor_fee_per_floor_no_elevator": 15,
+  "min_lead_time_hours": 24
 }
