@@ -25,6 +25,11 @@
     .ao-msg.ok { background: var(--green-light); color: #0d6b4b; }
     .ao-msg.err { background: var(--red-light); color: var(--red-dark); }
     .ao-badge { display: inline-block; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 20px; background: var(--blue-light); color: var(--blue-dark); margin-bottom: 6px; }
+    .ao-email-preview { margin-top: 14px; background: white; border: 1.5px dashed var(--line); border-radius: 12px; overflow: hidden; font-size: 13px; }
+    .ao-email-preview .aep-head { background: #fafbfd; color: var(--muted); padding: 8px 14px; font-weight: 700; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; border-bottom: 1px solid var(--line); }
+    .ao-email-preview .aep-meta { padding: 10px 14px; border-bottom: 1px solid var(--line); line-height: 1.6; }
+    .ao-email-preview .aep-body { padding: 12px 14px; }
+    .ao-email-preview .aep-body table { width: 100%; border-collapse: collapse; }
   </style>
 </head>
 <body>
@@ -81,6 +86,16 @@
         if (!res.ok) throw new Error(result.error || "Erreur");
         msgEl.textContent = successText;
         msgEl.className = "ao-msg show ok";
+        if (result.emailPreview) {
+          const p = result.emailPreview;
+          const preview = document.createElement("div");
+          preview.className = "ao-email-preview";
+          preview.innerHTML =
+            "<div class=\"aep-head\">📧 Aperçu de l'e-mail (démo)</div>" +
+            `<div class="aep-meta"><b>À :</b> ${p.to}<br/><b>Objet :</b> ${p.subject}</div>` +
+            `<div class="aep-body">${p.html}</div>`;
+          msgEl.insertAdjacentElement("afterend", preview);
+        }
       } catch (e) {
         msgEl.textContent = "Erreur : " + e.message;
         msgEl.className = "ao-msg show err";

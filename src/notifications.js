@@ -37,7 +37,7 @@ async function sendEmail({ to, subject, html }) {
       console.log("Lien(s):", links.join(", "));
     }
     console.log("================================================================================\n");
-    return { simulated: true };
+    return { simulated: true, preview: { to, subject, html } };
   }
 
   await transporter.sendMail({

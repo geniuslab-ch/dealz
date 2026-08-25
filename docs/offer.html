@@ -25,6 +25,11 @@
     .of-result.show { display: block; }
     .of-result.ok { background: var(--green-light); color: #0d6b4b; }
     .of-result a { color: inherit; font-weight: 700; }
+    .of-email-preview { margin-top: 14px; text-align: left; background: white; border: 1.5px dashed var(--line); border-radius: 12px; overflow: hidden; font-size: 13px; }
+    .of-email-preview .ofp-head { background: #fafbfd; color: var(--muted); padding: 8px 14px; font-weight: 700; font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; border-bottom: 1px solid var(--line); }
+    .of-email-preview .ofp-meta { padding: 10px 14px; border-bottom: 1px solid var(--line); line-height: 1.6; }
+    .of-email-preview .ofp-body { padding: 12px 14px; }
+    .of-email-preview .ofp-body table { width: 100%; border-collapse: collapse; }
   </style>
 </head>
 <body>
@@ -107,6 +112,16 @@
             resEl.textContent = "Pas de souci — merci pour votre réponse.";
           }
           resEl.className = "of-result show ok";
+          if (result.emailPreview) {
+            const p = result.emailPreview;
+            const preview = document.createElement("div");
+            preview.className = "of-email-preview";
+            preview.innerHTML =
+              "<div class=\"ofp-head\">📧 Aperçu de l'e-mail (démo)</div>" +
+              `<div class="ofp-meta"><b>À :</b> ${p.to}<br/><b>Objet :</b> ${p.subject}</div>` +
+              `<div class="ofp-body">${p.html}</div>`;
+            resEl.insertAdjacentElement("afterend", preview);
+          }
         } catch (e) {
           resEl.textContent = "Erreur : " + e.message;
           resEl.className = "of-result show ok";

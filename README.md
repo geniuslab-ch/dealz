@@ -170,11 +170,21 @@ verified end to end with zero email credentials. Set `SMTP_HOST`/`SMTP_PORT`/`SM
 (any provider — Gmail app password, Resend, Postmark, your own mail server) to start sending for
 real, no code changes needed.
 
-**This whole loop needs a real backend and cannot run on GitHub Pages** — email and calendar links
-are inherently server-side. The static/GitHub-Pages version of `demo.html` still lets a visitor
-click through objection chips (good UX, real product feel) but shows an honest "en conditions
-réelles, ceci serait envoyé par e-mail…" message instead of calling the API, since there's no
-server there to call.
+**Actually sending an email or writing to a calendar needs a real backend and cannot run on GitHub
+Pages** — those side effects are inherently server-side. But *seeing what would be sent* doesn't:
+every step of the loop (decline notification, counteroffer, reschedule, revised offer, follow-up,
+booking confirmation) now renders an **"📧 Aperçu de l'e-mail (démo)"** panel right in the chat,
+showing the actual To/Subject/body — real dry-run content from `sendEmail()` when there's a backend
+running without SMTP configured, or a client-built equivalent (`docs/mock-client.js`,
+`buildDeclineEmailPreview` / `buildBookingConfirmationPreview`, mirroring `src/notifications.js` +
+`src/objections.js` closely enough to be representative) when there's no backend at all — so the
+static/GitHub-Pages version of `demo.html` shows exactly what a real deployment would email,
+without ever needing SMTP credentials or leaving the page.
+
+The same pattern was added to `counteroffer.html` and `offer.html` (the owner-action and
+customer-offer pages reached via email links) — every action that triggers an email now shows a
+matching preview panel underneath the confirmation message, so the entire decline → objection →
+counteroffer → accept loop is previewable end to end without ever configuring SMTP.
 
 ## The quote is a real PDF, viewed in a modal before any decision
 
@@ -425,10 +435,17 @@ every tab so nobody mistakes the illustrative company for a real Dealz customer.
 
 For the demo, pricing rules live in [`docs/pricing.json`](docs/pricing.json) as a small hand-written
 table (per-room rates for end-of-tenancy cleaning, per-hour rate for regular cleaning, flat add-on
-fees, distance-based travel fee). In a real deployment, this file is what you'd generate from a
-client's actual Excel price list — the assistant and pricing-engine code don't need to change, only
-the data (and the item labels in `pricingEngine.js` / `pricing-engine-client.js` if the client isn't
+fees, distance-based travel fee, plus condition-based surcharges, a hard-to-reach-windows fee, and a
+per-floor no-elevator fee). In a real deployment, this file is what you'd generate from a client's
+actual Excel price list — the assistant and pricing-engine code don't need to change, only the data
+(and the item labels in `pricingEngine.js` / `pricing-engine-client.js` if the client isn't
 French-speaking).
+
+The three condition-based variables (`condition_surcharge`, `difficult_access_windows_fee`,
+`floor_fee_per_floor_no_elevator`) are deliberately *not* asked about on every conversation — the
+system prompt in `src/claude.js` only tells the assistant to bring them up when the customer
+mentions them unprompted (very dirty/cluttered, hard-to-reach windows, no elevator), keeping the
+question flow short for the common case while still pricing accurately for the edge cases.
 
 ## Model choice & cost
 

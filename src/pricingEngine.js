@@ -77,6 +77,30 @@ function calculateQuote(input) {
     }
   }
 
+  const conditionFee = pricing.condition_surcharge[input.condition];
+  if (conditionFee) {
+    const conditionLabel =
+      input.condition === "very_dirty" ? "Supplément saleté importante" : "Supplément nettoyage en profondeur";
+    items.push({ label: conditionLabel, amount: conditionFee });
+  } else if (input.condition && pricing.condition_surcharge[input.condition] === undefined) {
+    warnings.push(`État inconnu "${input.condition}" — ignoré.`);
+  }
+
+  if (input.difficult_access_windows && addons.includes("windows")) {
+    items.push({
+      label: "Supplément vitres difficiles d'accès (baies vitrées, hauteur…)",
+      amount: pricing.difficult_access_windows_fee,
+    });
+  }
+
+  const floorsNoElevator = Number(input.floors_no_elevator) || 0;
+  if (floorsNoElevator > 0) {
+    items.push({
+      label: `Supplément étages sans ascenseur (${floorsNoElevator})`,
+      amount: round(floorsNoElevator * pricing.floor_fee_per_floor_no_elevator),
+    });
+  }
+
   let total = round(items.reduce((sum, i) => sum + i.amount, 0));
   if (total > 0 && total < pricing.minimum_price) {
     items.push({

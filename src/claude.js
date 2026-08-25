@@ -35,6 +35,16 @@ moquette (demande combien de pièces sont concernées).
 Ne demande la distance de déplacement que si le client mentionne un lieu éloigné de la zone
 habituelle de l'entreprise ; sinon, ignore ce point.
 
+Trois autres détails peuvent influencer le prix, mais ne les demande QUE quand c'est pertinent dans
+le fil de la conversation (jamais comme une liste de questions systématique) :
+- L'état général du logement (normal, sale, très sale/encombré) — utile surtout pour un nettoyage de
+  fin de bail ou si le client mentionne spontanément que c'est très sale.
+- Si l'option "nettoyage des vitres" est demandée et que le client mentionne des vitres difficiles
+  d'accès (baies vitrées, hauteur, etc.), signale qu'un supplément s'applique.
+- Le nombre d'étages sans ascenseur, seulement si le client mentionne un immeuble sans ascenseur ou
+  un étage élevé.
+Si rien de tout cela n'est mentionné, n'en parle pas et laisse ces champs vides.
+
 Pose des questions courtes et naturelles — une ou deux à la fois, jamais un long formulaire. Une
 fois que tu as tous les détails du service (type de prestation, taille, options), demande le nom du
 client, son e-mail, son téléphone, et l'adresse du logement à nettoyer — en une ou deux questions
@@ -83,6 +93,25 @@ const CALCULATE_QUOTE_TOOL = {
       distance_km: {
         type: "number",
         description: "Approximate travel distance in km from the company's base, if known.",
+      },
+      condition: {
+        type: "string",
+        enum: ["normal", "dirty", "very_dirty"],
+        description:
+          "General condition/cleanliness of the property, only if the customer mentioned it " +
+          "(e.g. very dirty, cluttered, needs deep cleaning). Omit if not discussed.",
+      },
+      difficult_access_windows: {
+        type: "boolean",
+        description:
+          "True only if 'windows' is in addons AND the customer mentioned hard-to-reach windows " +
+          "(bay windows, height, etc). Omit otherwise.",
+      },
+      floors_no_elevator: {
+        type: "number",
+        description:
+          "Number of floors to climb without an elevator, only if the customer mentioned no " +
+          "elevator or a high floor. Omit if not discussed.",
       },
       customer_name: { type: "string", description: "Customer's name, if provided." },
       customer_email: { type: "string", description: "Customer's email, if provided." },

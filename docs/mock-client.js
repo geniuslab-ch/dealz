@@ -94,5 +94,59 @@
     };
   }
 
-  window.DealzMock = { runTurnMock };
+  // ---- Email preview (static fallback only) ----
+  // Mirrors src/notifications.js + src/objections.js closely enough to show
+  // a representative preview when there is no backend to actually send from.
+  const CATEGORY_META = {
+    price: { label: "Prix trop élevé", emoji: "🔴", showTotal: true },
+    timing: { label: "Date indisponible", emoji: "📅", showTotal: true },
+    scope: { label: "Périmètre du service", emoji: "🧹", showTotal: true },
+    conditions: { label: "Conditions / détails du nettoyage", emoji: "🏠", showTotal: true },
+    competitor: { label: "A choisi un autre prestataire", emoji: "🆚", showTotal: true },
+    information: { label: "A besoin d'informations", emoji: "❓", showTotal: false },
+    thinking: { label: "A besoin de réfléchir", emoji: "🟡", showTotal: true },
+    not_needed: { label: "N'a plus besoin du service", emoji: "⚪", showTotal: false },
+    other: { label: "Autre raison", emoji: "⚠️", showTotal: true },
+  };
+
+  function fmtCHF(n) {
+    return `CHF ${Number(n).toFixed(2)}`;
+  }
+
+  function quoteItemsHtml(quote) {
+    return quote.items
+      .map((i) => `<tr><td>${i.label}</td><td style="text-align:right">${fmtCHF(i.amount)}</td></tr>`)
+      .join("");
+  }
+
+  function buildDeclineEmailPreview({ quote, category, rawText, customer }) {
+    const cfg = CATEGORY_META[category] || CATEGORY_META.other;
+    const parts = [`${cfg.emoji} Devis refusé`, cfg.label, customer.name || "un client"];
+    if (cfg.showTotal && quote && quote.total) parts.push(fmtCHF(quote.total));
+    const subject = parts.join(" — ");
+    const html = `
+      <h2>${cfg.emoji} Devis refusé — action possible</h2>
+      <p><b>Client :</b> ${customer.name || "(non fourni)"}<br/>
+         <b>E-mail :</b> ${customer.email || "(non fourni)"}<br/>
+         <b>Téléphone :</b> ${customer.phone || "(non fourni)"}<br/>
+         <b>Adresse :</b> ${customer.address || "(non fournie)"}</p>
+      ${cfg.showTotal ? `<p><b>Devis original :</b> ${fmtCHF(quote.total)}</p><table>${quoteItemsHtml(quote)}</table>` : ""}
+      <p><b>Motif du refus :</b> ${cfg.label}</p>
+      ${rawText ? `<p><b>Message du client :</b><br/>« ${rawText} »</p>` : ""}
+      <p><i>Bouton d'action (« ${cfg.emoji === "❓" ? "Répondre au client" : "agir"} ») inclus dans le vrai e-mail.</i></p>
+    `;
+    return { to: "reservations@swissclean.demo", subject, html };
+  }
+
+  function buildBookingConfirmationPreview({ quote, customer }) {
+    const html = `
+      <h2>✓ Réservation confirmée</h2>
+      <p>Merci ${customer.name || ""} ! Votre nettoyage est confirmé pour <b>${fmtCHF(quote.total)}</b>.</p>
+      <table>${quoteItemsHtml(quote)}</table>
+      <p><i>Lien « Ajouter à mon Google Agenda » inclus dans le vrai e-mail.</i></p>
+    `;
+    return { to: customer.email || "(non fourni)", subject: "✓ Réservation confirmée", html };
+  }
+
+  window.DealzMock = { runTurnMock, buildDeclineEmailPreview, buildBookingConfirmationPreview };
 })();

@@ -306,6 +306,12 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
   gap: 12px;
   background: #fbfcff;
 }
+/* Without this, cards with their own `overflow: hidden` (quote card, email
+   preview…) get flex-shrunk toward zero height once the conversation grows
+   taller than the panel, instead of the panel simply scrolling. */
+.dealz-messages > * {
+  flex-shrink: 0;
+}
 
 .dealz-msg {
   max-width: 78%;
@@ -408,6 +414,39 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
   opacity: 0.45;
   cursor: default;
 }
+
+.dealz-email-preview {
+  align-self: stretch;
+  background: white;
+  border: 1.5px dashed var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  font-size: 13px;
+}
+.dealz-email-preview .dep-head {
+  background: #fafbfd;
+  color: var(--muted);
+  padding: 8px 14px;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--line);
+}
+.dealz-email-preview .dep-meta {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  line-height: 1.6;
+}
+.dealz-email-preview .dep-body {
+  padding: 12px 14px;
+  color: var(--ink);
+}
+.dealz-email-preview .dep-body table { width: 100%; border-collapse: collapse; }
+.dealz-email-preview .dep-body td { padding: 4px 0; font-size: 13px; }
+.dealz-email-preview .dep-body h2 { font-size: 15px; margin: 0 0 8px; }
+.dealz-email-preview .dep-body a { color: var(--blue); }
 
 .dealz-inputbar {
   display: flex;

@@ -191,6 +191,20 @@
     scrollToBottom(container);
   }
 
+  // Shows exactly what would be emailed — real dry-run content from the
+  // backend when it's simulating (no SMTP configured), or a client-built
+  // approximation when there's no backend at all (static fallback).
+  function renderEmailPreview(container, preview) {
+    if (!preview) return;
+    const wrap = el("div", "dealz-email-preview");
+    wrap.innerHTML =
+      "<div class=\"dep-head\">📧 Aperçu de l'e-mail (démo)</div>" +
+      `<div class="dep-meta"><b>À :</b> ${preview.to}<br/><b>Objet :</b> ${preview.subject}</div>` +
+      `<div class="dep-body">${preview.html}</div>`;
+    container.appendChild(wrap);
+    scrollToBottom(container);
+  }
+
   function simulatedAcceptHtml() {
     return (
       `✓ Merci ! Votre devis a été transmis à ${COMPANY_NAME}. Vous recevrez la confirmation ` +
@@ -203,6 +217,7 @@
   async function confirmBooking(container, quote, customer) {
     if (useStaticFallback) {
       renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
+      renderEmailPreview(container, window.DealzMock.buildBookingConfirmationPreview({ quote, customer }));
       return;
     }
     try {
@@ -217,11 +232,13 @@
             ? `<br/><br/><a href="${data.calendarLink}" target="_blank" rel="noopener">📅 Ajouter à mon Google Agenda</a>`
             : "")
       );
+      renderEmailPreview(container, data.emailPreview);
     } catch (err) {
       if (err.isAppError) {
         renderSystemMessage(container, `Erreur : ${err.message}`, "system-decline");
       } else {
         renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
+        renderEmailPreview(container, window.DealzMock.buildBookingConfirmationPreview({ quote, customer }));
       }
     }
   }
@@ -243,13 +260,14 @@
 
   async function submitDecline(container, quote, category, text, customer) {
     try {
-      await postJSON("/api/decline", { quote, category, text, customer });
+      const data = await postJSON("/api/decline", { quote, category, text, customer });
       renderSystemMessage(
         container,
         "Merci pour votre retour ! Nous avons transmis votre message à l'équipe — vous serez " +
           "recontacté(e) rapidement si une meilleure offre est possible.",
         "system-decline"
       );
+      renderEmailPreview(container, data.emailPreview);
     } catch (err) {
       renderSystemMessage(
         container,
@@ -275,6 +293,15 @@
           `Merci pour votre retour ! En conditions réelles, ce message serait transmis à ` +
             `${COMPANY_NAME} par e-mail, avec une action adaptée à votre motif de refus.` +
             `<br/><br/><i style="opacity:.7">(Mode démonstration statique — aucun e-mail réel n'est envoyé ici.)</i>`
+        );
+        renderEmailPreview(
+          container,
+          window.DealzMock.buildDeclineEmailPreview({
+            quote,
+            category: category || "other",
+            rawText: text,
+            customer: quote.customer || {},
+          })
         );
         return;
       }

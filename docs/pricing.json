@@ -25,5 +25,12 @@
       { "max_km": 40, "fee": 30 },
       { "max_km": 999, "fee": 60 }
     ]
-  }
+  },
+  "condition_surcharge": {
+    "normal": 0,
+    "dirty": 40,
+    "very_dirty": 90
+  },
+  "difficult_access_windows_fee": 45,
+  "floor_fee_per_floor_no_elevator": 15
 }

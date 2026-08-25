@@ -92,7 +92,7 @@ app.post("/api/decline", async (req, res) => {
       status: "pending",
     });
 
-    await sendDeclineNotification({
+    const emailResult = await sendDeclineNotification({
       quote,
       category: finalCategory,
       summary,
@@ -101,7 +101,12 @@ app.post("/api/decline", async (req, res) => {
       declineToken,
     });
 
-    res.json({ ok: true, category: finalCategory, categoryLabel: CATEGORIES[finalCategory].label });
+    res.json({
+      ok: true,
+      category: finalCategory,
+      categoryLabel: CATEGORIES[finalCategory].label,
+      emailPreview: emailResult.preview || null,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Internal error" });
@@ -150,9 +155,9 @@ app.post("/api/counteroffer/:token", async (req, res) => {
 
     if (cfg.action === "reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
-      await sendReplyToCustomer({ message, customer });
+      const emailResult = await sendReplyToCustomer({ message, customer });
       store.update(req.params.token, { status: "replied" });
-      return res.json({ ok: true });
+      return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     if (cfg.action === "close" || cfg.action === "review") {
@@ -172,8 +177,8 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
       });
       store.update(req.params.token, { status: "counter-sent" });
-      await sendCounterofferToCustomer({ quote: entry.quote, amount, message, customer, offerToken });
-      return res.json({ ok: true });
+      const emailResult = await sendCounterofferToCustomer({ quote: entry.quote, amount, message, customer, offerToken });
+      return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     if (cfg.action === "reschedule") {
@@ -189,8 +194,8 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
       });
       store.update(req.params.token, { status: "counter-sent" });
-      await sendRescheduleToCustomer({ date, message, customer, offerToken });
-      return res.json({ ok: true });
+      const emailResult = await sendRescheduleToCustomer({ date, message, customer, offerToken });
+      return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     if (cfg.action === "revise") {
@@ -208,8 +213,8 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
       });
       store.update(req.params.token, { status: "counter-sent" });
-      await sendRevisedOfferToCustomer({ quote: revisedQuote, message, customer, offerToken });
-      return res.json({ ok: true });
+      const emailResult = await sendRevisedOfferToCustomer({ quote: revisedQuote, message, customer, offerToken });
+      return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     if (cfg.action === "followup") {
@@ -221,8 +226,8 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
       });
       store.update(req.params.token, { status: "followup-sent" });
-      await sendFollowupToCustomer({ quote: entry.quote, customer, offerToken });
-      return res.json({ ok: true });
+      const emailResult = await sendFollowupToCustomer({ quote: entry.quote, customer, offerToken });
+      return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     return res.status(400).json({ error: "Action inconnue pour ce motif" });
@@ -270,7 +275,11 @@ app.post("/api/offer/:token/respond", async (req, res) => {
     const result = await sendBookingConfirmation({ quote, customer });
     store.update(req.params.token, { status: "accepted" });
 
-    res.json({ ok: true, calendarLink: result.calendarLink });
+    res.json({
+      ok: true,
+      calendarLink: result.calendarLink,
+      emailPreview: result.customerEmail.preview || result.companyEmail.preview || null,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Internal error" });
@@ -283,7 +292,11 @@ app.post("/api/accept", async (req, res) => {
     if (!quote || !quote.items) return res.status(400).json({ error: "quote is required" });
 
     const result = await sendBookingConfirmation({ quote, customer: customer || {} });
-    res.json({ ok: true, calendarLink: result.calendarLink });
+    res.json({
+      ok: true,
+      calendarLink: result.calendarLink,
+      emailPreview: result.customerEmail.preview || result.companyEmail.preview || null,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Internal error" });
