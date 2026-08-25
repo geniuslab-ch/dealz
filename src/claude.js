@@ -1,6 +1,6 @@
 const Anthropic = require("@anthropic-ai/sdk");
 const { calculateQuote } = require("./pricingEngine");
-const pricing = require("./pricing.json");
+const pricing = require("../docs/pricing.json");
 
 const client = new Anthropic(); // reads ANTHROPIC_API_KEY from env
 

@@ -8,7 +8,7 @@ const MOCK_MODE = process.env.MOCK_MODE === "true";
 
 const app = express();
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "docs")));
 
 app.post("/api/chat", async (req, res) => {
   try {

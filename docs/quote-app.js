@@ -5,6 +5,40 @@
   let messages = [];
   let sending = false;
   let greeted = false;
+  let useStaticFallback = false;
+  let pricingPromise = null;
+
+  function loadPricing() {
+    if (!pricingPromise) {
+      pricingPromise = fetch("/pricing.json").then((r) => r.json());
+    }
+    return pricingPromise;
+  }
+
+  // Talks to the real backend. Throws a plain Error (network failure, or a
+  // non-JSON response like a static host's 404 page) when no backend exists
+  // at all — that's the signal to fall back to the offline client-side mock,
+  // as opposed to a *reachable* backend returning a real error (bad API key,
+  // no credit, etc.), which should be shown to the user as-is.
+  async function callBackend(payloadMessages) {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: payloadMessages }),
+    });
+    let data;
+    try {
+      data = await res.json();
+    } catch (e) {
+      throw new Error("no-backend");
+    }
+    if (!res.ok) {
+      const err = new Error(data.error || "une erreur est survenue");
+      err.isAppError = true;
+      throw err;
+    }
+    return data;
+  }
 
   function el(tag, cls, text) {
     const e = document.createElement(tag);
@@ -103,23 +137,25 @@
     scrollToBottom(container);
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages }),
-      });
-      const data = await res.json();
-      typing.remove();
-
-      if (!res.ok) {
-        renderAssistantText(
-          container,
-          `Erreur : ${data.error || "une erreur est survenue"}. Vous pouvez essayer MOCK_MODE=true ` +
-            `dans .env pour tester sans clé API.`
-        );
-        return;
+      let data;
+      try {
+        if (useStaticFallback) throw new Error("no-backend");
+        data = await callBackend(messages);
+      } catch (err) {
+        if (err.isAppError) {
+          typing.remove();
+          renderAssistantText(container, `Erreur : ${err.message}`);
+          return;
+        }
+        // No reachable backend at all (e.g. this page hosted as static files,
+        // no Express server behind it) — switch to the offline demo engine
+        // for the rest of the session and keep going transparently.
+        useStaticFallback = true;
+        const pricing = await loadPricing();
+        data = window.DealzMock.runTurnMock(pricing, messages);
       }
 
+      typing.remove();
       messages.push(...data.messages);
 
       for (const msg of data.messages) {
@@ -132,7 +168,7 @@
       if (data.quote) renderQuoteCard(container, data.quote);
     } catch (err) {
       typing.remove();
-      renderAssistantText(container, "Erreur réseau — le serveur est-il démarré ?");
+      renderAssistantText(container, "Une erreur est survenue — veuillez réessayer.");
     } finally {
       sending = false;
       sendBtn.disabled = false;

@@ -1,5 +1,5 @@
 const { calculateQuote } = require("./pricingEngine");
-const pricing = require("./pricing.json");
+const pricing = require("../docs/pricing.json");
 
 /**
  * Offline stand-in for src/claude.js — same runTurn(history) shape, no API

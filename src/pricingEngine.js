@@ -1,4 +1,4 @@
-const pricing = require("./pricing.json");
+const pricing = require("../docs/pricing.json");
 
 const ADDON_LABELS = {
   oven: "Nettoyage du four",
