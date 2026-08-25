@@ -127,13 +127,14 @@ the actual point of the Objection Engine, not just classification:
 | Prix trop élevé | Faire une contre-offre (CHF amount) | New price, accept/decline |
 | Date indisponible | Proposer une autre date | New date, accept/decline |
 | Périmètre du service | Envoyer une offre révisée (checkboxes to remove line items — total recalculates server-side) | Revised itemized quote, accept/decline |
+| Conditions / détails du nettoyage | Modifier l'offre — reuses the *same* revise action/form as "Périmètre" on purpose (both end in adjusting the offer's terms; no third form needed) | Revised itemized quote, accept/decline |
 | A choisi un autre prestataire | Faire une contre-offre, or "Maintenir le prix" (closes with no customer email) | Same as price |
 | A besoin d'informations | Répondre au client (free-text reply) | A plain answer, no accept/decline — nothing is pushed |
 | A besoin de réfléchir | Relancer le client (one click, capped at once — no repeated nagging) | The original quote again |
 | N'a plus besoin du service | Clôturer la demande (one click, no customer contact) | Nothing — closing, not selling, per the brief this shipped from |
 | Autre raison | Voir la conversation | — |
 
-Only `docs/counteroffer.html` exists as a page — it's **one adaptive form**, not eight different
+Only `docs/counteroffer.html` exists as a page — it's **one adaptive form**, not nine different
 pages, rendering different fields based on the category's configured `action` from the same
 `CATEGORIES` table in `src/objections.js`. Same for the customer side: **one** `docs/offer.html`
 renders a price, a date, a revised item list, or nothing, based on what the owner actually sent.
@@ -174,6 +175,28 @@ are inherently server-side. The static/GitHub-Pages version of `demo.html` still
 click through objection chips (good UX, real product feel) but shows an honest "en conditions
 réelles, ceci serait envoyé par e-mail…" message instead of calling the API, since there's no
 server there to call.
+
+## The quote is a real PDF, viewed in a modal before any decision
+
+The quote card in the chat shows a summary and one button — **"📄 Voir mon devis (PDF)"** — not
+Accept/Decline directly. Clicking it opens a modal, generates a real PDF client-side (`docs/
+pdf-generator.js`, using `jsPDF` lazy-loaded from a CDN only when a quote is actually delivered —
+no cost to page load otherwise), and shows it in an embedded `<iframe>` with **Accepter/Refuser
+directly below it**, matching the spec this shipped from precisely. The PDF itself contains the
+company header (name/address/phone/email), the client's info, the itemized services, and the
+total — verified for real, not just visually: generated one, decoded it, and ran `pdftotext` on the
+actual bytes to confirm the content is correct (`%PDF-1.3` header, valid structure, correct text).
+
+**No email is sent to the customer before they decide** — this was already true before this change
+(the accept/decline handlers underneath the modal are untouched, just relocated), but now it's also
+visually true: the PDF is generated and shown entirely client-side, and Accepter/Refuser inside the
+modal call the exact same `handleAccept`/`handleDecline` functions as before — closing the modal
+first, then running the identical flow. Nothing about the accept/decline/counteroffer logic changed;
+only how the customer *gets to* that decision changed.
+
+Same self-contained-CSS treatment as the rest of the widget — the modal's styles are duplicated
+(by hand, documented) into `docs/embed.js`'s own stylesheet too, so it works identically on a
+third-party site using the generic embed snippet, not just on `demo.html`.
 
 ## Setting up real Gmail sending and real Google Calendar
 
@@ -319,9 +342,11 @@ docs/pricing.json               The example company's pricing rules — single s
                                  (stand-in for a real client's Excel sheet), read by both the
                                  server and the browser fallback
 docs/counteroffer.html          Owner-facing single-action page — one adaptive form covering all
-                                 8 objection actions. Needs the real backend (no static fallback)
+                                 9 objection actions. Needs the real backend (no static fallback)
 docs/offer.html                 Customer-facing response page — adapts to price/date/revised-scope/
                                  followup. Needs the real backend (no static fallback)
+docs/pdf-generator.js           Generates the real devis PDF client-side (jsPDF, lazy-loaded) —
+                                 shown in the quote modal before Accept/Decline
 docs/embed.js                   The generic "add this to your real website" snippet — self-
                                  contained CSS, floating launcher, cross-origin (see "The generic
                                  embed snippet")

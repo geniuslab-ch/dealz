@@ -5,6 +5,7 @@
     { category: "price", label: "💰 Le prix est trop élevé" },
     { category: "timing", label: "📅 La date ne convient pas" },
     { category: "scope", label: "🧹 Je n'ai pas besoin de tout" },
+    { category: "conditions", label: "🏠 Les conditions/détails ne conviennent pas" },
     { category: "thinking", label: "🤔 Je dois réfléchir" },
     { category: "competitor", label: "🆚 J'ai reçu une autre offre" },
     { category: "information", label: "❓ J'ai une autre question" },
@@ -293,6 +294,93 @@
     });
   }
 
+  // ---- PDF modal: the quote opens as a real PDF, viewed without leaving
+  // Dealz, with Accepter/Refuser directly below it — not shown until the
+  // customer chooses to view it, per the brief this shipped from.
+  const PDF_LIB_URL = "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+  let pdfLibPromise = null;
+
+  function loadPdfLibs() {
+    if (pdfLibPromise) return pdfLibPromise;
+    pdfLibPromise = new Promise((resolve, reject) => {
+      const jspdfScript = document.createElement("script");
+      jspdfScript.src = PDF_LIB_URL;
+      jspdfScript.onload = () => {
+        const genScript = document.createElement("script");
+        genScript.src = (window.DEALZ_API_BASE || "") + "/pdf-generator.js";
+        genScript.onload = resolve;
+        genScript.onerror = reject;
+        document.body.appendChild(genScript);
+      };
+      jspdfScript.onerror = reject;
+      document.body.appendChild(jspdfScript);
+    });
+    return pdfLibPromise;
+  }
+
+  function closePdfModal() {
+    const overlay = document.getElementById("dealz-pdf-overlay");
+    if (overlay) overlay.remove();
+  }
+
+  async function openPdfModal(container, quote) {
+    const overlay = el("div", "dealz-pdf-overlay");
+    overlay.id = "dealz-pdf-overlay";
+    overlay.innerHTML =
+      '<div class="dealz-pdf-modal">' +
+      '<div class="dealz-pdf-modal-head">' +
+      '<span>📄 Votre devis</span>' +
+      '<button class="dealz-pdf-close" aria-label="Fermer">✕</button>' +
+      "</div>" +
+      '<div class="dealz-pdf-body"><p class="dealz-pdf-loading">Génération du devis…</p></div>' +
+      '<div class="dealz-pdf-actions">' +
+      '<button class="qc-accept" id="dealz-pdf-accept">✓ Accepter le devis</button>' +
+      '<button class="qc-decline" id="dealz-pdf-decline">Refuser</button>' +
+      "</div>" +
+      "</div>";
+    document.body.appendChild(overlay);
+
+    overlay.querySelector(".dealz-pdf-close").addEventListener("click", closePdfModal);
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closePdfModal();
+    });
+
+    const acceptBtn = overlay.querySelector("#dealz-pdf-accept");
+    const declineBtn = overlay.querySelector("#dealz-pdf-decline");
+    acceptBtn.addEventListener("click", () => {
+      acceptBtn.disabled = true;
+      declineBtn.disabled = true;
+      closePdfModal();
+      handleAccept(container, quote);
+    });
+    declineBtn.addEventListener("click", () => {
+      acceptBtn.disabled = true;
+      declineBtn.disabled = true;
+      closePdfModal();
+      handleDecline(container, quote);
+    });
+
+    try {
+      await loadPdfLibs();
+      const { doc, blobUrl } = window.DealzPDF.generate(quote, quote.customer || {});
+      const body = overlay.querySelector(".dealz-pdf-body");
+      body.innerHTML = "";
+      const iframe = el("iframe", "dealz-pdf-frame");
+      iframe.src = blobUrl;
+      iframe.title = "Devis PDF";
+      body.appendChild(iframe);
+      const dl = el("a", "dealz-pdf-download", "⬇ Télécharger le PDF");
+      dl.href = blobUrl;
+      dl.download = "devis-swissclean.pdf";
+      body.appendChild(dl);
+    } catch (err) {
+      const body = overlay.querySelector(".dealz-pdf-body");
+      body.innerHTML =
+        '<p class="dealz-pdf-loading">Impossible de générer le PDF (connexion requise). ' +
+        "Vous pouvez tout de même accepter ou refuser ci-dessous.</p>";
+    }
+  }
+
   function renderQuoteCard(container, quote) {
     const card = el("div", "dealz-quote-card");
     const headLabel = quote.customer && quote.customer.name
@@ -311,23 +399,12 @@
     card.appendChild(total);
 
     const actions = el("div", "qc-actions");
-    const acceptBtn = el("button", "qc-accept", "✓ Accepter le devis");
-    const declineBtn = el("button", "qc-decline", "Refuser");
-    actions.appendChild(acceptBtn);
-    actions.appendChild(declineBtn);
+    const viewBtn = el("button", "qc-accept", "📄 Voir mon devis (PDF)");
+    viewBtn.style.flex = "1 1 100%";
+    actions.appendChild(viewBtn);
     card.appendChild(actions);
 
-    acceptBtn.addEventListener("click", () => {
-      acceptBtn.disabled = true;
-      declineBtn.disabled = true;
-      handleAccept(container, quote);
-    });
-
-    declineBtn.addEventListener("click", () => {
-      acceptBtn.disabled = true;
-      declineBtn.disabled = true;
-      handleDecline(container, quote);
-    });
+    viewBtn.addEventListener("click", () => openPdfModal(container, quote));
 
     container.appendChild(card);
     scrollToBottom(container);

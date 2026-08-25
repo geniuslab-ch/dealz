@@ -85,6 +85,16 @@
     ".dealz-inputbar input{flex:1;border:1.5px solid var(--dz-line);border-radius:20px;padding:9px 13px;font-size:13px;font-family:inherit;outline:none;}",
     ".dealz-inputbar button{background:linear-gradient(135deg,var(--dz-blue),var(--dz-blue-dark));color:#fff;border:none;border-radius:20px;padding:0 16px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}",
     ".dealz-inputbar button:disabled{opacity:.5;}",
+    ".dealz-pdf-overlay{position:fixed;inset:0;background:rgba(11,18,32,.55);display:flex;align-items:center;justify-content:center;z-index:1000001;padding:20px;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;}",
+    ".dealz-pdf-modal{background:#fff;border-radius:18px;width:100%;max-width:520px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4);}",
+    ".dealz-pdf-modal-head{background:linear-gradient(120deg,var(--dz-blue),var(--dz-navy));color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px;flex-shrink:0;}",
+    ".dealz-pdf-modal-head button{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;}",
+    ".dealz-pdf-body{flex:1;min-height:280px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:10px;overflow-y:auto;}",
+    ".dealz-pdf-loading{color:var(--dz-muted);font-size:13.5px;text-align:center;margin:40px 0;}",
+    ".dealz-pdf-frame{width:100%;height:48vh;min-height:260px;border:1px solid var(--dz-line);border-radius:10px;}",
+    ".dealz-pdf-download{font-size:13px;font-weight:700;color:var(--dz-blue-dark);text-decoration:none;}",
+    ".dealz-pdf-actions{display:flex;gap:10px;padding:14px;border-top:1px solid var(--dz-line);flex-shrink:0;}",
+    ".dealz-pdf-actions button{flex:1;padding:11px;font-size:14px;border-radius:22px;}",
   ].join("");
   document.head.appendChild(STYLE);
 

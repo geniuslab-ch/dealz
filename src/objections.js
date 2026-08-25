@@ -27,6 +27,16 @@ const CATEGORIES = {
     primaryCta: "Envoyer une offre révisée",
     showTotal: true,
   },
+  conditions: {
+    label: "Conditions / détails du nettoyage",
+    emoji: "🏠",
+    // Reuses the same "revise" action as scope on purpose — both end in the
+    // owner adjusting the offer's terms, and counteroffer.html already
+    // renders an adaptive revise form; no need for a third variant.
+    action: "revise",
+    primaryCta: "Modifier l'offre",
+    showTotal: true,
+  },
   competitor: {
     label: "A choisi un autre prestataire",
     emoji: "🆚",
@@ -118,6 +128,8 @@ function heuristicClassify(text) {
   if (/date|horaire|jour|semaine|disponib|convien|septembre|octobre|novembre|d[ée]cembre|janvier|f[ée]vrier|mars|avril|mai|juin|juillet|ao[uû]t/.test(t))
     return { category: "timing", summary: text };
   if (/pas besoin de tout|sans le|retirer|enlever/.test(t)) return { category: "scope", summary: text };
+  if (/acc[èe]s|[ée]tage|meubl[ée]|occup[ée]|[ée]tat du logement|ascenseur/.test(t))
+    return { category: "conditions", summary: text };
   if (/r[ée]fl[ée]chir|penser|plus tard/.test(t)) return { category: "thinking", summary: text };
   if (/\?/.test(t) || /combien|comment|pourquoi|est-ce que/.test(t))
     return { category: "information", summary: text };
