@@ -1,10 +1,10 @@
 const pricing = require("./pricing.json");
 
 const ADDON_LABELS = {
-  oven: "Oven cleaning",
-  windows: "Window cleaning",
-  fridge: "Fridge cleaning",
-  carpet_shampoo: "Carpet shampooing",
+  oven: "Nettoyage du four",
+  windows: "Nettoyage des vitres",
+  fridge: "Nettoyage du frigo",
+  carpet_shampoo: "Shampoing moquette",
 };
 
 function round(n) {
@@ -24,7 +24,7 @@ function calculateQuote(input) {
     const base = pricing.end_of_tenancy_by_rooms[key];
     if (base === undefined) {
       warnings.push(
-        `No exact rate for "${input.rooms}" rooms — used the closest available tier.`
+        `Aucun tarif exact pour "${input.rooms}" pièces — palier le plus proche utilisé.`
       );
       const keys = Object.keys(pricing.end_of_tenancy_by_rooms).map(Number);
       const target = parseFloat(input.rooms) || keys[0];
@@ -32,23 +32,23 @@ function calculateQuote(input) {
         Math.abs(b - target) < Math.abs(a - target) ? b : a
       );
       items.push({
-        label: `End-of-tenancy cleaning (${closest}-room apartment)`,
+        label: `Nettoyage de fin de bail (appartement ${closest} pièces)`,
         amount: pricing.end_of_tenancy_by_rooms[String(closest)],
       });
     } else {
       items.push({
-        label: `End-of-tenancy cleaning (${key}-room apartment)`,
+        label: `Nettoyage de fin de bail (appartement ${key} pièces)`,
         amount: base,
       });
     }
   } else if (input.service_type === "regular_cleaning") {
     const hours = Number(input.hours) || 0;
     items.push({
-      label: `Regular cleaning (${hours}h @ CHF ${pricing.regular_cleaning_per_hour}/h)`,
+      label: `Nettoyage régulier (${hours}h à CHF ${pricing.regular_cleaning_per_hour}/h)`,
       amount: round(hours * pricing.regular_cleaning_per_hour),
     });
   } else {
-    warnings.push(`Unknown service type "${input.service_type}".`);
+    warnings.push(`Type de prestation inconnu : "${input.service_type}".`);
   }
 
   const addons = Array.isArray(input.addons) ? input.addons : [];
@@ -56,7 +56,7 @@ function calculateQuote(input) {
     if (addon === "carpet_shampoo") {
       const rooms = Number(input.carpet_rooms) || 1;
       items.push({
-        label: `${ADDON_LABELS.carpet_shampoo} (${rooms} room${rooms > 1 ? "s" : ""})`,
+        label: `${ADDON_LABELS.carpet_shampoo} (${rooms} pièce${rooms > 1 ? "s" : ""})`,
         amount: round(rooms * pricing.addons.carpet_shampoo_per_room),
       });
     } else if (pricing.addons[addon] !== undefined) {
@@ -65,7 +65,7 @@ function calculateQuote(input) {
         amount: pricing.addons[addon],
       });
     } else {
-      warnings.push(`Unknown add-on "${addon}" — skipped.`);
+      warnings.push(`Option inconnue "${addon}" — ignorée.`);
     }
   }
 
@@ -73,14 +73,14 @@ function calculateQuote(input) {
   if (distanceKm > pricing.travel_fee.free_within_km) {
     const tier = pricing.travel_fee.tiers.find((t) => distanceKm <= t.max_km);
     if (tier) {
-      items.push({ label: "Travel fee", amount: tier.fee });
+      items.push({ label: "Frais de déplacement", amount: tier.fee });
     }
   }
 
   let total = round(items.reduce((sum, i) => sum + i.amount, 0));
   if (total > 0 && total < pricing.minimum_price) {
     items.push({
-      label: "Minimum order adjustment",
+      label: "Ajustement au minimum de commande",
       amount: round(pricing.minimum_price - total),
     });
     total = pricing.minimum_price;

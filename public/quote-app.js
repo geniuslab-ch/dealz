@@ -1,4 +1,7 @@
 (function () {
+  const COMPANY_NAME = "SwissClean Sàrl";
+  const COMPANY_EMAIL = "reservations@swissclean.demo";
+
   let messages = [];
   let sending = false;
   let greeted = false;
@@ -24,9 +27,14 @@
     scrollToBottom(container);
   }
 
+  function renderSystemMessage(container, text, kind) {
+    container.appendChild(el("div", `dealz-msg ${kind}`, text));
+    scrollToBottom(container);
+  }
+
   function renderQuoteCard(container, quote) {
     const card = el("div", "dealz-quote-card");
-    card.appendChild(el("div", "qc-head", "ESTIMATED QUOTE"));
+    card.appendChild(el("div", "qc-head", "DEVIS DÉTAILLÉ"));
     quote.items.forEach((item) => {
       const row = el("div", "qc-row");
       row.appendChild(el("span", null, item.label));
@@ -37,6 +45,38 @@
     total.appendChild(el("span", null, "TOTAL"));
     total.appendChild(el("span", null, `CHF ${quote.total.toFixed(2)}`));
     card.appendChild(total);
+
+    const actions = el("div", "qc-actions");
+    const acceptBtn = el("button", "qc-accept", "✓ Accepter le devis");
+    const declineBtn = el("button", "qc-decline", "Refuser");
+    actions.appendChild(acceptBtn);
+    actions.appendChild(declineBtn);
+    card.appendChild(actions);
+
+    acceptBtn.addEventListener("click", () => {
+      acceptBtn.disabled = true;
+      declineBtn.disabled = true;
+      renderSystemMessage(
+        container,
+        `✓ Merci ! Votre devis a été transmis à ${COMPANY_NAME}. Vous recevrez la confirmation ` +
+          `par e-mail à l'adresse fournie, et le rendez-vous a été ajouté à l'agenda Google de ` +
+          `l'entreprise (${COMPANY_EMAIL}). Une personne de l'équipe vous contactera si besoin pour ` +
+          `finaliser les détails.`,
+        "system-success"
+      );
+    });
+
+    declineBtn.addEventListener("click", () => {
+      acceptBtn.disabled = true;
+      declineBtn.disabled = true;
+      renderSystemMessage(
+        container,
+        "Pas de souci ! Vous pouvez ajuster votre demande ci-dessous — par exemple changer la " +
+          "taille du logement ou les options — et obtenir un nouveau devis.",
+        "system-decline"
+      );
+    });
+
     container.appendChild(card);
     scrollToBottom(container);
   }
@@ -58,7 +98,7 @@
     renderUserMessage(container, text);
     input.value = "";
 
-    const typing = el("div", "dealz-msg typing", "Typing…");
+    const typing = el("div", "dealz-msg typing", "En train d'écrire…");
     container.appendChild(typing);
     scrollToBottom(container);
 
@@ -72,7 +112,11 @@
       typing.remove();
 
       if (!res.ok) {
-        renderAssistantText(container, `Error: ${data.error || "something went wrong"}`);
+        renderAssistantText(
+          container,
+          `Erreur : ${data.error || "une erreur est survenue"}. Vous pouvez essayer MOCK_MODE=true ` +
+            `dans .env pour tester sans clé API.`
+        );
         return;
       }
 
@@ -88,7 +132,7 @@
       if (data.quote) renderQuoteCard(container, data.quote);
     } catch (err) {
       typing.remove();
-      renderAssistantText(container, "Network error — is the server running?");
+      renderAssistantText(container, "Erreur réseau — le serveur est-il démarré ?");
     } finally {
       sending = false;
       sendBtn.disabled = false;
@@ -107,8 +151,8 @@
       greeted = true;
       renderAssistantText(
         container,
-        "Hi! Tell me a bit about the cleaning job you need — apartment size, type of cleaning, " +
-          "and any extras like oven or windows — and I'll work out a price on the spot."
+        "Bonjour ! Décrivez-moi votre besoin — taille du logement, type de nettoyage, et toute " +
+          "option souhaitée comme le four ou les vitres — et je vous établis un devis tout de suite."
       );
     }
 
