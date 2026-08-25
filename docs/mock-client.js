@@ -608,7 +608,7 @@
       .join("");
   }
 
-  function buildDeclineEmailPreview({ quote, category, rawText, customer }) {
+  function buildDeclineEmailPreview({ quote, category, rawText, customer, companyEmail }) {
     const cfg = CATEGORY_META[category] || CATEGORY_META.other;
     const parts = [`${cfg.emoji} Devis refusé`, cfg.label, customer.name || "un client"];
     if (cfg.showTotal && quote && quote.total) parts.push(fmtCHF(quote.total));
@@ -624,7 +624,7 @@
       ${rawText ? `<p><b>Message du client :</b><br/>« ${rawText} »</p>` : ""}
       <p><i>Bouton d'action (« ${cfg.emoji === "❓" ? "Répondre au client" : "agir"} ») inclus dans le vrai e-mail.</i></p>
     `;
-    return { to: "reservations@swissclean.demo", subject, html };
+    return { to: companyEmail || "reservations@swissclean.demo", subject, html };
   }
 
   function buildBookingConfirmationPreview({ quote, customer }) {

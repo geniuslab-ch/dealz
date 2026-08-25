@@ -86,9 +86,18 @@ function buildDeclineSubject({ category, customer, quote }) {
   return parts.join(" — ");
 }
 
-async function sendDeclineNotification({ quote, category, summary, rawText, customer, declineToken }) {
+async function sendDeclineNotification({
+  quote,
+  category,
+  summary,
+  rawText,
+  customer,
+  declineToken,
+  baseUrl = APP_BASE_URL,
+  notifyEmail = COMPANY_NOTIFY_EMAIL,
+}) {
   const cfg = CATEGORIES[category] || CATEGORIES.other;
-  const actionUrl = `${APP_BASE_URL}/counteroffer.html?token=${declineToken}`;
+  const actionUrl = `${baseUrl}/counteroffer.html?token=${declineToken}`;
 
   const html = `
     <h2>${cfg.emoji} Devis refusé — action possible</h2>
@@ -103,7 +112,7 @@ async function sendDeclineNotification({ quote, category, summary, rawText, cust
   `;
 
   return sendEmail({
-    to: COMPANY_NOTIFY_EMAIL,
+    to: notifyEmail,
     subject: buildDeclineSubject({ category, customer, quote }),
     html,
   });
@@ -111,9 +120,9 @@ async function sendDeclineNotification({ quote, category, summary, rawText, cust
 
 // ---- Owner actions, one per objection type ----
 
-async function sendCounterofferToCustomer({ quote, amount, message, customer, offerToken }) {
+async function sendCounterofferToCustomer({ quote, amount, message, customer, offerToken, baseUrl = APP_BASE_URL }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
-  const offerUrl = `${APP_BASE_URL}/offer.html?token=${offerToken}`;
+  const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
   const html = `
     <h2>Nouvelle offre de ${COMPANY_NAME}</h2>
     <p>Bonjour ${customer.name || ""},</p>
@@ -125,9 +134,9 @@ async function sendCounterofferToCustomer({ quote, amount, message, customer, of
   return sendEmail({ to: customer.email, subject: `Nouvelle offre — ${fmtCHF(amount)}`, html });
 }
 
-async function sendRescheduleToCustomer({ date, message, customer, offerToken }) {
+async function sendRescheduleToCustomer({ date, message, customer, offerToken, baseUrl = APP_BASE_URL }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
-  const offerUrl = `${APP_BASE_URL}/offer.html?token=${offerToken}`;
+  const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
   const html = `
     <h2>Nouvelle date proposée — ${COMPANY_NAME}</h2>
     <p>Bonjour ${customer.name || ""},</p>
@@ -139,9 +148,9 @@ async function sendRescheduleToCustomer({ date, message, customer, offerToken })
   return sendEmail({ to: customer.email, subject: `Nouvelle date proposée`, html });
 }
 
-async function sendRevisedOfferToCustomer({ quote, message, customer, offerToken }) {
+async function sendRevisedOfferToCustomer({ quote, message, customer, offerToken, baseUrl = APP_BASE_URL }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
-  const offerUrl = `${APP_BASE_URL}/offer.html?token=${offerToken}`;
+  const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
   const html = `
     <h2>Offre révisée — ${COMPANY_NAME}</h2>
     <p>Bonjour ${customer.name || ""},</p>
@@ -164,9 +173,9 @@ async function sendReplyToCustomer({ message, customer }) {
   return sendEmail({ to: customer.email, subject: `Réponse à votre question`, html });
 }
 
-async function sendFollowupToCustomer({ quote, customer, offerToken }) {
+async function sendFollowupToCustomer({ quote, customer, offerToken, baseUrl = APP_BASE_URL }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
-  const offerUrl = `${APP_BASE_URL}/offer.html?token=${offerToken}`;
+  const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
   const html = `
     <h2>Toujours intéressé(e) ?</h2>
     <p>Bonjour ${customer.name || ""},</p>
@@ -177,7 +186,7 @@ async function sendFollowupToCustomer({ quote, customer, offerToken }) {
   return sendEmail({ to: customer.email, subject: `Toujours intéressé(e) par notre offre ?`, html });
 }
 
-async function sendBookingConfirmation({ quote, customer }) {
+async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL }) {
   const now = new Date();
   const start = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // placeholder: 3 days out
   const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // 2h duration placeholder
@@ -210,7 +219,7 @@ async function sendBookingConfirmation({ quote, customer }) {
     customer.email
       ? sendEmail({ to: customer.email, subject: "✓ Réservation confirmée", html: customerHtml })
       : Promise.resolve({ simulated: true, skipped: "no customer email" }),
-    sendEmail({ to: COMPANY_NOTIFY_EMAIL, subject: "✓ Nouvelle réservation confirmée", html: companyHtml }),
+    sendEmail({ to: notifyEmail, subject: "✓ Nouvelle réservation confirmée", html: companyHtml }),
   ]);
 
   return { calendarLink: calLink, customerEmail: results[0], companyEmail: results[1] };

@@ -171,6 +171,25 @@ The gate also fails open on the static/GitHub-Pages build specifically (no backe
 include this gate — it would be nonsensical to ask a cleaning company's own customers for a lead
 form before they can get their own quote.
 
+**The e-mail captured at the gate is what internal demo notifications get addressed to.** When you
+decline or accept a quote in the demo, the *company-facing* copy (decline notification, the internal
+half of a booking confirmation) is sent to whatever e-mail you typed into the gate — not to the
+fictional `reservations@swissclean.demo` — via `sessionStorage`'s `dealz_company_email`, threaded
+through as `companyEmail` in the `/api/decline` and `/api/accept` request bodies. The *customer*-
+facing copies (the fictional end-customer's booking confirmation, counteroffers, etc.) are untouched
+and still go to whatever contact info you entered as "the customer" partway through the
+conversation — those two are deliberately different people in the story the demo is telling, and
+personalizing one should never bleed into the other.
+
+**Links inside notification e-mails are built from the actual request, not a hardcoded URL.**
+`server.js`'s `requestBaseUrl(req)` derives the base URL (`https://your-deployment.vercel.app`, a
+custom domain, `http://localhost:3000` — whatever the request actually came in on) from the incoming
+request itself (`req.protocol` + `req.get("host")`, with `app.set("trust proxy", 1)` so this reports
+correctly behind Vercel's proxy), so the "Faire une contre-offre" / "Voir l'offre" links inside
+`counteroffer.html?token=...` and `offer.html?token=...` always point at wherever the app is actually
+running — no more dead links to `localhost` on a real deployment. `APP_BASE_URL` in `.env` still
+works as an explicit override if you ever need to force a specific canonical URL.
+
 ## What's actually happening on the demo (real mode)
 
 - **Claude only asks questions and reads the customer's answers.** It never invents a price.

@@ -26,6 +26,18 @@
     return (window.DEALZ_API_BASE || "") + path;
   }
 
+  // The e-mail captured by docs/lead-gate.js before the widget was revealed
+  // — when set, company-facing demo notifications (decline, booking) are
+  // addressed to it instead of the fictional company inbox, so testing the
+  // demo for your own business shows what *you* would actually receive.
+  function getCompanyEmail() {
+    try {
+      return sessionStorage.getItem("dealz_company_email") || "";
+    } catch (e) {
+      return "";
+    }
+  }
+
   function loadPricing() {
     if (!pricingPromise) {
       pricingPromise = fetch(apiUrl("/pricing.json")).then((r) => r.json());
@@ -289,7 +301,7 @@
       return;
     }
     try {
-      const data = await postJSON("/api/accept", { quote, customer });
+      const data = await postJSON("/api/accept", { quote, customer, companyEmail: getCompanyEmail() });
       renderSystemMessage(
         container,
         null,
@@ -328,7 +340,13 @@
 
   async function submitDecline(container, quote, category, text, customer) {
     try {
-      const data = await postJSON("/api/decline", { quote, category, text, customer });
+      const data = await postJSON("/api/decline", {
+        quote,
+        category,
+        text,
+        customer,
+        companyEmail: getCompanyEmail(),
+      });
       renderSystemMessage(
         container,
         "Merci pour votre retour ! Nous avons transmis votre message à l'équipe — vous serez " +
@@ -369,6 +387,7 @@
             category: category || "other",
             rawText: text,
             customer: quote.customer || {},
+            companyEmail: getCompanyEmail(),
           })
         );
         return;

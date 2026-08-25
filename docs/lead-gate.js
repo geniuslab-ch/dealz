@@ -13,6 +13,7 @@
  */
 (function () {
   const SESSION_KEY = "dealz_lead_ok";
+  const EMAIL_KEY = "dealz_company_email";
 
   function apiUrl(path) {
     return (window.DEALZ_API_BASE || "") + path;
@@ -75,6 +76,7 @@
 
         if (data.allowed) {
           sessionStorage.setItem(SESSION_KEY, "true");
+          sessionStorage.setItem(EMAIL_KEY, email);
           revealChat();
           return;
         }
@@ -87,6 +89,7 @@
       } catch (err) {
         // No reachable backend at all — nothing to protect, let them through.
         sessionStorage.setItem(SESSION_KEY, "true");
+        sessionStorage.setItem(EMAIL_KEY, email);
         revealChat();
       }
     });

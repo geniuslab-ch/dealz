@@ -19,8 +19,24 @@ const { recordTrialAttempt } = require("./src/leads");
 const MOCK_MODE = process.env.MOCK_MODE === "true";
 
 const app = express();
+// Vercel (and most PaaS hosts) sit behind a proxy — without this, req.protocol
+// always reports "http" even on a real https deployment, and the links built
+// into notification emails (counteroffer.html, offer.html) would use the
+// wrong scheme.
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "docs")));
+
+// The public URL this server is reachable at, for links built into e-mails
+// (counteroffer.html?token=..., offer.html?token=...). APP_BASE_URL is an
+// explicit override; otherwise this is derived from the incoming request
+// itself, so it's automatically correct on any deployment (Vercel prod,
+// Vercel preview URLs, a custom domain, localhost) with zero configuration —
+// no more emails linking to a hardcoded "http://localhost:3000" that only
+// works on the developer's own machine.
+function requestBaseUrl(req) {
+  return process.env.APP_BASE_URL || `${req.protocol}://${req.get("host")}`;
+}
 
 // Allows /api/* and /pricing.json to be called from a client's own website
 // when embed.js is loaded there (a different origin than this server) —
@@ -89,7 +105,7 @@ app.post("/api/chat", async (req, res) => {
 
 app.post("/api/decline", async (req, res) => {
   try {
-    const { quote, category, text, customer } = req.body;
+    const { quote, category, text, customer, companyEmail } = req.body;
     if (!quote || !quote.items) return res.status(400).json({ error: "quote is required" });
 
     let finalCategory = category;
@@ -117,6 +133,8 @@ app.post("/api/decline", async (req, res) => {
       rawText: text || "",
       customer: customer || {},
       declineToken,
+      baseUrl: requestBaseUrl(req),
+      notifyEmail: companyEmail || undefined,
     });
 
     res.json({
@@ -195,7 +213,14 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
       });
       store.update(req.params.token, { status: "counter-sent" });
-      const emailResult = await sendCounterofferToCustomer({ quote: entry.quote, amount, message, customer, offerToken });
+      const emailResult = await sendCounterofferToCustomer({
+        quote: entry.quote,
+        amount,
+        message,
+        customer,
+        offerToken,
+        baseUrl: requestBaseUrl(req),
+      });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -212,7 +237,13 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
       });
       store.update(req.params.token, { status: "counter-sent" });
-      const emailResult = await sendRescheduleToCustomer({ date, message, customer, offerToken });
+      const emailResult = await sendRescheduleToCustomer({
+        date,
+        message,
+        customer,
+        offerToken,
+        baseUrl: requestBaseUrl(req),
+      });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -231,7 +262,13 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
       });
       store.update(req.params.token, { status: "counter-sent" });
-      const emailResult = await sendRevisedOfferToCustomer({ quote: revisedQuote, message, customer, offerToken });
+      const emailResult = await sendRevisedOfferToCustomer({
+        quote: revisedQuote,
+        message,
+        customer,
+        offerToken,
+        baseUrl: requestBaseUrl(req),
+      });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -244,7 +281,12 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
       });
       store.update(req.params.token, { status: "followup-sent" });
-      const emailResult = await sendFollowupToCustomer({ quote: entry.quote, customer, offerToken });
+      const emailResult = await sendFollowupToCustomer({
+        quote: entry.quote,
+        customer,
+        offerToken,
+        baseUrl: requestBaseUrl(req),
+      });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -306,10 +348,14 @@ app.post("/api/offer/:token/respond", async (req, res) => {
 
 app.post("/api/accept", async (req, res) => {
   try {
-    const { quote, customer } = req.body;
+    const { quote, customer, companyEmail } = req.body;
     if (!quote || !quote.items) return res.status(400).json({ error: "quote is required" });
 
-    const result = await sendBookingConfirmation({ quote, customer: customer || {} });
+    const result = await sendBookingConfirmation({
+      quote,
+      customer: customer || {},
+      notifyEmail: companyEmail || undefined,
+    });
     res.json({
       ok: true,
       calendarLink: result.calendarLink,
