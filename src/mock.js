@@ -5,13 +5,14 @@ const pricing = require("../docs/pricing.json");
  * Offline stand-in for src/claude.js — a full clickable-MCQ question bank
  * (25 categories, adapted from the original brief), no API key or credit
  * required. Walks a fixed, ordered list of steps; each step asks its
- * question as chips (or free text for a couple of open-ended ones like
- * dates and contact info) exactly once, and conditional branches (e.g.
- * fin-de-bail-specific questions, régulier-specific questions) only apply
- * when relevant — see each step's `applies()`. Deliberately does NOT try to
- * detect answers from earlier free text and skip ahead: the whole point of
- * this flow, per an explicit product decision, is to walk the full
- * structured bank every time rather than guess from what was said upfront.
+ * question as chips (a date picker for dates, a structured name/e-mail/
+ * phone/address form for contact info) exactly once, and conditional
+ * branches (e.g. fin-de-bail-specific questions, régulier-specific
+ * questions) only apply when relevant — see each step's `applies()`.
+ * Deliberately does NOT try to detect answers from earlier free text and
+ * skip ahead: the whole point of this flow, per an explicit product
+ * decision, is to walk the full structured bank every time rather than
+ * guess from what was said upfront.
  *
  * Only a subset of steps actually feed calculateQuote() (anything present
  * in docs/pricing.json); the rest are collected for context/realism and
@@ -505,10 +506,21 @@ const STEPS = [
   {
     id: "contact",
     question:
-      "Parfait ! Pour finaliser votre devis, quel est votre nom, votre e-mail, votre téléphone, et l'adresse du logement à nettoyer ? " +
-      "(Vous testez cette démo pour votre entreprise ? Indiquez ici les coordonnées fictives d'un de vos clients — pas les vôtres.)",
-    type: "text",
-    parse: (text) => text,
+      "Parfait ! Pour finaliser votre devis, merci d'indiquer vos coordonnées ci-dessous. " +
+      "(Vous testez cette démo pour votre entreprise ? Indiquez les coordonnées fictives d'un de vos clients — pas les vôtres.)",
+    type: "contact_form",
+    // Submitted as JSON by renderContactForm's onSubmit (see docs/quote-app.js)
+    // — falls back to the old free-text guesser only if something else sends
+    // plain text instead.
+    parse: (text) => {
+      try {
+        const parsed = JSON.parse(text);
+        if (parsed && typeof parsed === "object") return parsed;
+      } catch (e) {
+        // not JSON — fall through to the free-text guesser
+      }
+      return extractContact(text || "");
+    },
     applies: () => true,
   },
 ];
@@ -547,6 +559,8 @@ async function runTurnMock(history) {
         question = { type: step.type, options: step.options() };
       } else if (step.type === "date") {
         question = { type: "date", minDate: computeMinDate(pricing) };
+      } else if (step.type === "contact_form") {
+        question = { type: "contact_form", needAddress: true };
       }
       return ask(questionText, question);
     }
@@ -577,7 +591,7 @@ async function runTurnMock(history) {
   };
 
   const quote = calculateQuote(input);
-  quote.customer = extractContact(answers.contact || "");
+  quote.customer = answers.contact || { name: "", email: "", phone: "", address: "" };
   quote.details = answers;
 
   const text = quote.customer.name

@@ -285,6 +285,26 @@
     scrollToBottom(container);
   }
 
+  // Shown once, right after a booking is confirmed — the moment someone has
+  // just watched the whole flow work end to end is the natural point to ask
+  // for the next step, rather than leaving the conversation with no CTA.
+  function renderPostBookingCTA(container) {
+    const wrap = el("div", "dealz-post-cta");
+    wrap.appendChild(
+      el("p", "dpc-text", "Merci d'avoir testé l'outil de devis intégré de Dealz !")
+    );
+    const actions = el("div", "dpc-actions");
+    const integrateLink = el("a", "dpc-btn dpc-btn-primary", "Intégrer Dealz");
+    integrateLink.href = "/index.html#contact";
+    const contactLink = el("a", "dpc-btn dpc-btn-secondary", "Nous contacter");
+    contactLink.href = "mailto:dealz@mycountryisgoodat.com";
+    actions.appendChild(integrateLink);
+    actions.appendChild(contactLink);
+    wrap.appendChild(actions);
+    container.appendChild(wrap);
+    scrollToBottom(container);
+  }
+
   function simulatedAcceptHtml() {
     return (
       `✓ Merci ! Votre devis a été transmis à ${COMPANY_NAME}. Vous recevrez la confirmation ` +
@@ -298,6 +318,7 @@
     if (useStaticFallback) {
       renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
       renderEmailPreview(container, window.DealzMock.buildBookingConfirmationPreview({ quote, customer }));
+      renderPostBookingCTA(container);
       return;
     }
     try {
@@ -313,12 +334,14 @@
             : "")
       );
       renderEmailPreview(container, data.emailPreview);
+      renderPostBookingCTA(container);
     } catch (err) {
       if (err.isAppError) {
         renderSystemMessage(container, `Erreur : ${err.message}`, "system-decline");
       } else {
         renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
         renderEmailPreview(container, window.DealzMock.buildBookingConfirmationPreview({ quote, customer }));
+        renderPostBookingCTA(container);
       }
     }
   }
@@ -533,13 +556,21 @@
       .join("\n");
   }
 
-  async function sendMessage(container, input, sendBtn, text) {
+  // displayText lets a structured-form submission (e.g. the contact form)
+  // show a clean human-readable bubble while the actual engine payload
+  // (JSON) travels as `text` — defaults to `text` for ordinary typed/chip
+  // answers, where the two are the same thing. Passing `null` suppresses
+  // the user bubble entirely (used to silently prime the very first
+  // question — see primeConversation).
+  async function sendMessage(container, input, sendBtn, text, displayText) {
     if (!text.trim() || sending) return;
     sending = true;
     sendBtn.disabled = true;
 
     messages.push({ role: "user", content: text });
-    renderUserMessage(container, text);
+    if (displayText !== null) {
+      renderUserMessage(container, displayText !== undefined ? displayText : text);
+    }
     input.value = "";
 
     const typing = el("div", "dealz-msg typing", "En train d'écrire…");
@@ -577,6 +608,15 @@
 
       if (data.quote) {
         renderQuoteCard(container, data.quote);
+      } else if (data.question && data.question.type === "contact_form") {
+        renderContactForm(
+          container,
+          { submitLabel: "Continuer", needAddress: data.question.needAddress },
+          (customer) => {
+            const summary = [customer.name, customer.email, customer.phone].filter(Boolean).join(" · ");
+            sendMessage(container, input, sendBtn, JSON.stringify(customer), summary || "(coordonnées transmises)");
+          }
+        );
       } else if (data.question) {
         renderChipQuestion(container, data.question, (text) =>
           sendMessage(container, input, sendBtn, text)
@@ -603,9 +643,14 @@
       greeted = true;
       renderAssistantText(
         container,
-        "Bonjour ! Décrivez-moi votre besoin — taille du logement, type de nettoyage, et toute " +
-          "option souhaitée comme le four ou les vitres — et je vous établis un devis tout de suite."
+        "Bonjour ! Je vais vous poser quelques questions rapides sur votre logement, et je vous " +
+          "établis un devis ferme tout de suite après."
       );
+      // Silently primes the engine with a generic opening statement so the
+      // first real question (chips, not free text) appears immediately —
+      // no wasted first reply that the structured question bank would
+      // otherwise ignore and ask about again later.
+      sendMessage(container, input, sendBtn, "Je souhaite un devis de nettoyage.", null);
     }
 
     greet();

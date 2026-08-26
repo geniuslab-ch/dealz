@@ -510,10 +510,22 @@
     {
       id: "contact",
       question:
-        "Parfait ! Pour finaliser votre devis, quel est votre nom, votre e-mail, votre téléphone, et l'adresse du logement à nettoyer ? " +
-        "(Vous testez cette démo pour votre entreprise ? Indiquez ici les coordonnées fictives d'un de vos clients — pas les vôtres.)",
-      type: "text",
-      parse: (text) => text,
+        "Parfait ! Pour finaliser votre devis, merci d'indiquer vos coordonnées ci-dessous. " +
+        "(Vous testez cette démo pour votre entreprise ? Indiquez les coordonnées fictives d'un de vos clients — pas les vôtres.)",
+      type: "contact_form",
+      // Submitted as JSON by renderContactForm's onSubmit (see quote-app.js)
+      // — falls back to the old free-text guesser only if something else
+      // (e.g. a real Claude backend not using the structured form) sends
+      // plain text instead.
+      parse: (text) => {
+        try {
+          const parsed = JSON.parse(text);
+          if (parsed && typeof parsed === "object") return parsed;
+        } catch (e) {
+          // not JSON — fall through to the free-text guesser
+        }
+        return extractContact(text || "");
+      },
       applies: () => true,
     },
   ];
@@ -537,6 +549,8 @@
           question = { type: step.type, options: step.options() };
         } else if (step.type === "date") {
           question = { type: "date", minDate: computeMinDate(pricing) };
+        } else if (step.type === "contact_form") {
+          question = { type: "contact_form", needAddress: true };
         }
         return ask(questionText, question, pricing);
       }
@@ -567,7 +581,7 @@
     };
 
     const quote = window.DealzPricingEngine.calculateQuote(pricing, input);
-    quote.customer = extractContact(answers.contact || "");
+    quote.customer = answers.contact || { name: "", email: "", phone: "", address: "" };
     quote.details = answers;
 
     const text = quote.customer.name
