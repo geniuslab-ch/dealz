@@ -141,7 +141,8 @@
     let addressInput = null;
     if (needAddress) {
       addressInput = el("input", "dcf-input");
-      addressInput.placeholder = "Adresse (optionnel)";
+      addressInput.placeholder = "Adresse du logement à nettoyer";
+      addressInput.required = true;
       wrap.appendChild(addressInput);
     }
 
@@ -151,6 +152,10 @@
     submitBtn.addEventListener("click", () => {
       if (!emailInput.value.trim()) {
         emailInput.focus();
+        return;
+      }
+      if (addressInput && !addressInput.value.trim()) {
+        addressInput.focus();
         return;
       }
       submitBtn.disabled = true;
