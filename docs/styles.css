@@ -47,15 +47,23 @@ img { max-width: 100%; }
 }
 .nav-logo {
   display: flex;
-  align-items: center;
-  gap: 9px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
   flex-shrink: 0;
   margin-right: 12px;
 }
 .nav-logo img {
-  height: 44px;
+  height: 54px;
   width: auto;
   display: block;
+}
+.nav-logo .nav-slogan {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
 }
 .nav-links {
   display: flex;
@@ -144,7 +152,11 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
   color: transparent;
 }
 .hero p { color: var(--muted); font-size: 17px; margin: 0 auto 30px; max-width: 480px; }
+.hero-question { font-size: 20px; font-weight: 700; color: var(--ink); margin: 0 auto 14px; max-width: 520px; }
+.hero-usp { font-size: 13.5px; color: var(--muted); margin: -16px auto 30px; max-width: 480px; line-height: 1.5; }
+.hero-usp b { color: var(--ink); }
 .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.hero-tagline { font-size: 13px; font-weight: 600; font-style: italic; color: var(--blue-dark); margin: 22px auto 0; }
 
 .btn {
   display: inline-flex;
