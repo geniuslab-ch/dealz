@@ -8,9 +8,10 @@
  * "always-available free-text input" fallback — rather than inventing a
  * new component language.
  *
- * No backend call on submit: the previous lead form was client-side only
- * (see README's "Not included yet"), and this keeps that exact behaviour
- * rather than standing up new infrastructure for it.
+ * On submit, POSTs to /api/install-request (server.js) — fire-and-forget,
+ * the confirmation bubble always shows regardless of the network result.
+ * That endpoint e-mails the Dealz team and forwards the lead into the CRM
+ * (see src/notifications.js / dealz-crm's /api/inbound-leads).
  */
 (function () {
   const PLANS = {
@@ -396,6 +397,30 @@
   }
 
   // ---- Summary ----
+  // Fire-and-forget: the confirmation bubble always shows regardless of
+  // whether this succeeds, matching this whole flow's original "no
+  // backend, never break the visible confirmation" posture — the
+  // difference now is a real notification actually goes out when the
+  // network call succeeds, instead of nothing happening at all.
+  function submitInstallRequest(a) {
+    fetch("/api/install-request", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        companyName: a.company_name || "",
+        contactName: a.contact_name || "",
+        contactEmail: a.contact_email || "",
+        contactPhone: a.contact_phone || "",
+        websiteUrl: a.website_url || "",
+        planChoice: a.plan_choice || "",
+        billingChoice: a.billing_choice || "",
+        teamSize: a.team_size || "",
+        mainProblem: a.main_problem || "",
+        requestSources: a.request_sources || "",
+      }),
+    }).catch((err) => console.error("[install-request] failed to submit:", err));
+  }
+
   function renderSummary() {
     updateProgress();
     setInputMode("off");
@@ -434,6 +459,7 @@
     submitBtn.type = "button";
     submitBtn.addEventListener("click", () => {
       actions.querySelectorAll("button").forEach((b) => (b.disabled = true));
+      submitInstallRequest(a);
       renderConfirmation();
     });
     const editBtn = el("button", "btn btn-secondary", "Modifier mes réponses");

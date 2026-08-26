@@ -5,6 +5,12 @@ const COMPANY_NAME = "SwissClean Sàrl";
 const COMPANY_NOTIFY_EMAIL = process.env.COMPANY_NOTIFY_EMAIL || "reservations@swissclean.demo";
 const APP_BASE_URL = process.env.APP_BASE_URL || "http://localhost:3000";
 
+// Distinct from COMPANY_NOTIFY_EMAIL above: that one is the *fictional
+// demo company's* inbox (SwissClean), used for notifications about a
+// demo visitor's own simulated booking. This one is Dealz's own real
+// inbox — for someone asking to install the real product on their site.
+const DEALZ_TEAM_EMAIL = process.env.DEALZ_TEAM_EMAIL || "dealz@mycountryisgoodat.com";
+
 let transporter = null;
 if (process.env.SMTP_HOST) {
   transporter = nodemailer.createTransport({
@@ -225,6 +231,39 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
   return { calendarLink: calLink, customerEmail: results[0], companyEmail: results[1] };
 }
 
+// ---- Install-request notification (docs/contact-flow.js's #contact flow) ----
+async function sendInstallRequestNotification({
+  companyName,
+  contactName,
+  contactEmail,
+  contactPhone,
+  websiteUrl,
+  planChoice,
+  billingChoice,
+  teamSize,
+  mainProblem,
+  requestSources,
+  notifyEmail = DEALZ_TEAM_EMAIL,
+}) {
+  const html = `
+    <h2>🚀 Nouvelle demande d'installation Dealz</h2>
+    <p><b>Entreprise :</b> ${companyName || "(non fourni)"}<br/>
+       <b>Contact :</b> ${contactName || "(non fourni)"}<br/>
+       <b>E-mail :</b> ${contactEmail || "(non fourni)"}<br/>
+       <b>Téléphone :</b> ${contactPhone || "(non fourni)"}<br/>
+       <b>Site web :</b> ${websiteUrl || "(non fourni)"}</p>
+    <p><b>Formule :</b> ${planChoice || "—"} (${billingChoice === "yearly" ? "annuel" : "mensuel"})<br/>
+       <b>Taille de l'équipe :</b> ${teamSize || "—"}<br/>
+       <b>Problème principal :</b> ${mainProblem || "—"}<br/>
+       <b>Sources de demandes actuelles :</b> ${requestSources || "—"}</p>
+  `;
+  return sendEmail({
+    to: notifyEmail,
+    subject: `🚀 Demande d'installation — ${companyName || contactEmail || "nouveau prospect"}`,
+    html,
+  });
+}
+
 module.exports = {
   sendEmail,
   sendDeclineNotification,
@@ -234,6 +273,8 @@ module.exports = {
   sendReplyToCustomer,
   sendFollowupToCustomer,
   sendBookingConfirmation,
+  sendInstallRequestNotification,
   googleCalendarLink,
   COMPANY_NOTIFY_EMAIL,
+  DEALZ_TEAM_EMAIL,
 };

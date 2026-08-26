@@ -12,6 +12,7 @@ const {
   sendReplyToCustomer,
   sendFollowupToCustomer,
   sendBookingConfirmation,
+  sendInstallRequestNotification,
 } = require("./src/notifications");
 const store = require("./src/store");
 const { recordTrialAttempt } = require("./src/leads");
@@ -66,6 +67,71 @@ app.post("/api/lead", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: err.message || "Internal error" });
   }
+});
+
+// Submitted by docs/contact-flow.js (#contact's install-request flow) when
+// someone finishes the whole conversational form. Two independent side
+// effects — an e-mail to the Dealz team, and forwarding the lead into the
+// CRM's pipeline — each wrapped separately so one failing doesn't hide the
+// other, and neither ever surfaces as an error to the visitor: the same
+// graceful-degradation posture as everywhere else in this codebase. The CRM
+// forward is skipped (not an error) when CRM_INBOUND_URL isn't configured.
+app.post("/api/install-request", async (req, res) => {
+  const {
+    companyName,
+    contactName,
+    contactEmail,
+    contactPhone,
+    websiteUrl,
+    planChoice,
+    billingChoice,
+    teamSize,
+    mainProblem,
+    requestSources,
+  } = req.body || {};
+
+  if (!contactEmail) {
+    return res.status(400).json({ error: "contactEmail requis" });
+  }
+
+  const payload = {
+    companyName,
+    contactName,
+    contactEmail,
+    contactPhone,
+    websiteUrl,
+    planChoice,
+    billingChoice,
+    teamSize,
+    mainProblem,
+    requestSources,
+  };
+
+  const [emailResult, crmResult] = await Promise.allSettled([
+    sendInstallRequestNotification(payload),
+    (async () => {
+      if (!process.env.CRM_INBOUND_URL || !process.env.CRM_INBOUND_SECRET) {
+        return { skipped: "CRM_INBOUND_URL/CRM_INBOUND_SECRET not configured" };
+      }
+      const resp = await fetch(process.env.CRM_INBOUND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
+        body: JSON.stringify(payload),
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || `CRM responded ${resp.status}`);
+      return data;
+    })(),
+  ]);
+
+  if (emailResult.status === "rejected") {
+    console.error("[install-request] notification e-mail failed:", emailResult.reason);
+  }
+  if (crmResult.status === "rejected") {
+    console.error("[install-request] CRM forward failed:", crmResult.reason);
+  }
+
+  res.json({ ok: true });
 });
 
 app.post("/api/chat", async (req, res) => {
