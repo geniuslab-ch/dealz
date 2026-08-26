@@ -652,6 +652,123 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 .dcf-submit:disabled { opacity: 0.5; cursor: default; }
 .dealz-msg.system-success a, .dealz-msg.system-decline a { color: inherit; font-weight: 700; }
 
+/* ---------- Contact flow (index.html #contact — docs/contact-flow.js) ---------- */
+.contact-panel { height: 640px; max-width: 620px; margin: 0 auto; }
+.flow-block { display: flex; flex-direction: column; gap: 10px; align-self: stretch; }
+.flow-back {
+  align-self: flex-start;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 0;
+}
+.flow-back:hover { color: var(--blue-dark); }
+.flow-back:disabled { opacity: 0.4; cursor: default; }
+
+.flow-plan-grid, .flow-billing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+}
+.flow-plan-card, .flow-billing-card {
+  position: relative;
+  background: white;
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.flow-plan-card.featured, .flow-billing-card.highlight { border-color: var(--blue); background: var(--blue-light); }
+.flow-plan-badge {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--blue), var(--sky));
+  color: white;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.flow-plan-name { font-size: 13px; font-weight: 800; color: var(--ink); margin-top: 4px; }
+.flow-plan-price, .flow-billing-price { font-size: 16px; font-weight: 800; color: var(--blue-dark); }
+.flow-plan-tagline { font-size: 11.5px; color: var(--muted); line-height: 1.4; min-height: 30px; }
+.flow-plan-pick, .flow-billing-pick { width: 100%; margin-top: 6px; font-size: 12.5px; padding: 8px 10px; }
+.flow-billing-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-top: 6px; }
+.flow-billing-line { font-size: 11.5px; color: var(--muted); }
+.flow-billing-line s { color: var(--muted); }
+.flow-billing-save { font-size: 11.5px; font-weight: 700; color: var(--blue-dark); }
+
+.flow-recommend-prompt { align-self: stretch; }
+.flow-recommend-btn {
+  background: none;
+  border: 1.5px dashed var(--line);
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--blue-dark);
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+}
+.flow-recommend-btn:hover { border-color: var(--blue); background: var(--sky-light); }
+
+.flow-recommendation {
+  align-self: stretch;
+  background: var(--blue-light);
+  border: 1.5px solid var(--blue);
+  border-radius: 14px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.flow-recommendation-label { font-size: 14px; font-weight: 800; color: var(--blue-dark); }
+.flow-recommendation-reason { font-size: 13px; color: var(--ink); line-height: 1.5; margin: 0; }
+.flow-recommendation-price { font-size: 15px; font-weight: 800; color: var(--ink); }
+
+.flow-summary-card {
+  align-self: stretch;
+  background: white;
+  border: 1.5px solid var(--blue);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(11, 95, 255, 0.12);
+}
+.flow-summary-title {
+  background: linear-gradient(120deg, var(--blue), var(--navy));
+  color: white;
+  padding: 10px 14px;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.flow-summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  border-bottom: 1px solid #f0f2f6;
+  font-size: 13px;
+}
+.flow-summary-row:last-child { border-bottom: none; }
+.flow-summary-label { color: var(--muted); font-weight: 600; flex-shrink: 0; }
+.flow-summary-value { color: var(--ink); font-weight: 700; text-align: right; word-break: break-word; }
+.flow-summary-actions { display: flex; gap: 10px; flex-wrap: wrap; align-self: stretch; }
+.flow-summary-actions .btn { flex: 1; justify-content: center; white-space: nowrap; }
+
 /* ---------- Lead-capture gate (in front of the demo chat) ---------- */
 .dealz-lead-gate {
   flex: 1;

@@ -463,31 +463,18 @@
     <div class="section-inner">
       <span class="eyebrow">Contact</span>
       <h2 class="section-title">Parlons de votre entreprise</h2>
-      <p class="section-sub">Une question, une demande d'installation, ou juste envie d'en savoir plus — écrivez-nous.</p>
+      <p class="section-sub">Répondez à quelques questions. Dealz vous aidera à trouver la formule la plus adaptée.</p>
 
-      <form class="lead-form" id="lead-form">
-        <div>
-          <label for="lf-name">Nom</label>
-          <input id="lf-name" type="text" required />
+      <div class="quote-panel contact-panel">
+        <div class="quote-panel-head">
+          <div class="title">Dealz · Configuration</div>
+          <div class="subtitle" id="contact-progress">Quelques questions rapides</div>
         </div>
-        <div>
-          <label for="lf-company">Entreprise</label>
-          <input id="lf-company" type="text" required />
+        <div class="dealz-messages" id="contact-messages"></div>
+        <div class="dealz-inputbar" id="contact-inputbar">
+          <input id="contact-input" type="text" placeholder="Écrivez votre réponse…" autocomplete="off" />
+          <button id="contact-send">Envoyer</button>
         </div>
-        <div class="full">
-          <label for="lf-email">E-mail professionnel</label>
-          <input id="lf-email" type="email" required />
-        </div>
-        <div class="full">
-          <label for="lf-message">Message</label>
-          <textarea id="lf-message" placeholder="Dites-nous en un peu plus sur votre entreprise…"></textarea>
-        </div>
-        <div class="full">
-          <button type="submit" class="btn btn-primary">Envoyer la demande</button>
-        </div>
-      </form>
-      <div class="lead-confirm" id="lead-confirm">
-        ✓ Merci ! Votre demande a bien été reçue — nous vous recontactons sous 24h.
       </div>
 
       <div class="contact-grid" style="margin-top:36px;">
@@ -501,13 +488,8 @@
     Dealz — Assistant de vente IA pour entreprises de nettoyage suisses. 🇨🇭 FR · DE · IT · EN (bientôt)
   </footer>
 
+  <script src="/contact-flow.js"></script>
   <script>
-    document.getElementById("lead-form").addEventListener("submit", function (e) {
-      e.preventDefault();
-      document.getElementById("lead-confirm").classList.add("show");
-      this.reset();
-    });
-
     (function () {
       var acceptBtn = document.getElementById("pdf-accept");
       var declineBtn = document.getElementById("pdf-decline");

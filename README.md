@@ -190,6 +190,34 @@ correctly behind Vercel's proxy), so the "Faire une contre-offre" / "Voir l'offr
 running — no more dead links to `localhost` on a real deployment. `APP_BASE_URL` in `.env` still
 works as an explicit override if you ever need to force a specific canonical URL.
 
+## The contact section is a mini Dealz conversation, not a form (`docs/contact-flow.js`)
+
+`index.html`'s `#contact` section used to be a static lead form (name/company/e-mail/message,
+client-side only, no backend). Per an explicit brief ("the form should feel like the product, not a
+contact form with more fields"), it's now a self-contained chip-and-chat flow reusing the *exact*
+visual language already built for the real widget — `.dealz-messages` / `.dealz-msg` / `.dop-chip` /
+`.dealz-contact-form` from `styles.css`, the same "chip click sends the same text a free-text answer
+would" pattern from `docs/quote-app.js` — rather than inventing a new component language. One
+question at a time: company name → team size → how requests come in today (multi-select) → main
+pain point → plan choice (three cards, or "not sure? let Dealz recommend" using a small deterministic
+rule over the two previous answers — multi-person team wins to SCALE, refused-quotes/counteroffer
+pain wins to CLOSE, otherwise CAPTURE) → monthly-vs-annual (computed from the chosen plan; the annual
+side's only advantage is the CHF 390 install fee waived, not a lower SaaS price — matches the pricing
+section's own installation panel) → site URL (light validation, auto-prepends `https://`) → contact
+details (name/e-mail/phone, reusing the widget's own contact-form styling) → a recap card → submit.
+
+Any question where "Autre" is a valid option asks one short free-text follow-up ("Vous pouvez
+préciser :") and merges it into the stored answer, rather than either forcing free text everywhere or
+silently discarding what doesn't fit a preset option. "← Modifier la réponse précédente" is available
+on every step after the first — it discards that step's own (still-unanswered) block and the previous
+step's answered block, then re-asks the previous question fresh, so correcting an answer never leaves
+a stale answer bubble behind.
+
+**Still genuinely a client-side-only flow, on purpose.** The submit button shows the same static
+confirmation message the old form did — no `fetch` call, no new backend route. The brief was explicit
+about not standing up infrastructure that wasn't already there for this; if/when this needs to reach
+a real inbox or CRM, that's a deliberate follow-up, not something silently added here.
+
 ## What's actually happening on the demo (real mode)
 
 - **Claude only asks questions and reads the customer's answers.** It never invents a price.
@@ -478,6 +506,9 @@ docs/quote-app.js               The quote assistant UI (used on demo.html's "Dev
 docs/mock-client.js             Browser port of src/mock.js — the GitHub Pages fallback engine
 docs/lead-gate.js                Lead-capture form in front of the demo widget — posts to
                                  /api/lead, fails open with no backend or no Supabase configured
+docs/contact-flow.js            index.html's conversational contact/qualification flow — client-
+                                 side only, no backend call on submit — see "The contact section
+                                 is a mini Dealz conversation, not a form"
 docs/pricing-engine-client.js   Browser port of src/pricingEngine.js — used by mock-client.js
 docs/pricing.json               The example company's pricing rules — single source of truth
                                  (stand-in for a real client's Excel sheet), read by both the
@@ -515,10 +546,11 @@ a mock chat conversation → a mock PDF offer with Accepter/Refuser buttons, cap
 that the CHF shown is *the cleaning customer's* price, not Dealz's own price (this used to be two
 separate, redundant sections — merged into one linear 3-panel story) → "couche de vente, pas un
 remplacement" (vs. existing cleaning software) → **competitor comparison table** (3×2 dashboard
-grid — `.dash-grid`) → **pricing (CAPTURE / CLOSE / SCALE)** → final CTA → contact / lead form
-(client-side only — see "Not included"). CTA copy changes with funnel position: "Voir comment ça
-marche" in the hero, "Découvrir l'expérience" after How It Works, "Essayer la démo gratuite" at
-pricing and the final CTA, "Demander l'installation" as the closing ask.
+grid — `.dash-grid`) → **pricing (CAPTURE / CLOSE / SCALE)** → final CTA → **conversational contact
+flow** (client-side only — see "Not included" and the dedicated section below). CTA copy changes
+with funnel position: "Voir comment ça marche" in the hero, "Découvrir l'expérience" after How It
+Works, "Essayer la démo gratuite" at pricing and the final CTA, "Demander l'installation" as the
+closing ask.
 
 **Pricing tells a progression, not a feature-count comparison** (rewritten from an earlier
 Capture/Convert/Automate version per an explicit product brief — plan names are deliberately short,
