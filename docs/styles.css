@@ -59,11 +59,11 @@ img { max-width: 100%; }
   display: block;
 }
 .nav-logo .nav-slogan {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 600;
   color: var(--muted);
   letter-spacing: 0.01em;
-  white-space: nowrap;
+  line-height: 1.35;
 }
 .nav-links {
   display: flex;
@@ -152,11 +152,11 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
   color: transparent;
 }
 .hero p { color: var(--muted); font-size: 17px; margin: 0 auto 30px; max-width: 480px; }
-.hero-question { font-size: 20px; font-weight: 700; color: var(--ink); margin: 0 auto 14px; max-width: 520px; }
-.hero-usp { font-size: 13.5px; color: var(--muted); margin: -16px auto 30px; max-width: 480px; line-height: 1.5; }
+.hero p.hero-question { font-size: 20px; font-weight: 700; color: var(--ink); margin: 0 auto 14px; max-width: 520px; }
+.hero p.hero-usp { font-size: 13.5px; color: var(--muted); margin: -16px auto 30px; max-width: 480px; line-height: 1.5; }
 .hero-usp b { color: var(--ink); }
 .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-.hero-tagline { font-size: 13px; font-weight: 600; font-style: italic; color: var(--blue-dark); margin: 22px auto 0; }
+.hero p.hero-tagline { font-size: 13px; font-weight: 600; font-style: italic; color: var(--blue-dark); margin: 40px auto 0; }
 
 .btn {
   display: inline-flex;
