@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const { runTurn } = require("./src/claude");
 const { runTurnMock } = require("./src/mock");
-const { classifyObjection, CATEGORIES } = require("./src/objections");
+const { classifyObjection, draftSuggestedReply, CATEGORIES } = require("./src/objections");
 const {
   sendDeclineNotification,
   sendCounterofferToCustomer,
@@ -357,6 +357,14 @@ app.post("/api/decline", async (req, res) => {
       status: "pending",
     });
 
+    const suggestedReply = await draftSuggestedReply({
+      category: finalCategory,
+      summary,
+      rawText: text || "",
+      quote,
+      customer: customer || {},
+    });
+
     const emailResult = await sendDeclineNotification({
       quote,
       category: finalCategory,
@@ -364,6 +372,7 @@ app.post("/api/decline", async (req, res) => {
       rawText: text || "",
       customer: customer || {},
       declineToken,
+      suggestedReply,
       baseUrl: requestBaseUrl(req),
       notifyEmail: companyEmail || undefined,
     });

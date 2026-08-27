@@ -99,6 +99,7 @@ async function sendDeclineNotification({
   rawText,
   customer,
   declineToken,
+  suggestedReply,
   baseUrl = APP_BASE_URL,
   notifyEmail = COMPANY_NOTIFY_EMAIL,
 }) {
@@ -114,6 +115,14 @@ async function sendDeclineNotification({
     ${cfg.showTotal ? `<p><b>Devis original :</b> ${fmtCHF(quote.total)}</p><table>${quoteItemsHtml(quote)}</table>` : ""}
     <p><b>Motif du refus :</b> ${cfg.label}</p>
     ${rawText ? `<p><b>Message du client :</b><br/>« ${rawText} »</p>` : ""}
+    ${
+      suggestedReply
+        ? `<div style="background:#f7f9fd;border:1px solid #e4e9f2;border-radius:10px;padding:14px 16px;margin:14px 0;">
+             <p style="margin:0 0 6px;font-weight:bold;font-size:13px;text-transform:uppercase;letter-spacing:0.04em;color:#5b6472;">💬 Réponse suggérée (à relire et adapter avant envoi)</p>
+             <p style="margin:0;">${suggestedReply}</p>
+           </div>`
+        : ""
+    }
     <p><a href="${actionUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">${cfg.primaryCta}</a></p>
   `;
 

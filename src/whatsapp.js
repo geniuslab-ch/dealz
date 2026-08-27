@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const { runTurn } = require("./claude");
 const { runTurnMock } = require("./mock");
-const { classifyObjection } = require("./objections");
+const { classifyObjection, draftSuggestedReply } = require("./objections");
 const { sendBookingConfirmation, sendDeclineNotification } = require("./notifications");
 const store = require("./store");
 const { getCompanyByPhoneNumberId } = require("./companies");
@@ -208,6 +208,13 @@ async function handleIncomingMessage(phoneNumberId, from, rawText) {
           customer: quote.customer || {},
           status: "pending",
         });
+        const suggestedReply = await draftSuggestedReply({
+          category: classified.category,
+          summary: classified.summary,
+          rawText: text,
+          quote,
+          customer: quote.customer || {},
+        });
         await sendDeclineNotification({
           quote,
           category: classified.category,
@@ -215,6 +222,7 @@ async function handleIncomingMessage(phoneNumberId, from, rawText) {
           rawText: text,
           customer: quote.customer || {},
           declineToken,
+          suggestedReply,
           notifyEmail: company.notifyEmail,
         });
       } catch (err) {
