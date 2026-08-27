@@ -195,6 +195,33 @@ app.post("/api/referral", async (req, res) => {
   res.json({ ok: true });
 });
 
+// Called by docs/referral-form.js when someone lands on parrainage.html
+// without a personalized ?ref=<id> link (e.g. via the generic referral
+// link in the site footer rather than their own welcome email) — resolves
+// their e-mail to their own client id via the CRM, so the form can still
+// attribute the referral correctly. Relayed straight through to the CRM;
+// nothing here needs to know how that lookup works.
+app.post("/api/referral-identify", async (req, res) => {
+  try {
+    const { email } = req.body || {};
+    if (!email) return res.status(400).json({ error: "E-mail requis" });
+    if (!process.env.CRM_REFERRAL_IDENTIFY_URL || !process.env.CRM_INBOUND_SECRET) {
+      return res.status(503).json({ error: "Service indisponible pour le moment." });
+    }
+    const resp = await fetch(process.env.CRM_REFERRAL_IDENTIFY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
+      body: JSON.stringify({ email }),
+    });
+    const data = await resp.json();
+    if (!resp.ok) throw new Error(data.error || `CRM responded ${resp.status}`);
+    res.json(data);
+  } catch (err) {
+    console.error("[referral-identify] CRM lookup failed:", err.message);
+    res.status(502).json({ error: "Une erreur est survenue — réessayez dans un instant." });
+  }
+});
+
 app.post("/api/chat", async (req, res) => {
   try {
     const history = Array.isArray(req.body.messages) ? req.body.messages : [];

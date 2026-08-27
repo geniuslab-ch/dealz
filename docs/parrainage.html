@@ -27,15 +27,28 @@
       <span class="eyebrow">Programme de parrainage</span>
       <h1>VOUS AVEZ GARDÉ<br>LE SECRET ASSEZ LONGTEMPS.</h1>
       <p class="hero-question">Un confrère perd encore des demandes le soir ?</p>
-      <p>Dites-le-nous en 30 secondes. On s'occupe de lui montrer Dealz — et vous, vous récupérez [réduction à définir] sur votre abonnement dès qu'il s'installe.</p>
+      <p>Dites-le-nous en 30 secondes. On s'occupe de lui montrer Dealz — et vous, vous récupérez une récompense sur votre abonnement dès qu'il s'installe : jusqu'à CHF 300 de réduction (annuel) ou 3 mois offerts (mensuel).</p>
     </div>
   </section>
 
   <section id="parrainage-form-section">
     <div class="section-inner" style="max-width: 560px;">
-      <div class="referral-card">
+
+      <div class="referral-card" id="identify-section" style="display:none;">
         <div class="referral-card-head">
-          <div class="title">Parrainer un confrère</div>
+          <div class="title">D'abord, retrouvons votre compte</div>
+          <div class="subtitle">Vous n'êtes pas passé par votre lien personnel — pas de souci, votre e-mail suffit</div>
+        </div>
+        <div id="identify-form">
+          <input class="dcf-input" id="id-email" type="email" placeholder="Votre e-mail client Dealz" required />
+          <button class="dcf-submit" id="id-submit">Continuer →</button>
+          <p class="dlg-msg" id="id-msg"></p>
+        </div>
+      </div>
+
+      <div class="referral-card" id="referral-form-section" style="display:none;">
+        <div class="referral-card-head">
+          <div class="title">Présenter un confrère</div>
           <div class="subtitle">2 minutes, sans obligation pour lui</div>
         </div>
 
@@ -53,6 +66,7 @@
           <p style="font-size: 13.5px; color: var(--muted); margin: 0;">On prend le relais avec votre confrère. Merci pour le coup de main — et pour la confiance.</p>
         </div>
       </div>
+
     </div>
   </section>
 

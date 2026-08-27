@@ -256,6 +256,17 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
   font-style: italic;
   color: var(--blue-dark);
 }
+.site-footer-referral {
+  margin-top: 14px;
+}
+.site-footer-referral a {
+  color: var(--blue-dark);
+  font-weight: 700;
+  text-decoration: none;
+}
+.site-footer-referral a:hover {
+  text-decoration: underline;
+}
 
 /* ---------- Quote tab ---------- */
 .quote-wrap {
