@@ -116,7 +116,22 @@
       <h2 class="sc-title">Votre prix en moins d'une minute</h2>
       <p class="sc-devis-note">Répondez à quelques questions sur votre logement — vous recevrez un devis réel, que vous pourrez accepter ou refuser directement ici.</p>
 
-      <div class="quote-wrap">
+      <div class="demo-channel-choice cards-grid cols-2">
+        <div class="svc-card c-blue channel-card">
+          <div class="svc-icon">💻</div>
+          <h3>Sur le site</h3>
+          <p>Vivez l'expérience telle que vos clients la vivent depuis votre site web.</p>
+          <a href="#quote-wrap-anchor" class="btn btn-secondary">Essayer ici ↓</a>
+        </div>
+        <div class="svc-card c-sky channel-card" id="whatsapp-trial-card" style="display: none;">
+          <div class="svc-icon">📱</div>
+          <h3>Sur WhatsApp</h3>
+          <p>Vivez l'expérience telle que vos clients la vivent en vous écrivant directement — depuis votre propre WhatsApp, sans rien installer.</p>
+          <a href="#" id="whatsapp-trial-link" class="btn btn-primary" target="_blank" rel="noopener">Essayer sur WhatsApp →</a>
+        </div>
+      </div>
+
+      <div class="quote-wrap" id="quote-wrap-anchor">
         <div class="quote-side">
           <h3>Comment ça marche</h3>
           <div class="flow-steps">
@@ -182,6 +197,7 @@
   <script src="/mock-client.js"></script>
   <script src="/quote-app.js"></script>
   <script src="/lead-gate.js"></script>
+  <script src="/whatsapp-trial-card.js"></script>
   <script>
     document.addEventListener("dealz:quote-delivered", function () {
       var el = document.getElementById("demo-followup");

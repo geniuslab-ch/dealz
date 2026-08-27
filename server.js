@@ -57,6 +57,24 @@ app.use((req, res, next) => {
   next();
 });
 
+// Powers the "Essayer sur WhatsApp" card on docs/demo.html — unlike the
+// website chat demo, this has NO lead-gate at all: a visitor just messages
+// the trial number directly on their own WhatsApp, the same frictionless
+// way their own future customers would message them. Nothing to configure
+// on the visitor's side, and no extra backend work either — the trial
+// number IS the existing default/demo company (see src/companies.js's
+// fallback), it just needs to be reachable as a real wa.me link. Returns
+// `enabled: false` (card stays hidden client-side) until
+// WHATSAPP_TRIAL_NUMBER_E164 is set — this must be the SAME physical
+// number registered as WHATSAPP_PHONE_NUMBER_ID, just in public E.164
+// digits-only form instead of Meta's internal id.
+app.get("/api/whatsapp-trial", (req, res) => {
+  const number = process.env.WHATSAPP_TRIAL_NUMBER_E164;
+  if (!number) return res.json({ enabled: false });
+  const prefill = "Bonjour, je voudrais un devis de nettoyage";
+  res.json({ enabled: true, waLink: `https://wa.me/${number}?text=${encodeURIComponent(prefill)}` });
+});
+
 // Gate in front of the public demo widget (docs/demo.html + docs/lead-gate.js)
 // — records who's trying it and caps free trials, so the demo doesn't run up
 // real Anthropic API cost from unlimited anonymous use. See src/leads.js.
