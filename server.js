@@ -17,6 +17,7 @@ const {
 } = require("./src/notifications");
 const store = require("./src/store");
 const { recordTrialAttempt } = require("./src/leads");
+const whatsapp = require("./src/whatsapp");
 
 const MOCK_MODE = process.env.MOCK_MODE === "true";
 
@@ -26,7 +27,10 @@ const app = express();
 // into notification emails (counteroffer.html, offer.html) would use the
 // wrong scheme.
 app.set("trust proxy", 1);
-app.use(express.json());
+// `verify` stashes the raw request bytes on req.rawBody — needed to check
+// Meta's X-Hub-Signature-256 on the WhatsApp webhook (see src/whatsapp.js's
+// verifySignature). Harmless for every other route, which never reads it.
+app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf; } }));
 app.use(express.static(path.join(__dirname, "docs")));
 
 // The public URL this server is reachable at, for links built into e-mails
@@ -219,6 +223,55 @@ app.post("/api/referral-identify", async (req, res) => {
   } catch (err) {
     console.error("[referral-identify] CRM lookup failed:", err.message);
     res.status(502).json({ error: "Une erreur est survenue — réessayez dans un instant." });
+  }
+});
+
+// ---- WhatsApp channel (Meta Cloud API) — same quote engine as /api/chat,
+// reached over WhatsApp instead of the website widget. See src/whatsapp.js.
+
+// Meta calls this once, at setup time in the Meta App Dashboard, to prove
+// this endpoint is really under your control before it'll deliver any
+// messages here.
+app.get("/api/whatsapp/webhook", (req, res) => {
+  const mode = req.query["hub.mode"];
+  const token = req.query["hub.verify_token"];
+  const challenge = req.query["hub.challenge"];
+  if (whatsapp.verifyWebhookChallenge(mode, token)) {
+    return res.status(200).send(challenge);
+  }
+  res.sendStatus(403);
+});
+
+app.post("/api/whatsapp/webhook", async (req, res) => {
+  if (!whatsapp.verifySignature(req)) {
+    console.warn("[whatsapp webhook] invalid or missing signature — rejecting");
+    return res.sendStatus(401);
+  }
+  // Meta expects a fast 200 regardless of what we do with the payload, and
+  // will retry (or eventually disable the webhook) if it doesn't get one —
+  // acknowledge first, then process.
+  res.sendStatus(200);
+  try {
+    const message = req.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+    if (!message) return; // delivery/read receipts and other non-message events
+
+    const from = message.from;
+    let text = "";
+    if (message.type === "text") {
+      text = message.text?.body || "";
+    } else if (message.type === "interactive") {
+      text = message.interactive?.button_reply?.title || message.interactive?.list_reply?.title || "";
+    } else {
+      await whatsapp.sendWhatsAppText(
+        from,
+        "Merci de nous écrire votre demande sous forme de texte — je ne peux pas encore traiter les photos, notes vocales ou fichiers."
+      );
+      return;
+    }
+
+    await whatsapp.handleIncomingMessage(from, text);
+  } catch (err) {
+    console.error("[whatsapp webhook]", err);
   }
 });
 
@@ -529,5 +582,12 @@ app.listen(PORT, () => {
   } else if (!process.env.ANTHROPIC_API_KEY) {
     console.warn("⚠ ANTHROPIC_API_KEY is not set — requests to /api/chat will fail.");
     console.warn("  Set MOCK_MODE=true in .env to try the demo without an API key.");
+  }
+  if (!whatsapp.isConfigured()) {
+    console.log("→ WhatsApp not configured: inbound messages will be logged to this console instead of replied to for real.");
+    console.log("  Set WHATSAPP_ACCESS_TOKEN/WHATSAPP_PHONE_NUMBER_ID in .env to reply for real (see .env.example).");
+  }
+  if (!process.env.WHATSAPP_APP_SECRET) {
+    console.warn("⚠ WHATSAPP_APP_SECRET is not set — the WhatsApp webhook will accept unsigned requests from anyone.");
   }
 });
