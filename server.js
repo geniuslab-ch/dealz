@@ -252,9 +252,14 @@ app.post("/api/whatsapp/webhook", async (req, res) => {
   // acknowledge first, then process.
   res.sendStatus(200);
   try {
-    const message = req.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+    const value = req.body?.entry?.[0]?.changes?.[0]?.value;
+    const message = value?.messages?.[0];
     if (!message) return; // delivery/read receipts and other non-message events
 
+    // Which of (potentially many) companies' own WhatsApp numbers this
+    // message came in on — src/companies.js resolves it to that company's
+    // name/pricing, and replies get sent from this same number.
+    const phoneNumberId = value?.metadata?.phone_number_id;
     const from = message.from;
     let text = "";
     if (message.type === "text") {
@@ -264,12 +269,13 @@ app.post("/api/whatsapp/webhook", async (req, res) => {
     } else {
       await whatsapp.sendWhatsAppText(
         from,
-        "Merci de nous écrire votre demande sous forme de texte — je ne peux pas encore traiter les photos, notes vocales ou fichiers."
+        "Merci de nous écrire votre demande sous forme de texte — je ne peux pas encore traiter les photos, notes vocales ou fichiers.",
+        phoneNumberId
       );
       return;
     }
 
-    await whatsapp.handleIncomingMessage(from, text);
+    await whatsapp.handleIncomingMessage(phoneNumberId, from, text);
   } catch (err) {
     console.error("[whatsapp webhook]", err);
   }
@@ -585,7 +591,7 @@ app.listen(PORT, () => {
   }
   if (!whatsapp.isConfigured()) {
     console.log("→ WhatsApp not configured: inbound messages will be logged to this console instead of replied to for real.");
-    console.log("  Set WHATSAPP_ACCESS_TOKEN/WHATSAPP_PHONE_NUMBER_ID in .env to reply for real (see .env.example).");
+    console.log("  Set WHATSAPP_ACCESS_TOKEN in .env and add each company's number to src/companies.js (see .env.example).");
   }
   if (!process.env.WHATSAPP_APP_SECRET) {
     console.warn("⚠ WHATSAPP_APP_SECRET is not set — the WhatsApp webhook will accept unsigned requests from anyone.");

@@ -1,4 +1,4 @@
-const pricing = require("../docs/pricing.json");
+const defaultPricing = require("../docs/pricing.json");
 
 const ADDON_LABELS = {
   oven: "Nettoyage du four",
@@ -23,8 +23,12 @@ function round(n) {
 /**
  * Deterministic price calculation. Claude never does the math itself —
  * it only gathers structured inputs and calls this function via a tool.
+ * `pricing` defaults to the single demo company's grid (docs/pricing.json)
+ * so every existing caller (the website chat) is unaffected; a multi-tenant
+ * caller (the WhatsApp channel) passes each company's own grid instead —
+ * same shape, different numbers (see src/companies.js).
  */
-function calculateQuote(input) {
+function calculateQuote(input, pricing = defaultPricing) {
   const items = [];
   const warnings = [];
 

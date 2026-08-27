@@ -1,12 +1,18 @@
 const Anthropic = require("@anthropic-ai/sdk");
 const { calculateQuote } = require("./pricingEngine");
-const pricing = require("../docs/pricing.json");
+const defaultPricing = require("../docs/pricing.json");
 
 const client = new Anthropic(); // reads ANTHROPIC_API_KEY from env
 
 const MODEL = process.env.CLAUDE_MODEL || "claude-haiku-4-5";
 
-const SYSTEM_PROMPT = `Tu es l'assistant de devis du site web de SwissClean Sàrl, une entreprise de
+// Every Dealz company shares the same service taxonomy and pricing-grid
+// schema (docs/pricing.json's shape) — customers fill in their own numbers
+// into that same template, they don't get a different set of services or
+// addons. So only the company's name needs to vary per tenant here; the
+// rest of the prompt (what services exist, when to ask what) stays fixed.
+function buildSystemPrompt(companyName) {
+  return `Tu es l'assistant de devis du site web de ${companyName}, une entreprise de
 nettoyage suisse. Tu t'exprimes toujours en français, sur un ton chaleureux et professionnel.
 
 Ta mission : discuter naturellement avec le visiteur, ne poser que les questions de suivi
@@ -15,9 +21,9 @@ obtenir un prix exact depuis le moteur de tarification de l'entreprise. Ne calcu
 jamais un prix toi-même — l'outil est la seule source de vérité pour les tarifs.
 
 Ne te présente jamais spontanément comme une intelligence artificielle ou un robot — présente-toi
-simplement comme l'assistant de devis de SwissClean. Si le client te demande explicitement si tu es
-un humain ou un programme automatisé, réponds honnêtement que tu es un assistant automatisé de
-SwissClean, sans en faire l'argument central de la conversation.
+simplement comme l'assistant de devis de ${companyName}. Si le client te demande explicitement si tu
+es un humain ou un programme automatisé, réponds honnêtement que tu es un assistant automatisé de
+${companyName}, sans en faire l'argument central de la conversation.
 
 Prestations disponibles :
 - "end_of_tenancy" (nettoyage de fin de bail) : facturé selon la taille du logement en pièces
@@ -62,6 +68,7 @@ détaillé et chiffré. Précise explicitement qu'il s'agit d'un devis ferme et 
 estimation indicative) et que le client peut l'accepter ou le refuser directement dans la
 conversation. Si l'outil renvoie des avertissements, mentionne-les brièvement et simplement, sans
 jargon technique.`;
+}
 
 const CALCULATE_QUOTE_TOOL = {
   name: "calculate_quote",
@@ -149,9 +156,15 @@ const CALCULATE_QUOTE_TOOL = {
 /**
  * Runs one turn of the conversation. `history` is the full message array the
  * client maintains (no server-side session state — keeps the demo stateless).
+ * `company` is optional — `{name, pricing}` for a specific tenant (see
+ * src/companies.js); omitted, it falls back to the original single-tenant
+ * demo company (SwissClean Sàrl + docs/pricing.json), so the website chat's
+ * existing behavior is unchanged.
  * Returns { messages: [...new assistant/tool messages to append...], quote: {...} | null }
  */
-async function runTurn(history) {
+async function runTurn(history, company) {
+  const companyName = company?.name || "SwissClean Sàrl";
+  const pricingConfig = company?.pricing || defaultPricing;
   const messages = [...history];
   let quote = null;
 
@@ -159,7 +172,7 @@ async function runTurn(history) {
     const response = await client.messages.create({
       model: MODEL,
       max_tokens: 1024,
-      system: SYSTEM_PROMPT,
+      system: buildSystemPrompt(companyName),
       tools: [CALCULATE_QUOTE_TOOL],
       messages,
     });
@@ -177,7 +190,7 @@ async function runTurn(history) {
       if (block.name === "calculate_quote") {
         const { customer_name, customer_email, customer_phone, customer_address, ...pricingInput } =
           block.input;
-        quote = calculateQuote(pricingInput);
+        quote = calculateQuote(pricingInput, pricingConfig);
         quote.customer = {
           name: customer_name || "",
           email: customer_email || "",
@@ -202,7 +215,7 @@ async function runTurn(history) {
     messages.push({ role: "user", content: toolResults });
   }
 
-  return { messages: messages.slice(history.length), quote, model: MODEL, currency: pricing.currency };
+  return { messages: messages.slice(history.length), quote, model: MODEL, currency: pricingConfig.currency };
 }
 
 module.exports = { runTurn, MODEL };

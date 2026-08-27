@@ -36,12 +36,12 @@ function answerFollowing(history, questionText) {
   return next ? next.content : "";
 }
 
-function ask(questionText, question) {
+function ask(questionText, question, currency = pricing.currency) {
   return {
     messages: [{ role: "assistant", content: questionText }],
     quote: null,
     model: "mode-demo",
-    currency: pricing.currency,
+    currency,
     question: question || null,
   };
 }
@@ -545,7 +545,12 @@ function extractContact(text) {
   };
 }
 
-async function runTurnMock(history) {
+// `company` is optional — `{name, pricing}` for a specific tenant (see
+// src/companies.js); omitted, it falls back to the original single-tenant
+// demo company's grid (docs/pricing.json), so the website chat's existing
+// behavior is unchanged.
+async function runTurnMock(history, company) {
+  const pricingConfig = company?.pricing || pricing;
   const answers = {};
 
   for (const step of STEPS) {
@@ -558,15 +563,16 @@ async function runTurnMock(history) {
       if (step.type === "single" || step.type === "multi") {
         question = { type: step.type, options: step.options() };
       } else if (step.type === "date") {
-        question = { type: "date", minDate: computeMinDate(pricing) };
+        question = { type: "date", minDate: computeMinDate(pricingConfig) };
       } else if (step.type === "contact_form") {
         question = { type: "contact_form", needAddress: true };
       }
-      return ask(questionText, question);
+      return ask(questionText, question, pricingConfig.currency);
     }
 
     const rawAnswer = answerFollowing(history, questionText);
-    answers[step.id] = step.type === "date" ? clampDate(rawAnswer, computeMinDate(pricing)) : step.parse(rawAnswer, answers);
+    answers[step.id] =
+      step.type === "date" ? clampDate(rawAnswer, computeMinDate(pricingConfig)) : step.parse(rawAnswer, answers);
   }
 
   // Every step has been asked and answered — build the quote.
@@ -590,7 +596,7 @@ async function runTurnMock(history) {
     floors_no_elevator: answers.floors_no_elevator || 0,
   };
 
-  const quote = calculateQuote(input);
+  const quote = calculateQuote(input, pricingConfig);
   quote.customer = answers.contact || { name: "", email: "", phone: "", address: "" };
   quote.details = answers;
 
@@ -602,7 +608,7 @@ async function runTurnMock(history) {
     messages: [{ role: "assistant", content: text }],
     quote,
     model: "mode-demo",
-    currency: pricing.currency,
+    currency: pricingConfig.currency,
     question: null,
   };
 }

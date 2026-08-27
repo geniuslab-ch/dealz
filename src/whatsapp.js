@@ -4,36 +4,45 @@ const { runTurnMock } = require("./mock");
 const { classifyObjection } = require("./objections");
 const { sendBookingConfirmation, sendDeclineNotification } = require("./notifications");
 const store = require("./store");
+const { getCompanyByPhoneNumberId } = require("./companies");
 
 /**
  * WhatsApp channel for the same quote engine the website chat widget uses
  * (src/claude.js's runTurn / src/mock.js's runTurnMock) — talks to Meta's
  * WhatsApp Cloud API directly (no Twilio or other paid middleman). The
- * Cloud API itself has no platform fee; Meta bills per conversation once
- * you're past the free monthly allowance, but there's no cost to wire this
- * up and test it.
+ * Cloud API itself has no platform fee, and every message here is a
+ * customer-initiated "service" reply — Meta's own free category, not
+ * billed at all (see docs/companies.js's onboarding notes for the numbers).
+ *
+ * Multi-tenant: many cleaning companies' own WhatsApp numbers can share one
+ * Meta Business Account (WABA) and one access token — Meta's webhook payload
+ * tells us which number received each message (metadata.phone_number_id),
+ * which src/companies.js resolves to that company's own name + pricing
+ * grid. A single ACCESS_TOKEN sends on behalf of any of them by just
+ * targeting the right phone_number_id per call.
  *
  * The server has no session/database, so per-sender conversation state
  * (the same `messages[]` array the website keeps in a browser-side closure)
- * lives in an in-memory Map here instead, keyed by WhatsApp phone number —
- * same fine-for-a-single-process-demo tradeoff as src/store.js.
+ * lives in an in-memory Map here instead, keyed by (receiving number,
+ * customer number) — same fine-for-a-single-process-demo tradeoff as
+ * src/store.js.
  */
 
 const API_VERSION = process.env.WHATSAPP_API_VERSION || "v21.0";
 const MOCK_MODE = process.env.MOCK_MODE === "true";
 
 function isConfigured() {
-  return !!(process.env.WHATSAPP_ACCESS_TOKEN && process.env.WHATSAPP_PHONE_NUMBER_ID);
+  return !!process.env.WHATSAPP_ACCESS_TOKEN;
 }
 
-async function sendWhatsAppText(to, body) {
-  if (!isConfigured()) {
-    console.log(`\n===== [WHATSAPP SIMULÉ — configurez WHATSAPP_ACCESS_TOKEN / WHATSAPP_PHONE_NUMBER_ID] =====`);
-    console.log(`À : ${to}\n${body}`);
+async function sendWhatsAppText(to, body, fromPhoneNumberId) {
+  if (!isConfigured() || !fromPhoneNumberId) {
+    console.log(`\n===== [WHATSAPP SIMULÉ — configurez WHATSAPP_ACCESS_TOKEN (et un numéro dans src/companies.js)] =====`);
+    console.log(`De : ${fromPhoneNumberId || "(non configuré)"}\nÀ : ${to}\n${body}`);
     console.log("=====\n");
     return { simulated: true };
   }
-  const url = `https://graph.facebook.com/${API_VERSION}/${process.env.WHATSAPP_PHONE_NUMBER_ID}/messages`;
+  const url = `https://graph.facebook.com/${API_VERSION}/${fromPhoneNumberId}/messages`;
   const resp = await fetch(url, {
     method: "POST",
     headers: {
@@ -79,22 +88,29 @@ function verifySignature(req) {
 }
 
 // ---- Per-sender conversation state ----
+// Keyed by (receiving company number, customer number) — the same customer
+// phone messaging two different companies' numbers gets two independent
+// conversations.
 
 const sessions = new Map();
 const SESSION_TTL_MS = 1000 * 60 * 60 * 6; // 6h of silence starts a fresh conversation
 
-function getSession(phone) {
-  const existing = sessions.get(phone);
+function sessionKey(phoneNumberId, from) {
+  return `${phoneNumberId}:${from}`;
+}
+function getSession(phoneNumberId, from) {
+  const key = sessionKey(phoneNumberId, from);
+  const existing = sessions.get(key);
   if (existing && Date.now() - existing.updatedAt < SESSION_TTL_MS) return existing;
   const fresh = { messages: [], pendingOptions: null, pendingQuote: null, updatedAt: Date.now() };
-  sessions.set(phone, fresh);
+  sessions.set(key, fresh);
   return fresh;
 }
 function touchSession(session) {
   session.updatedAt = Date.now();
 }
-function clearSession(phone) {
-  sessions.delete(phone);
+function clearSession(phoneNumberId, from) {
+  sessions.delete(sessionKey(phoneNumberId, from));
 }
 
 // ---- Formatting helpers ----
@@ -138,9 +154,20 @@ const NO_RE = /^(non|annul|refus|no)\b/i;
 // /api/chat does (real Claude, silently falling back to the scripted
 // engine on any API error), plus the same accept/decline notification
 // logic as /api/accept and /api/decline — just triggered by a WhatsApp
-// reply instead of a website button click.
-async function handleIncomingMessage(from, rawText) {
-  const session = getSession(from);
+// reply instead of a website button click. `phoneNumberId` is the company's
+// own WhatsApp number that received the message (Meta's metadata.
+// phone_number_id) — resolved to that company's config via
+// src/companies.js, so replies go out from the same number, priced with
+// that company's own grid.
+async function handleIncomingMessage(phoneNumberId, from, rawText) {
+  const company = getCompanyByPhoneNumberId(phoneNumberId);
+  if (!company) {
+    console.warn(`[whatsapp] Message reçu sur un numéro non configuré (phone_number_id=${phoneNumberId}) — ignoré.`);
+    return;
+  }
+  const reply = (body) => sendWhatsAppText(from, body, phoneNumberId);
+
+  const session = getSession(phoneNumberId, from);
   touchSession(session);
   const text = (rawText || "").trim();
   if (!text) return;
@@ -151,17 +178,20 @@ async function handleIncomingMessage(from, rawText) {
     if (YES_RE.test(text)) {
       session.pendingQuote = null;
       try {
-        const result = await sendBookingConfirmation({ quote, customer: quote.customer || {} });
-        await sendWhatsAppText(
-          from,
+        const result = await sendBookingConfirmation({
+          quote,
+          customer: quote.customer || {},
+          notifyEmail: company.notifyEmail,
+        });
+        await reply(
           "Réservation confirmée ! 🎉\n\nNous revenons vers vous rapidement pour planifier l'intervention." +
             (result.calendarLink ? `\n\nAjouter à votre agenda : ${result.calendarLink}` : "")
         );
       } catch (err) {
         console.error("[whatsapp] booking confirmation failed:", err);
-        await sendWhatsAppText(from, "Un souci technique est survenu lors de la confirmation — nous vous recontactons directement.");
+        await reply("Un souci technique est survenu lors de la confirmation — nous vous recontactons directement.");
       }
-      clearSession(from);
+      clearSession(phoneNumberId, from);
       return;
     }
 
@@ -185,19 +215,17 @@ async function handleIncomingMessage(from, rawText) {
           rawText: text,
           customer: quote.customer || {},
           declineToken,
+          notifyEmail: company.notifyEmail,
         });
       } catch (err) {
         console.error("[whatsapp] decline notification failed:", err);
       }
-      await sendWhatsAppText(
-        from,
-        "Compris, merci pour votre retour — nous en tenons compte. N'hésitez pas à nous recontacter si vous changez d'avis."
-      );
-      clearSession(from);
+      await reply("Compris, merci pour votre retour — nous en tenons compte. N'hésitez pas à nous recontacter si vous changez d'avis.");
+      clearSession(phoneNumberId, from);
       return;
     }
 
-    await sendWhatsAppText(from, "Je n'ai pas bien compris — répondez *OUI* pour confirmer ce devis, ou *NON* pour le refuser.");
+    await reply("Je n'ai pas bien compris — répondez *OUI* pour confirmer ce devis, ou *NON* pour le refuser.");
     return;
   }
 
@@ -218,10 +246,10 @@ async function handleIncomingMessage(from, rawText) {
 
   let data;
   try {
-    data = MOCK_MODE ? await runTurnMock(session.messages) : await runTurn(session.messages);
+    data = MOCK_MODE ? await runTurnMock(session.messages, company) : await runTurn(session.messages, company);
   } catch (err) {
     console.warn("[whatsapp] Real Claude call failed — falling back to the scripted demo engine:", err.message);
-    data = await runTurnMock(session.messages);
+    data = await runTurnMock(session.messages, company);
   }
 
   session.messages.push(...data.messages);
@@ -230,24 +258,21 @@ async function handleIncomingMessage(from, rawText) {
   for (const m of data.messages) {
     if (m.role !== "assistant") continue;
     const t = extractText(m.content);
-    if (t) await sendWhatsAppText(from, t);
+    if (t) await reply(t);
   }
 
   if (data.quote) {
     if (!data.quote.customer) data.quote.customer = {};
     if (!data.quote.customer.phone) data.quote.customer.phone = from;
     session.pendingQuote = data.quote;
-    await sendWhatsAppText(from, formatQuoteText(data.quote));
+    await reply(formatQuoteText(data.quote));
   } else if (data.question?.type === "single" || data.question?.type === "multi") {
     session.pendingOptions = data.question.options;
-    await sendWhatsAppText(from, formatOptionsText(data.question.options));
+    await reply(formatOptionsText(data.question.options));
   } else if (data.question?.type === "date") {
-    await sendWhatsAppText(from, `Merci d'indiquer une date (à partir du ${data.question.minDate}).`);
+    await reply(`Merci d'indiquer une date (à partir du ${data.question.minDate}).`);
   } else if (data.question?.type === "contact_form") {
-    await sendWhatsAppText(
-      from,
-      "Par exemple : Jean Dupont, jean.dupont@email.com, 079 123 45 67, Rue de la Gare 5, 1000 Lausanne"
-    );
+    await reply("Par exemple : Jean Dupont, jean.dupont@email.com, 079 123 45 67, Rue de la Gare 5, 1000 Lausanne");
   }
 }
 
