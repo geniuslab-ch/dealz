@@ -13,6 +13,7 @@ const {
   sendFollowupToCustomer,
   sendBookingConfirmation,
   sendInstallRequestNotification,
+  sendReferralNotification,
 } = require("./src/notifications");
 const store = require("./src/store");
 const { recordTrialAttempt } = require("./src/leads");
@@ -142,6 +143,53 @@ app.post("/api/install-request", async (req, res) => {
   }
   if (crmResult.status === "rejected") {
     console.error("[install-request] CRM forward failed:", crmResult.reason);
+  }
+
+  res.json({ ok: true });
+});
+
+// Submitted by docs/parrainage.html when a client nominates a colleague.
+// Same two-side-effects, never-block-the-visitor posture as install-request
+// above: an internal notification e-mail, and forwarding into the CRM so
+// the referred colleague becomes a real prospect (source: "referral").
+app.post("/api/referral", async (req, res) => {
+  const { referredById, companyName, contactEmail, contactPhone, note } = req.body || {};
+
+  if (!referredById) {
+    return res.status(400).json({ error: "referredById requis" });
+  }
+  if (!contactEmail) {
+    return res.status(400).json({ error: "E-mail du confrère requis" });
+  }
+
+  const payload = { referredById, companyName, contactEmail, contactPhone, note };
+
+  const [emailResult, crmResult] = await Promise.allSettled([
+    sendReferralNotification(payload),
+    (async () => {
+      if (!process.env.CRM_REFERRAL_URL || !process.env.CRM_INBOUND_SECRET) {
+        return { skipped: "CRM_REFERRAL_URL/CRM_INBOUND_SECRET not configured" };
+      }
+      const resp = await fetch(process.env.CRM_REFERRAL_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
+        body: JSON.stringify(payload),
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || `CRM responded ${resp.status}`);
+      return data;
+    })(),
+  ]);
+
+  if (emailResult.status === "rejected") {
+    console.error("[referral] notification e-mail failed:", emailResult.reason);
+  }
+  if (crmResult.status === "rejected") {
+    console.error("[referral] CRM forward failed:", crmResult.reason);
+    // Unlike install-request, a failed CRM forward here means the referred
+    // lead was NOT recorded anywhere — surface this as a real error rather
+    // than a silent success, so the visitor knows to try again.
+    return res.status(502).json({ error: "Une erreur est survenue — réessayez dans un instant." });
   }
 
   res.json({ ok: true });

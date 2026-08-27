@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Parrainage — Dealz</title>
+  <meta name="description" content="Vous connaissez un confrère qui perd encore des demandes ? Parrainez-le chez Dealz." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <img src="/images/dealz-logo-sm.png" alt="Dealz" />
+      <span class="nav-slogan">Keep your website.<br>Keep your tools.<br>Add Dealz.</span>
+    </div>
+    <div class="nav-links">
+      <a href="/index.html">Accueil</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Programme de parrainage</span>
+      <h1>VOUS AVEZ GARDÉ<br>LE SECRET ASSEZ LONGTEMPS.</h1>
+      <p class="hero-question">Un confrère perd encore des demandes le soir ?</p>
+      <p>Dites-le-nous en 30 secondes. On s'occupe de lui montrer Dealz — et vous, vous récupérez [réduction à définir] sur votre abonnement dès qu'il s'installe.</p>
+    </div>
+  </section>
+
+  <section id="parrainage-form-section">
+    <div class="section-inner" style="max-width: 560px;">
+      <div class="referral-card">
+        <div class="referral-card-head">
+          <div class="title">Parrainer un confrère</div>
+          <div class="subtitle">2 minutes, sans obligation pour lui</div>
+        </div>
+
+        <div id="referral-form">
+          <input class="dcf-input" id="rf-company" placeholder="Nom de son entreprise" />
+          <input class="dcf-input" id="rf-email" type="email" placeholder="Son e-mail professionnel" required />
+          <input class="dcf-input" id="rf-phone" placeholder="Son téléphone (optionnel)" />
+          <textarea class="dcf-input" id="rf-note" placeholder="Un mot pour lui (optionnel) — ex : « Regarde ça, ça pourrait t'aider »" rows="3" style="resize: vertical; font-family: inherit;"></textarea>
+          <button class="dcf-submit" id="rf-submit">Envoyer le tuyau →</button>
+          <p class="dlg-msg" id="rf-msg"></p>
+        </div>
+
+        <div id="referral-success" style="display:none;">
+          <p style="font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 6px;">C'est envoyé. 🤝</p>
+          <p style="font-size: 13.5px; color: var(--muted); margin: 0;">On prend le relais avec votre confrère. Merci pour le coup de main — et pour la confiance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div>Dealz — Assistant de vente IA pour entreprises de nettoyage suisses. 🇨🇭 FR · DE · IT · EN (bientôt)</div>
+    <div class="site-footer-slogan">Keep your website. Keep your tools. Add Dealz.</div>
+  </footer>
+
+  <script src="/referral-form.js"></script>
+</body>
+</html>

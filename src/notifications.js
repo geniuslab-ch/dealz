@@ -264,6 +264,30 @@ async function sendInstallRequestNotification({
   });
 }
 
+// ---- Referral notification (docs/parrainage.html) ----
+async function sendReferralNotification({
+  referredById,
+  companyName,
+  contactEmail,
+  contactPhone,
+  note,
+  notifyEmail = DEALZ_TEAM_EMAIL,
+}) {
+  const html = `
+    <h2>🤝 Nouveau parrainage</h2>
+    <p><b>Parrainé par :</b> prospect CRM #${referredById}</p>
+    <p><b>Entreprise :</b> ${companyName || "(non fourni)"}<br/>
+       <b>E-mail :</b> ${contactEmail || "(non fourni)"}<br/>
+       <b>Téléphone :</b> ${contactPhone || "(non fourni)"}</p>
+    ${note ? `<p><b>Message :</b> ${note}</p>` : ""}
+  `;
+  return sendEmail({
+    to: notifyEmail,
+    subject: `🤝 Parrainage — ${companyName || contactEmail || "nouveau prospect"}`,
+    html,
+  });
+}
+
 module.exports = {
   sendEmail,
   sendDeclineNotification,
@@ -274,6 +298,7 @@ module.exports = {
   sendFollowupToCustomer,
   sendBookingConfirmation,
   sendInstallRequestNotification,
+  sendReferralNotification,
   googleCalendarLink,
   COMPANY_NOTIFY_EMAIL,
   DEALZ_TEAM_EMAIL,
