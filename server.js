@@ -62,6 +62,19 @@ app.post("/api/lead", async (req, res) => {
       return res.status(400).json({ error: "E-mail professionnel requis" });
     }
     const result = await recordTrialAttempt({ email, phone: phone || "", companyName: companyName || "" });
+
+    // Fire-and-forget: if this e-mail matches an existing CRM prospect
+    // (e.g. an outbound FREN target trying the real demo on their own),
+    // flip their demo_tested flag. Never blocks or fails the lead-gate
+    // response — same posture as the install-request forward.
+    if (process.env.CRM_DEMO_TESTED_URL && process.env.CRM_INBOUND_SECRET) {
+      fetch(process.env.CRM_DEMO_TESTED_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
+        body: JSON.stringify({ email }),
+      }).catch((err) => console.error("[lead] CRM demo_tested forward failed:", err.message));
+    }
+
     res.json(result);
   } catch (err) {
     console.error(err);
