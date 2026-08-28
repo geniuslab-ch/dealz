@@ -9,7 +9,7 @@ const APP_BASE_URL = process.env.APP_BASE_URL || "http://localhost:3000";
 // demo company's* inbox (SwissClean), used for notifications about a
 // demo visitor's own simulated booking. This one is Dealz's own real
 // inbox — for someone asking to install the real product on their site.
-const DEALZ_TEAM_EMAIL = process.env.DEALZ_TEAM_EMAIL || "dealz@mycountryisgoodat.com";
+const DEALZ_TEAM_EMAIL = process.env.DEALZ_TEAM_EMAIL || "info@dealz.website";
 
 let transporter = null;
 if (process.env.SMTP_HOST) {
