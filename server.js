@@ -347,22 +347,23 @@ app.post("/api/decline", async (req, res) => {
       summary = classified.summary;
     }
 
-    const declineToken = store.put({
-      type: "decline",
-      quote,
-      category: finalCategory,
-      summary,
-      rawText: text || "",
-      customer: customer || {},
-      status: "pending",
-    });
-
     const suggestedReply = await draftSuggestedReply({
       category: finalCategory,
       summary,
       rawText: text || "",
       quote,
       customer: customer || {},
+    });
+
+    const declineToken = await store.put({
+      type: "decline",
+      quote,
+      category: finalCategory,
+      summary,
+      rawText: text || "",
+      customer: customer || {},
+      suggestedReply,
+      status: "pending",
     });
 
     const emailResult = await sendDeclineNotification({
@@ -389,31 +390,37 @@ app.post("/api/decline", async (req, res) => {
   }
 });
 
-app.get("/api/counteroffer/:token", (req, res) => {
-  const entry = store.get(req.params.token);
-  if (!entry || entry.type !== "decline") return res.status(404).json({ error: "Introuvable ou expiré" });
-  const cfg = CATEGORIES[entry.category] || CATEGORIES.other;
-  res.json({
-    quote: entry.quote,
-    category: entry.category,
-    categoryLabel: cfg.label,
-    emoji: cfg.emoji,
-    action: cfg.action,
-    primaryCta: cfg.primaryCta,
-    secondaryCta: cfg.secondaryCta || null,
-    showTotal: cfg.showTotal,
-    summary: entry.summary,
-    rawText: entry.rawText,
-    customer: entry.customer,
-    status: entry.status,
-  });
+app.get("/api/counteroffer/:token", async (req, res) => {
+  try {
+    const entry = await store.get(req.params.token);
+    if (!entry || entry.type !== "decline") return res.status(404).json({ error: "Introuvable ou expiré" });
+    const cfg = CATEGORIES[entry.category] || CATEGORIES.other;
+    res.json({
+      quote: entry.quote,
+      category: entry.category,
+      categoryLabel: cfg.label,
+      emoji: cfg.emoji,
+      action: cfg.action,
+      primaryCta: cfg.primaryCta,
+      secondaryCta: cfg.secondaryCta || null,
+      showTotal: cfg.showTotal,
+      summary: entry.summary,
+      rawText: entry.rawText,
+      customer: entry.customer,
+      status: entry.status,
+      suggestedReply: entry.suggestedReply || null,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Internal error" });
+  }
 });
 
 // One endpoint, branching by the objection's configured action — this is
 // the owner's entire interface for every objection type, no dashboard.
 app.post("/api/counteroffer/:token", async (req, res) => {
   try {
-    const entry = store.get(req.params.token);
+    const entry = await store.get(req.params.token);
     if (!entry || entry.type !== "decline") return res.status(404).json({ error: "Introuvable ou expiré" });
 
     const cfg = CATEGORIES[entry.category] || CATEGORIES.other;
@@ -425,26 +432,38 @@ app.post("/api/counteroffer/:token", async (req, res) => {
     // just closes the loop. Distinct from the primary action for that
     // category, so it's checked first regardless of cfg.action.
     if (req.body.action === "keep") {
-      store.update(req.params.token, { status: "kept" });
+      await store.update(req.params.token, { status: "kept" });
       return res.json({ ok: true });
+    }
+
+    // The "Réponse suggérée" block on every decline notification, however
+    // it was categorized — the owner edits the AI-drafted reply and sends
+    // it as-is, independent of whatever category-specific action (revise,
+    // counteroffer, etc.) also applies. Checked before cfg.action for the
+    // same reason as "keep" above.
+    if (req.body.action === "send-reply") {
+      if (!message.trim()) return res.status(400).json({ error: "Message requis" });
+      const emailResult = await sendReplyToCustomer({ message, customer });
+      await store.update(req.params.token, { status: "replied" });
+      return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     if (cfg.action === "reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
       const emailResult = await sendReplyToCustomer({ message, customer });
-      store.update(req.params.token, { status: "replied" });
+      await store.update(req.params.token, { status: "replied" });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     if (cfg.action === "close" || cfg.action === "review") {
-      store.update(req.params.token, { status: "closed" });
+      await store.update(req.params.token, { status: "closed" });
       return res.json({ ok: true });
     }
 
     if (cfg.action === "counteroffer") {
       const amount = Number(req.body.amount);
       if (!amount || amount <= 0) return res.status(400).json({ error: "Montant invalide" });
-      const offerToken = store.put({
+      const offerToken = await store.put({
         type: "offer",
         kind: "price",
         originalQuote: entry.quote,
@@ -452,7 +471,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         message,
         customer,
       });
-      store.update(req.params.token, { status: "counter-sent" });
+      await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendCounterofferToCustomer({
         quote: entry.quote,
         amount,
@@ -467,7 +486,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
     if (cfg.action === "reschedule") {
       const date = (req.body.date || "").trim();
       if (!date) return res.status(400).json({ error: "Date requise" });
-      const offerToken = store.put({
+      const offerToken = await store.put({
         type: "offer",
         kind: "date",
         originalQuote: entry.quote,
@@ -476,7 +495,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         message,
         customer,
       });
-      store.update(req.params.token, { status: "counter-sent" });
+      await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRescheduleToCustomer({
         date,
         message,
@@ -492,7 +511,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
       const items = entry.quote.items.filter((i) => !removeLabels.includes(i.label));
       const total = items.reduce((sum, i) => sum + i.amount, 0);
       const revisedQuote = { currency: entry.quote.currency, items, total };
-      const offerToken = store.put({
+      const offerToken = await store.put({
         type: "offer",
         kind: "revise",
         originalQuote: entry.quote,
@@ -501,7 +520,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         message,
         customer,
       });
-      store.update(req.params.token, { status: "counter-sent" });
+      await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRevisedOfferToCustomer({
         quote: revisedQuote,
         message,
@@ -513,14 +532,14 @@ app.post("/api/counteroffer/:token", async (req, res) => {
     }
 
     if (cfg.action === "followup") {
-      const offerToken = store.put({
+      const offerToken = await store.put({
         type: "offer",
         kind: "followup",
         originalQuote: entry.quote,
         amount: entry.quote.total,
         customer,
       });
-      store.update(req.params.token, { status: "followup-sent" });
+      await store.update(req.params.token, { status: "followup-sent" });
       const emailResult = await sendFollowupToCustomer({
         quote: entry.quote,
         customer,
@@ -537,28 +556,33 @@ app.post("/api/counteroffer/:token", async (req, res) => {
   }
 });
 
-app.get("/api/offer/:token", (req, res) => {
-  const entry = store.get(req.params.token);
-  if (!entry || entry.type !== "offer") return res.status(404).json({ error: "Introuvable ou expiré" });
-  res.json({
-    kind: entry.kind,
-    amount: entry.amount,
-    date: entry.date,
-    revisedQuote: entry.revisedQuote,
-    originalQuote: entry.originalQuote,
-    message: entry.message,
-    customer: entry.customer,
-  });
+app.get("/api/offer/:token", async (req, res) => {
+  try {
+    const entry = await store.get(req.params.token);
+    if (!entry || entry.type !== "offer") return res.status(404).json({ error: "Introuvable ou expiré" });
+    res.json({
+      kind: entry.kind,
+      amount: entry.amount,
+      date: entry.date,
+      revisedQuote: entry.revisedQuote,
+      originalQuote: entry.originalQuote,
+      message: entry.message,
+      customer: entry.customer,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Internal error" });
+  }
 });
 
 app.post("/api/offer/:token/respond", async (req, res) => {
   try {
-    const entry = store.get(req.params.token);
+    const entry = await store.get(req.params.token);
     if (!entry || entry.type !== "offer") return res.status(404).json({ error: "Introuvable ou expiré" });
 
     const action = req.body.action;
     if (action === "decline") {
-      store.update(req.params.token, { status: "declined" });
+      await store.update(req.params.token, { status: "declined" });
       return res.json({ ok: true });
     }
 
@@ -573,7 +597,7 @@ app.post("/api/offer/:token/respond", async (req, res) => {
           };
 
     const result = await sendBookingConfirmation({ quote, customer });
-    store.update(req.params.token, { status: "accepted" });
+    await store.update(req.params.token, { status: "accepted" });
 
     res.json({
       ok: true,

@@ -46,6 +46,14 @@
 
     function fmt(n) { return "CHF " + Number(n).toFixed(2); }
 
+    // rawText/suggestedReply/customer.name are customer-supplied free text
+    // (the decline reason someone typed) — must be escaped before going
+    // into innerHTML, or a customer could inject markup into a page the
+    // business owner views.
+    function escapeHtml(s) {
+      return (s || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
     async function load() {
       if (!token) { card.innerHTML = "<p>Lien invalide — aucun jeton fourni.</p>"; return; }
       try {
@@ -63,13 +71,13 @@
 
     function contextHtml(data) {
       const itemsHtml = data.quote.items
-        .map((i) => `<div class="row"><span>${i.label}</span><span>${fmt(i.amount)}</span></div>`)
+        .map((i) => `<div class="row"><span>${escapeHtml(i.label)}</span><span>${fmt(i.amount)}</span></div>`)
         .join("");
       return `
         <span class="ao-badge">${data.emoji} ${data.categoryLabel}</span>
         <h2 style="margin:6px 0 4px;">${data.primaryCta}</h2>
-        <p style="color:var(--muted); font-size:13.5px; margin:0 0 10px;">Devis refusé par ${data.customer.name || "le client"}</p>
-        ${data.rawText ? `<div class="ao-label">Message du client</div><div class="ao-value">« ${data.rawText} »</div>` : ""}
+        <p style="color:var(--muted); font-size:13.5px; margin:0 0 10px;">Devis refusé par ${escapeHtml(data.customer.name) || "le client"}</p>
+        ${data.rawText ? `<div class="ao-label">Message du client</div><div class="ao-value">« ${escapeHtml(data.rawText)} »</div>` : ""}
         ${data.showTotal ? `<div class="ao-label">Devis original</div><div class="ao-quote">${itemsHtml}<div class="row total"><span>TOTAL</span><span>${fmt(data.quote.total)}</span></div></div>` : ""}
       `;
     }
@@ -146,6 +154,17 @@
         <button class="ao-btn" id="ao-submit">${data.action === "followup" ? "Relancer maintenant" : data.action === "close" || data.action === "review" ? "Clôturer la demande" : "Envoyer au client"}</button>
         ${data.secondaryCta ? `<button class="ao-btn secondary" id="ao-secondary">${data.secondaryCta}</button>` : ""}
         <div class="ao-msg" id="ao-msg"></div>
+        ${
+          data.suggestedReply
+            ? `
+        <hr style="border:none; border-top:1px solid var(--line); margin:22px 0;" />
+        <div class="ao-label">💬 Réponse suggérée — relisez et adaptez avant l'envoi</div>
+        <textarea class="ao-textarea" id="ao-suggested-reply" style="min-height:110px;">${escapeHtml(data.suggestedReply)}</textarea>
+        <button class="ao-btn secondary" id="ao-send-suggested">✏️ Modifier et envoyer</button>
+        <div class="ao-msg" id="ao-suggested-msg"></div>
+        `
+            : ""
+        }
       `;
 
       const msgEl = document.getElementById("ao-msg");
@@ -183,6 +202,20 @@
         secondaryBtn.addEventListener("click", () => {
           submit(secondaryBtn, msgEl, { action: "keep" }, "✓ Prix maintenu — demande clôturée.");
           submitBtn.disabled = true;
+        });
+      }
+
+      const sendSuggestedBtn = document.getElementById("ao-send-suggested");
+      if (sendSuggestedBtn) {
+        sendSuggestedBtn.addEventListener("click", () => {
+          const replyText = document.getElementById("ao-suggested-reply").value.trim();
+          if (!replyText) return document.getElementById("ao-suggested-reply").focus();
+          submit(
+            sendSuggestedBtn,
+            document.getElementById("ao-suggested-msg"),
+            { action: "send-reply", message: replyText },
+            "✓ Réponse envoyée au client."
+          );
         });
       }
     }

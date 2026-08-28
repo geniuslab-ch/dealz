@@ -199,21 +199,22 @@ async function handleIncomingMessage(phoneNumberId, from, rawText) {
       session.pendingQuote = null;
       try {
         const classified = await classifyObjection(text);
-        const declineToken = store.put({
-          type: "decline",
-          quote,
-          category: classified.category,
-          summary: classified.summary,
-          rawText: text,
-          customer: quote.customer || {},
-          status: "pending",
-        });
         const suggestedReply = await draftSuggestedReply({
           category: classified.category,
           summary: classified.summary,
           rawText: text,
           quote,
           customer: quote.customer || {},
+        });
+        const declineToken = await store.put({
+          type: "decline",
+          quote,
+          category: classified.category,
+          summary: classified.summary,
+          rawText: text,
+          customer: quote.customer || {},
+          suggestedReply,
+          status: "pending",
         });
         await sendDeclineNotification({
           quote,
