@@ -302,7 +302,7 @@
     const integrateLink = el("a", "dpc-btn dpc-btn-primary", "Intégrer Dealz");
     integrateLink.href = "/index.html#contact";
     const contactLink = el("a", "dpc-btn dpc-btn-secondary", "Nous contacter");
-    contactLink.href = "mailto:info@dealz.website";
+    contactLink.href = "mailto:dealz@dealz.website";
     actions.appendChild(integrateLink);
     actions.appendChild(contactLink);
     wrap.appendChild(actions);
