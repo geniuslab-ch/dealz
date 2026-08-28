@@ -245,6 +245,11 @@
 
     question.options.forEach((opt) => {
       const btn = el("button", "dop-chip", opt.label);
+      // "Aucun(e)" is mutually exclusive with every other option in the
+      // same multi-select question — picking it means none of the others
+      // apply, so they're greyed out and cleared; picking any real option
+      // clears "Aucun(e)" back the other way.
+      const isNoneOption = /^aucun/i.test(opt.label);
       if (question.type === "multi" && preselected.has(opt.value)) {
         btn.classList.add("selected");
         selected.add(opt.label);
@@ -254,6 +259,24 @@
           btn.classList.toggle("selected");
           if (selected.has(opt.label)) selected.delete(opt.label);
           else selected.add(opt.label);
+
+          const otherButtons = Array.from(chipsRow.querySelectorAll("button")).filter((b) => b !== btn);
+          if (isNoneOption) {
+            const nowSelected = btn.classList.contains("selected");
+            otherButtons.forEach((otherBtn) => {
+              otherBtn.disabled = nowSelected;
+              if (nowSelected && otherBtn.classList.contains("selected")) {
+                otherBtn.classList.remove("selected");
+                selected.delete(otherBtn.textContent);
+              }
+            });
+          } else if (btn.classList.contains("selected")) {
+            const noneBtn = otherButtons.find((b) => /^aucun/i.test(b.textContent));
+            if (noneBtn && noneBtn.classList.contains("selected")) {
+              noneBtn.classList.remove("selected");
+              selected.delete(noneBtn.textContent);
+            }
+          }
         } else {
           wrap.querySelectorAll("button").forEach((n) => (n.disabled = true));
           onAnswer(opt.label);

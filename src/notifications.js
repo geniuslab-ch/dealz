@@ -2,7 +2,15 @@ const nodemailer = require("nodemailer");
 const { CATEGORIES } = require("./objections");
 
 const COMPANY_NAME = "SwissClean Sàrl";
-const COMPANY_NOTIFY_EMAIL = process.env.COMPANY_NOTIFY_EMAIL || "reservations@swissclean.demo";
+// Falls back to Dealz's own real inbox, NOT a fictional address — this used
+// to default to "reservations@swissclean.demo", which doesn't exist and
+// started hard-bouncing every notification the moment real SMTP went live
+// (a customer accepting/declining on the demo with no companyEmail
+// captured would see a raw SMTP error instead of a confirmation). The
+// normal path still overrides this with the real visitor-supplied
+// companyEmail (see docs/lead-gate.js / getCompanyEmail()) — this is only
+// the safety-net default when that's missing.
+const COMPANY_NOTIFY_EMAIL = process.env.COMPANY_NOTIFY_EMAIL || "dealz@dealz.website";
 const APP_BASE_URL = process.env.APP_BASE_URL || "http://localhost:3000";
 
 // Distinct from COMPANY_NOTIFY_EMAIL above: that one is the *fictional
@@ -63,6 +71,13 @@ function quoteItemsHtml(quote) {
   return quote.items
     .map((i) => `<tr><td>${i.label}</td><td style="text-align:right">${fmtCHF(i.amount)}</td></tr>`)
     .join("");
+}
+
+// Every customer-facing e-mail (counteroffer, reschedule, revised offer,
+// free-text reply, follow-up) ends with this — without it, a message the
+// owner personally wrote reads as if it came from nobody in particular.
+function signatureHtml() {
+  return `<p style="margin-top:20px;">Cordialement,<br/><b>${COMPANY_NAME}</b></p>`;
 }
 
 /**
@@ -145,6 +160,7 @@ async function sendCounterofferToCustomer({ quote, amount, message, customer, of
     <p style="font-size:22px;font-weight:bold;color:#0b5fff;">${fmtCHF(amount)}</p>
     ${message ? `<p>${message}</p>` : ""}
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir l'offre</a></p>
+    ${signatureHtml()}
   `;
   return sendEmail({ to: customer.email, subject: `Nouvelle offre — ${fmtCHF(amount)}`, html });
 }
@@ -159,6 +175,7 @@ async function sendRescheduleToCustomer({ date, message, customer, offerToken, b
     <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${date}</p>
     ${message ? `<p>${message}</p>` : ""}
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir la proposition</a></p>
+    ${signatureHtml()}
   `;
   return sendEmail({ to: customer.email, subject: `Nouvelle date proposée`, html });
 }
@@ -174,6 +191,7 @@ async function sendRevisedOfferToCustomer({ quote, message, customer, offerToken
     <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${fmtCHF(quote.total)}</p>
     ${message ? `<p>${message}</p>` : ""}
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir l'offre révisée</a></p>
+    ${signatureHtml()}
   `;
   return sendEmail({ to: customer.email, subject: `Devis révisé — ${fmtCHF(quote.total)}`, html });
 }
@@ -184,6 +202,7 @@ async function sendReplyToCustomer({ message, customer }) {
     <h2>Réponse de ${COMPANY_NAME}</h2>
     <p>Bonjour ${customer.name || ""},</p>
     <p>${message}</p>
+    ${signatureHtml()}
   `;
   return sendEmail({ to: customer.email, subject: `Réponse à votre question`, html });
 }
@@ -197,6 +216,7 @@ async function sendFollowupToCustomer({ quote, customer, offerToken, baseUrl = A
     <p>Nous voulions juste nous assurer que vous aviez toutes les informations nécessaires. Votre devis reste disponible :</p>
     <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${fmtCHF(quote.total)}</p>
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Revoir le devis</a></p>
+    ${signatureHtml()}
   `;
   return sendEmail({ to: customer.email, subject: `Toujours intéressé(e) par notre offre ?`, html });
 }
@@ -218,6 +238,7 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
     <p>Merci ${customer.name || ""} ! Votre nettoyage est confirmé pour <b>${fmtCHF(quote.total)}</b>.</p>
     <table>${quoteItemsHtml(quote)}</table>
     <p><a href="${calLink}">Ajouter à mon Google Agenda</a></p>
+    ${signatureHtml()}
   `;
   const companyHtml = `
     <h2>✓ Nouvelle réservation confirmée</h2>
@@ -230,14 +251,29 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
     <p><a href="${calLink}">Ajouter à l'agenda Google de l'entreprise</a></p>
   `;
 
-  const results = await Promise.all([
+  // allSettled, not all: a failure notifying the company (e.g. an unreal
+  // fallback address) must never break the confirmation for the customer,
+  // who's watching this happen live and would otherwise see a raw SMTP
+  // error instead of "your booking is confirmed".
+  const [customerResult, companyResult] = await Promise.allSettled([
     customer.email
       ? sendEmail({ to: customer.email, subject: "✓ Réservation confirmée", html: customerHtml })
       : Promise.resolve({ simulated: true, skipped: "no customer email" }),
     sendEmail({ to: notifyEmail, subject: "✓ Nouvelle réservation confirmée", html: companyHtml }),
   ]);
 
-  return { calendarLink: calLink, customerEmail: results[0], companyEmail: results[1] };
+  if (customerResult.status === "rejected") {
+    console.error("[sendBookingConfirmation] customer confirmation failed:", customerResult.reason);
+  }
+  if (companyResult.status === "rejected") {
+    console.error("[sendBookingConfirmation] company notification failed:", companyResult.reason);
+  }
+
+  return {
+    calendarLink: calLink,
+    customerEmail: customerResult.status === "fulfilled" ? customerResult.value : { simulated: true, failed: true },
+    companyEmail: companyResult.status === "fulfilled" ? companyResult.value : { simulated: true, failed: true },
+  };
 }
 
 // ---- Install-request notification (docs/contact-flow.js's #contact flow) ----

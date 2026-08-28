@@ -363,6 +363,7 @@ app.post("/api/decline", async (req, res) => {
       rawText: text || "",
       customer: customer || {},
       suggestedReply,
+      companyEmail: companyEmail || null,
       status: "pending",
     });
 
@@ -470,6 +471,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         amount,
         message,
         customer,
+        companyEmail: entry.companyEmail,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendCounterofferToCustomer({
@@ -494,6 +496,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         date,
         message,
         customer,
+        companyEmail: entry.companyEmail,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRescheduleToCustomer({
@@ -519,6 +522,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         amount: total,
         message,
         customer,
+        companyEmail: entry.companyEmail,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRevisedOfferToCustomer({
@@ -538,6 +542,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         originalQuote: entry.quote,
         amount: entry.quote.total,
         customer,
+        companyEmail: entry.companyEmail,
       });
       await store.update(req.params.token, { status: "followup-sent" });
       const emailResult = await sendFollowupToCustomer({
@@ -596,7 +601,7 @@ app.post("/api/offer/:token/respond", async (req, res) => {
             total: entry.amount,
           };
 
-    const result = await sendBookingConfirmation({ quote, customer });
+    const result = await sendBookingConfirmation({ quote, customer, notifyEmail: entry.companyEmail || undefined });
     await store.update(req.params.token, { status: "accepted" });
 
     res.json({
