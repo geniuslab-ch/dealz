@@ -76,25 +76,15 @@ function quoteItemsHtml(quote) {
 // Every customer-facing e-mail (counteroffer, reschedule, revised offer,
 // free-text reply, follow-up) ends with this — without it, a message the
 // owner personally wrote reads as if it came from nobody in particular.
+// This signs off as the CLEANING COMPANY, not Dealz — the customer's
+// relationship is with their cleaner, not with the software behind it.
+// No logo/contact block beyond the name: this single-tenant demo's
+// "SwissClean Sàrl" is fictional, so there's no real logo or phone number
+// to show — inventing one would be worse than just the name.
 function signatureHtml() {
   return `
-    <p style="margin-top:20px; margin-bottom:14px;">Cordialement,</p>
-    <table cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, Helvetica, sans-serif; color:#10131a;">
-      <tr>
-        <td style="padding-right:16px; vertical-align:top;">
-          <img src="https://dealz.website/images/dealz-logo-mascot.png" width="70" height="70" alt="Dealz" style="display:block; border-radius:12px;" />
-        </td>
-        <td style="vertical-align:top; border-left:2px solid #0b5fff; padding-left:16px;">
-          <div style="font-size:15px; font-weight:bold; color:#10131a;">Équipe ${COMPANY_NAME}</div>
-          <div style="font-size:13px; font-weight:bold; color:#0b5fff; margin-top:6px;">⚡ Dealz</div>
-          <div style="font-size:11.5px; font-style:italic; color:#5b6472; margin-top:2px;">Keep your website. Keep your tools. Add Dealz.</div>
-          <div style="font-size:12px; color:#5b6472; margin-top:8px;">
-            <div>dealz@dealz.website</div>
-            <div><a href="https://dealz.website" style="color:#0b5fff; text-decoration:none;">dealz.website</a></div>
-          </div>
-        </td>
-      </tr>
-    </table>
+    <p style="margin-top:20px; margin-bottom:2px;">Cordialement,</p>
+    <p style="margin:0; font-weight:bold;">${COMPANY_NAME}</p>
   `;
 }
 
