@@ -47,13 +47,21 @@ async function getCompanyByPhoneNumberId(phoneNumberId) {
   if (!phoneNumberId) return null;
 
   if (supabase) {
-    const { data, error } = await supabase
-      .from("companies")
-      .select("*")
-      .eq("phone_number_id", phoneNumberId)
-      .maybeSingle();
-    if (error) throw error;
-    if (data) return rowToCompany(data);
+    try {
+      const { data, error } = await supabase
+        .from("companies")
+        .select("*")
+        .eq("phone_number_id", phoneNumberId)
+        .maybeSingle();
+      if (error) throw error;
+      if (data) return rowToCompany(data);
+    } catch (err) {
+      // A lookup failure (table not yet created, transient Supabase
+      // hiccup) must never leave a real customer's WhatsApp message
+      // unanswered — log it and fall through to the same fallback as an
+      // unrecognized number, rather than throwing and breaking the reply.
+      console.error("[companies] getCompanyByPhoneNumberId lookup failed:", err.message);
+    }
   }
 
   // Falls back to the demo company when the inbound number is the one
@@ -67,12 +75,19 @@ async function getCompanyByPhoneNumberId(phoneNumberId) {
 // single "default slug"), so an unrecognized or missing slug just means
 // "use the demo": callers pass the resolved company straight to
 // runTurn/runTurnMock, which already default to the demo when given
-// `undefined`.
+// `undefined`. A lookup failure (table not yet created, transient
+// Supabase hiccup) degrades the same way — never breaks the quote flow
+// for a visitor just because tenant resolution hit a snag.
 async function getCompanyBySlug(slug) {
   if (!slug || !supabase) return null;
-  const { data, error } = await supabase.from("companies").select("*").eq("id", slug).maybeSingle();
-  if (error) throw error;
-  return data ? rowToCompany(data) : null;
+  try {
+    const { data, error } = await supabase.from("companies").select("*").eq("id", slug).maybeSingle();
+    if (error) throw error;
+    return data ? rowToCompany(data) : null;
+  } catch (err) {
+    console.error("[companies] getCompanyBySlug lookup failed:", err.message);
+    return null;
+  }
 }
 
 module.exports = { getCompanyByPhoneNumberId, getCompanyBySlug, defaultCompany };
