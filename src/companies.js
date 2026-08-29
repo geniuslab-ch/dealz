@@ -31,6 +31,8 @@ function defaultCompany() {
     notifyEmail: process.env.COMPANY_NOTIFY_EMAIL,
     pricing: defaultPricing,
     signature: null,
+    logoUrl: null,
+    tagline: null,
   };
 }
 
@@ -42,6 +44,8 @@ function rowToCompany(row) {
     notifyEmail: row.notify_email,
     pricing: row.pricing,
     signature: row.signature || null,
+    logoUrl: row.logo_url || null,
+    tagline: row.tagline || null,
   };
 }
 
