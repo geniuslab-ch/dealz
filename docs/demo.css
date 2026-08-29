@@ -163,3 +163,20 @@ body.swissclean { background: var(--sc-bg); color: var(--sc-ink); }
 
 /* Quote tab intro line */
 .sc-devis-note { text-align: center; max-width: 600px; margin: 0 auto 30px; color: var(--sc-muted); font-size: 15px; }
+
+/* Devis mode tabs — the four "how this looks on your site" options */
+.devis-mode-tabs {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+  max-width: 720px; margin: 0 auto 26px;
+}
+.dmt-btn {
+  background: white; border: 1.5px solid var(--sc-line); border-radius: 20px;
+  padding: 9px 18px; font-family: inherit; font-size: 13.5px; font-weight: 700;
+  color: var(--sc-muted); cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.dmt-btn:hover { border-color: var(--sc-teal); color: var(--sc-teal-dark); }
+.dmt-btn.active { background: var(--sc-teal-dark); border-color: var(--sc-teal-dark); color: white; }
+
+.devis-mode-panel { display: none; }
+.devis-mode-panel.active { display: block; }
+.devis-mode-try { text-align: center; padding: 34px 0 44px; }

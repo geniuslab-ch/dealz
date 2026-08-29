@@ -1,6 +1,6 @@
 /**
- * Unhides docs/demo.html's "Essayer sur WhatsApp" card once a real trial
- * number is configured server-side (GET /api/whatsapp-trial) — stays
+ * Unhides docs/demo.html's "WhatsApp Business" devis-mode tab once a real
+ * trial number is configured server-side (GET /api/whatsapp-trial) — stays
  * hidden entirely (not shown as a broken/disabled option) until then, same
  * graceful-degradation posture as the rest of this codebase.
  */
@@ -10,19 +10,19 @@
   }
 
   async function init() {
-    const card = document.getElementById("whatsapp-trial-card");
+    const tab = document.getElementById("devis-whatsapp-tab");
     const link = document.getElementById("whatsapp-trial-link");
-    if (!card || !link) return;
+    if (!tab || !link) return;
 
     try {
       const res = await fetch(apiUrl("/api/whatsapp-trial"));
       const data = await res.json();
       if (data.enabled && data.waLink) {
         link.href = data.waLink;
-        card.style.display = "";
+        tab.style.display = "";
       }
     } catch (err) {
-      // No backend reachable (e.g. static hosting) — leave the card hidden.
+      // No backend reachable (e.g. static hosting) — leave the tab hidden.
     }
   }
 

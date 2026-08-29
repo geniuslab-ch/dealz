@@ -116,59 +116,72 @@
       <h2 class="sc-title">Votre prix en moins d'une minute</h2>
       <p class="sc-devis-note">Répondez à quelques questions sur votre logement — vous recevrez un devis réel, que vous pourrez accepter ou refuser directement ici.</p>
 
-      <div class="demo-channel-choice cards-grid cols-2">
-        <div class="svc-card c-blue channel-card">
-          <div class="svc-icon">💻</div>
-          <h3>Sur le site</h3>
-          <p>Vivez l'expérience telle que vos clients la vivent depuis votre site web.</p>
-          <a href="#quote-wrap-anchor" class="btn btn-secondary">Essayer ici ↓</a>
-        </div>
-        <div class="svc-card c-sky channel-card" id="whatsapp-trial-card" style="display: none;">
-          <div class="svc-icon">📱</div>
-          <h3>Sur WhatsApp</h3>
-          <p>Vivez l'expérience telle que vos clients la vivent en vous écrivant directement — depuis votre propre WhatsApp, sans rien installer.</p>
-          <a href="#" id="whatsapp-trial-link" class="btn btn-primary" target="_blank" rel="noopener">Essayer sur WhatsApp →</a>
+      <div class="devis-mode-tabs" id="devis-mode-tabs">
+        <button class="dmt-btn active" data-devis-mode="chat">💬 Widget de chat</button>
+        <button class="dmt-btn" data-devis-mode="popup">🪟 Pop-up</button>
+        <button class="dmt-btn" data-devis-mode="page">📄 Onglet dédié</button>
+        <button class="dmt-btn" data-devis-mode="whatsapp" id="devis-whatsapp-tab" style="display: none">📱 WhatsApp Business</button>
+      </div>
+
+      <div class="devis-mode-panel active" data-devis-panel="chat">
+        <p class="sc-devis-note">Une bulle flottante sur votre site, dans un coin de l'écran — l'intégration la plus simple : une seule ligne de code, fonctionne sur n'importe quelle plateforme (Wix, Shopify, WordPress, site fait main…).</p>
+        <div class="quote-wrap" id="quote-wrap-anchor">
+          <div class="quote-side">
+            <h3>Comment ça marche</h3>
+            <div class="flow-steps">
+              <div class="flow-step"><div class="num">1</div><span class="label">Vous décrivez votre besoin</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">2</div><span class="label">Quelques questions rapides</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">3</div><span class="label">Calcul selon notre grille tarifaire</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">4</div><span class="label">Devis ferme affiché</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">5</div><span class="label">Vous acceptez ou refusez</span></div>
+            </div>
+          </div>
+
+          <div class="quote-panel">
+            <div class="quote-panel-head">
+              <div class="title">SwissClean · Devis</div>
+              <div class="subtitle">Réponse habituellement instantanée</div>
+            </div>
+
+            <div class="dealz-lead-gate" id="dealz-lead-gate">
+              <p class="dlg-intro">Avant votre devis instantané, laissez-nous vos coordonnées professionnelles :</p>
+              <input class="dcf-input" id="dlg-company" placeholder="Nom de votre entreprise (optionnel)" />
+              <input class="dcf-input" id="dlg-email" type="email" placeholder="E-mail professionnel" required />
+              <input class="dcf-input" id="dlg-phone" placeholder="Téléphone (optionnel)" />
+              <button class="dcf-submit" id="dlg-submit">Essayer la démo</button>
+              <p class="dlg-msg" id="dlg-msg"></p>
+            </div>
+
+            <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+              <div class="dealz-messages" id="dealz-messages"></div>
+              <div class="dealz-inputbar">
+                <input id="dealz-input" type="text" placeholder="Décrivez votre besoin de nettoyage…" autocomplete="off" />
+                <button id="dealz-send">Envoyer</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="quote-wrap" id="quote-wrap-anchor">
-        <div class="quote-side">
-          <h3>Comment ça marche</h3>
-          <div class="flow-steps">
-            <div class="flow-step"><div class="num">1</div><span class="label">Vous décrivez votre besoin</span></div>
-            <div class="flow-connector"></div>
-            <div class="flow-step"><div class="num">2</div><span class="label">Quelques questions rapides</span></div>
-            <div class="flow-connector"></div>
-            <div class="flow-step"><div class="num">3</div><span class="label">Calcul selon notre grille tarifaire</span></div>
-            <div class="flow-connector"></div>
-            <div class="flow-step"><div class="num">4</div><span class="label">Devis ferme affiché</span></div>
-            <div class="flow-connector"></div>
-            <div class="flow-step"><div class="num">5</div><span class="label">Vous acceptez ou refusez</span></div>
-          </div>
+      <div class="devis-mode-panel" data-devis-panel="popup">
+        <p class="sc-devis-note">Un bouton « Devis » dans votre menu ouvre le même devis en plein écran, dans sa propre fenêtre — davantage d'espace que la bulle, sans jamais quitter votre site.</p>
+        <div class="devis-mode-try">
+          <button class="sc-btn sc-btn-primary" id="try-popup-btn">Essayer le pop-up →</button>
         </div>
+      </div>
 
-        <div class="quote-panel">
-          <div class="quote-panel-head">
-            <div class="title">SwissClean · Devis</div>
-            <div class="subtitle">Réponse habituellement instantanée</div>
-          </div>
+      <div class="devis-mode-panel" data-devis-panel="page">
+        <p class="sc-devis-note">Le devis vit sur une vraie page de votre site, sous votre propre en-tête et navigation — exactement comme <b>cette page</b> : le bouton « ✨ Obtenir un devis » du menu ci-dessus vous a mené ici, sous l'en-tête SwissClean, sans jamais le quitter.</p>
+      </div>
 
-          <div class="dealz-lead-gate" id="dealz-lead-gate">
-            <p class="dlg-intro">Avant votre devis instantané, laissez-nous vos coordonnées professionnelles :</p>
-            <input class="dcf-input" id="dlg-company" placeholder="Nom de votre entreprise (optionnel)" />
-            <input class="dcf-input" id="dlg-email" type="email" placeholder="E-mail professionnel" required />
-            <input class="dcf-input" id="dlg-phone" placeholder="Téléphone (optionnel)" />
-            <button class="dcf-submit" id="dlg-submit">Essayer la démo</button>
-            <p class="dlg-msg" id="dlg-msg"></p>
-          </div>
-
-          <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
-            <div class="dealz-messages" id="dealz-messages"></div>
-            <div class="dealz-inputbar">
-              <input id="dealz-input" type="text" placeholder="Décrivez votre besoin de nettoyage…" autocomplete="off" />
-              <button id="dealz-send">Envoyer</button>
-            </div>
-          </div>
+      <div class="devis-mode-panel" data-devis-panel="whatsapp">
+        <p class="sc-devis-note">Vos clients écrivent directement sur votre WhatsApp Business — sans rien installer sur leur téléphone.</p>
+        <div class="devis-mode-try">
+          <a href="#" id="whatsapp-trial-link" class="sc-btn sc-btn-primary" target="_blank" rel="noopener">Essayer sur WhatsApp →</a>
         </div>
       </div>
 
@@ -205,6 +218,28 @@
         el.classList.add("show");
         el.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
+    });
+
+    // Switches between the four "how this looks on your site" panels —
+    // same idea as demo-tabs.js's top nav, scoped to this section instead.
+    (function () {
+      var tabButtons = document.querySelectorAll("#devis-mode-tabs .dmt-btn");
+      var panels = document.querySelectorAll(".devis-mode-panel");
+      tabButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          tabButtons.forEach(function (b) { b.classList.toggle("active", b === btn); });
+          panels.forEach(function (p) {
+            p.classList.toggle("active", p.dataset.devisPanel === btn.dataset.devisMode);
+          });
+        });
+      });
+    })();
+
+    // Lets the "pop-up" tab actually open the real pop-up (quote-window.html)
+    // rather than just describe it — same mechanism a real client site uses
+    // via embed.js's data-dealz-mode="window".
+    document.getElementById("try-popup-btn").addEventListener("click", function () {
+      window.open("/quote-window.html", "dealz-demo-popup", "width=480,height=760,noopener");
     });
   </script>
 </body>
