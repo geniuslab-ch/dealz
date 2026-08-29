@@ -3,7 +3,7 @@
  * script. One tag, works on any CMS (WordPress, Wix, Squarespace, Webflow,
  * a hand-written site, anything that allows a <script> tag):
  *
- *   <script src="https://YOUR-DEALZ-DOMAIN/embed.js" data-dealz-company="swissclean" async></script>
+ *   <script src="https://dealz.website/embed.js" data-dealz-company="swissclean" async></script>
  *
  * It injects a floating launcher bubble + chat panel — self-contained CSS,
  * doesn't touch or depend on the host page's styling — then loads the same
@@ -15,15 +15,14 @@
  * a real client's arbitrary website, where you can't assume any particular
  * markup or nav structure exists to hook into.
  *
- * `data-dealz-company` is read but not yet used server-side (this demo is
- * single-tenant) — wiring /api/chat etc. to route by company is the natural
- * next step for real multi-tenant hosting (see README "Not included yet").
+ * `data-dealz-company` is the tenant slug (set in the CRM's companies.html)
+ * — /api/chat, /api/pricing, /api/decline and /api/accept all resolve it
+ * server-side via getCompanyBySlug to route to that company's own pricing,
+ * name and notify email.
  */
 (function () {
   var CURRENT_SCRIPT = document.currentScript;
   var API_BASE = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-api-base")) || "";
-  // Not used server-side yet (this demo is single-tenant) — stored for when
-  // /api/* routes are extended to select a pricing config/tenant by it.
   window.DEALZ_COMPANY = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-company")) || "";
   var ORIGIN = (function () {
     if (API_BASE) return API_BASE.replace(/\/$/, "");
