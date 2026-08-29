@@ -478,14 +478,14 @@ app.post("/api/counteroffer/:token", async (req, res) => {
     // same reason as "keep" above.
     if (req.body.action === "send-reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
-      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName });
+      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail });
       await store.update(req.params.token, { status: "replied" });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     if (cfg.action === "reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
-      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName });
+      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail });
       await store.update(req.params.token, { status: "replied" });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -517,6 +517,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         offerToken,
         baseUrl: requestBaseUrl(req),
         companyName: entry.companyName,
+        companyEmail: entry.companyEmail,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -543,6 +544,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         offerToken,
         baseUrl: requestBaseUrl(req),
         companyName: entry.companyName,
+        companyEmail: entry.companyEmail,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -571,6 +573,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         offerToken,
         baseUrl: requestBaseUrl(req),
         companyName: entry.companyName,
+        companyEmail: entry.companyEmail,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -592,6 +595,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         offerToken,
         baseUrl: requestBaseUrl(req),
         companyName: entry.companyName,
+        companyEmail: entry.companyEmail,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }

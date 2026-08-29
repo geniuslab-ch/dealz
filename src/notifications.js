@@ -38,7 +38,7 @@ if (process.env.SMTP_HOST) {
  * accept loop run and be verified end to end with zero email credentials,
  * and starts actually sending the moment SMTP_* is set in .env.
  */
-async function sendEmail({ to, subject, html }) {
+async function sendEmail({ to, subject, html, replyTo }) {
   if (!transporter) {
     const links = [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
     console.log("\n===== [EMAIL SIMULÉ — configurez SMTP_HOST dans .env pour un envoi réel] =====");
@@ -59,6 +59,7 @@ async function sendEmail({ to, subject, html }) {
     to,
     subject,
     html,
+    ...(replyTo ? { replyTo } : {}),
   });
   return { simulated: false };
 }
@@ -166,6 +167,7 @@ async function sendCounterofferToCustomer({
   offerToken,
   baseUrl = APP_BASE_URL,
   companyName = COMPANY_NAME,
+  companyEmail,
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
@@ -178,7 +180,7 @@ async function sendCounterofferToCustomer({
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir l'offre</a></p>
     ${signatureHtml(companyName)}
   `;
-  return sendEmail({ to: customer.email, subject: `Nouvelle offre — ${fmtCHF(amount)}`, html });
+  return sendEmail({ to: customer.email, subject: `Nouvelle offre — ${fmtCHF(amount)}`, html, replyTo: companyEmail });
 }
 
 async function sendRescheduleToCustomer({
@@ -188,6 +190,7 @@ async function sendRescheduleToCustomer({
   offerToken,
   baseUrl = APP_BASE_URL,
   companyName = COMPANY_NAME,
+  companyEmail,
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
@@ -200,7 +203,7 @@ async function sendRescheduleToCustomer({
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir la proposition</a></p>
     ${signatureHtml(companyName)}
   `;
-  return sendEmail({ to: customer.email, subject: `Nouvelle date proposée`, html });
+  return sendEmail({ to: customer.email, subject: `Nouvelle date proposée`, html, replyTo: companyEmail });
 }
 
 async function sendRevisedOfferToCustomer({
@@ -210,6 +213,7 @@ async function sendRevisedOfferToCustomer({
   offerToken,
   baseUrl = APP_BASE_URL,
   companyName = COMPANY_NAME,
+  companyEmail,
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
@@ -223,10 +227,10 @@ async function sendRevisedOfferToCustomer({
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir l'offre révisée</a></p>
     ${signatureHtml(companyName)}
   `;
-  return sendEmail({ to: customer.email, subject: `Devis révisé — ${fmtCHF(quote.total)}`, html });
+  return sendEmail({ to: customer.email, subject: `Devis révisé — ${fmtCHF(quote.total)}`, html, replyTo: companyEmail });
 }
 
-async function sendReplyToCustomer({ message, customer, companyName = COMPANY_NAME }) {
+async function sendReplyToCustomer({ message, customer, companyName = COMPANY_NAME, companyEmail }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const html = `
     <h2>Réponse de ${companyName}</h2>
@@ -234,7 +238,7 @@ async function sendReplyToCustomer({ message, customer, companyName = COMPANY_NA
     <p>${message}</p>
     ${signatureHtml(companyName)}
   `;
-  return sendEmail({ to: customer.email, subject: `Réponse à votre question`, html });
+  return sendEmail({ to: customer.email, subject: `Réponse à votre question`, html, replyTo: companyEmail });
 }
 
 async function sendFollowupToCustomer({
@@ -243,6 +247,7 @@ async function sendFollowupToCustomer({
   offerToken,
   baseUrl = APP_BASE_URL,
   companyName = COMPANY_NAME,
+  companyEmail,
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
@@ -254,7 +259,7 @@ async function sendFollowupToCustomer({
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Revoir le devis</a></p>
     ${signatureHtml(companyName)}
   `;
-  return sendEmail({ to: customer.email, subject: `Toujours intéressé(e) par notre offre ?`, html });
+  return sendEmail({ to: customer.email, subject: `Toujours intéressé(e) par notre offre ?`, html, replyTo: companyEmail });
 }
 
 async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME }) {
@@ -293,7 +298,7 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
   // error instead of "your booking is confirmed".
   const [customerResult, companyResult] = await Promise.allSettled([
     customer.email
-      ? sendEmail({ to: customer.email, subject: "✓ Réservation confirmée", html: customerHtml })
+      ? sendEmail({ to: customer.email, subject: "✓ Réservation confirmée", html: customerHtml, replyTo: notifyEmail })
       : Promise.resolve({ simulated: true, skipped: "no customer email" }),
     sendEmail({ to: notifyEmail, subject: "✓ Nouvelle réservation confirmée", html: companyHtml }),
   ]);
