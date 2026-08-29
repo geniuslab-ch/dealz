@@ -117,14 +117,14 @@
       <p class="sc-devis-note">Répondez à quelques questions sur votre logement — vous recevrez un devis réel, que vous pourrez accepter ou refuser directement ici.</p>
 
       <div class="devis-mode-tabs" id="devis-mode-tabs">
-        <button class="dmt-btn active" data-devis-mode="chat">💬 Widget de chat</button>
+        <button class="dmt-btn active" data-devis-mode="page">📄 Onglet dédié</button>
         <button class="dmt-btn" data-devis-mode="popup">🪟 Pop-up</button>
-        <button class="dmt-btn" data-devis-mode="page">📄 Onglet dédié</button>
+        <button class="dmt-btn" data-devis-mode="chat">💬 Widget de chat</button>
         <button class="dmt-btn" data-devis-mode="whatsapp" id="devis-whatsapp-tab" style="display: none">📱 WhatsApp Business</button>
       </div>
 
-      <div class="devis-mode-panel active" data-devis-panel="chat">
-        <p class="sc-devis-note">Une bulle flottante sur votre site, dans un coin de l'écran — l'intégration la plus simple : une seule ligne de code, fonctionne sur n'importe quelle plateforme (Wix, Shopify, WordPress, site fait main…).</p>
+      <div class="devis-mode-panel active" data-devis-panel="page">
+        <p class="sc-devis-note">Onglet dédié — comme celui sur lequel vous venez de cliquer en allant sur « ✨ Obtenir un devis ». Le devis vit sur une vraie page de votre site, sous votre propre en-tête et navigation, sans jamais le quitter.</p>
         <div class="quote-wrap" id="quote-wrap-anchor">
           <div class="quote-side">
             <h3>Comment ça marche</h3>
@@ -141,26 +141,32 @@
             </div>
           </div>
 
-          <div class="quote-panel">
-            <div class="quote-panel-head">
-              <div class="title">SwissClean · Devis</div>
-              <div class="subtitle">Réponse habituellement instantanée</div>
-            </div>
+          <div class="quote-panel-slot" id="quote-panel-slot">
+            <!-- .quote-panel (below) is the single, real chat instance —
+                 JS moves this exact node here or into the floating bubble
+                 slot depending on the active tab, instead of duplicating
+                 it, so there's only ever one conversation/state. -->
+            <div class="quote-panel" id="quote-panel">
+              <div class="quote-panel-head">
+                <div class="title">SwissClean · Devis</div>
+                <div class="subtitle">Réponse habituellement instantanée</div>
+              </div>
 
-            <div class="dealz-lead-gate" id="dealz-lead-gate">
-              <p class="dlg-intro">Avant votre devis instantané, laissez-nous vos coordonnées professionnelles :</p>
-              <input class="dcf-input" id="dlg-company" placeholder="Nom de votre entreprise (optionnel)" />
-              <input class="dcf-input" id="dlg-email" type="email" placeholder="E-mail professionnel" required />
-              <input class="dcf-input" id="dlg-phone" placeholder="Téléphone (optionnel)" />
-              <button class="dcf-submit" id="dlg-submit">Essayer la démo</button>
-              <p class="dlg-msg" id="dlg-msg"></p>
-            </div>
+              <div class="dealz-lead-gate" id="dealz-lead-gate">
+                <p class="dlg-intro">Avant votre devis instantané, laissez-nous vos coordonnées professionnelles :</p>
+                <input class="dcf-input" id="dlg-company" placeholder="Nom de votre entreprise (optionnel)" />
+                <input class="dcf-input" id="dlg-email" type="email" placeholder="E-mail professionnel" required />
+                <input class="dcf-input" id="dlg-phone" placeholder="Téléphone (optionnel)" />
+                <button class="dcf-submit" id="dlg-submit">Essayer la démo</button>
+                <p class="dlg-msg" id="dlg-msg"></p>
+              </div>
 
-            <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
-              <div class="dealz-messages" id="dealz-messages"></div>
-              <div class="dealz-inputbar">
-                <input id="dealz-input" type="text" placeholder="Décrivez votre besoin de nettoyage…" autocomplete="off" />
-                <button id="dealz-send">Envoyer</button>
+              <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+                <div class="dealz-messages" id="dealz-messages"></div>
+                <div class="dealz-inputbar">
+                  <input id="dealz-input" type="text" placeholder="Décrivez votre besoin de nettoyage…" autocomplete="off" />
+                  <button id="dealz-send">Envoyer</button>
+                </div>
               </div>
             </div>
           </div>
@@ -174,8 +180,8 @@
         </div>
       </div>
 
-      <div class="devis-mode-panel" data-devis-panel="page">
-        <p class="sc-devis-note">Le devis vit sur une vraie page de votre site, sous votre propre en-tête et navigation — exactement comme <b>cette page</b> : le bouton « ✨ Obtenir un devis » du menu ci-dessus vous a mené ici, sous l'en-tête SwissClean, sans jamais le quitter.</p>
+      <div class="devis-mode-panel" data-devis-panel="chat">
+        <p class="sc-devis-note">Une bulle flottante sur votre site, dans un coin de l'écran — l'intégration la plus simple : une seule ligne de code, fonctionne sur n'importe quelle plateforme (Wix, Shopify, WordPress, site fait main…). Cliquez sur la bulle en bas à droite pour l'essayer.</p>
       </div>
 
       <div class="devis-mode-panel" data-devis-panel="whatsapp">
@@ -184,6 +190,13 @@
           <a href="#" id="whatsapp-trial-link" class="sc-btn sc-btn-primary" target="_blank" rel="noopener">Essayer sur WhatsApp →</a>
         </div>
       </div>
+
+      <!-- Real floating bubble, matching embed.js's actual bubble mode —
+           shown only while the "Widget de chat" tab is active; .quote-panel
+           gets moved in here (see script below), so the bubble opens the
+           exact same live conversation, not a lookalike. -->
+      <button id="demo-widget-launcher" class="demo-widget-launcher" aria-label="Ouvrir le devis en ligne">💬</button>
+      <div id="demo-widget-panel-slot" class="demo-widget-panel-slot"></div>
 
       <div class="demo-followup" id="demo-followup">
         <h2>Imaginez ceci sur VOTRE site.</h2>
@@ -222,16 +235,38 @@
 
     // Switches between the four "how this looks on your site" panels —
     // same idea as demo-tabs.js's top nav, scoped to this section instead.
+    // The "chat" mode is the real floating-bubble behaviour, not a
+    // lookalike: the single .quote-panel node (one live conversation) is
+    // physically moved between the inline "onglet dédié" slot and the
+    // fixed-position bubble slot, and only the bubble mode starts closed.
     (function () {
       var tabButtons = document.querySelectorAll("#devis-mode-tabs .dmt-btn");
       var panels = document.querySelectorAll(".devis-mode-panel");
+      var quotePanel = document.getElementById("quote-panel");
+      var inlineSlot = document.getElementById("quote-panel-slot");
+      var bubbleSlot = document.getElementById("demo-widget-panel-slot");
+      var launcher = document.getElementById("demo-widget-launcher");
+
+      function setMode(mode) {
+        tabButtons.forEach(function (b) { b.classList.toggle("active", b.dataset.devisMode === mode); });
+        panels.forEach(function (p) { p.classList.toggle("active", p.dataset.devisPanel === mode); });
+
+        if (mode === "chat") {
+          bubbleSlot.appendChild(quotePanel);
+          launcher.classList.add("show");
+          bubbleSlot.classList.remove("open");
+        } else {
+          inlineSlot.appendChild(quotePanel);
+          launcher.classList.remove("show");
+          bubbleSlot.classList.remove("open");
+        }
+      }
+
       tabButtons.forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          tabButtons.forEach(function (b) { b.classList.toggle("active", b === btn); });
-          panels.forEach(function (p) {
-            p.classList.toggle("active", p.dataset.devisPanel === btn.dataset.devisMode);
-          });
-        });
+        btn.addEventListener("click", function () { setMode(btn.dataset.devisMode); });
+      });
+      launcher.addEventListener("click", function () {
+        bubbleSlot.classList.toggle("open");
       });
     })();
 

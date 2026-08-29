@@ -180,3 +180,23 @@ body.swissclean { background: var(--sc-bg); color: var(--sc-ink); }
 .devis-mode-panel { display: none; }
 .devis-mode-panel.active { display: block; }
 .devis-mode-try { text-align: center; padding: 34px 0 44px; }
+
+/* Real floating bubble for the "Widget de chat" tab — same positioning
+   language as docs/embed.js's actual bubble, so this demo is an honest
+   preview, not a lookalike. .quote-panel is moved into the slot below by
+   JS rather than duplicated. */
+.demo-widget-launcher {
+  display: none;
+  position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--sc-teal), var(--sc-teal-dark)); color: #fff; border: none; cursor: pointer;
+  font-size: 26px; box-shadow: 0 6px 18px rgba(14, 184, 168, 0.4); z-index: 999999;
+}
+.demo-widget-launcher.show { display: block; }
+.demo-widget-panel-slot {
+  display: none;
+  position: fixed; bottom: 96px; right: 24px; z-index: 999999;
+  max-width: calc(100vw - 32px); max-height: calc(100vh - 140px);
+}
+.demo-widget-panel-slot.open { display: block; }
+.quote-panel-slot .quote-panel { width: 100%; }
+.demo-widget-panel-slot .quote-panel { width: 360px; max-width: calc(100vw - 32px); }
