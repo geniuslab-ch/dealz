@@ -5,15 +5,26 @@
  *
  *   <script src="https://dealz.website/embed.js" data-dealz-company="swissclean" async></script>
  *
- * It injects a floating launcher bubble + chat panel — self-contained CSS,
- * doesn't touch or depend on the host page's styling — then loads the same
- * quote-app.js used everywhere else in this project, so the conversation
- * logic (Claude/mock fallback, the objection engine, accept/decline) is
- * identical to demo.html. Only the surrounding chrome differs: demo.html
- * shows the *ideal* integration (a "Devis" tab living inside a real site's
- * own navigation) as the sales pitch; this file is what actually ships to
- * a real client's arbitrary website, where you can't assume any particular
- * markup or nav structure exists to hook into.
+ * By default it injects a floating launcher bubble + chat panel —
+ * self-contained CSS, doesn't touch or depend on the host page's styling —
+ * then loads the same quote-app.js used everywhere else in this project,
+ * so the conversation logic (Claude/mock fallback, the objection engine,
+ * accept/decline) is identical to demo.html. This bubble mode is the right
+ * choice for no-code platforms (Wix, Shopify, WordPress, Squarespace) where
+ * nobody has access to the site's own nav markup to hook a proper tab into.
+ *
+ * When a developer DOES have code access to the site (a hand-built site, a
+ * Next.js/React app, anything with a real navbar component), the better
+ * integration is a real "Devis" tab living in that navbar — demo.html shows
+ * what that looks like. Two attributes support this:
+ *
+ *   data-dealz-launcher="false"   — suppresses the floating bubble/panel
+ *                                   entirely; you drive it yourself
+ *   window.DealzWidget.open()/.close()/.toggle() — opens/closes the same
+ *                                   panel from your own nav button's onClick
+ *
+ * Example for a hand-built "Devis" nav tab:
+ *   <button onclick="DealzWidget.open()">Devis</button>
  *
  * `data-dealz-company` is the tenant slug (set in the CRM's companies.html)
  * — /api/chat, /api/pricing, /api/decline and /api/accept all resolve it
@@ -107,11 +118,19 @@
   ].join("");
   document.head.appendChild(STYLE);
 
-  var launcher = document.createElement("button");
-  launcher.id = "dealz-embed-launcher";
-  launcher.setAttribute("aria-label", "Ouvrir le devis en ligne");
-  launcher.textContent = "💬";
-  document.body.appendChild(launcher);
+  // "false" suppresses the floating bubble for sites that drive the panel
+  // from their own nav tab instead (see window.DealzWidget below) — any
+  // other value, or the attribute being absent, keeps the default bubble.
+  var showLauncher = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-launcher")) !== "false";
+
+  var launcher = null;
+  if (showLauncher) {
+    launcher = document.createElement("button");
+    launcher.id = "dealz-embed-launcher";
+    launcher.setAttribute("aria-label", "Ouvrir le devis en ligne");
+    launcher.textContent = "💬";
+    document.body.appendChild(launcher);
+  }
 
   var panel = document.createElement("div");
   panel.id = "dealz-embed-panel";
@@ -127,12 +146,25 @@
     "</div>";
   document.body.appendChild(panel);
 
-  launcher.addEventListener("click", function () {
-    panel.classList.toggle("dealz-embed-open");
-  });
-  document.getElementById("dealz-embed-close").addEventListener("click", function () {
+  function openPanel() {
+    panel.classList.add("dealz-embed-open");
+  }
+  function closePanel() {
     panel.classList.remove("dealz-embed-open");
-  });
+  }
+  function togglePanel() {
+    panel.classList.toggle("dealz-embed-open");
+  }
+
+  if (launcher) {
+    launcher.addEventListener("click", togglePanel);
+  }
+  document.getElementById("dealz-embed-close").addEventListener("click", closePanel);
+
+  // Public API for a hand-built nav tab elsewhere on the page, e.g.
+  // <button onclick="DealzWidget.open()">Devis</button> — works whether or
+  // not the floating bubble is also shown.
+  window.DealzWidget = { open: openPanel, close: closePanel, toggle: togglePanel };
 
   // Tells quote-app.js's API calls to target the Dealz backend explicitly
   // rather than the host page's own origin — required for cross-origin
