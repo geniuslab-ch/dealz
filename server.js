@@ -317,6 +317,21 @@ app.get("/api/pricing", async (req, res) => {
   }
 });
 
+// Separate from /api/pricing on purpose — that route's response shape
+// (the raw pricing object) is consumed directly by pricing-engine-client.js
+// and can't grow extra fields without breaking it. This one exists purely
+// so docs/embed.js can show a real "[Company] · Devis" panel header (like
+// demo.html's "SwissClean · Devis") instead of a generic one.
+app.get("/api/company-info", async (req, res) => {
+  try {
+    const company = await getCompanyBySlug(req.query.company);
+    res.json({ name: company?.name || null, logoUrl: company?.logoUrl || null, tagline: company?.tagline || null });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Internal error" });
+  }
+});
+
 app.post("/api/chat", async (req, res) => {
   try {
     const history = Array.isArray(req.body.messages) ? req.body.messages : [];

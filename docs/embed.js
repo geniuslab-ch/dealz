@@ -146,6 +146,22 @@
     "</div>";
   document.body.appendChild(panel);
 
+  // Swaps the generic "Devis en ligne" header for "[Company] · Devis" —
+  // matching demo.html's "SwissClean · Devis" — once the tenant's real name
+  // resolves. Left as the generic default (never blocks panel open) when
+  // there's no company slug, or the lookup fails/returns nothing.
+  if (window.DEALZ_COMPANY) {
+    fetch(ORIGIN + "/api/company-info?company=" + encodeURIComponent(window.DEALZ_COMPANY))
+      .then(function (r) { return r.json(); })
+      .then(function (info) {
+        if (info && info.name) {
+          var titleEl = panel.querySelector(".dealz-embed-header .t");
+          if (titleEl) titleEl.textContent = info.name + " · Devis";
+        }
+      })
+      .catch(function () {});
+  }
+
   function openPanel() {
     panel.classList.add("dealz-embed-open");
   }
