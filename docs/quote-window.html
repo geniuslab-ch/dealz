@@ -13,6 +13,13 @@
 
   Reads the tenant from ?company=slug in the URL — no build step, no
   server-side templating, works identically wherever it's hosted.
+
+  ?embedded=1 — for a site with real code access that wants to iframe this
+  directly into one of its own pages (below its own real navbar), rather
+  than open it as a popup. Drops this page's own card chrome (shadow,
+  centering, close button) and its "[Company] · Devis" mini-header, since
+  the host page's own header already establishes whose site this is —
+  showing both would be a redundant double-header.
 -->
 <style>
   :root{--dz-navy:#0b1220;--dz-blue:#0b5fff;--dz-blue-dark:#063fc7;--dz-sky-light:#eef6ff;
@@ -29,6 +36,10 @@
     box-shadow:0 20px 60px rgba(11,18,32,.18);
   }
   @media (min-width:540px){ #dealz-window{ border-radius:18px; margin:20px; height:calc(100vh - 40px); } }
+  body.dz-embedded{background:#fff;}
+  body.dz-embedded #dealz-window{max-width:none;max-height:none;box-shadow:none;}
+  body.dz-embedded .dealz-embed-header{display:none;}
+  @media (min-width:540px){ body.dz-embedded #dealz-window{ border-radius:0; margin:0; height:100vh; } }
   .dealz-embed-header{background:linear-gradient(120deg,var(--dz-blue),var(--dz-navy));color:#fff;
     padding:16px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
   .dealz-embed-header .t{font-weight:bold;font-size:15px;}
@@ -111,6 +122,7 @@
     var company = params.get("company") || "";
     window.DEALZ_COMPANY = company;
     window.DEALZ_API_BASE = params.get("api-base") || location.origin;
+    if (params.get("embedded") === "1") document.body.classList.add("dz-embedded");
 
     // Closing a window only works if this page opened as a popup
     // (window.open) — if someone just navigated here directly there's
