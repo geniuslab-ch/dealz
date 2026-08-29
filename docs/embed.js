@@ -14,16 +14,22 @@
  * nobody has access to the site's own nav markup to hook a proper tab into.
  *
  * When a developer DOES have code access to the site (a hand-built site, a
- * Next.js/React app, anything with a real navbar component), the better
- * integration is a real "Devis" tab living in that navbar — demo.html shows
- * what that looks like. Two attributes support this:
+ * Next.js/React app, anything with a real navbar component), two things
+ * change the experience:
  *
  *   data-dealz-launcher="false"   — suppresses the floating bubble/panel
  *                                   entirely; you drive it yourself
- *   window.DealzWidget.open()/.close()/.toggle() — opens/closes the same
- *                                   panel from your own nav button's onClick
+ *   data-dealz-mode="window"      — opens the quote flow as its own popup
+ *                                   window/tab (quote-window.html) instead
+ *                                   of the small in-page chat panel; "chat"
+ *                                   (the default) keeps the panel
+ *   window.DealzWidget.open()/.close()/.toggle() — opens/closes the panel
+ *                                   (mode "chat") or the popup (mode
+ *                                   "window") from your own nav button
  *
- * Example for a hand-built "Devis" nav tab:
+ * Example for a hand-built "Devis" nav tab, opened as a separate window:
+ *   <script src="https://dealz.website/embed.js" data-dealz-company="acme"
+ *           data-dealz-launcher="false" data-dealz-mode="window" async></script>
  *   <button onclick="DealzWidget.open()">Devis</button>
  *
  * `data-dealz-company` is the tenant slug (set in the CRM's companies.html)
@@ -116,11 +122,19 @@
     ".dealz-pdf-actions{display:flex;gap:10px;padding:14px;border-top:1px solid var(--dz-line);flex-shrink:0;}",
     ".dealz-pdf-actions button{flex:1;padding:11px;font-size:14px;border-radius:22px;}",
   ].join("");
+  // Applied unconditionally (both modes need the launcher bubble's CSS,
+  // even in "window" mode where the chat-panel rules below just go unused).
   document.head.appendChild(STYLE);
 
-  // "false" suppresses the floating bubble for sites that drive the panel
-  // from their own nav tab instead (see window.DealzWidget below) — any
-  // other value, or the attribute being absent, keeps the default bubble.
+  // "window" opens the quote flow as its own popup instead of the in-page
+  // chat panel — any other value, or the attribute being absent, keeps the
+  // default in-page "chat" panel.
+  var mode = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-mode")) || "chat";
+
+  // "false" suppresses the floating bubble for sites that drive the
+  // panel/popup from their own nav tab instead (see window.DealzWidget
+  // below) — any other value, or the attribute being absent, keeps the
+  // default bubble.
   var showLauncher = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-launcher")) !== "false";
 
   var launcher = null;
@@ -130,6 +144,31 @@
     launcher.setAttribute("aria-label", "Ouvrir le devis en ligne");
     launcher.textContent = "💬";
     document.body.appendChild(launcher);
+  }
+
+  if (mode === "window") {
+    // quote-window.html is a self-contained page — it loads its own copies
+    // of pricing-engine-client.js/mock-client.js/quote-app.js, so none of
+    // that (nor the chat-panel CSS/DOM above) is needed in the host page.
+    var popup = null;
+    function openWindow() {
+      if (popup && !popup.closed) {
+        popup.focus();
+        return;
+      }
+      var url =
+        ORIGIN +
+        "/quote-window.html?company=" +
+        encodeURIComponent(window.DEALZ_COMPANY) +
+        "&api-base=" +
+        encodeURIComponent(ORIGIN);
+      popup = window.open(url, "dealz-quote-" + (window.DEALZ_COMPANY || "demo"), "width=480,height=760,noopener");
+    }
+    if (launcher) launcher.addEventListener("click", openWindow);
+    // close/toggle are no-ops on a real popup window (can't reach into a
+    // separate window/tab from here) — open is what matters for this mode.
+    window.DealzWidget = { open: openWindow, close: function () {}, toggle: openWindow };
+    return;
   }
 
   var panel = document.createElement("div");
