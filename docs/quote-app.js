@@ -38,9 +38,16 @@
     }
   }
 
+  // window.DEALZ_COMPANY is set by embed.js from the script tag's
+  // data-dealz-company="..." attribute — a real tenant's own pricing grid
+  // (see /api/pricing in server.js); empty on demo.html, which keeps using
+  // the static /pricing.json for the single-tenant demo grid.
   function loadPricing() {
     if (!pricingPromise) {
-      pricingPromise = fetch(apiUrl("/pricing.json")).then((r) => r.json());
+      const url = window.DEALZ_COMPANY
+        ? apiUrl("/api/pricing?company=" + encodeURIComponent(window.DEALZ_COMPANY))
+        : apiUrl("/pricing.json");
+      pricingPromise = fetch(url).then((r) => r.json());
     }
     return pricingPromise;
   }
@@ -54,7 +61,7 @@
     const res = await fetch(apiUrl("/api/chat"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: payloadMessages }),
+      body: JSON.stringify({ messages: payloadMessages, company: window.DEALZ_COMPANY || undefined }),
     });
     let data;
     try {
@@ -350,7 +357,12 @@
       return;
     }
     try {
-      const data = await postJSON("/api/accept", { quote, customer, companyEmail: getCompanyEmail() });
+      const data = await postJSON("/api/accept", {
+        quote,
+        customer,
+        companyEmail: getCompanyEmail(),
+        company: window.DEALZ_COMPANY || undefined,
+      });
       renderSystemMessage(
         container,
         null,
@@ -397,6 +409,7 @@
         text,
         customer,
         companyEmail: getCompanyEmail(),
+        company: window.DEALZ_COMPANY || undefined,
       });
       renderSystemMessage(
         container,

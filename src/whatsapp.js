@@ -160,7 +160,7 @@ const NO_RE = /^(non|annul|refus|no)\b/i;
 // src/companies.js, so replies go out from the same number, priced with
 // that company's own grid.
 async function handleIncomingMessage(phoneNumberId, from, rawText) {
-  const company = getCompanyByPhoneNumberId(phoneNumberId);
+  const company = await getCompanyByPhoneNumberId(phoneNumberId);
   if (!company) {
     console.warn(`[whatsapp] Message reçu sur un numéro non configuré (phone_number_id=${phoneNumberId}) — ignoré.`);
     return;

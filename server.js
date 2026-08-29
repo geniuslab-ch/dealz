@@ -18,6 +18,8 @@ const {
 const store = require("./src/store");
 const { recordTrialAttempt } = require("./src/leads");
 const whatsapp = require("./src/whatsapp");
+const { getCompanyBySlug } = require("./src/companies");
+const defaultPricing = require("./docs/pricing.json");
 
 const MOCK_MODE = process.env.MOCK_MODE === "true";
 
@@ -299,6 +301,22 @@ app.post("/api/whatsapp/webhook", async (req, res) => {
   }
 });
 
+// Company-aware pricing lookup — docs/quote-app.js's loadPricing() calls
+// this instead of the static /pricing.json whenever a data-dealz-company
+// slug is present (see docs/embed.js), so the client-side quote math
+// (docs/pricing-engine-client.js, used for the offline/no-backend static
+// fallback) also uses the right tenant's numbers. No slug, or an
+// unrecognized one, falls back to the single-tenant demo grid.
+app.get("/api/pricing", async (req, res) => {
+  try {
+    const company = await getCompanyBySlug(req.query.company);
+    res.json(company ? company.pricing : defaultPricing);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message || "Internal error" });
+  }
+});
+
 app.post("/api/chat", async (req, res) => {
   try {
     const history = Array.isArray(req.body.messages) ? req.body.messages : [];
@@ -306,8 +324,15 @@ app.post("/api/chat", async (req, res) => {
       return res.status(400).json({ error: "messages[] is required" });
     }
 
+    // `company` is the slug docs/embed.js reads from data-dealz-company="..."
+    // — resolves to that tenant's own name + pricing grid (see
+    // src/companies.js). Unset or unrecognized falls back to the original
+    // single-tenant demo (SwissClean Sàrl + docs/pricing.json), same as
+    // every caller that predates multi-tenant support.
+    const company = (await getCompanyBySlug(req.body.company)) || undefined;
+
     if (MOCK_MODE) {
-      return res.json(await runTurnMock(history));
+      return res.json(await runTurnMock(history, company));
     }
 
     // A visitor on the live demo should never see a broken conversation just
@@ -316,14 +341,14 @@ app.post("/api/chat", async (req, res) => {
     // engine MOCK_MODE uses, silently, and log it so the developer notices
     // and can fix the underlying account issue.
     try {
-      return res.json(await runTurn(history));
+      return res.json(await runTurn(history, company));
     } catch (apiErr) {
       console.warn(
         "[/api/chat] Real Claude call failed — falling back to the scripted demo engine. " +
           "Fix the underlying issue (e.g. add Anthropic credit) to restore the real assistant. " +
           `Error: ${apiErr.message}`
       );
-      return res.json(await runTurnMock(history));
+      return res.json(await runTurnMock(history, company));
     }
   } catch (err) {
     console.error(err);
@@ -338,6 +363,14 @@ app.post("/api/decline", async (req, res) => {
   try {
     const { quote, category, text, customer, companyEmail } = req.body;
     if (!quote || !quote.items) return res.status(400).json({ error: "quote is required" });
+
+    // `company` (a data-dealz-company slug) is the real-tenant path; the
+    // demo's session-captured companyEmail (see docs/lead-gate.js) still
+    // wins if both are somehow present, since that's an explicit visitor
+    // override on the single-tenant demo, not something a real embed sends.
+    const company = await getCompanyBySlug(req.body.company);
+    const resolvedNotifyEmail = companyEmail || company?.notifyEmail || undefined;
+    const resolvedCompanyName = company?.name;
 
     let finalCategory = category;
     let summary = text || "";
@@ -363,7 +396,8 @@ app.post("/api/decline", async (req, res) => {
       rawText: text || "",
       customer: customer || {},
       suggestedReply,
-      companyEmail: companyEmail || null,
+      companyEmail: resolvedNotifyEmail || null,
+      companyName: resolvedCompanyName || null,
       status: "pending",
     });
 
@@ -376,7 +410,7 @@ app.post("/api/decline", async (req, res) => {
       declineToken,
       suggestedReply,
       baseUrl: requestBaseUrl(req),
-      notifyEmail: companyEmail || undefined,
+      notifyEmail: resolvedNotifyEmail,
     });
 
     res.json({
@@ -444,14 +478,14 @@ app.post("/api/counteroffer/:token", async (req, res) => {
     // same reason as "keep" above.
     if (req.body.action === "send-reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
-      const emailResult = await sendReplyToCustomer({ message, customer });
+      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName });
       await store.update(req.params.token, { status: "replied" });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     if (cfg.action === "reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
-      const emailResult = await sendReplyToCustomer({ message, customer });
+      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName });
       await store.update(req.params.token, { status: "replied" });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -472,6 +506,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         message,
         customer,
         companyEmail: entry.companyEmail,
+        companyName: entry.companyName,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendCounterofferToCustomer({
@@ -481,6 +516,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         offerToken,
         baseUrl: requestBaseUrl(req),
+        companyName: entry.companyName,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -497,6 +533,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         message,
         customer,
         companyEmail: entry.companyEmail,
+        companyName: entry.companyName,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRescheduleToCustomer({
@@ -505,6 +542,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         offerToken,
         baseUrl: requestBaseUrl(req),
+        companyName: entry.companyName,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -523,6 +561,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         message,
         customer,
         companyEmail: entry.companyEmail,
+        companyName: entry.companyName,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRevisedOfferToCustomer({
@@ -531,6 +570,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         offerToken,
         baseUrl: requestBaseUrl(req),
+        companyName: entry.companyName,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -543,6 +583,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         amount: entry.quote.total,
         customer,
         companyEmail: entry.companyEmail,
+        companyName: entry.companyName,
       });
       await store.update(req.params.token, { status: "followup-sent" });
       const emailResult = await sendFollowupToCustomer({
@@ -550,6 +591,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         offerToken,
         baseUrl: requestBaseUrl(req),
+        companyName: entry.companyName,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -601,7 +643,12 @@ app.post("/api/offer/:token/respond", async (req, res) => {
             total: entry.amount,
           };
 
-    const result = await sendBookingConfirmation({ quote, customer, notifyEmail: entry.companyEmail || undefined });
+    const result = await sendBookingConfirmation({
+      quote,
+      customer,
+      notifyEmail: entry.companyEmail || undefined,
+      companyName: entry.companyName || undefined,
+    });
     await store.update(req.params.token, { status: "accepted" });
 
     res.json({
@@ -620,10 +667,13 @@ app.post("/api/accept", async (req, res) => {
     const { quote, customer, companyEmail } = req.body;
     if (!quote || !quote.items) return res.status(400).json({ error: "quote is required" });
 
+    const company = await getCompanyBySlug(req.body.company);
+
     const result = await sendBookingConfirmation({
       quote,
       customer: customer || {},
-      notifyEmail: companyEmail || undefined,
+      notifyEmail: companyEmail || company?.notifyEmail || undefined,
+      companyName: company?.name || undefined,
     });
     res.json({
       ok: true,

@@ -1,74 +1,78 @@
+const { createClient } = require("@supabase/supabase-js");
 const defaultPricing = require("../docs/pricing.json");
 
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+const supabase = SUPABASE_URL && SUPABASE_SERVICE_KEY ? createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY) : null;
+
 /**
- * Tenant registry for the WhatsApp channel — one entry per cleaning
- * company's own WhatsApp number, keyed by that number's Meta-issued
- * `phone_number_id` (NOT the phone number itself — Meta's webhook payload
- * identifies the receiving number by this id, see value.metadata in
- * src/whatsapp.js).
+ * Shared tenant registry (Supabase `companies` table, managed from the
+ * Dealz CRM's own "Companies" page) — one row per real cleaning company,
+ * looked up two ways depending on the channel:
+ *   - by `phone_number_id` for WhatsApp (see src/whatsapp.js)
+ *   - by `id` (a slug) for the website widget, sent as the
+ *     data-dealz-company="..." attribute on docs/embed.js's script tag
  *
- * All these numbers live under Dealz's own Meta Business Account (WABA) —
- * one WABA can hold many phone numbers, and a single system-user access
- * token (WHATSAPP_ACCESS_TOKEN) can send/receive on behalf of any of them,
- * just by passing the right phone_number_id per call. Each number still
- * gets its own WhatsApp Business Profile (name, logo, category) set in
- * Meta's WhatsApp Manager, so it looks like that company's own WhatsApp to
- * their customers — even though Dealz manages it under one account.
+ * One company, one config, whichever channels they actually use — a
+ * company with no phone_number_id set just never matches on WhatsApp
+ * lookups, same idea for a company that doesn't use the website widget.
  *
- * Onboarding a new client (manual, a few minutes in Meta's dashboard):
- *   1. Get a phone number from them that isn't currently active on the
- *      regular consumer WhatsApp app (or have them remove it from there
- *      first — a number can only be registered on one WhatsApp platform at
- *      a time).
- *   2. In Meta's WhatsApp Manager (business.facebook.com/wa/manage),
- *      add that number to Dealz's WABA and complete verification — Meta
- *      sends an SMS/voice code to the number, which the client reads out or
- *      forwards during the call/setup session.
- *   3. Set the number's WhatsApp Business Profile (display name, logo,
- *      category) to match the client's own branding.
- *   4. Copy the new number's "Phone number ID" from WhatsApp Manager and
- *      add an entry below with the client's pricing grid (same shape as
- *      docs/pricing.json — copy that file and adjust the numbers).
- *   5. Redeploy.
- *
- * `pricing` config isn't secret (no tokens live here), but does contain a
- * client's real prices — fine to commit for a handful of clients; move to
- * a real per-tenant admin UI / database once this grows past a dozen or so.
+ * Both lookups fall back to the original single-tenant demo company
+ * (SwissClean Sàrl + docs/pricing.json) when nothing matches, so the
+ * existing WHATSAPP_PHONE_NUMBER_ID deployment and the website demo keep
+ * working unchanged for anyone who hasn't added real tenants yet.
  */
-const COMPANIES = {
-  // The original single-tenant demo company — kept here so an existing
-  // WHATSAPP_PHONE_NUMBER_ID deployment (registered before multi-tenant
-  // support existed) keeps working without needing an entry of its own;
-  // see getCompanyByPhoneNumberId's fallback below.
 
-  // Example of a second, real client — replace phone_number_id and pricing
-  // with their actual values once onboarded, then uncomment:
-  // "123456789012345": {
-  //   name: "Nom de l'entreprise Sàrl",
-  //   notifyEmail: "contact@entreprise.ch",
-  //   pricing: { ...same shape as docs/pricing.json... },
-  // },
-};
+function defaultCompany() {
+  return {
+    id: null,
+    phoneNumberId: process.env.WHATSAPP_PHONE_NUMBER_ID || null,
+    name: "SwissClean Sàrl",
+    notifyEmail: process.env.COMPANY_NOTIFY_EMAIL,
+    pricing: defaultPricing,
+  };
+}
 
-function getCompanyByPhoneNumberId(phoneNumberId) {
+function rowToCompany(row) {
+  return {
+    id: row.id,
+    phoneNumberId: row.phone_number_id,
+    name: row.name,
+    notifyEmail: row.notify_email,
+    pricing: row.pricing,
+  };
+}
+
+async function getCompanyByPhoneNumberId(phoneNumberId) {
   if (!phoneNumberId) return null;
 
-  const configured = COMPANIES[phoneNumberId];
-  if (configured) return { phoneNumberId, ...configured };
-
-  // Falls back to the original demo company when the inbound number is the
-  // one already configured via WHATSAPP_PHONE_NUMBER_ID — no entry needed
-  // above for the very first (demo) number.
-  if (phoneNumberId === process.env.WHATSAPP_PHONE_NUMBER_ID) {
-    return {
-      phoneNumberId,
-      name: "SwissClean Sàrl",
-      notifyEmail: process.env.COMPANY_NOTIFY_EMAIL,
-      pricing: defaultPricing,
-    };
+  if (supabase) {
+    const { data, error } = await supabase
+      .from("companies")
+      .select("*")
+      .eq("phone_number_id", phoneNumberId)
+      .maybeSingle();
+    if (error) throw error;
+    if (data) return rowToCompany(data);
   }
 
+  // Falls back to the demo company when the inbound number is the one
+  // already configured via WHATSAPP_PHONE_NUMBER_ID — no row needed in
+  // `companies` for the very first (demo) number.
+  if (phoneNumberId === process.env.WHATSAPP_PHONE_NUMBER_ID) return defaultCompany();
   return null;
 }
 
-module.exports = { getCompanyByPhoneNumberId };
+// Used by the website widget — no fallback-by-env-var here (there's no
+// single "default slug"), so an unrecognized or missing slug just means
+// "use the demo": callers pass the resolved company straight to
+// runTurn/runTurnMock, which already default to the demo when given
+// `undefined`.
+async function getCompanyBySlug(slug) {
+  if (!slug || !supabase) return null;
+  const { data, error } = await supabase.from("companies").select("*").eq("id", slug).maybeSingle();
+  if (error) throw error;
+  return data ? rowToCompany(data) : null;
+}
+
+module.exports = { getCompanyByPhoneNumberId, getCompanyBySlug, defaultCompany };
