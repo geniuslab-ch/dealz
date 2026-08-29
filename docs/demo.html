@@ -198,6 +198,18 @@
       <button id="demo-widget-launcher" class="demo-widget-launcher" aria-label="Ouvrir le devis en ligne">💬</button>
       <div id="demo-widget-panel-slot" class="demo-widget-panel-slot"></div>
 
+      <!-- Pop-up modal — stays on this page (backdrop + centered card),
+           not a new browser tab/window, matching what a real "pop-up"
+           should feel like. Loads quote-window.html?embedded=1 in an
+           iframe, same page real client sites get via embed.js's
+           data-dealz-mode="window". -->
+      <div id="demo-popup-overlay" class="demo-popup-overlay">
+        <div class="demo-popup-card">
+          <button id="demo-popup-close" class="demo-popup-close" aria-label="Fermer">✕</button>
+          <iframe id="demo-popup-iframe" title="Devis en ligne"></iframe>
+        </div>
+      </div>
+
       <div class="demo-followup" id="demo-followup">
         <h2>Imaginez ceci sur VOTRE site.</h2>
         <div class="imagine-lines">
@@ -270,12 +282,25 @@
       });
     })();
 
-    // Lets the "pop-up" tab actually open the real pop-up (quote-window.html)
-    // rather than just describe it — same mechanism a real client site uses
-    // via embed.js's data-dealz-mode="window".
-    document.getElementById("try-popup-btn").addEventListener("click", function () {
-      window.open("/quote-window.html", "dealz-demo-popup", "width=480,height=760,noopener");
-    });
+    // Lets the "pop-up" tab actually open the real pop-up — an in-page
+    // modal (stays on this page, unlike window.open()) — same mechanism a
+    // real client site uses via embed.js's data-dealz-mode="window".
+    (function () {
+      var overlay = document.getElementById("demo-popup-overlay");
+      var iframe = document.getElementById("demo-popup-iframe");
+      function openPopup() {
+        if (!iframe.src) iframe.src = "/quote-window.html?embedded=1";
+        overlay.classList.add("open");
+      }
+      function closePopup() {
+        overlay.classList.remove("open");
+      }
+      document.getElementById("try-popup-btn").addEventListener("click", openPopup);
+      document.getElementById("demo-popup-close").addEventListener("click", closePopup);
+      overlay.addEventListener("click", function (e) {
+        if (e.target === overlay) closePopup();
+      });
+    })();
   </script>
 </body>
 </html>

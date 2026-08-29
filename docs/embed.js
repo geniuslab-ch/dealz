@@ -19,15 +19,16 @@
  *
  *   data-dealz-launcher="false"   — suppresses the floating bubble/panel
  *                                   entirely; you drive it yourself
- *   data-dealz-mode="window"      — opens the quote flow as its own popup
- *                                   window/tab (quote-window.html) instead
- *                                   of the small in-page chat panel; "chat"
+ *   data-dealz-mode="window"      — opens the quote flow as an in-page
+ *                                   modal (backdrop + centered card, stays
+ *                                   on the current page — not a new browser
+ *                                   tab/window) instead of the chat panel; "chat"
  *                                   (the default) keeps the panel
  *   window.DealzWidget.open()/.close()/.toggle() — opens/closes the panel
- *                                   (mode "chat") or the popup (mode
+ *                                   (mode "chat") or the modal (mode
  *                                   "window") from your own nav button
  *
- * Example for a hand-built "Devis" nav tab, opened as a separate window:
+ * Example for a hand-built "Devis" nav tab, opened as an in-page modal:
  *   <script src="https://dealz.website/embed.js" data-dealz-company="acme"
  *           data-dealz-launcher="false" data-dealz-mode="window" async></script>
  *   <button onclick="DealzWidget.open()">Devis</button>
@@ -147,27 +148,64 @@
   }
 
   if (mode === "window") {
-    // quote-window.html is a self-contained page — it loads its own copies
-    // of pricing-engine-client.js/mock-client.js/quote-app.js, so none of
-    // that (nor the chat-panel CSS/DOM above) is needed in the host page.
-    var popup = null;
-    function openWindow() {
-      if (popup && !popup.closed) {
-        popup.focus();
-        return;
-      }
-      var url =
-        ORIGIN +
-        "/quote-window.html?company=" +
-        encodeURIComponent(window.DEALZ_COMPANY) +
-        "&api-base=" +
-        encodeURIComponent(ORIGIN);
-      popup = window.open(url, "dealz-quote-" + (window.DEALZ_COMPANY || "demo"), "width=480,height=760,noopener");
+    // A "pop-up" should stay on the page the visitor is already on — not
+    // open a separate browser tab/window (jarring, and easily blocked by
+    // popup blockers). This is an in-page modal instead: a backdrop +
+    // centered card, with quote-window.html loaded inside via iframe
+    // (?embedded=1 drops its own header/close since the modal card
+    // supplies those). Same self-contained page, just presented in-page.
+    var MODAL_STYLE = document.createElement("style");
+    MODAL_STYLE.textContent =
+      "#dealz-modal-overlay{position:fixed;inset:0;background:rgba(11,18,32,.55);display:none;" +
+      "align-items:center;justify-content:center;z-index:1000000;padding:20px;}" +
+      "#dealz-modal-overlay.open{display:flex;}" +
+      "#dealz-modal-card{position:relative;width:100%;max-width:480px;height:85vh;max-height:700px;" +
+      "background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4);}" +
+      "#dealz-modal-close{position:absolute;top:10px;right:10px;z-index:2;background:rgba(11,18,32,.5);" +
+      "color:#fff;border:none;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;line-height:1;}" +
+      "#dealz-modal-iframe{width:100%;height:100%;border:0;display:block;}";
+    document.head.appendChild(MODAL_STYLE);
+
+    var overlay = null;
+    var iframe = null;
+    function ensureModal() {
+      if (overlay) return;
+      overlay = document.createElement("div");
+      overlay.id = "dealz-modal-overlay";
+      overlay.innerHTML =
+        '<div id="dealz-modal-card">' +
+        '<button id="dealz-modal-close" aria-label="Fermer">✕</button>' +
+        '<iframe id="dealz-modal-iframe" title="Devis en ligne"></iframe>' +
+        "</div>";
+      document.body.appendChild(overlay);
+      iframe = document.getElementById("dealz-modal-iframe");
+      document.getElementById("dealz-modal-close").addEventListener("click", closeModal);
+      overlay.addEventListener("click", function (e) {
+        if (e.target === overlay) closeModal();
+      });
     }
-    if (launcher) launcher.addEventListener("click", openWindow);
-    // close/toggle are no-ops on a real popup window (can't reach into a
-    // separate window/tab from here) — open is what matters for this mode.
-    window.DealzWidget = { open: openWindow, close: function () {}, toggle: openWindow };
+    function openModal() {
+      ensureModal();
+      if (!iframe.src) {
+        iframe.src =
+          ORIGIN +
+          "/quote-window.html?company=" +
+          encodeURIComponent(window.DEALZ_COMPANY) +
+          "&api-base=" +
+          encodeURIComponent(ORIGIN) +
+          "&embedded=1";
+      }
+      overlay.classList.add("open");
+    }
+    function closeModal() {
+      if (overlay) overlay.classList.remove("open");
+    }
+    function toggleModal() {
+      if (overlay && overlay.classList.contains("open")) closeModal();
+      else openModal();
+    }
+    if (launcher) launcher.addEventListener("click", openModal);
+    window.DealzWidget = { open: openModal, close: closeModal, toggle: toggleModal };
     return;
   }
 
