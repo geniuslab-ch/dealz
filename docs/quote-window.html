@@ -34,6 +34,8 @@
   .dealz-embed-header .t{font-weight:bold;font-size:15px;}
   .dealz-embed-header .s{font-size:11.5px;color:#b9d6d5;}
   .dealz-embed-header button{background:none;border:none;color:#fff;font-size:19px;cursor:pointer;line-height:1;}
+  .dealz-header-brand{display:flex;align-items:center;gap:10px;min-width:0;color:inherit;text-decoration:none;cursor:default;}
+  .dealz-header-logo{width:36px;height:36px;border-radius:8px;object-fit:contain;background:#fff;flex-shrink:0;}
   .dealz-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#fbfcff;}
   .dealz-messages>*{flex-shrink:0;}
   .dealz-msg{max-width:82%;padding:9px 12px;border-radius:12px;font-size:13.5px;line-height:1.45;white-space:pre-wrap;}
@@ -90,8 +92,11 @@
 </head>
 <body>
   <div id="dealz-window">
-    <div class="dealz-embed-header">
-      <div><div class="t" id="dealz-window-title">Devis en ligne</div><div class="s">Réponse habituellement instantanée</div></div>
+    <div class="dealz-embed-header" id="dealz-window-header">
+      <a class="dealz-header-brand" id="dealz-window-brandlink" href="#" target="_blank" rel="noopener">
+        <img id="dealz-window-logo" class="dealz-header-logo" alt="" style="display:none;" />
+        <div><div class="t" id="dealz-window-title">Devis en ligne</div><div class="s">Réponse habituellement instantanée</div></div>
+      </a>
       <button id="dealz-window-close" aria-label="Fermer">✕</button>
     </div>
     <div class="dealz-messages" id="dealz-messages"></div>
@@ -117,13 +122,47 @@
       }, 50);
     });
 
+    // Header link only becomes clickable once/if a real website resolves —
+    // no href-less "#" navigation for a company that hasn't set one.
+    var brandLink = document.getElementById("dealz-window-brandlink");
+    brandLink.addEventListener("click", function (e) {
+      if (!brandLink.getAttribute("href") || brandLink.getAttribute("href") === "#") e.preventDefault();
+    });
+
+    // Turns "#RRGGBB" into a slightly darker shade for the header's
+    // gradient end — same visual language as the default Dealz blue→navy
+    // header, just built from the company's own brand color instead.
+    function darken(hex, amount) {
+      var m = /^#?([0-9a-f]{6})$/i.exec(hex);
+      if (!m) return hex;
+      var n = parseInt(m[1], 16);
+      var r = Math.max(0, ((n >> 16) & 255) * (1 - amount));
+      var g = Math.max(0, ((n >> 8) & 255) * (1 - amount));
+      var b = Math.max(0, (n & 255) * (1 - amount));
+      return "#" + [r, g, b].map(function (c) { return Math.round(c).toString(16).padStart(2, "0"); }).join("");
+    }
+
     if (company) {
       fetch(window.DEALZ_API_BASE + "/api/company-info?company=" + encodeURIComponent(company))
         .then(function (r) { return r.json(); })
         .then(function (info) {
-          if (info && info.name) {
+          if (!info) return;
+          if (info.name) {
             document.getElementById("dealz-window-title").textContent = info.name + " · Devis";
             document.title = info.name + " · Devis";
+          }
+          if (info.logoUrl) {
+            var logo = document.getElementById("dealz-window-logo");
+            logo.src = info.logoUrl;
+            logo.style.display = "block";
+          }
+          if (info.website) {
+            brandLink.href = info.website;
+            brandLink.style.cursor = "pointer";
+          }
+          if (info.brandColor && /^#[0-9a-f]{6}$/i.test(info.brandColor)) {
+            document.getElementById("dealz-window-header").style.background =
+              "linear-gradient(120deg," + info.brandColor + "," + darken(info.brandColor, 0.35) + ")";
           }
         })
         .catch(function () {});

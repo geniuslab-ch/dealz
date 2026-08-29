@@ -325,7 +325,13 @@ app.get("/api/pricing", async (req, res) => {
 app.get("/api/company-info", async (req, res) => {
   try {
     const company = await getCompanyBySlug(req.query.company);
-    res.json({ name: company?.name || null, logoUrl: company?.logoUrl || null, tagline: company?.tagline || null });
+    res.json({
+      name: company?.name || null,
+      logoUrl: company?.logoUrl || null,
+      tagline: company?.tagline || null,
+      website: company?.website || null,
+      brandColor: company?.brandColor || null,
+    });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Internal error" });

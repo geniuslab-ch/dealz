@@ -33,6 +33,8 @@ function defaultCompany() {
     signature: null,
     logoUrl: null,
     tagline: null,
+    website: null,
+    brandColor: null,
   };
 }
 
@@ -46,6 +48,8 @@ function rowToCompany(row) {
     signature: row.signature || null,
     logoUrl: row.logo_url || null,
     tagline: row.tagline || null,
+    website: row.website || null,
+    brandColor: row.brand_color || null,
   };
 }
 
