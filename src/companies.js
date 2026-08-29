@@ -30,6 +30,7 @@ function defaultCompany() {
     name: "SwissClean Sàrl",
     notifyEmail: process.env.COMPANY_NOTIFY_EMAIL,
     pricing: defaultPricing,
+    signature: null,
   };
 }
 
@@ -40,6 +41,7 @@ function rowToCompany(row) {
     name: row.name,
     notifyEmail: row.notify_email,
     pricing: row.pricing,
+    signature: row.signature || null,
   };
 }
 

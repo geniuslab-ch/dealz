@@ -64,6 +64,10 @@ async function sendEmail({ to, subject, html, replyTo }) {
   return { simulated: false };
 }
 
+function escapeHtml(s) {
+  return String(s || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
 function fmtCHF(n) {
   return `CHF ${Number(n).toFixed(2)}`;
 }
@@ -82,7 +86,14 @@ function quoteItemsHtml(quote) {
 // No logo/contact block beyond the name: this single-tenant demo's
 // "SwissClean Sàrl" is fictional, so there's no real logo or phone number
 // to show — inventing one would be worse than just the name.
-function signatureHtml(companyName = COMPANY_NAME) {
+// `signature` is free text the company owner wrote themselves in the CRM
+// (companies.html) — may include their phone, address, a custom sign-off.
+// Escaped since it ends up in an HTML email; newlines become <br> since a
+// signature box is the one place multi-line plain text is expected.
+function signatureHtml(companyName = COMPANY_NAME, signature) {
+  if (signature) {
+    return `<p style="margin-top:20px; margin-bottom:0; white-space:normal;">${escapeHtml(signature).replace(/\n/g, "<br>")}</p>`;
+  }
   return `
     <p style="margin-top:20px; margin-bottom:2px;">Cordialement,</p>
     <p style="margin:0; font-weight:bold;">${companyName}</p>
@@ -168,6 +179,7 @@ async function sendCounterofferToCustomer({
   baseUrl = APP_BASE_URL,
   companyName = COMPANY_NAME,
   companyEmail,
+  signature,
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
@@ -178,7 +190,7 @@ async function sendCounterofferToCustomer({
     <p style="font-size:22px;font-weight:bold;color:#0b5fff;">${fmtCHF(amount)}</p>
     ${message ? `<p>${message}</p>` : ""}
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir l'offre</a></p>
-    ${signatureHtml(companyName)}
+    ${signatureHtml(companyName, signature)}
   `;
   return sendEmail({ to: customer.email, subject: `Nouvelle offre — ${fmtCHF(amount)}`, html, replyTo: companyEmail });
 }
@@ -191,6 +203,7 @@ async function sendRescheduleToCustomer({
   baseUrl = APP_BASE_URL,
   companyName = COMPANY_NAME,
   companyEmail,
+  signature,
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
@@ -201,7 +214,7 @@ async function sendRescheduleToCustomer({
     <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${date}</p>
     ${message ? `<p>${message}</p>` : ""}
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir la proposition</a></p>
-    ${signatureHtml(companyName)}
+    ${signatureHtml(companyName, signature)}
   `;
   return sendEmail({ to: customer.email, subject: `Nouvelle date proposée`, html, replyTo: companyEmail });
 }
@@ -214,6 +227,7 @@ async function sendRevisedOfferToCustomer({
   baseUrl = APP_BASE_URL,
   companyName = COMPANY_NAME,
   companyEmail,
+  signature,
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
@@ -225,18 +239,18 @@ async function sendRevisedOfferToCustomer({
     <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${fmtCHF(quote.total)}</p>
     ${message ? `<p>${message}</p>` : ""}
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir l'offre révisée</a></p>
-    ${signatureHtml(companyName)}
+    ${signatureHtml(companyName, signature)}
   `;
   return sendEmail({ to: customer.email, subject: `Devis révisé — ${fmtCHF(quote.total)}`, html, replyTo: companyEmail });
 }
 
-async function sendReplyToCustomer({ message, customer, companyName = COMPANY_NAME, companyEmail }) {
+async function sendReplyToCustomer({ message, customer, companyName = COMPANY_NAME, companyEmail, signature }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const html = `
     <h2>Réponse de ${companyName}</h2>
     <p>Bonjour ${customer.name || ""},</p>
     <p>${message}</p>
-    ${signatureHtml(companyName)}
+    ${signatureHtml(companyName, signature)}
   `;
   return sendEmail({ to: customer.email, subject: `Réponse à votre question`, html, replyTo: companyEmail });
 }
@@ -248,6 +262,7 @@ async function sendFollowupToCustomer({
   baseUrl = APP_BASE_URL,
   companyName = COMPANY_NAME,
   companyEmail,
+  signature,
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
@@ -257,12 +272,12 @@ async function sendFollowupToCustomer({
     <p>Nous voulions juste nous assurer que vous aviez toutes les informations nécessaires. Votre devis reste disponible :</p>
     <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${fmtCHF(quote.total)}</p>
     <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Revoir le devis</a></p>
-    ${signatureHtml(companyName)}
+    ${signatureHtml(companyName, signature)}
   `;
   return sendEmail({ to: customer.email, subject: `Toujours intéressé(e) par notre offre ?`, html, replyTo: companyEmail });
 }
 
-async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME }) {
+async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME, signature }) {
   const now = new Date();
   const start = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // placeholder: 3 days out
   const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // 2h duration placeholder
@@ -279,7 +294,7 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
     <p>Merci ${customer.name || ""} ! Votre nettoyage est confirmé pour <b>${fmtCHF(quote.total)}</b>.</p>
     <table>${quoteItemsHtml(quote)}</table>
     <p><a href="${calLink}">Ajouter à mon Google Agenda</a></p>
-    ${signatureHtml(companyName)}
+    ${signatureHtml(companyName, signature)}
   `;
   const companyHtml = `
     <h2>✓ Nouvelle réservation confirmée</h2>

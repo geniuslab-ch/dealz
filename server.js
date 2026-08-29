@@ -371,6 +371,7 @@ app.post("/api/decline", async (req, res) => {
     const company = await getCompanyBySlug(req.body.company);
     const resolvedNotifyEmail = companyEmail || company?.notifyEmail || undefined;
     const resolvedCompanyName = company?.name;
+    const resolvedSignature = company?.signature;
 
     let finalCategory = category;
     let summary = text || "";
@@ -398,6 +399,7 @@ app.post("/api/decline", async (req, res) => {
       suggestedReply,
       companyEmail: resolvedNotifyEmail || null,
       companyName: resolvedCompanyName || null,
+      signature: resolvedSignature || null,
       status: "pending",
     });
 
@@ -478,14 +480,14 @@ app.post("/api/counteroffer/:token", async (req, res) => {
     // same reason as "keep" above.
     if (req.body.action === "send-reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
-      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail });
+      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail, signature: entry.signature });
       await store.update(req.params.token, { status: "replied" });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     if (cfg.action === "reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
-      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail });
+      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail, signature: entry.signature });
       await store.update(req.params.token, { status: "replied" });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -507,6 +509,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         companyEmail: entry.companyEmail,
         companyName: entry.companyName,
+        signature: entry.signature,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendCounterofferToCustomer({
@@ -518,6 +521,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         baseUrl: requestBaseUrl(req),
         companyName: entry.companyName,
         companyEmail: entry.companyEmail,
+        signature: entry.signature,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -535,6 +539,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         companyEmail: entry.companyEmail,
         companyName: entry.companyName,
+        signature: entry.signature,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRescheduleToCustomer({
@@ -545,6 +550,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         baseUrl: requestBaseUrl(req),
         companyName: entry.companyName,
         companyEmail: entry.companyEmail,
+        signature: entry.signature,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -564,6 +570,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         companyEmail: entry.companyEmail,
         companyName: entry.companyName,
+        signature: entry.signature,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRevisedOfferToCustomer({
@@ -574,6 +581,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         baseUrl: requestBaseUrl(req),
         companyName: entry.companyName,
         companyEmail: entry.companyEmail,
+        signature: entry.signature,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -587,6 +595,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         companyEmail: entry.companyEmail,
         companyName: entry.companyName,
+        signature: entry.signature,
       });
       await store.update(req.params.token, { status: "followup-sent" });
       const emailResult = await sendFollowupToCustomer({
@@ -596,6 +605,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         baseUrl: requestBaseUrl(req),
         companyName: entry.companyName,
         companyEmail: entry.companyEmail,
+        signature: entry.signature,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -652,6 +662,7 @@ app.post("/api/offer/:token/respond", async (req, res) => {
       customer,
       notifyEmail: entry.companyEmail || undefined,
       companyName: entry.companyName || undefined,
+      signature: entry.signature || undefined,
     });
     await store.update(req.params.token, { status: "accepted" });
 
@@ -678,6 +689,7 @@ app.post("/api/accept", async (req, res) => {
       customer: customer || {},
       notifyEmail: companyEmail || company?.notifyEmail || undefined,
       companyName: company?.name || undefined,
+      signature: company?.signature || undefined,
     });
     res.json({
       ok: true,
