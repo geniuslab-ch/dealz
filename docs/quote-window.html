@@ -124,6 +124,37 @@
     window.DEALZ_API_BASE = params.get("api-base") || location.origin;
     if (params.get("embedded") === "1") document.body.classList.add("dz-embedded");
 
+    // Same T() dictionary as quote-app.js would use, kept tiny here since
+    // this page only has a handful of its own static strings (the rest of
+    // the conversation is quote-app.js's own, translated there).
+    var lang = params.get("lang") || "fr";
+    window.DEALZ_LANG = lang;
+    var WINDOW_STRINGS = {
+      en: {
+        title: "Online quote",
+        subtitle: "Usually replies instantly",
+        placeholder: "Describe your cleaning needs…",
+        send: "Send",
+        close: "Close",
+      },
+      de: {
+        title: "Online-Offerte",
+        subtitle: "Antwort meist sofort",
+        placeholder: "Beschreiben Sie Ihren Reinigungsbedarf…",
+        send: "Senden",
+        close: "Schliessen",
+      },
+    };
+    if (WINDOW_STRINGS[lang]) {
+      var s = WINDOW_STRINGS[lang];
+      document.getElementById("dealz-window-title").textContent = s.title;
+      document.querySelector("#dealz-window-header .s").textContent = s.subtitle;
+      document.getElementById("dealz-input").placeholder = s.placeholder;
+      document.getElementById("dealz-send").textContent = s.send;
+      document.getElementById("dealz-window-close").setAttribute("aria-label", s.close);
+      document.title = s.title;
+    }
+
     // Closing a window only works if this page opened as a popup
     // (window.open) — if someone just navigated here directly there's
     // nothing to close, so send them back instead.
@@ -160,8 +191,9 @@
         .then(function (info) {
           if (!info) return;
           if (info.name) {
-            document.getElementById("dealz-window-title").textContent = info.name + " · Devis";
-            document.title = info.name + " · Devis";
+            var suffix = lang === "en" ? " · Quote" : lang === "de" ? " · Offerte" : " · Devis";
+            document.getElementById("dealz-window-title").textContent = info.name + suffix;
+            document.title = info.name + suffix;
           }
           if (info.logoUrl) {
             var logo = document.getElementById("dealz-window-logo");

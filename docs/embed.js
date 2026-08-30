@@ -42,6 +42,10 @@
   var CURRENT_SCRIPT = document.currentScript;
   var API_BASE = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-api-base")) || "";
   window.DEALZ_COMPANY = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-company")) || "";
+  // "fr" (default), "en" or "de" — quote-app.js's own T() dictionary reads
+  // this for the bubble/inline panel; the popup modal below passes it on
+  // to quote-window.html as ?lang=.
+  window.DEALZ_LANG = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-lang")) || "fr";
   var ORIGIN = (function () {
     if (API_BASE) return API_BASE.replace(/\/$/, "");
     if (CURRENT_SCRIPT && CURRENT_SCRIPT.src) {
@@ -193,7 +197,8 @@
           encodeURIComponent(window.DEALZ_COMPANY) +
           "&api-base=" +
           encodeURIComponent(ORIGIN) +
-          "&embedded=1";
+          "&embedded=1&lang=" +
+          encodeURIComponent(window.DEALZ_LANG || "fr");
       }
       overlay.classList.add("open");
     }

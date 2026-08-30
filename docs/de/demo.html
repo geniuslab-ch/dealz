@@ -235,6 +235,7 @@
     Powered by <a href="/de/index.html">⚡ Dealz</a>.
   </footer>
 
+  <script>window.DEALZ_LANG = "de";</script>
   <script src="/demo-tabs.js"></script>
   <script src="/pricing-engine-client.js"></script>
   <script src="/mock-client.js"></script>
@@ -294,7 +295,7 @@
       var overlay = document.getElementById("demo-popup-overlay");
       var iframe = document.getElementById("demo-popup-iframe");
       function openPopup() {
-        if (!iframe.src) iframe.src = "/quote-window.html?embedded=1";
+        if (!iframe.src) iframe.src = "/quote-window.html?embedded=1&lang=de";
         overlay.classList.add("open");
       }
       function closePopup() {
