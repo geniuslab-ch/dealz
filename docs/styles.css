@@ -95,6 +95,28 @@ img { max-width: 100%; }
   background: linear-gradient(135deg, var(--blue), var(--sky));
   color: white;
 }
+.nav-lang {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: 6px;
+  padding-left: 10px;
+  border-left: 1px solid var(--line);
+}
+.nav-lang a {
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+  padding: 6px 9px;
+  border-radius: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-lang a:hover { background: var(--blue-light); color: var(--blue-dark); }
+.nav-lang a.active { background: var(--navy); color: white; }
 .nav-links a.cta:hover, .nav-links button.cta:hover {
   background: linear-gradient(135deg, var(--blue-dark), var(--blue));
   color: white;

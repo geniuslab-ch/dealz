@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SwissClean Sàrl — Demo site (powered by Dealz)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/demo.css" />
+</head>
+<body class="swissclean">
+
+  <div class="sc-demo-banner">
+    <span class="tag">DEMO</span>
+    This is the fictional website of a cleaning company that has integrated Dealz.
+    <a href="/en/index.html">Discover Dealz →</a>
+  </div>
+
+  <nav class="sc-nav">
+    <div class="sc-nav-logo"><span class="dot">🧽</span> SwissClean</div>
+    <div class="sc-nav-links">
+      <button data-tab="accueil" class="active">Home</button>
+      <button data-tab="prestations">Services</button>
+      <button data-tab="apropos">About</button>
+      <button data-tab="devis" class="cta">✨ Get a quote</button>
+      <button data-tab="contact">Contact</button>
+      <span class="nav-lang">
+        <a href="/demo.html">FR</a>
+        <a href="/en/demo.html" class="active">EN</a>
+        <a href="/de/demo.html">DE</a>
+      </span>
+    </div>
+  </nav>
+
+  <!-- HOME -->
+  <section id="sc-tab-accueil" class="sc-tab active">
+    <div class="sc-hero">
+      <div class="sc-hero-inner">
+        <span class="sc-eyebrow">Lake Geneva region · Fictional example</span>
+        <h1>A spotless home, without the hassle.</h1>
+        <p>Residential, end-of-tenancy and office cleaning across Greater Geneva &amp; the canton of Vaud — get a price in seconds, right here on this site.</p>
+        <div>
+          <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Get an instant quote</button>
+          <button class="sc-btn sc-btn-secondary" data-goto="prestations">See our services</button>
+        </div>
+      </div>
+      <div class="sc-hero-strip">
+        <div class="stat"><div class="num">4.9★</div><div class="lbl">CUSTOMER SATISFACTION</div></div>
+        <div class="stat"><div class="num">2,300+</div><div class="lbl">CLEANINGS COMPLETED</div></div>
+        <div class="stat"><div class="num">&lt; 1 min</div><div class="lbl">FOR A QUOTE</div></div>
+      </div>
+    </div>
+
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Why SwissClean</span>
+      <h2 class="sc-title">A clear price, before you even book</h2>
+      <p class="sc-sub">Answer a few questions and get a detailed quote right away.</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">⚡</div><h3>Instant price</h3><p>Detailed quote in under a minute, any time of day.</p></div>
+        <div class="sc-card"><div class="icon">🎯</div><h3>Step by step</h3><p>A few simple questions — no complicated form.</p></div>
+        <div class="sc-card"><div class="icon">🔒</div><h3>Firm quote</h3><p>The price you're shown is the price you pay.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="sc-tab-prestations" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Services</span>
+      <h2 class="sc-title">What we clean</h2>
+      <p class="sc-sub">Choose a service, or simply describe what you need in the "Get a quote" tab.</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">🏠</div><h3>Regular cleaning</h3><p>Weekly, bi-weekly or one-off, billed hourly.</p><span class="tag">from CHF 45/h</span></div>
+        <div class="sc-card"><div class="icon">📦</div><h3>End of tenancy</h3><p>Deep clean for your move.</p><span class="tag">from CHF 220</span></div>
+        <div class="sc-card"><div class="icon">🔥</div><h3>Oven cleaning</h3><p>Full degreasing, as an add-on.</p><span class="tag">CHF 40</span></div>
+        <div class="sc-card"><div class="icon">🪟</div><h3>Window cleaning</h3><p>Inside and out, streak-free.</p><span class="tag">CHF 60</span></div>
+        <div class="sc-card"><div class="icon">🧺</div><h3>Carpet shampooing</h3><p>Deep clean, per room.</p><span class="tag">CHF 35/room</span></div>
+        <div class="sc-card"><div class="icon">❄️</div><h3>Fridge cleaning</h3><p>Full interior clean and degreasing.</p><span class="tag">CHF 30</span></div>
+      </div>
+      <div style="text-align:center; margin-top: 32px;">
+        <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Get an instant quote</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="sc-tab-apropos" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">About</span>
+      <h2 class="sc-title">A local team, smartly organised</h2>
+      <p class="sc-sub" style="margin-bottom:0;">SwissClean has been cleaning homes and offices in the canton of Vaud and Geneva since 2014. In 2026, we added an instant quote assistant to our site — faster for you, less admin for us.</p>
+      <ul class="sc-about-list">
+        <li><span class="sc-check">✓</span><span><b>Insured, vetted staff</b> — every team member is checked.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Eco-friendly products</b> — safe for children and pets.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Transparent pricing</b> — the quote you get is the price you pay.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="sc-tab-contact" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Contact</span>
+      <h2 class="sc-title">Talk to a person, or get an instant quote</h2>
+      <p class="sc-sub">Would rather answer a few questions than call? Head to the <b>Get a quote</b> tab.</p>
+      <div class="sc-contact-grid">
+        <div class="sc-contact-card"><div class="lbl">Phone</div><div class="val">022 000 00 00</div></div>
+        <div class="sc-contact-card"><div class="lbl">Email</div><div class="val">hello@swissclean.demo</div></div>
+        <div class="sc-contact-card"><div class="lbl">Service area</div><div class="val">Vaud &amp; Geneva</div></div>
+        <div class="sc-contact-card"><div class="lbl">Hours</div><div class="val">Mon–Sat, 8am–6pm</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE (Dealz widget embedded here) -->
+  <section id="sc-tab-devis" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">✨ Get a quote</span>
+      <h2 class="sc-title">Your price in under a minute</h2>
+      <p class="sc-devis-note">Answer a few questions about your home — you'll receive a real quote, which you can accept or decline right here.</p>
+
+      <div class="devis-mode-tabs" id="devis-mode-tabs">
+        <button class="dmt-btn active" data-devis-mode="page">📄 Dedicated page</button>
+        <button class="dmt-btn" data-devis-mode="popup">🪟 Pop-up</button>
+        <button class="dmt-btn" data-devis-mode="chat">💬 Chat widget</button>
+        <button class="dmt-btn" data-devis-mode="whatsapp" id="devis-whatsapp-tab" style="display: none">📱 WhatsApp Business</button>
+      </div>
+
+      <div class="devis-mode-panel active" data-devis-panel="page">
+        <p class="sc-devis-note">Dedicated page — like the one you just clicked to get here, via "✨ Get a quote". The quote lives on a real page of your site, under your own header and navigation, without ever leaving it.</p>
+        <div class="quote-wrap" id="quote-wrap-anchor">
+          <div class="quote-side">
+            <h3>How it works</h3>
+            <div class="flow-steps">
+              <div class="flow-step"><div class="num">1</div><span class="label">You describe what you need</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">2</div><span class="label">A few quick questions</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">3</div><span class="label">Calculated from our price list</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">4</div><span class="label">Firm quote shown</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">5</div><span class="label">You accept or decline</span></div>
+            </div>
+          </div>
+
+          <div class="quote-panel-slot" id="quote-panel-slot">
+            <!-- .quote-panel (below) is the single, real chat instance —
+                 JS moves this exact node here or into the floating bubble
+                 slot depending on the active tab, instead of duplicating
+                 it, so there's only ever one conversation/state. -->
+            <div class="quote-panel" id="quote-panel">
+              <div class="quote-panel-head">
+                <div class="title">SwissClean · Quote</div>
+                <div class="subtitle">Usually replies instantly</div>
+              </div>
+
+              <div class="dealz-lead-gate" id="dealz-lead-gate">
+                <p class="dlg-intro">Before your instant quote, please share your professional contact details:</p>
+                <input class="dcf-input" id="dlg-company" placeholder="Your company name (optional)" />
+                <input class="dcf-input" id="dlg-email" type="email" placeholder="Work email" required />
+                <input class="dcf-input" id="dlg-phone" placeholder="Phone (optional)" />
+                <button class="dcf-submit" id="dlg-submit">Try the demo</button>
+                <p class="dlg-msg" id="dlg-msg"></p>
+              </div>
+
+              <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+                <div class="dealz-messages" id="dealz-messages"></div>
+                <div class="dealz-inputbar">
+                  <input id="dealz-input" type="text" placeholder="Describe your cleaning needs…" autocomplete="off" />
+                  <button id="dealz-send">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="popup">
+        <p class="sc-devis-note">A "Quote" button in your menu opens the same quote full-screen, in its own window — more room than the bubble, without ever leaving your site.</p>
+        <div class="devis-mode-try">
+          <button class="sc-btn sc-btn-primary" id="try-popup-btn">Try the pop-up →</button>
+        </div>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="chat">
+        <p class="sc-devis-note">A floating bubble on your site, in a corner of the screen — the simplest integration: one line of code, works on any platform (Wix, Shopify, WordPress, a hand-built site…). Click the bubble bottom-right to try it.</p>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="whatsapp">
+        <p class="sc-devis-note">Your customers message your WhatsApp Business number directly — nothing to install on their phone.</p>
+        <div class="devis-mode-try">
+          <a href="#" id="whatsapp-trial-link" class="sc-btn sc-btn-primary" target="_blank" rel="noopener">Try it on WhatsApp →</a>
+        </div>
+      </div>
+
+      <!-- Real floating bubble, matching embed.js's actual bubble mode —
+           shown only while the "Chat widget" tab is active; .quote-panel
+           gets moved in here (see script below), so the bubble opens the
+           exact same live conversation, not a lookalike. -->
+      <button id="demo-widget-launcher" class="demo-widget-launcher" aria-label="Open the quote chat">💬</button>
+      <div id="demo-widget-panel-slot" class="demo-widget-panel-slot"></div>
+
+      <!-- Pop-up modal — stays on this page (backdrop + centered card),
+           not a new browser tab/window, matching what a real "pop-up"
+           should feel like. Loads quote-window.html?embedded=1 in an
+           iframe, same page real client sites get via embed.js's
+           data-dealz-mode="window". -->
+      <div id="demo-popup-overlay" class="demo-popup-overlay">
+        <div class="demo-popup-card">
+          <button id="demo-popup-close" class="demo-popup-close" aria-label="Close">✕</button>
+          <iframe id="demo-popup-iframe" title="Online quote"></iframe>
+        </div>
+      </div>
+
+      <div class="demo-followup" id="demo-followup">
+        <h2>Picture this on YOUR site.</h2>
+        <div class="imagine-lines">
+          Your prices. Your services. Your brand. Your customers.<br />
+          Your AI sales assistant, available around the clock.
+        </div>
+        <div class="demo-followup-ctas">
+          <a href="/en/index.html#contact" class="btn btn-primary">Request setup</a>
+          <a href="/en/index.html#tarifs" class="btn btn-secondary">See pricing</a>
+          <a href="mailto:dealz@dealz.website" class="btn btn-secondary">Contact Dealz</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sc-footer">
+    SwissClean Sàrl — demo site, this company does not really exist.
+    Powered by <a href="/en/index.html">⚡ Dealz</a>.
+  </footer>
+
+  <script src="/demo-tabs.js"></script>
+  <script src="/pricing-engine-client.js"></script>
+  <script src="/mock-client.js"></script>
+  <script src="/quote-app.js"></script>
+  <script src="/lead-gate.js"></script>
+  <script src="/whatsapp-trial-card.js"></script>
+  <script>
+    document.addEventListener("dealz:quote-delivered", function () {
+      var el = document.getElementById("demo-followup");
+      if (!el.classList.contains("show")) {
+        el.classList.add("show");
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+
+    // Switches between the four "how this looks on your site" panels —
+    // same idea as demo-tabs.js's top nav, scoped to this section instead.
+    // The "chat" mode is the real floating-bubble behaviour, not a
+    // lookalike: the single .quote-panel node (one live conversation) is
+    // physically moved between the inline "dedicated page" slot and the
+    // fixed-position bubble slot, and only the bubble mode starts closed.
+    (function () {
+      var tabButtons = document.querySelectorAll("#devis-mode-tabs .dmt-btn");
+      var panels = document.querySelectorAll(".devis-mode-panel");
+      var quotePanel = document.getElementById("quote-panel");
+      var inlineSlot = document.getElementById("quote-panel-slot");
+      var bubbleSlot = document.getElementById("demo-widget-panel-slot");
+      var launcher = document.getElementById("demo-widget-launcher");
+
+      function setMode(mode) {
+        tabButtons.forEach(function (b) { b.classList.toggle("active", b.dataset.devisMode === mode); });
+        panels.forEach(function (p) { p.classList.toggle("active", p.dataset.devisPanel === mode); });
+
+        if (mode === "chat") {
+          bubbleSlot.appendChild(quotePanel);
+          launcher.classList.add("show");
+          bubbleSlot.classList.remove("open");
+        } else {
+          inlineSlot.appendChild(quotePanel);
+          launcher.classList.remove("show");
+          bubbleSlot.classList.remove("open");
+        }
+      }
+
+      tabButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () { setMode(btn.dataset.devisMode); });
+      });
+      launcher.addEventListener("click", function () {
+        bubbleSlot.classList.toggle("open");
+      });
+    })();
+
+    // Lets the "pop-up" tab actually open the real pop-up — an in-page
+    // modal (stays on this page, unlike window.open()) — same mechanism a
+    // real client site uses via embed.js's data-dealz-mode="window".
+    (function () {
+      var overlay = document.getElementById("demo-popup-overlay");
+      var iframe = document.getElementById("demo-popup-iframe");
+      function openPopup() {
+        if (!iframe.src) iframe.src = "/quote-window.html?embedded=1";
+        overlay.classList.add("open");
+      }
+      function closePopup() {
+        overlay.classList.remove("open");
+      }
+      document.getElementById("try-popup-btn").addEventListener("click", openPopup);
+      document.getElementById("demo-popup-close").addEventListener("click", closePopup);
+      overlay.addEventListener("click", function (e) {
+        if (e.target === overlay) closePopup();
+      });
+    })();
+  </script>
+</body>
+</html>
