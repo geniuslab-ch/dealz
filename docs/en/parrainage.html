@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Referral — Dealz</title>
+  <meta name="description" content="Know a fellow cleaning company still missing enquiries? Refer them to Dealz." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <img src="/images/dealz-logo-sm.png" alt="Dealz" />
+      <span class="nav-slogan">Keep your website.<br>Keep your tools.<br>Add Dealz.</span>
+    </div>
+    <div class="nav-links">
+      <a href="/en/index.html">Home</a>
+      <span class="nav-lang">
+        <a href="/parrainage.html">FR</a>
+        <a href="/en/parrainage.html" class="active">EN</a>
+        <a href="/de/parrainage.html">DE</a>
+      </span>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Referral program</span>
+      <h1>YOU'VE KEPT<br>THE SECRET LONG ENOUGH.</h1>
+      <p class="hero-question">Know a fellow business still missing enquiries in the evening?</p>
+      <p>Tell us in 30 seconds. We'll take it from there and show them Dealz — and you get a reward on your subscription as soon as they sign up: up to CHF 300 off (yearly) or 3 months free (monthly).</p>
+    </div>
+  </section>
+
+  <section id="parrainage-form-section">
+    <div class="section-inner" style="max-width: 560px;">
+
+      <div class="referral-card" id="identify-section" style="display:none;">
+        <div class="referral-card-head">
+          <div class="title">First, let's find your account</div>
+          <div class="subtitle">You didn't come through your personal link — no worries, your email is enough</div>
+        </div>
+        <div id="identify-form">
+          <input class="dcf-input" id="id-email" type="email" placeholder="Your Dealz customer email" required />
+          <button class="dcf-submit" id="id-submit">Continue →</button>
+          <p class="dlg-msg" id="id-msg"></p>
+        </div>
+      </div>
+
+      <div class="referral-card" id="referral-form-section" style="display:none;">
+        <div class="referral-card-head">
+          <div class="title">Introduce a colleague</div>
+          <div class="subtitle">2 minutes, no obligation for them</div>
+        </div>
+
+        <div id="referral-form">
+          <input class="dcf-input" id="rf-company" placeholder="Their company name" />
+          <input class="dcf-input" id="rf-email" type="email" placeholder="Their work email" required />
+          <input class="dcf-input" id="rf-phone" placeholder="Their phone (optional)" />
+          <textarea class="dcf-input" id="rf-note" placeholder="A note for them (optional) — e.g. “Check this out, it might help you”" rows="3" style="resize: vertical; font-family: inherit;"></textarea>
+          <button class="dcf-submit" id="rf-submit">Send the tip →</button>
+          <p class="dlg-msg" id="rf-msg"></p>
+        </div>
+
+        <div id="referral-success" style="display:none;">
+          <p style="font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 6px;">Sent. 🤝</p>
+          <p style="font-size: 13.5px; color: var(--muted); margin: 0;">We'll take it from here with your colleague. Thanks for the help — and for the trust.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div>Dealz — AI sales assistant for Swiss cleaning companies. 🇨🇭 FR · DE · IT · EN (soon)</div>
+    <div class="site-footer-slogan">Keep your website. Keep your tools. Add Dealz.</div>
+  </footer>
+
+  <script>window.DEALZ_LANG = "en";</script>
+  <script src="/referral-form.js"></script>
+</body>
+</html>

@@ -13,6 +13,37 @@
  * the CRM's /api/referral-leads webhook.
  */
 (function () {
+  // Display-only translation (same safe pattern as docs/quote-app.js and
+  // docs/contact-flow.js): every string here is a UI message only, never
+  // matched against later — so translating at render time is fully safe.
+  const I18N = {
+    "Merci d'indiquer un e-mail professionnel valide pour votre confrère.": {
+      en: "Please provide a valid work email for your colleague.",
+      de: "Bitte geben Sie eine gültige geschäftliche E-Mail-Adresse für Ihre Kollegin oder Ihren Kollegen an.",
+    },
+    "Envoi…": { en: "Sending…", de: "Wird gesendet…" },
+    "Une erreur est survenue — réessayez dans un instant.": {
+      en: "Something went wrong — please try again in a moment.",
+      de: "Etwas ist schiefgelaufen — bitte versuchen Sie es gleich nochmals.",
+    },
+    "Merci d'indiquer l'e-mail associé à votre compte Dealz.": {
+      en: "Please provide the email linked to your Dealz account.",
+      de: "Bitte geben Sie die mit Ihrem Dealz-Konto verknüpfte E-Mail-Adresse an.",
+    },
+    "Vérification…": { en: "Checking…", de: "Wird geprüft…" },
+    "Aucun compte client Dealz trouvé avec cet e-mail. Vérifiez l'adresse, ou utilisez le lien reçu dans votre e-mail de bienvenue.": {
+      en: "No Dealz customer account found with this email. Check the address, or use the link from your welcome email.",
+      de: "Kein Dealz-Kundenkonto mit dieser E-Mail-Adresse gefunden. Überprüfen Sie die Adresse, oder verwenden Sie den Link aus Ihrer Willkommens-E-Mail.",
+    },
+  };
+
+  function T(fr) {
+    const lang = window.DEALZ_LANG;
+    if (!lang || lang === "fr" || !fr) return fr;
+    const entry = I18N[fr];
+    return (entry && entry[lang]) || fr;
+  }
+
   function apiUrl(path) {
     return (window.DEALZ_API_BASE || "") + path;
   }
@@ -25,7 +56,7 @@
   function showMessage(elId, text, isError) {
     const msg = document.getElementById(elId);
     if (!msg) return;
-    msg.textContent = text;
+    msg.textContent = T(text);
     msg.className = "dlg-msg show" + (isError ? " err" : " ok");
   }
 
