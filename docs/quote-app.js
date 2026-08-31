@@ -902,7 +902,7 @@
 
     try {
       await loadPdfLibs();
-      const { doc, blobUrl } = window.DealzPDF.generate(quote, quote.customer || {});
+      const { doc, blobUrl } = window.DealzPDF.generate(quote, quote.customer || {}, window.DEALZ_LANG || "fr");
       const body = overlay.querySelector(".dealz-pdf-body");
       body.innerHTML = "";
       const iframe = el("iframe", "dealz-pdf-frame");
