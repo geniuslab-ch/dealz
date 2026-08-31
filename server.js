@@ -351,9 +351,14 @@ app.post("/api/chat", async (req, res) => {
     // single-tenant demo (SwissClean Sàrl + docs/pricing.json), same as
     // every caller that predates multi-tenant support.
     const company = (await getCompanyBySlug(req.body.company)) || undefined;
+    // "fr" (default), "en" or "de" — set by the page/widget the visitor is
+    // on (window.DEALZ_LANG in quote-app.js). Only affects item.label text
+    // in the returned quote and the assistant's own copy; the pricing math
+    // is identical regardless of language.
+    const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
 
     if (MOCK_MODE) {
-      return res.json(await runTurnMock(history, company));
+      return res.json(await runTurnMock(history, company, lang));
     }
 
     // A visitor on the live demo should never see a broken conversation just
@@ -362,14 +367,14 @@ app.post("/api/chat", async (req, res) => {
     // engine MOCK_MODE uses, silently, and log it so the developer notices
     // and can fix the underlying account issue.
     try {
-      return res.json(await runTurn(history, company));
+      return res.json(await runTurn(history, company, lang));
     } catch (apiErr) {
       console.warn(
         "[/api/chat] Real Claude call failed — falling back to the scripted demo engine. " +
           "Fix the underlying issue (e.g. add Anthropic credit) to restore the real assistant. " +
           `Error: ${apiErr.message}`
       );
-      return res.json(await runTurnMock(history, company));
+      return res.json(await runTurnMock(history, company, lang));
     }
   } catch (err) {
     console.error(err);
@@ -395,6 +400,11 @@ app.post("/api/decline", async (req, res) => {
     const resolvedSignature = company?.signature;
     const resolvedLogoUrl = company?.logoUrl;
     const resolvedTagline = company?.tagline;
+    // The language the customer was actually talking to the widget in
+    // (window.DEALZ_LANG on the page) — every customer-facing email in this
+    // decline → counteroffer → accept chain re-reads this off the stored
+    // token, so it stays consistent through the whole flow.
+    const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
 
     let finalCategory = category;
     let summary = text || "";
@@ -425,6 +435,7 @@ app.post("/api/decline", async (req, res) => {
       signature: resolvedSignature || null,
       logoUrl: resolvedLogoUrl || null,
       tagline: resolvedTagline || null,
+      lang,
       status: "pending",
     });
 
@@ -505,14 +516,14 @@ app.post("/api/counteroffer/:token", async (req, res) => {
     // same reason as "keep" above.
     if (req.body.action === "send-reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
-      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail, signature: entry.signature, logoUrl: entry.logoUrl, tagline: entry.tagline });
+      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail, signature: entry.signature, logoUrl: entry.logoUrl, tagline: entry.tagline, lang: entry.lang });
       await store.update(req.params.token, { status: "replied" });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     if (cfg.action === "reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
-      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail, signature: entry.signature, logoUrl: entry.logoUrl, tagline: entry.tagline });
+      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail, signature: entry.signature, logoUrl: entry.logoUrl, tagline: entry.tagline, lang: entry.lang });
       await store.update(req.params.token, { status: "replied" });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -537,6 +548,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         signature: entry.signature,
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
+        lang: entry.lang,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendCounterofferToCustomer({
@@ -551,6 +563,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         signature: entry.signature,
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
+        lang: entry.lang,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -571,6 +584,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         signature: entry.signature,
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
+        lang: entry.lang,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRescheduleToCustomer({
@@ -584,6 +598,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         signature: entry.signature,
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
+        lang: entry.lang,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -606,6 +621,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         signature: entry.signature,
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
+        lang: entry.lang,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRevisedOfferToCustomer({
@@ -619,6 +635,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         signature: entry.signature,
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
+        lang: entry.lang,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -635,6 +652,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         signature: entry.signature,
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
+        lang: entry.lang,
       });
       await store.update(req.params.token, { status: "followup-sent" });
       const emailResult = await sendFollowupToCustomer({
@@ -647,6 +665,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         signature: entry.signature,
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
+        lang: entry.lang,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -706,6 +725,7 @@ app.post("/api/offer/:token/respond", async (req, res) => {
       signature: entry.signature || undefined,
       logoUrl: entry.logoUrl || undefined,
       tagline: entry.tagline || undefined,
+      lang: entry.lang || undefined,
     });
     await store.update(req.params.token, { status: "accepted" });
 
@@ -726,6 +746,7 @@ app.post("/api/accept", async (req, res) => {
     if (!quote || !quote.items) return res.status(400).json({ error: "quote is required" });
 
     const company = await getCompanyBySlug(req.body.company);
+    const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
 
     const result = await sendBookingConfirmation({
       quote,
@@ -735,6 +756,7 @@ app.post("/api/accept", async (req, res) => {
       signature: company?.signature || undefined,
       logoUrl: company?.logoUrl || undefined,
       tagline: company?.tagline || undefined,
+      lang,
     });
     res.json({
       ok: true,

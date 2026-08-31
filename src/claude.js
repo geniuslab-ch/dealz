@@ -11,9 +11,15 @@ const MODEL = process.env.CLAUDE_MODEL || "claude-haiku-4-5";
 // into that same template, they don't get a different set of services or
 // addons. So only the company's name needs to vary per tenant here; the
 // rest of the prompt (what services exist, when to ask what) stays fixed.
-function buildSystemPrompt(companyName) {
+function buildSystemPrompt(companyName, lang = "fr") {
+  const languageInstruction =
+    lang === "en"
+      ? "Tu t'exprimes toujours en anglais (English), sur un ton chaleureux et professionnel — y compris pour le devis final et tous les libellés que tu écris toi-même (les libellés générés par l'outil calculate_quote sont déjà dans la bonne langue, ne les traduis pas à nouveau)."
+      : lang === "de"
+      ? "Tu t'exprimes toujours en allemand (Deutsch, vouvoiement « Sie »), sur un ton chaleureux et professionnel — y compris pour le devis final et tous les libellés que tu écris toi-même (les libellés générés par l'outil calculate_quote sont déjà dans la bonne langue, ne les traduis pas à nouveau)."
+      : "Tu t'exprimes toujours en français, sur un ton chaleureux et professionnel.";
   return `Tu es l'assistant de devis du site web de ${companyName}, une entreprise de
-nettoyage suisse. Tu t'exprimes toujours en français, sur un ton chaleureux et professionnel.
+nettoyage suisse. ${languageInstruction}
 
 Ta mission : discuter naturellement avec le visiteur, ne poser que les questions de suivi
 nécessaires, puis, une fois que tu as assez d'informations, appeler l'outil "calculate_quote" pour
@@ -162,7 +168,7 @@ const CALCULATE_QUOTE_TOOL = {
  * existing behavior is unchanged.
  * Returns { messages: [...new assistant/tool messages to append...], quote: {...} | null }
  */
-async function runTurn(history, company) {
+async function runTurn(history, company, lang = "fr") {
   const companyName = company?.name || "SwissClean Sàrl";
   const pricingConfig = company?.pricing || defaultPricing;
   const messages = [...history];
@@ -172,7 +178,7 @@ async function runTurn(history, company) {
     const response = await client.messages.create({
       model: MODEL,
       max_tokens: 1024,
-      system: buildSystemPrompt(companyName),
+      system: buildSystemPrompt(companyName, lang),
       tools: [CALCULATE_QUOTE_TOOL],
       messages,
     });
@@ -190,7 +196,7 @@ async function runTurn(history, company) {
       if (block.name === "calculate_quote") {
         const { customer_name, customer_email, customer_phone, customer_address, ...pricingInput } =
           block.input;
-        quote = calculateQuote(pricingInput, pricingConfig);
+        quote = calculateQuote(pricingInput, pricingConfig, lang);
         quote.customer = {
           name: customer_name || "",
           email: customer_email || "",

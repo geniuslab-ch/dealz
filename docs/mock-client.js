@@ -535,7 +535,8 @@
   // for open-ended ones like dates and contact info) — with conditional
   // branches (fin-de-bail-specific, régulier-specific, etc.) only applying
   // when relevant. See src/mock.js for the full design note.
-  function runTurnMock(pricing, history) {
+  function runTurnMock(pricing, history, lang) {
+    lang = lang || window.DEALZ_LANG || "fr";
     const answers = {};
 
     for (const step of STEPS) {
@@ -580,13 +581,23 @@
       floors_no_elevator: answers.floors_no_elevator || 0,
     };
 
-    const quote = window.DealzPricingEngine.calculateQuote(pricing, input);
+    const quote = window.DealzPricingEngine.calculateQuote(pricing, input, lang);
     quote.customer = answers.contact || { name: "", email: "", phone: "", address: "" };
     quote.details = answers;
 
-    const text = quote.customer.name
-      ? `Merci ${quote.customer.name} ! Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.`
-      : "Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.";
+    const withName = (name) =>
+      lang === "en"
+        ? `Thank you ${name}! Here is your firm, detailed quote for this service — you can accept or decline it below.`
+        : lang === "de"
+        ? `Vielen Dank, ${name}! Hier ist Ihre feste, detaillierte Offerte für diese Leistung — Sie können sie unten annehmen oder ablehnen.`
+        : `Merci ${name} ! Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.`;
+    const withoutName =
+      lang === "en"
+        ? "Here is your firm, detailed quote for this service — you can accept or decline it below."
+        : lang === "de"
+        ? "Hier ist Ihre feste, detaillierte Offerte für diese Leistung — Sie können sie unten annehmen oder ablehnen."
+        : "Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.";
+    const text = quote.customer.name ? withName(quote.customer.name) : withoutName;
 
     return {
       messages: [{ role: "assistant", content: text }],

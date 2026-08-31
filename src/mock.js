@@ -549,7 +549,7 @@ function extractContact(text) {
 // src/companies.js); omitted, it falls back to the original single-tenant
 // demo company's grid (docs/pricing.json), so the website chat's existing
 // behavior is unchanged.
-async function runTurnMock(history, company) {
+async function runTurnMock(history, company, lang = "fr") {
   const pricingConfig = company?.pricing || pricing;
   const answers = {};
 
@@ -596,13 +596,23 @@ async function runTurnMock(history, company) {
     floors_no_elevator: answers.floors_no_elevator || 0,
   };
 
-  const quote = calculateQuote(input, pricingConfig);
+  const quote = calculateQuote(input, pricingConfig, lang);
   quote.customer = answers.contact || { name: "", email: "", phone: "", address: "" };
   quote.details = answers;
 
-  const text = quote.customer.name
-    ? `Merci ${quote.customer.name} ! Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.`
-    : "Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.";
+  const withName = (name) =>
+    lang === "en"
+      ? `Thank you ${name}! Here is your firm, detailed quote for this service — you can accept or decline it below.`
+      : lang === "de"
+      ? `Vielen Dank, ${name}! Hier ist Ihre feste, detaillierte Offerte für diese Leistung — Sie können sie unten annehmen oder ablehnen.`
+      : `Merci ${name} ! Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.`;
+  const withoutName =
+    lang === "en"
+      ? "Here is your firm, detailed quote for this service — you can accept or decline it below."
+      : lang === "de"
+      ? "Hier ist Ihre feste, detaillierte Offerte für diese Leistung — Sie können sie unten annehmen oder ablehnen."
+      : "Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.";
+  const text = quote.customer.name ? withName(quote.customer.name) : withoutName;
 
   return {
     messages: [{ role: "assistant", content: text }],

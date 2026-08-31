@@ -376,7 +376,11 @@
     const res = await fetch(apiUrl("/api/chat"), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: payloadMessages, company: window.DEALZ_COMPANY || undefined }),
+      body: JSON.stringify({
+        messages: payloadMessages,
+        company: window.DEALZ_COMPANY || undefined,
+        lang: window.DEALZ_LANG || undefined,
+      }),
     });
     let data;
     try {
@@ -703,6 +707,7 @@
         customer,
         companyEmail: getCompanyEmail(),
         company: window.DEALZ_COMPANY || undefined,
+        lang: window.DEALZ_LANG || undefined,
       });
       renderSystemMessage(
         container,
@@ -757,6 +762,7 @@
         customer,
         companyEmail: getCompanyEmail(),
         company: window.DEALZ_COMPANY || undefined,
+        lang: window.DEALZ_LANG || undefined,
       });
       renderSystemMessage(
         container,
@@ -992,7 +998,7 @@
         // for the rest of the session and keep going transparently.
         useStaticFallback = true;
         const pricing = await loadPricing();
-        data = window.DealzMock.runTurnMock(pricing, messages);
+        data = window.DealzMock.runTurnMock(pricing, messages, window.DEALZ_LANG || "fr");
       }
 
       typing.remove();

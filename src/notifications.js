@@ -87,10 +87,11 @@ function quoteItemsHtml(quote) {
 // (set in the CRM's companies.html) — every piece is optional and each
 // falls back gracefully: no logo -> no image column; no tagline -> no
 // italic line; no signature text -> just "Cordialement, [name]".
-function signatureHtml(companyName = COMPANY_NAME, signature, logoUrl, tagline) {
+function signatureHtml(companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr") {
+  const closing = lang === "en" ? "Best regards" : lang === "de" ? "Freundliche Grüsse" : "Cordialement";
   const contactBlock = signature
     ? `<div style="font-size:12.5px; color:#5b6472; margin-top:6px; line-height:1.5;">${escapeHtml(signature).replace(/\n/g, "<br>")}</div>`
-    : `<div style="font-size:13px; color:#10131a; margin-top:6px;">Cordialement</div>`;
+    : `<div style="font-size:13px; color:#10131a; margin-top:6px;">${closing}</div>`;
 
   if (logoUrl) {
     return `
@@ -113,7 +114,7 @@ function signatureHtml(companyName = COMPANY_NAME, signature, logoUrl, tagline) 
     return `<p style="margin-top:20px; margin-bottom:0; white-space:normal;">${escapeHtml(signature).replace(/\n/g, "<br>")}</p>`;
   }
   return `
-    <p style="margin-top:20px; margin-bottom:2px;">Cordialement,</p>
+    <p style="margin-top:20px; margin-bottom:2px;">${closing},</p>
     <p style="margin:0; font-weight:bold;">${companyName}</p>
   `;
 }
@@ -200,19 +201,26 @@ async function sendCounterofferToCustomer({
   signature,
   logoUrl,
   tagline,
+  lang = "fr",
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
+  const t =
+    lang === "en"
+      ? { h2: `New offer from ${companyName}`, hello: `Hello ${customer.name || ""},`, intro: "Following your message, we're offering you a new price for your cleaning:", cta: "View the offer", subject: `New offer — ${fmtCHF(amount)}` }
+      : lang === "de"
+      ? { h2: `Neues Angebot von ${companyName}`, hello: `Guten Tag ${customer.name || ""}`, intro: "Aufgrund Ihrer Nachricht bieten wir Ihnen einen neuen Preis für Ihre Reinigung an:", cta: "Angebot ansehen", subject: `Neues Angebot — ${fmtCHF(amount)}` }
+      : { h2: `Nouvelle offre de ${companyName}`, hello: `Bonjour ${customer.name || ""},`, intro: "Suite à votre message, nous vous proposons un nouveau prix pour votre nettoyage :", cta: "Voir l'offre", subject: `Nouvelle offre — ${fmtCHF(amount)}` };
   const html = `
-    <h2>Nouvelle offre de ${companyName}</h2>
-    <p>Bonjour ${customer.name || ""},</p>
-    <p>Suite à votre message, nous vous proposons un nouveau prix pour votre nettoyage :</p>
+    <h2>${t.h2}</h2>
+    <p>${t.hello}</p>
+    <p>${t.intro}</p>
     <p style="font-size:22px;font-weight:bold;color:#0b5fff;">${fmtCHF(amount)}</p>
     ${message ? `<p>${message}</p>` : ""}
-    <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir l'offre</a></p>
-    ${signatureHtml(companyName, signature, logoUrl, tagline)}
+    <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">${t.cta}</a></p>
+    ${signatureHtml(companyName, signature, logoUrl, tagline, lang)}
   `;
-  return sendEmail({ to: customer.email, subject: `Nouvelle offre — ${fmtCHF(amount)}`, html, replyTo: companyEmail });
+  return sendEmail({ to: customer.email, subject: t.subject, html, replyTo: companyEmail });
 }
 
 async function sendRescheduleToCustomer({
@@ -226,19 +234,26 @@ async function sendRescheduleToCustomer({
   signature,
   logoUrl,
   tagline,
+  lang = "fr",
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
+  const t =
+    lang === "en"
+      ? { h2: `New date proposed — ${companyName}`, hello: `Hello ${customer.name || ""},`, intro: "We're proposing the following date for your cleaning:", cta: "View the proposal", subject: "New date proposed" }
+      : lang === "de"
+      ? { h2: `Neuer Termin vorgeschlagen — ${companyName}`, hello: `Guten Tag ${customer.name || ""}`, intro: "Wir schlagen Ihnen folgenden Termin für Ihre Reinigung vor:", cta: "Vorschlag ansehen", subject: "Neuer Termin vorgeschlagen" }
+      : { h2: `Nouvelle date proposée — ${companyName}`, hello: `Bonjour ${customer.name || ""},`, intro: "Nous vous proposons la date suivante pour votre nettoyage :", cta: "Voir la proposition", subject: "Nouvelle date proposée" };
   const html = `
-    <h2>Nouvelle date proposée — ${companyName}</h2>
-    <p>Bonjour ${customer.name || ""},</p>
-    <p>Nous vous proposons la date suivante pour votre nettoyage :</p>
+    <h2>${t.h2}</h2>
+    <p>${t.hello}</p>
+    <p>${t.intro}</p>
     <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${date}</p>
     ${message ? `<p>${message}</p>` : ""}
-    <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir la proposition</a></p>
-    ${signatureHtml(companyName, signature, logoUrl, tagline)}
+    <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">${t.cta}</a></p>
+    ${signatureHtml(companyName, signature, logoUrl, tagline, lang)}
   `;
-  return sendEmail({ to: customer.email, subject: `Nouvelle date proposée`, html, replyTo: companyEmail });
+  return sendEmail({ to: customer.email, subject: t.subject, html, replyTo: companyEmail });
 }
 
 async function sendRevisedOfferToCustomer({
@@ -252,31 +267,44 @@ async function sendRevisedOfferToCustomer({
   signature,
   logoUrl,
   tagline,
+  lang = "fr",
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
+  const t =
+    lang === "en"
+      ? { h2: `Revised offer — ${companyName}`, hello: `Hello ${customer.name || ""},`, intro: "Here is your revised quote:", cta: "View the revised offer", subject: `Revised quote — ${fmtCHF(quote.total)}` }
+      : lang === "de"
+      ? { h2: `Überarbeitetes Angebot — ${companyName}`, hello: `Guten Tag ${customer.name || ""}`, intro: "Hier ist Ihre überarbeitete Offerte:", cta: "Überarbeitetes Angebot ansehen", subject: `Überarbeitete Offerte — ${fmtCHF(quote.total)}` }
+      : { h2: `Offre révisée — ${companyName}`, hello: `Bonjour ${customer.name || ""},`, intro: "Voici votre devis révisé :", cta: "Voir l'offre révisée", subject: `Devis révisé — ${fmtCHF(quote.total)}` };
   const html = `
-    <h2>Offre révisée — ${companyName}</h2>
-    <p>Bonjour ${customer.name || ""},</p>
-    <p>Voici votre devis révisé :</p>
+    <h2>${t.h2}</h2>
+    <p>${t.hello}</p>
+    <p>${t.intro}</p>
     <table>${quoteItemsHtml(quote)}</table>
     <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${fmtCHF(quote.total)}</p>
     ${message ? `<p>${message}</p>` : ""}
-    <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Voir l'offre révisée</a></p>
-    ${signatureHtml(companyName, signature, logoUrl, tagline)}
+    <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">${t.cta}</a></p>
+    ${signatureHtml(companyName, signature, logoUrl, tagline, lang)}
   `;
-  return sendEmail({ to: customer.email, subject: `Devis révisé — ${fmtCHF(quote.total)}`, html, replyTo: companyEmail });
+  return sendEmail({ to: customer.email, subject: t.subject, html, replyTo: companyEmail });
 }
 
-async function sendReplyToCustomer({ message, customer, companyName = COMPANY_NAME, companyEmail, signature, logoUrl, tagline }) {
+async function sendReplyToCustomer({ message, customer, companyName = COMPANY_NAME, companyEmail, signature, logoUrl, tagline, lang = "fr" }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
+  const t =
+    lang === "en"
+      ? { h2: `Reply from ${companyName}`, hello: `Hello ${customer.name || ""},`, subject: "Reply to your question" }
+      : lang === "de"
+      ? { h2: `Antwort von ${companyName}`, hello: `Guten Tag ${customer.name || ""}`, subject: "Antwort auf Ihre Frage" }
+      : { h2: `Réponse de ${companyName}`, hello: `Bonjour ${customer.name || ""},`, subject: "Réponse à votre question" };
   const html = `
-    <h2>Réponse de ${companyName}</h2>
-    <p>Bonjour ${customer.name || ""},</p>
+    <h2>${t.h2}</h2>
+    <p>${t.hello}</p>
     <p>${message}</p>
-    ${signatureHtml(companyName, signature, logoUrl, tagline)}
+    ${signatureHtml(companyName, signature, logoUrl, tagline, lang)}
   `;
-  return sendEmail({ to: customer.email, subject: `Réponse à votre question`, html, replyTo: companyEmail });
+  return sendEmail({ to: customer.email, subject: t.subject, html, replyTo: companyEmail });
 }
 
 async function sendFollowupToCustomer({
@@ -289,38 +317,60 @@ async function sendFollowupToCustomer({
   signature,
   logoUrl,
   tagline,
+  lang = "fr",
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
+  const t =
+    lang === "en"
+      ? { h2: "Still interested?", hello: `Hello ${customer.name || ""},`, intro: "We just wanted to make sure you had all the information you need. Your quote is still available:", cta: "Review the quote", subject: "Still interested in our offer?" }
+      : lang === "de"
+      ? { h2: "Noch interessiert?", hello: `Guten Tag ${customer.name || ""}`, intro: "Wir wollten uns nur vergewissern, dass Sie alle nötigen Informationen haben. Ihre Offerte ist weiterhin verfügbar:", cta: "Offerte erneut ansehen", subject: "Noch Interesse an unserem Angebot?" }
+      : { h2: "Toujours intéressé(e) ?", hello: `Bonjour ${customer.name || ""},`, intro: "Nous voulions juste nous assurer que vous aviez toutes les informations nécessaires. Votre devis reste disponible :", cta: "Revoir le devis", subject: "Toujours intéressé(e) par notre offre ?" };
   const html = `
-    <h2>Toujours intéressé(e) ?</h2>
-    <p>Bonjour ${customer.name || ""},</p>
-    <p>Nous voulions juste nous assurer que vous aviez toutes les informations nécessaires. Votre devis reste disponible :</p>
+    <h2>${t.h2}</h2>
+    <p>${t.hello}</p>
+    <p>${t.intro}</p>
     <p style="font-size:20px;font-weight:bold;color:#0b5fff;">${fmtCHF(quote.total)}</p>
-    <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">Revoir le devis</a></p>
-    ${signatureHtml(companyName, signature, logoUrl, tagline)}
+    <p><a href="${offerUrl}" style="display:inline-block;background:#0b5fff;color:white;padding:10px 18px;border-radius:20px;text-decoration:none;font-weight:bold;">${t.cta}</a></p>
+    ${signatureHtml(companyName, signature, logoUrl, tagline, lang)}
   `;
-  return sendEmail({ to: customer.email, subject: `Toujours intéressé(e) par notre offre ?`, html, replyTo: companyEmail });
+  return sendEmail({ to: customer.email, subject: t.subject, html, replyTo: companyEmail });
 }
 
-async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME, signature, logoUrl, tagline }) {
+async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr" }) {
   const now = new Date();
   const start = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // placeholder: 3 days out
   const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // 2h duration placeholder
+  const calTitle =
+    lang === "en" ? `Cleaning — ${customer.name || "Customer"}` : lang === "de" ? `Reinigung — ${customer.name || "Kunde"}` : `Nettoyage — ${customer.name || "Client"}`;
+  const calDetails =
+    lang === "en"
+      ? `Quote accepted (${fmtCHF(quote.total)}). ${quote.items.map((i) => i.label).join(", ")}.`
+      : lang === "de"
+      ? `Offerte angenommen (${fmtCHF(quote.total)}). ${quote.items.map((i) => i.label).join(", ")}.`
+      : `Devis accepté (${fmtCHF(quote.total)}). ${quote.items.map((i) => i.label).join(", ")}.`;
   const calLink = googleCalendarLink({
-    title: `Nettoyage — ${customer.name || "Client"}`,
-    details: `Devis accepté (${fmtCHF(quote.total)}). ${quote.items.map((i) => i.label).join(", ")}.`,
+    title: calTitle,
+    details: calDetails,
     location: customer.address || "",
     startISO: start.toISOString(),
     endISO: end.toISOString(),
   });
 
+  const t =
+    lang === "en"
+      ? { h2: "✓ Booking confirmed", thanks: (n) => `Thank you ${n}! Your cleaning is confirmed for `, calLink: "Add to my Google Calendar", subject: "✓ Booking confirmed" }
+      : lang === "de"
+      ? { h2: "✓ Buchung bestätigt", thanks: (n) => `Vielen Dank${n ? ", " + n : ""}! Ihre Reinigung ist bestätigt für `, calLink: "Zu meinem Google Kalender hinzufügen", subject: "✓ Buchung bestätigt" }
+      : { h2: "✓ Réservation confirmée", thanks: (n) => `Merci ${n} ! Votre nettoyage est confirmé pour `, calLink: "Ajouter à mon Google Agenda", subject: "✓ Réservation confirmée" };
+
   const customerHtml = `
-    <h2>✓ Réservation confirmée</h2>
-    <p>Merci ${customer.name || ""} ! Votre nettoyage est confirmé pour <b>${fmtCHF(quote.total)}</b>.</p>
+    <h2>${t.h2}</h2>
+    <p>${t.thanks(customer.name || "")}<b>${fmtCHF(quote.total)}</b>.</p>
     <table>${quoteItemsHtml(quote)}</table>
-    <p><a href="${calLink}">Ajouter à mon Google Agenda</a></p>
-    ${signatureHtml(companyName, signature, logoUrl, tagline)}
+    <p><a href="${calLink}">${t.calLink}</a></p>
+    ${signatureHtml(companyName, signature, logoUrl, tagline, lang)}
   `;
   const companyHtml = `
     <h2>✓ Nouvelle réservation confirmée</h2>
@@ -339,7 +389,7 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
   // error instead of "your booking is confirmed".
   const [customerResult, companyResult] = await Promise.allSettled([
     customer.email
-      ? sendEmail({ to: customer.email, subject: "✓ Réservation confirmée", html: customerHtml, replyTo: notifyEmail })
+      ? sendEmail({ to: customer.email, subject: t.subject, html: customerHtml, replyTo: notifyEmail })
       : Promise.resolve({ simulated: true, skipped: "no customer email" }),
     sendEmail({ to: notifyEmail, subject: "✓ Nouvelle réservation confirmée", html: companyHtml }),
   ]);
