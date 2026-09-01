@@ -20,6 +20,8 @@
     SCALE: { price: 149, tagline: "Plus de demandes sans plus de gestion." },
   };
 
+  const ONE_TIME_PRICES = { CAPTURE: 880, CLOSE: 1420, SCALE: 2680 };
+
   const STEPS = [
     {
       id: "company_name",
@@ -199,6 +201,15 @@
       de: "Lassen Sie ein „Nein“ nicht mehr zu einem verlorenen Verkauf werden.",
     },
     "Plus de demandes sans plus de gestion.": { en: "More enquiries without more admin.", de: "Mehr Anfragen ohne mehr Verwaltungsaufwand." },
+    "Paiement unique": { en: "One-time payment", de: "Einmalzahlung" },
+    "Accès à vie, sans abonnement.": { en: "Lifetime access, no subscription.", de: "Lebenslanger Zugang, kein Abo." },
+    "Choisir paiement unique": { en: "Choose one-time payment", de: "Einmalzahlung wählen" },
+    "Unique": { en: "One-time", de: "Einmalig" },
+    "Paiement": { en: "Payment", de: "Zahlung" },
+    "💬 Envie d'ajouter WhatsApp Business ? Disponible en option sur toutes les formules : CHF 25 / mois pour 100 conversations, puis CHF 0.30 par conversation supplémentaire.": {
+      en: "💬 Want to add WhatsApp Business? Available as an add-on on any plan: CHF 25 / month for 100 conversations, then CHF 0.30 per extra conversation.",
+      de: "💬 Möchten Sie WhatsApp Business hinzufügen? Als Zusatzoption bei jedem Plan verfügbar: CHF 25 / Monat für 100 Konversationen, danach CHF 0.30 pro zusätzlicher Konversation.",
+    },
   };
 
   function T(fr) {
@@ -246,8 +257,13 @@
     if (lang === "de") return `Schritt ${i} von ${total}`;
     return `Étape ${i} sur ${total}`;
   }
-  function billingLine(mode, monthly, yearly) {
+  function billingLine(mode, monthly, yearly, onetime) {
     const lang = window.DEALZ_LANG;
+    if (mode === "onetime") {
+      if (lang === "en") return `One-time — CHF ${onetime} (lifetime access, no subscription)`;
+      if (lang === "de") return `Einmalig — CHF ${onetime} (lebenslanger Zugang, kein Abo)`;
+      return `Paiement unique — CHF ${onetime} (accès à vie, sans abonnement)`;
+    }
     if (mode === "yearly") {
       if (lang === "en") return `Yearly — CHF ${yearly}/year (setup free)`;
       if (lang === "de") return `Jährlich — CHF ${yearly}/Jahr (Einrichtung gratis)`;
@@ -256,6 +272,12 @@
     if (lang === "en") return `Monthly — CHF ${monthly}/month + CHF 390 setup`;
     if (lang === "de") return `Monatlich — CHF ${monthly}/Monat + CHF 390 Einrichtung`;
     return `Mensuel — CHF ${monthly}/mois + CHF 390 installation`;
+  }
+  function oneTimeLabel(n) {
+    const lang = window.DEALZ_LANG;
+    if (lang === "en") return `CHF ${n} (one-time)`;
+    if (lang === "de") return `CHF ${n} (einmalig)`;
+    return `CHF ${n} (paiement unique)`;
   }
   function installedLine() {
     const lang = window.DEALZ_LANG;
@@ -484,6 +506,7 @@
     const plan = state.answers.plan_choice || "CAPTURE";
     const monthly = PLANS[plan].price;
     const yearly = monthly * 12;
+    const onetime = ONE_TIME_PRICES[plan] || ONE_TIME_PRICES.CAPTURE;
 
     const grid = el("div", "flow-billing-grid");
 
@@ -507,19 +530,31 @@
     yearlyCard.appendChild(el("div", "flow-billing-save", "Vous économisez CHF 390 sur l'installation."));
     const pickYearly = el("button", "btn btn-primary flow-billing-pick", "Choisir annuel");
     pickYearly.type = "button";
-    pickYearly.addEventListener("click", () => chooseBilling(wrap, "yearly", monthly, yearly));
+    pickYearly.addEventListener("click", () => chooseBilling(wrap, "yearly", monthly, yearly, onetime));
     yearlyCard.appendChild(pickYearly);
     grid.appendChild(yearlyCard);
 
+    const onetimeCard = el("div", "flow-billing-card");
+    onetimeCard.appendChild(el("div", "flow-billing-label", "Paiement unique"));
+    onetimeCard.appendChild(el("div", "flow-billing-price", oneTimeLabel(onetime)));
+    onetimeCard.appendChild(el("div", "flow-billing-line", "Accès à vie, sans abonnement."));
+    const pickOnetime = el("button", "btn btn-secondary flow-billing-pick", "Choisir paiement unique");
+    pickOnetime.type = "button";
+    pickOnetime.addEventListener("click", () => chooseBilling(wrap, "onetime", monthly, yearly, onetime));
+    onetimeCard.appendChild(pickOnetime);
+    grid.appendChild(onetimeCard);
+
     wrap.appendChild(grid);
+    wrap.appendChild(el("p", "flow-whatsapp-note", "💬 Envie d'ajouter WhatsApp Business ? Disponible en option sur toutes les formules : CHF 25 / mois pour 100 conversations, puis CHF 0.30 par conversation supplémentaire."));
   }
 
-  function chooseBilling(wrap, mode, monthly, yearly) {
+  function chooseBilling(wrap, mode, monthly, yearly, onetime) {
     disableBlock(wrap);
-    wrap.appendChild(userBubble(billingLine(mode, monthly, yearly)));
+    wrap.appendChild(userBubble(billingLine(mode, monthly, yearly, onetime)));
     state.answers.billing_choice = mode;
     state.answers.billing_monthly = monthly;
     state.answers.billing_yearly = yearly;
+    state.answers.billing_onetime = onetime;
     advanceTo(state.stepIndex + 1);
   }
 
@@ -605,15 +640,23 @@
     const card = el("div", "flow-summary-card");
     card.appendChild(el("div", "flow-summary-title", "VOTRE DEMANDE DEALZ"));
 
+    const billingLabel =
+      a.billing_choice === "yearly" ? "Annuelle" : a.billing_choice === "onetime" ? "Unique" : "Mensuelle";
+    const amountRowLabel = a.billing_choice === "onetime" ? "Paiement" : "Abonnement";
+    const amountRowValue =
+      a.billing_choice === "yearly"
+        ? perYear(a.billing_yearly)
+        : a.billing_choice === "onetime"
+        ? oneTimeLabel(a.billing_onetime)
+        : perMonth(a.billing_monthly);
+    const installationValue = a.billing_choice === "monthly" ? "CHF 390" : "OFFERTE";
+
     const rows = [
       ["Entreprise", a.company_name || "—"],
       ["Formule", a.plan_choice || "—"],
-      ["Facturation", a.billing_choice === "yearly" ? "Annuelle" : "Mensuelle"],
-      [
-        "Abonnement",
-        a.billing_choice === "yearly" ? perYear(a.billing_yearly) : perMonth(a.billing_monthly),
-      ],
-      ["Installation", a.billing_choice === "yearly" ? "OFFERTE" : "CHF 390"],
+      ["Facturation", billingLabel],
+      [amountRowLabel, amountRowValue],
+      ["Installation", installationValue],
       ["Site", a.website_url || "—"],
       ["Votre objectif", a.main_problem || "—"],
     ];

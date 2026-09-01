@@ -810,6 +810,15 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 .flow-billing-line { font-size: 11.5px; color: var(--muted); }
 .flow-billing-line s { color: var(--muted); }
 .flow-billing-save { font-size: 11.5px; font-weight: 700; color: var(--blue-dark); }
+.flow-whatsapp-note {
+  font-size: 12px;
+  color: var(--muted);
+  background: var(--blue-light);
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin: 10px 0 0;
+  line-height: 1.4;
+}
 
 .flow-recommend-prompt { align-self: stretch; }
 .flow-recommend-btn {
