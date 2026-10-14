@@ -162,9 +162,15 @@
 
   // Returns { doc, blobUrl } — doc is the jsPDF instance (for .save()),
   // blobUrl is for previewing in an <iframe> without triggering a download.
-  function generate(quote, customer, lang) {
+  // opts (optional, used by the sector demos in docs/sector-quote.js):
+  //   company     — { name, address, phone, email } replacing the SwissClean header
+  //   detailLines — already-formatted "label : value" recap lines
+  //   terms / generated — footer sentences
+  function generate(quote, customer, lang, opts) {
     lang = lang || window.DEALZ_LANG || "fr";
+    opts = opts || {};
     const s = STRINGS[lang] || STRINGS.fr;
+    const company = opts.company || COMPANY;
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF({ unit: "mm", format: "a4" });
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -175,13 +181,13 @@
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
     doc.setTextColor(11, 18, 32); // navy
-    doc.text(COMPANY.name, marginX, y);
+    doc.text(company.name, marginX, y);
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9);
     doc.setTextColor(91, 100, 114); // muted
-    doc.text(COMPANY.address, marginX, y + 6);
-    doc.text(`${COMPANY.phone} · ${COMPANY.email}`, marginX, y + 11);
+    doc.text(company.address, marginX, y + 6);
+    doc.text(`${company.phone} · ${company.email}`, marginX, y + 11);
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
@@ -220,7 +226,7 @@
     y += 8;
 
     // --- Extra context collected by the question flow (optional) ---
-    const extraLines = detailLines(quote.details, lang);
+    const extraLines = opts.detailLines || detailLines(quote.details, lang);
     if (extraLines.length) {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(10);
@@ -290,8 +296,8 @@
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8.5);
     doc.setTextColor(91, 100, 114);
-    doc.text(s.terms, marginX, y);
-    doc.text(s.generated, marginX, y + 5);
+    doc.text(opts.terms || s.terms, marginX, y);
+    doc.text(opts.generated || s.generated, marginX, y + 5);
 
     const blobUrl = doc.output("bloburl");
     return { doc, blobUrl };

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClairVue Vitrerie Services — Site de démonstration (propulsé par Dealz)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/demo.css" />
+  <style>
+    :root { --sc-teal: #228be6; --sc-teal-dark: #1971c2; --sc-teal-light: #d0ebff; --sc-coral: #12b886; --sc-coral-dark: #0ca678; --sc-bg: #f8fbff; }
+  </style>
+</head>
+<body class="swissclean">
+<!-- Généré par scripts/build-sectors.js depuis docs/secteurs/data/vitres.js — ne pas éditer à la main. -->
+
+  <div class="sc-demo-banner">
+    <span class="tag">DÉMO</span>
+    Ceci est le site fictif d'une entreprise du secteur « Nettoyage de vitres » ayant intégré Dealz.
+    <a href="/secteurs/vitres/">Découvrir Dealz →</a>
+  </div>
+
+  <nav class="sc-nav">
+    <div class="sc-nav-logo"><span class="dot">🪟</span> ClairVue</div>
+    <div class="sc-nav-links">
+      <button data-tab="accueil" class="active">Accueil</button>
+      <button data-tab="prestations">Prestations</button>
+      <button data-tab="apropos">À propos</button>
+      <button data-tab="devis" class="cta">✨ Obtenir un devis</button>
+      <button data-tab="contact">Contact</button>
+    </div>
+  </nav>
+
+  <section id="sc-tab-accueil" class="sc-tab active">
+    <div class="sc-hero">
+      <div class="sc-hero-inner">
+        <span class="sc-eyebrow">Vevey &amp; Riviera · Exemple fictif</span>
+        <h1>Des vitres impeccables, sans les traces.</h1>
+        <p>Nettoyage de vitres, baies vitrées, vérandas et vitrines pour particuliers et professionnels — obtenez un prix ferme en quelques secondes, directement sur ce site.</p>
+        <div>
+          <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Obtenir un devis instantané</button>
+          <button class="sc-btn sc-btn-secondary" data-goto="prestations">Voir nos prestations</button>
+        </div>
+      </div>
+      <div class="sc-hero-strip">
+        <div class="stat"><div class="num">4.8★</div><div class="lbl">SATISFACTION CLIENT</div></div>
+        <div class="stat"><div class="num">9 000+</div><div class="lbl">FAÇADES NETTOYÉES</div></div>
+        <div class="stat"><div class="num">&lt; 1 min</div><div class="lbl">POUR UN DEVIS</div></div>
+      </div>
+    </div>
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Pourquoi ClairVue</span>
+      <h2 class="sc-title">Un prix clair, avant même de réserver</h2>
+      <p class="sc-sub">Répondez à quelques questions et obtenez immédiatement un devis détaillé.</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">⚡</div><h3>Prix instantané</h3><p>Devis détaillé en moins d'une minute, à toute heure.</p></div>
+        <div class="sc-card"><div class="icon">🎯</div><h3>Guidé pas à pas</h3><p>Quelques questions simples — pas de formulaire compliqué.</p></div>
+        <div class="sc-card"><div class="icon">🔒</div><h3>Devis ferme</h3><p>Le prix annoncé est le prix payé.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-prestations" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Prestations</span>
+      <h2 class="sc-title">Ce que nous nettoyons</h2>
+      <p class="sc-sub">Choisissez une prestation, ou décrivez simplement votre besoin dans l'onglet « Obtenir un devis ».</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">🏠</div><h3>Vitres de maison</h3><p>Intérieur et extérieur, sans traces.</p><span class="tag">dès CHF 9.50/vitre</span></div>
+        <div class="sc-card"><div class="icon">🪟</div><h3>Baies vitrées</h3><p>Grandes surfaces et portes-fenêtres.</p><span class="tag">dès CHF 28/baie</span></div>
+        <div class="sc-card"><div class="icon">🏢</div><h3>Immeubles</h3><p>Parties communes et façades vitrées.</p><span class="tag">sur devis</span></div>
+        <div class="sc-card"><div class="icon">🛍️</div><h3>Vitrines de commerce</h3><p>Passage régulier avant ouverture.</p><span class="tag">dès CHF 90</span></div>
+        <div class="sc-card"><div class="icon">🌿</div><h3>Vérandas et toits vitrés</h3><p>Nettoyage soigné des surfaces vitrées.</p><span class="tag">CHF 140</span></div>
+        <div class="sc-card"><div class="icon">🧗</div><h3>Nacelle / cordes</h3><p>Accès aux étages élevés en sécurité.</p><span class="tag">CHF 280</span></div>
+      </div>
+      <div style="text-align:center; margin-top: 32px;">
+        <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Obtenir un devis instantané</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-apropos" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">À propos</span>
+      <h2 class="sc-title">Des laveurs de vitres qualifiés</h2>
+      <p class="sc-sub" style="margin-bottom:0;">ClairVue Vitrerie Services entretient vitres et façades vitrées de particuliers, régies et commerces entre Vevey et la Riviera depuis 2011. En 2026, nous avons ajouté un assistant de devis instantané à notre site — plus rapide pour vous, moins d'administratif pour nous.</p>
+      <ul class="sc-about-list">
+        <li><span class="sc-check">✓</span><span><b>Matériel professionnel</b> — eau pure et raclettes pour un résultat sans traces.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Travail en hauteur sécurisé</b> — équipes formées et assurées.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Prix transparent</b> — le devis reçu est le prix payé.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="sc-tab-contact" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Contact</span>
+      <h2 class="sc-title">Parlez à une personne, ou obtenez un devis instantané</h2>
+      <p class="sc-sub">Vous préférez répondre à quelques questions plutôt que téléphoner ? Rendez-vous dans l'onglet <b>Obtenir un devis</b>.</p>
+      <div class="sc-contact-grid">
+        <div class="sc-contact-card"><div class="lbl">Téléphone</div><div class="val">021 000 00 14</div></div>
+        <div class="sc-contact-card"><div class="lbl">E-mail</div><div class="val">hello@clairvue.demo</div></div>
+        <div class="sc-contact-card"><div class="lbl">Zone d'intervention</div><div class="val">Vevey, Riviera, Chablais</div></div>
+        <div class="sc-contact-card"><div class="lbl">Horaires</div><div class="val">Lun–Ven, 7h–17h</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-devis" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">✨ Obtenir un devis</span>
+      <h2 class="sc-title">Votre prix en moins d'une minute</h2>
+      <p class="sc-devis-note">Répondez à quelques questions sur vos vitres — vous recevrez un devis réel, que vous pourrez accepter ou refuser directement ici.</p>
+
+      <div class="quote-wrap">
+        <div class="quote-side">
+          <h3>Comment ça marche</h3>
+          <div class="flow-steps">
+            <div class="flow-step"><div class="num">1</div><span class="label">Vous décrivez votre besoin</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">2</div><span class="label">Quelques questions rapides</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">3</div><span class="label">Calcul selon notre grille tarifaire</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">4</div><span class="label">Devis ferme affiché</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">5</div><span class="label">Vous acceptez ou refusez</span></div>
+          </div>
+        </div>
+
+        <div class="quote-panel-slot">
+          <div class="quote-panel" id="quote-panel">
+            <div class="quote-panel-head">
+              <div class="title">ClairVue · Devis</div>
+              <div class="subtitle">Réponse habituellement instantanée</div>
+            </div>
+
+            <div class="dealz-lead-gate" id="dealz-lead-gate">
+              <p class="dlg-intro">Avant votre devis instantané, laissez-nous vos coordonnées professionnelles :</p>
+              <input class="dcf-input" id="dlg-company" placeholder="Nom de votre entreprise (optionnel)" />
+              <input class="dcf-input" id="dlg-email" type="email" placeholder="E-mail professionnel" required />
+              <input class="dcf-input" id="dlg-phone" placeholder="Téléphone (optionnel)" />
+              <button class="dcf-submit" id="dlg-submit">Essayer la démo</button>
+              <p class="dlg-msg" id="dlg-msg"></p>
+            </div>
+
+            <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+              <div class="dealz-messages" id="dealz-messages"></div>
+              <div class="dealz-inputbar">
+                <input id="dealz-input" type="text" placeholder="Décrivez vos vitres…" autocomplete="off" />
+                <button id="dealz-send">Envoyer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-followup" id="demo-followup">
+        <h2>Imaginez ceci sur VOTRE site.</h2>
+        <div class="imagine-lines">Vos prix. Vos services. Votre marque. Vos clients.<br />Votre assistant de vente IA, disponible 24 heures sur 24.</div>
+        <div class="demo-followup-ctas">
+          <a href="/secteurs/vitres/#contact" class="btn btn-primary">Demander l'installation</a>
+          <a href="/secteurs/vitres/#tarifs" class="btn btn-secondary">Voir les tarifs</a>
+          <a href="mailto:dealz@dealz.website" class="btn btn-secondary">Contacter Dealz</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sc-footer">
+    ClairVue Vitrerie Services — site de démonstration, cette entreprise n'existe pas réellement.
+    Propulsé par <a href="/secteurs/vitres/">⚡ Dealz</a>.
+  </footer>
+
+  <script>window.DEALZ_LANG = "fr"; window.DEALZ_SECTOR = "vitres";</script>
+  <script src="/demo-tabs.js"></script>
+  <script src="/secteurs/data/vitres.js"></script>
+  <script src="/sector-quote.js"></script>
+  <script src="/lead-gate.js"></script>
+  <script>
+    document.addEventListener("dealz:quote-delivered", function () {
+      var el = document.getElementById("demo-followup");
+      if (!el.classList.contains("show")) {
+        el.classList.add("show");
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+  </script>
+</body>
+</html>

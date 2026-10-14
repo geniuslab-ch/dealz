@@ -13,6 +13,7 @@ const {
   sendFollowupToCustomer,
   sendBookingConfirmation,
   sendInstallRequestNotification,
+  sectorLabel,
   sendReferralNotification,
 } = require("./src/notifications");
 const store = require("./src/store");
@@ -126,6 +127,7 @@ app.post("/api/install-request", async (req, res) => {
     teamSize,
     mainProblem,
     requestSources,
+    sector,
   } = req.body || {};
 
   if (!contactEmail) {
@@ -143,6 +145,8 @@ app.post("/api/install-request", async (req, res) => {
     teamSize,
     mainProblem,
     requestSources,
+    sector: sectorLabel(sector) ? sector : "",
+    sectorLabel: sectorLabel(sector),
   };
 
   const [emailResult, crmResult] = await Promise.allSettled([

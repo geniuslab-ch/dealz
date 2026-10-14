@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AlpiRent Location — Site de démonstration (propulsé par Dealz)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/demo.css" />
+  <style>
+    :root { --sc-teal: #1864ab; --sc-teal-dark: #124b82; --sc-teal-light: #d0ebff; --sc-coral: #f76707; --sc-coral-dark: #d9480f; --sc-bg: #f8fbff; }
+  </style>
+</head>
+<body class="swissclean">
+<!-- Généré par scripts/build-sectors.js depuis docs/secteurs/data/location-vehicules.js — ne pas éditer à la main. -->
+
+  <div class="sc-demo-banner">
+    <span class="tag">DÉMO</span>
+    Ceci est le site fictif d'une entreprise du secteur « Location de véhicules » ayant intégré Dealz.
+    <a href="/secteurs/location-vehicules/">Découvrir Dealz →</a>
+  </div>
+
+  <nav class="sc-nav">
+    <div class="sc-nav-logo"><span class="dot">🚙</span> AlpiRent</div>
+    <div class="sc-nav-links">
+      <button data-tab="accueil" class="active">Accueil</button>
+      <button data-tab="prestations">Prestations</button>
+      <button data-tab="apropos">À propos</button>
+      <button data-tab="devis" class="cta">✨ Obtenir un devis</button>
+      <button data-tab="contact">Contact</button>
+    </div>
+  </nav>
+
+  <section id="sc-tab-accueil" class="sc-tab active">
+    <div class="sc-hero">
+      <div class="sc-hero-inner">
+        <span class="sc-eyebrow">Genève &amp; Arc lémanique · Exemple fictif</span>
+        <h1>La bonne voiture, au bon prix, tout de suite.</h1>
+        <p>Citadines, SUV, fourgons et minibus à la journée ou à la semaine — obtenez un prix ferme en quelques secondes, directement sur ce site.</p>
+        <div>
+          <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Obtenir un devis instantané</button>
+          <button class="sc-btn sc-btn-secondary" data-goto="prestations">Voir nos prestations</button>
+        </div>
+      </div>
+      <div class="sc-hero-strip">
+        <div class="stat"><div class="num">4.7★</div><div class="lbl">SATISFACTION CLIENT</div></div>
+        <div class="stat"><div class="num">9 800+</div><div class="lbl">LOCATIONS</div></div>
+        <div class="stat"><div class="num">&lt; 1 min</div><div class="lbl">POUR UN DEVIS</div></div>
+      </div>
+    </div>
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Pourquoi AlpiRent</span>
+      <h2 class="sc-title">Un prix clair, avant même de réserver</h2>
+      <p class="sc-sub">Répondez à quelques questions et obtenez immédiatement un devis détaillé.</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">⚡</div><h3>Prix instantané</h3><p>Devis détaillé en moins d'une minute, à toute heure.</p></div>
+        <div class="sc-card"><div class="icon">🎯</div><h3>Guidé pas à pas</h3><p>Quelques questions simples — pas de formulaire compliqué.</p></div>
+        <div class="sc-card"><div class="icon">🔒</div><h3>Devis ferme</h3><p>Le prix annoncé est le prix payé.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-prestations" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Prestations</span>
+      <h2 class="sc-title">Ce que nous louons</h2>
+      <p class="sc-sub">Choisissez une catégorie, ou décrivez simplement votre besoin dans l'onglet « Obtenir un devis ».</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">🚗</div><h3>Citadine</h3><p>Idéale pour la ville et les courts trajets.</p><span class="tag">dès CHF 59/jour</span></div>
+        <div class="sc-card"><div class="icon">🚙</div><h3>Compacte / berline</h3><p>Confort et économie sur route.</p><span class="tag">dès CHF 79/jour</span></div>
+        <div class="sc-card"><div class="icon">🚐</div><h3>SUV et monospace</h3><p>Espace pour la famille et les bagages.</p><span class="tag">dès CHF 109/jour</span></div>
+        <div class="sc-card"><div class="icon">🚚</div><h3>Fourgon 12 m³</h3><p>Pour déménager ou transporter.</p><span class="tag">dès CHF 119/jour</span></div>
+        <div class="sc-card"><div class="icon">🚌</div><h3>Minibus 9 places</h3><p>Pour les groupes et les événements.</p><span class="tag">dès CHF 149/jour</span></div>
+        <div class="sc-card"><div class="icon">❄️</div><h3>Équipement hiver</h3><p>Pneus hiver et chaînes à neige.</p><span class="tag">CHF 35</span></div>
+      </div>
+      <div style="text-align:center; margin-top: 32px;">
+        <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Obtenir un devis instantané</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-apropos" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">À propos</span>
+      <h2 class="sc-title">Une agence locale, une flotte récente</h2>
+      <p class="sc-sub" style="margin-bottom:0;">AlpiRent Location met à disposition des véhicules récents aux particuliers et entreprises de l'Arc lémanique depuis 2007. En 2026, nous avons ajouté un assistant de devis instantané à notre site — plus rapide pour vous, moins d'administratif pour nous.</p>
+      <ul class="sc-about-list">
+        <li><span class="sc-check">✓</span><span><b>Flotte entretenue</b> — véhicules de moins de trois ans, contrôlés avant chaque départ.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Assurance claire</b> — franchise réduite disponible, sans surprise.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Prix transparent</b> — le devis reçu est le prix payé.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="sc-tab-contact" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Contact</span>
+      <h2 class="sc-title">Parlez à une personne, ou obtenez un devis instantané</h2>
+      <p class="sc-sub">Vous préférez répondre à quelques questions plutôt que téléphoner ? Rendez-vous dans l'onglet <b>Obtenir un devis</b>.</p>
+      <div class="sc-contact-grid">
+        <div class="sc-contact-card"><div class="lbl">Téléphone</div><div class="val">022 000 00 11</div></div>
+        <div class="sc-contact-card"><div class="lbl">E-mail</div><div class="val">hello@alpirent.demo</div></div>
+        <div class="sc-contact-card"><div class="lbl">Zone d'intervention</div><div class="val">Genève, Vaud, Valais</div></div>
+        <div class="sc-contact-card"><div class="lbl">Horaires</div><div class="val">Lun–Dim, 7h–20h</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-devis" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">✨ Obtenir un devis</span>
+      <h2 class="sc-title">Votre prix en moins d'une minute</h2>
+      <p class="sc-devis-note">Répondez à quelques questions sur votre location — vous recevrez un devis réel, que vous pourrez accepter ou refuser directement ici.</p>
+
+      <div class="quote-wrap">
+        <div class="quote-side">
+          <h3>Comment ça marche</h3>
+          <div class="flow-steps">
+            <div class="flow-step"><div class="num">1</div><span class="label">Vous décrivez votre besoin</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">2</div><span class="label">Quelques questions rapides</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">3</div><span class="label">Calcul selon notre grille tarifaire</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">4</div><span class="label">Devis ferme affiché</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">5</div><span class="label">Vous acceptez ou refusez</span></div>
+          </div>
+        </div>
+
+        <div class="quote-panel-slot">
+          <div class="quote-panel" id="quote-panel">
+            <div class="quote-panel-head">
+              <div class="title">AlpiRent · Devis</div>
+              <div class="subtitle">Réponse habituellement instantanée</div>
+            </div>
+
+            <div class="dealz-lead-gate" id="dealz-lead-gate">
+              <p class="dlg-intro">Avant votre devis instantané, laissez-nous vos coordonnées professionnelles :</p>
+              <input class="dcf-input" id="dlg-company" placeholder="Nom de votre entreprise (optionnel)" />
+              <input class="dcf-input" id="dlg-email" type="email" placeholder="E-mail professionnel" required />
+              <input class="dcf-input" id="dlg-phone" placeholder="Téléphone (optionnel)" />
+              <button class="dcf-submit" id="dlg-submit">Essayer la démo</button>
+              <p class="dlg-msg" id="dlg-msg"></p>
+            </div>
+
+            <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+              <div class="dealz-messages" id="dealz-messages"></div>
+              <div class="dealz-inputbar">
+                <input id="dealz-input" type="text" placeholder="Décrivez votre besoin de location…" autocomplete="off" />
+                <button id="dealz-send">Envoyer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-followup" id="demo-followup">
+        <h2>Imaginez ceci sur VOTRE site.</h2>
+        <div class="imagine-lines">Vos prix. Vos services. Votre marque. Vos clients.<br />Votre assistant de vente IA, disponible 24 heures sur 24.</div>
+        <div class="demo-followup-ctas">
+          <a href="/secteurs/location-vehicules/#contact" class="btn btn-primary">Demander l'installation</a>
+          <a href="/secteurs/location-vehicules/#tarifs" class="btn btn-secondary">Voir les tarifs</a>
+          <a href="mailto:dealz@dealz.website" class="btn btn-secondary">Contacter Dealz</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sc-footer">
+    AlpiRent Location — site de démonstration, cette entreprise n'existe pas réellement.
+    Propulsé par <a href="/secteurs/location-vehicules/">⚡ Dealz</a>.
+  </footer>
+
+  <script>window.DEALZ_LANG = "fr"; window.DEALZ_SECTOR = "location-vehicules";</script>
+  <script src="/demo-tabs.js"></script>
+  <script src="/secteurs/data/location-vehicules.js"></script>
+  <script src="/sector-quote.js"></script>
+  <script src="/lead-gate.js"></script>
+  <script>
+    document.addEventListener("dealz:quote-delivered", function () {
+      var el = document.getElementById("demo-followup");
+      if (!el.classList.contains("show")) {
+        el.classList.add("show");
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+  </script>
+</body>
+</html>

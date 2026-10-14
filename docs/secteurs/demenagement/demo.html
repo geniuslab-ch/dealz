@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Léman Déménagements SA — Site de démonstration (propulsé par Dealz)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/demo.css" />
+  <style>
+    :root { --sc-teal: #2563eb; --sc-teal-dark: #1d4ed8; --sc-teal-light: #dbeafe; --sc-coral: #f97316; --sc-coral-dark: #ea580c; --sc-bg: #fbfdff; }
+  </style>
+</head>
+<body class="swissclean">
+<!-- Généré par scripts/build-sectors.js depuis docs/secteurs/data/demenagement.js — ne pas éditer à la main. -->
+
+  <div class="sc-demo-banner">
+    <span class="tag">DÉMO</span>
+    Ceci est le site fictif d'une entreprise du secteur « Déménagement et débarras » ayant intégré Dealz.
+    <a href="/secteurs/demenagement/">Découvrir Dealz →</a>
+  </div>
+
+  <nav class="sc-nav">
+    <div class="sc-nav-logo"><span class="dot">🚚</span> Léman Déménagements</div>
+    <div class="sc-nav-links">
+      <button data-tab="accueil" class="active">Accueil</button>
+      <button data-tab="prestations">Prestations</button>
+      <button data-tab="apropos">À propos</button>
+      <button data-tab="devis" class="cta">✨ Obtenir un devis</button>
+      <button data-tab="contact">Contact</button>
+    </div>
+  </nav>
+
+  <section id="sc-tab-accueil" class="sc-tab active">
+    <div class="sc-hero">
+      <div class="sc-hero-inner">
+        <span class="sc-eyebrow">Lausanne &amp; Romandie · Exemple fictif</span>
+        <h1>Votre déménagement, sans le stress.</h1>
+        <p>Déménagement résidentiel, débarras et garde-meubles en Suisse romande — obtenez un prix ferme en quelques secondes, directement sur ce site.</p>
+        <div>
+          <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Obtenir un devis instantané</button>
+          <button class="sc-btn sc-btn-secondary" data-goto="prestations">Voir nos prestations</button>
+        </div>
+      </div>
+      <div class="sc-hero-strip">
+        <div class="stat"><div class="num">4.8★</div><div class="lbl">SATISFACTION CLIENT</div></div>
+        <div class="stat"><div class="num">3 100+</div><div class="lbl">DÉMÉNAGEMENTS RÉALISÉS</div></div>
+        <div class="stat"><div class="num">&lt; 1 min</div><div class="lbl">POUR UN DEVIS</div></div>
+      </div>
+    </div>
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Pourquoi Léman Déménagements</span>
+      <h2 class="sc-title">Un prix clair, avant même de réserver</h2>
+      <p class="sc-sub">Répondez à quelques questions et obtenez immédiatement un devis détaillé.</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">⚡</div><h3>Prix instantané</h3><p>Devis détaillé en moins d'une minute, à toute heure.</p></div>
+        <div class="sc-card"><div class="icon">🎯</div><h3>Guidé pas à pas</h3><p>Quelques questions simples — pas de formulaire compliqué.</p></div>
+        <div class="sc-card"><div class="icon">🔒</div><h3>Devis ferme</h3><p>Le prix annoncé est le prix payé.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-prestations" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Prestations</span>
+      <h2 class="sc-title">Ce que nous déménageons</h2>
+      <p class="sc-sub">Choisissez une prestation, ou décrivez simplement votre besoin dans l'onglet « Obtenir un devis ».</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">🚚</div><h3>Déménagement résidentiel</h3><p>Équipe et camion, de l'appartement à la villa.</p><span class="tag">dès CHF 480</span></div>
+        <div class="sc-card"><div class="icon">📦</div><h3>Emballage</h3><p>Cartons fournis et mise en cartons soignée.</p><span class="tag">dès CHF 150</span></div>
+        <div class="sc-card"><div class="icon">🪑</div><h3>Démontage / remontage</h3><p>Meubles démontés puis remontés à l'arrivée.</p><span class="tag">dès CHF 120</span></div>
+        <div class="sc-card"><div class="icon">🗑️</div><h3>Débarras</h3><p>Évacuation, tri et déchetterie.</p><span class="tag">dès CHF 350</span></div>
+        <div class="sc-card"><div class="icon">🎹</div><h3>Objets lourds</h3><p>Piano, coffre-fort, machines.</p><span class="tag">dès CHF 280</span></div>
+        <div class="sc-card"><div class="icon">🏬</div><h3>Garde-meubles</h3><p>Stockage sécurisé, au mois.</p><span class="tag">CHF 190/mois</span></div>
+      </div>
+      <div style="text-align:center; margin-top: 32px;">
+        <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Obtenir un devis instantané</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-apropos" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">À propos</span>
+      <h2 class="sc-title">Une équipe d'ici, rodée au terrain</h2>
+      <p class="sc-sub" style="margin-bottom:0;">Léman Déménagements accompagne particuliers et entreprises en Suisse romande depuis 2012. En 2026, nous avons ajouté un assistant de devis instantané à notre site — plus rapide pour vous, moins d'administratif pour nous.</p>
+      <ul class="sc-about-list">
+        <li><span class="sc-check">✓</span><span><b>Équipes formées et assurées</b> — chaque déménageur est contrôlé et couvert.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Protections incluses</b> — sangles, couvertures et protections de sol.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Prix transparent</b> — le devis reçu est le prix payé.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="sc-tab-contact" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Contact</span>
+      <h2 class="sc-title">Parlez à une personne, ou obtenez un devis instantané</h2>
+      <p class="sc-sub">Vous préférez répondre à quelques questions plutôt que téléphoner ? Rendez-vous dans l'onglet <b>Obtenir un devis</b>.</p>
+      <div class="sc-contact-grid">
+        <div class="sc-contact-card"><div class="lbl">Téléphone</div><div class="val">021 000 00 00</div></div>
+        <div class="sc-contact-card"><div class="lbl">E-mail</div><div class="val">hello@leman-demenagements.demo</div></div>
+        <div class="sc-contact-card"><div class="lbl">Zone d'intervention</div><div class="val">Vaud, Genève, Valais</div></div>
+        <div class="sc-contact-card"><div class="lbl">Horaires</div><div class="val">Lun–Sam, 7h–18h</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-devis" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">✨ Obtenir un devis</span>
+      <h2 class="sc-title">Votre prix en moins d'une minute</h2>
+      <p class="sc-devis-note">Répondez à quelques questions sur votre déménagement — vous recevrez un devis réel, que vous pourrez accepter ou refuser directement ici.</p>
+
+      <div class="quote-wrap">
+        <div class="quote-side">
+          <h3>Comment ça marche</h3>
+          <div class="flow-steps">
+            <div class="flow-step"><div class="num">1</div><span class="label">Vous décrivez votre besoin</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">2</div><span class="label">Quelques questions rapides</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">3</div><span class="label">Calcul selon notre grille tarifaire</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">4</div><span class="label">Devis ferme affiché</span></div>
+            <div class="flow-connector"></div>
+            <div class="flow-step"><div class="num">5</div><span class="label">Vous acceptez ou refusez</span></div>
+          </div>
+        </div>
+
+        <div class="quote-panel-slot">
+          <div class="quote-panel" id="quote-panel">
+            <div class="quote-panel-head">
+              <div class="title">Léman Déménagements · Devis</div>
+              <div class="subtitle">Réponse habituellement instantanée</div>
+            </div>
+
+            <div class="dealz-lead-gate" id="dealz-lead-gate">
+              <p class="dlg-intro">Avant votre devis instantané, laissez-nous vos coordonnées professionnelles :</p>
+              <input class="dcf-input" id="dlg-company" placeholder="Nom de votre entreprise (optionnel)" />
+              <input class="dcf-input" id="dlg-email" type="email" placeholder="E-mail professionnel" required />
+              <input class="dcf-input" id="dlg-phone" placeholder="Téléphone (optionnel)" />
+              <button class="dcf-submit" id="dlg-submit">Essayer la démo</button>
+              <p class="dlg-msg" id="dlg-msg"></p>
+            </div>
+
+            <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+              <div class="dealz-messages" id="dealz-messages"></div>
+              <div class="dealz-inputbar">
+                <input id="dealz-input" type="text" placeholder="Décrivez votre déménagement…" autocomplete="off" />
+                <button id="dealz-send">Envoyer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-followup" id="demo-followup">
+        <h2>Imaginez ceci sur VOTRE site.</h2>
+        <div class="imagine-lines">Vos prix. Vos services. Votre marque. Vos clients.<br />Votre assistant de vente IA, disponible 24 heures sur 24.</div>
+        <div class="demo-followup-ctas">
+          <a href="/secteurs/demenagement/#contact" class="btn btn-primary">Demander l'installation</a>
+          <a href="/secteurs/demenagement/#tarifs" class="btn btn-secondary">Voir les tarifs</a>
+          <a href="mailto:dealz@dealz.website" class="btn btn-secondary">Contacter Dealz</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sc-footer">
+    Léman Déménagements SA — site de démonstration, cette entreprise n'existe pas réellement.
+    Propulsé par <a href="/secteurs/demenagement/">⚡ Dealz</a>.
+  </footer>
+
+  <script>window.DEALZ_LANG = "fr"; window.DEALZ_SECTOR = "demenagement";</script>
+  <script src="/demo-tabs.js"></script>
+  <script src="/secteurs/data/demenagement.js"></script>
+  <script src="/sector-quote.js"></script>
+  <script src="/lead-gate.js"></script>
+  <script>
+    document.addEventListener("dealz:quote-delivered", function () {
+      var el = document.getElementById("demo-followup");
+      if (!el.classList.contains("show")) {
+        el.classList.add("show");
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+  </script>
+</body>
+</html>

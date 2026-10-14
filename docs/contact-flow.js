@@ -623,6 +623,7 @@
         teamSize: a.team_size || "",
         mainProblem: a.main_problem || "",
         requestSources: a.request_sources || "",
+        sector: window.DEALZ_SECTOR || "",
       }),
     }).catch((err) => console.error("[install-request] failed to submit:", err));
   }
