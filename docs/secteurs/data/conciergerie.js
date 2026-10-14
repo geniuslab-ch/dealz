@@ -37,6 +37,7 @@
       label: "Conciergerie et entretien immobilier",
       forWho: "entreprises de conciergerie et d'entretien immobilier",
       pitch: "Chiffrez un contrat mensuel d'entretien selon l'immeuble et les services.",
+      emailNoun: "votre contrat d'entretien",
       landing: {
         h1: ["VOUS ENTRETENEZ.", "DEALZ CHIFFRE."],
         question: "Combien de régies et de propriétaires perdez-vous parce que votre offre prend une semaine ?",

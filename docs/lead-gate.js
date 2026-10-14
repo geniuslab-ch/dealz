@@ -60,7 +60,7 @@
         const res = await fetch(apiUrl("/api/lead"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, phone, companyName }),
+          body: JSON.stringify({ email, phone, companyName, sector: window.DEALZ_SECTOR || undefined }),
         });
         let data;
         try {

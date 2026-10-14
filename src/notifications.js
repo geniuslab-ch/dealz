@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const { CATEGORIES } = require("./objections");
+const { CATEGORIES, categoryView } = require("./objections");
 
 const COMPANY_NAME = "SwissClean Sàrl";
 // Falls back to Dealz's own real inbox, NOT a fictional address — this used
@@ -61,7 +61,7 @@ async function sendEmail({ to, subject, html, replyTo }) {
     html,
     ...(replyTo ? { replyTo } : {}),
   });
-  return { simulated: false };
+  return { simulated: false, to, subject, html };
 }
 
 function escapeHtml(s) {
@@ -139,9 +139,10 @@ function googleCalendarLink({ title, details, location, startISO, endISO }) {
 
 // ---- Objection Engine: subject line + owner notification ----
 
-function buildDeclineSubject({ category, customer, quote }) {
+function buildDeclineSubject({ category, customer, quote, generic }) {
   const cfg = CATEGORIES[category] || CATEGORIES.other;
-  const parts = [`${cfg.emoji} Devis refusé`, cfg.label, customer.name || "un client"];
+  const view = categoryView(category, generic);
+  const parts = [`${view.emoji} Devis refusé`, view.label, customer.name || "un client"];
   if (cfg.showTotal && quote && quote.total) parts.push(fmtCHF(quote.total));
   return parts.join(" — ");
 }
@@ -156,18 +157,28 @@ async function sendDeclineNotification({
   suggestedReply,
   baseUrl = APP_BASE_URL,
   notifyEmail = COMPANY_NOTIFY_EMAIL,
+  sectorLabel: sectorName,
+  companyName: demoCompanyName,
 }) {
   const cfg = CATEGORIES[category] || CATEGORIES.other;
+  const view = categoryView(category, !!sectorName);
   const actionUrl = `${baseUrl}/counteroffer.html?token=${declineToken}`;
 
+  // Sector demos: say whose quote this is, so the trial e-mail reads like
+  // the real thing for that trade.
+  const demoBanner = sectorName
+    ? `<p style="margin:0 0 10px;font-size:12.5px;color:#5b6472;">Démo Dealz · <b>${demoCompanyName}</b> — secteur ${sectorName}</p>`
+    : "";
+
   const html = `
-    <h2>${cfg.emoji} Devis refusé — action possible</h2>
+    ${demoBanner}
+    <h2>${view.emoji} Devis refusé — action possible</h2>
     <p><b>Client :</b> ${customer.name || "(non fourni)"}<br/>
        <b>E-mail :</b> ${customer.email || "(non fourni)"}<br/>
        <b>Téléphone :</b> ${customer.phone || "(non fourni)"}<br/>
        <b>Adresse :</b> ${customer.address || "(non fournie)"}</p>
     ${cfg.showTotal ? `<p><b>Devis original :</b> ${fmtCHF(quote.total)}</p><table>${quoteItemsHtml(quote)}</table>` : ""}
-    <p><b>Motif du refus :</b> ${cfg.label}</p>
+    <p><b>Motif du refus :</b> ${view.label}</p>
     ${rawText ? `<p><b>Message du client :</b><br/>« ${rawText} »</p>` : ""}
     ${
       suggestedReply
@@ -182,7 +193,7 @@ async function sendDeclineNotification({
 
   return sendEmail({
     to: notifyEmail,
-    subject: buildDeclineSubject({ category, customer, quote }),
+    subject: buildDeclineSubject({ category, customer, quote, generic: !!sectorName }),
     html,
   });
 }
@@ -202,6 +213,7 @@ async function sendCounterofferToCustomer({
   logoUrl,
   tagline,
   lang = "fr",
+  serviceNoun,
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
@@ -210,7 +222,7 @@ async function sendCounterofferToCustomer({
       ? { h2: `New offer from ${companyName}`, hello: `Hello ${customer.name || ""},`, intro: "Following your message, we're offering you a new price for your cleaning:", cta: "View the offer", subject: `New offer — ${fmtCHF(amount)}` }
       : lang === "de"
       ? { h2: `Neues Angebot von ${companyName}`, hello: `Guten Tag ${customer.name || ""}`, intro: "Aufgrund Ihrer Nachricht bieten wir Ihnen einen neuen Preis für Ihre Reinigung an:", cta: "Angebot ansehen", subject: `Neues Angebot — ${fmtCHF(amount)}` }
-      : { h2: `Nouvelle offre de ${companyName}`, hello: `Bonjour ${customer.name || ""},`, intro: "Suite à votre message, nous vous proposons un nouveau prix pour votre nettoyage :", cta: "Voir l'offre", subject: `Nouvelle offre — ${fmtCHF(amount)}` };
+      : { h2: `Nouvelle offre de ${companyName}`, hello: `Bonjour ${customer.name || ""},`, intro: `Suite à votre message, nous vous proposons un nouveau prix pour ${serviceNoun || "votre nettoyage"} :`, cta: "Voir l'offre", subject: `Nouvelle offre — ${fmtCHF(amount)}` };
   const html = `
     <h2>${t.h2}</h2>
     <p>${t.hello}</p>
@@ -235,6 +247,7 @@ async function sendRescheduleToCustomer({
   logoUrl,
   tagline,
   lang = "fr",
+  serviceNoun,
 }) {
   if (!customer.email) return { simulated: true, skipped: "no customer email" };
   const offerUrl = `${baseUrl}/offer.html?token=${offerToken}`;
@@ -243,7 +256,7 @@ async function sendRescheduleToCustomer({
       ? { h2: `New date proposed — ${companyName}`, hello: `Hello ${customer.name || ""},`, intro: "We're proposing the following date for your cleaning:", cta: "View the proposal", subject: "New date proposed" }
       : lang === "de"
       ? { h2: `Neuer Termin vorgeschlagen — ${companyName}`, hello: `Guten Tag ${customer.name || ""}`, intro: "Wir schlagen Ihnen folgenden Termin für Ihre Reinigung vor:", cta: "Vorschlag ansehen", subject: "Neuer Termin vorgeschlagen" }
-      : { h2: `Nouvelle date proposée — ${companyName}`, hello: `Bonjour ${customer.name || ""},`, intro: "Nous vous proposons la date suivante pour votre nettoyage :", cta: "Voir la proposition", subject: "Nouvelle date proposée" };
+      : { h2: `Nouvelle date proposée — ${companyName}`, hello: `Bonjour ${customer.name || ""},`, intro: `Nous vous proposons la date suivante pour ${serviceNoun || "votre nettoyage"} :`, cta: "Voir la proposition", subject: "Nouvelle date proposée" };
   const html = `
     <h2>${t.h2}</h2>
     <p>${t.hello}</p>
@@ -338,12 +351,14 @@ async function sendFollowupToCustomer({
   return sendEmail({ to: customer.email, subject: t.subject, html, replyTo: companyEmail });
 }
 
-async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr" }) {
+async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr", serviceNoun }) {
   const now = new Date();
   const start = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // placeholder: 3 days out
   const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // 2h duration placeholder
   const calTitle =
-    lang === "en" ? `Cleaning — ${customer.name || "Customer"}` : lang === "de" ? `Reinigung — ${customer.name || "Kunde"}` : `Nettoyage — ${customer.name || "Client"}`;
+    serviceNoun
+      ? `${companyName} — ${customer.name || "Client"}`
+      : lang === "en" ? `Cleaning — ${customer.name || "Customer"}` : lang === "de" ? `Reinigung — ${customer.name || "Kunde"}` : `Nettoyage — ${customer.name || "Client"}`;
   const calDetails =
     lang === "en"
       ? `Quote accepted (${fmtCHF(quote.total)}). ${quote.items.map((i) => i.label).join(", ")}.`
@@ -363,7 +378,7 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
       ? { h2: "✓ Booking confirmed", thanks: (n) => `Thank you ${n}! Your cleaning is confirmed for `, calLink: "Add to my Google Calendar", subject: "✓ Booking confirmed" }
       : lang === "de"
       ? { h2: "✓ Buchung bestätigt", thanks: (n) => `Vielen Dank${n ? ", " + n : ""}! Ihre Reinigung ist bestätigt für `, calLink: "Zu meinem Google Kalender hinzufügen", subject: "✓ Buchung bestätigt" }
-      : { h2: "✓ Réservation confirmée", thanks: (n) => `Merci ${n} ! Votre nettoyage est confirmé pour `, calLink: "Ajouter à mon Google Agenda", subject: "✓ Réservation confirmée" };
+      : { h2: "✓ Réservation confirmée", thanks: (n) => (serviceNoun ? `Merci ${n} ! Votre réservation auprès de ${companyName} est confirmée pour ` : `Merci ${n} ! Votre nettoyage est confirmé pour `), calLink: "Ajouter à mon Google Agenda", subject: "✓ Réservation confirmée" };
 
   const customerHtml = `
     <h2>${t.h2}</h2>
@@ -409,13 +424,7 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
 }
 
 // ---- Install-request notification (docs/contact-flow.js's #contact flow) ----
-// slug -> French label, generated by scripts/build-sectors.js from the same
-// definitions the sector pages are built from. The slug arrives from a
-// public form, so only known slugs resolve; anything else yields "".
-const SECTOR_LABELS = require("./sector-labels.json");
-function sectorLabel(slug) {
-  return slug && Object.prototype.hasOwnProperty.call(SECTOR_LABELS, slug) ? SECTOR_LABELS[slug] : "";
-}
+const { sectorLabel } = require("./sectors");
 
 function billingLabelFr(billingChoice) {
   if (billingChoice === "yearly") return "annuel";

@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MeubleMontage Pro · Devis</title>
+<!-- Généré par scripts/build-sectors.js depuis docs/secteurs/data/montage-meubles.js — ne pas éditer à la main.
+     ?embedded=1 : masque l'en-tête et les marges pour une intégration en iframe (mode « pop-up »). -->
+<style>
+  :root{--dz-navy:#0b1220;--dz-blue:#0b5fff;--dz-blue-dark:#063fc7;--dz-sky-light:#eef6ff;
+    --dz-green:#17a672;--dz-green-light:#e4f7ef;--dz-ink:#10131a;--dz-muted:#5b6472;--dz-line:#e4e9f2;}
+  *{box-sizing:border-box;}
+  html,body{height:100%;margin:0;}
+  body{
+    background:#eef1f7;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;
+    display:flex;align-items:center;justify-content:center;
+  }
+  #dealz-window{
+    width:100%;max-width:480px;height:100vh;max-height:760px;background:#fff;
+    display:flex;flex-direction:column;overflow:hidden;
+    box-shadow:0 20px 60px rgba(11,18,32,.18);
+  }
+  @media (min-width:540px){ #dealz-window{ border-radius:18px; margin:20px; height:calc(100vh - 40px); } }
+  body.dz-embedded{background:#fff;}
+  body.dz-embedded #dealz-window{max-width:none;max-height:none;box-shadow:none;}
+  body.dz-embedded .dealz-embed-header{display:none;}
+  @media (min-width:540px){ body.dz-embedded #dealz-window{ border-radius:0; margin:0; height:100vh; } }
+  .dealz-embed-header{background:linear-gradient(120deg,var(--dz-blue),var(--dz-navy));color:#fff;
+    padding:16px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+  .dealz-embed-header .t{font-weight:bold;font-size:15px;}
+  .dealz-embed-header .s{font-size:11.5px;color:#b9d6d5;}
+  .dealz-embed-header button{background:none;border:none;color:#fff;font-size:19px;cursor:pointer;line-height:1;}
+  .dealz-header-brand{display:flex;align-items:center;gap:10px;min-width:0;color:inherit;text-decoration:none;cursor:default;}
+  .dealz-header-logo{width:36px;height:36px;border-radius:8px;object-fit:contain;background:#fff;flex-shrink:0;}
+  .dealz-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#fbfcff;}
+  .dealz-messages>*{flex-shrink:0;}
+  .dealz-msg{max-width:82%;padding:9px 12px;border-radius:12px;font-size:13.5px;line-height:1.45;white-space:pre-wrap;}
+  .dealz-msg.user{align-self:flex-end;background:linear-gradient(135deg,var(--dz-blue),var(--dz-blue-dark));color:#fff;border-bottom-right-radius:3px;}
+  .dealz-msg.assistant{align-self:flex-start;background:var(--dz-sky-light);color:var(--dz-ink);border-bottom-left-radius:3px;}
+  .dealz-msg.typing{align-self:flex-start;background:var(--dz-sky-light);color:var(--dz-muted);font-style:italic;}
+  .dealz-msg.system-success{align-self:stretch;background:var(--dz-green-light);color:#0d6b4b;border:1px solid rgba(23,166,114,.3);}
+  .dealz-msg.system-decline{align-self:stretch;background:#f3f4f6;color:var(--dz-muted);border:1px solid var(--dz-line);}
+  .dealz-msg.system-success a,.dealz-msg.system-decline a{color:inherit;font-weight:700;}
+  .dealz-quote-card{align-self:stretch;background:#fff;border:1.5px solid var(--dz-blue);border-radius:12px;overflow:hidden;font-size:13px;}
+  .qc-head{background:linear-gradient(120deg,var(--dz-blue),var(--dz-navy));color:#fff;padding:8px 12px;font-weight:800;font-size:11px;letter-spacing:.04em;}
+  .qc-row{display:flex;justify-content:space-between;padding:7px 12px;border-bottom:1px solid #f0f2f6;}
+  .qc-total{display:flex;justify-content:space-between;padding:10px 12px;font-weight:800;background:var(--dz-sky-light);color:var(--dz-blue-dark);}
+  .qc-actions{display:flex;gap:8px;padding:10px 12px;background:#fafbfd;}
+  .qc-actions button{flex:1;border:none;border-radius:18px;padding:8px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .qc-accept{background:linear-gradient(135deg,var(--dz-green),#0d8f5f);color:#fff;}
+  .qc-decline{background:#fff;color:var(--dz-muted);border:1.5px solid var(--dz-line)!important;}
+  .qc-actions button:disabled{opacity:.45;cursor:default;}
+  .dealz-email-preview{align-self:stretch;background:#fff;border:1.5px dashed var(--dz-line);border-radius:12px;overflow:hidden;font-size:12.5px;}
+  .dealz-email-preview .dep-head{background:#fafbfd;color:var(--dz-muted);padding:7px 12px;font-weight:700;font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid var(--dz-line);}
+  .dealz-email-preview .dep-meta{padding:9px 12px;border-bottom:1px solid var(--dz-line);color:var(--dz-ink);line-height:1.6;}
+  .dealz-email-preview .dep-body{padding:11px 12px;color:var(--dz-ink);}
+  .dealz-email-preview .dep-body table{width:100%;border-collapse:collapse;}
+  .dealz-email-preview .dep-body td{padding:4px 0;font-size:12.5px;}
+  .dealz-email-preview .dep-body h2{font-size:14px;margin:0 0 8px;}
+  .dealz-email-preview .dep-body a{color:var(--dz-blue);}
+  .dealz-objection-picker{align-self:stretch;display:flex;flex-direction:column;gap:8px;}
+  .dop-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .dop-chip{border:1.5px solid var(--dz-line);background:#fff;border-radius:16px;padding:6px 11px;font-size:11.5px;font-weight:600;cursor:pointer;color:var(--dz-ink);font-family:inherit;}
+  .dop-chip:disabled{opacity:.4;}
+  .dop-chip.selected{border-color:var(--dz-blue);background:var(--dz-sky-light);color:var(--dz-blue-dark);font-weight:700;}
+  .dop-free{display:flex;gap:6px;}
+  .dop-free-input{flex:1;border:1.5px solid var(--dz-line);border-radius:16px;padding:7px 12px;font-size:12px;font-family:inherit;outline:none;}
+  .dop-free-btn{background:var(--dz-navy);color:#fff;border:none;border-radius:16px;padding:0 14px;font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .dealz-contact-form{align-self:stretch;background:#fff;border:1px solid var(--dz-line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:7px;}
+  .dcf-intro{font-size:12px;color:var(--dz-muted);margin:0 0 2px;font-weight:600;}
+  .dcf-input{border:1.5px solid var(--dz-line);border-radius:8px;padding:7px 10px;font-size:12.5px;font-family:inherit;outline:none;width:100%;}
+  .dcf-submit{margin-top:2px;background:linear-gradient(135deg,var(--dz-blue),var(--dz-blue-dark));color:#fff;border:none;border-radius:16px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .dealz-inputbar{display:flex;gap:8px;padding:14px;border-top:1px solid var(--dz-line);background:#fff;flex-shrink:0;}
+  .dealz-inputbar input{flex:1;border:1.5px solid var(--dz-line);border-radius:20px;padding:10px 14px;font-size:13.5px;font-family:inherit;outline:none;}
+  .dealz-inputbar button{background:linear-gradient(135deg,var(--dz-blue),var(--dz-blue-dark));color:#fff;border:none;border-radius:20px;padding:0 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .dealz-inputbar button:disabled{opacity:.5;}
+  .dealz-pdf-overlay{position:fixed;inset:0;background:rgba(11,18,32,.55);display:flex;align-items:center;justify-content:center;z-index:1000001;padding:20px;font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;}
+  .dealz-pdf-modal{background:#fff;border-radius:18px;width:100%;max-width:520px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4);}
+  .dealz-pdf-modal-head{background:linear-gradient(120deg,var(--dz-blue),var(--dz-navy));color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px;flex-shrink:0;}
+  .dealz-pdf-modal-head button{background:none;border:none;color:#fff;font-size:18px;cursor:pointer;}
+  .dealz-pdf-body{flex:1;min-height:280px;padding:14px;display:flex;flex-direction:column;align-items:center;gap:10px;overflow-y:auto;}
+  .dealz-pdf-loading{color:var(--dz-muted);font-size:13.5px;text-align:center;margin:40px 0;}
+  .dealz-pdf-frame{width:100%;height:48vh;min-height:260px;border:1px solid var(--dz-line);border-radius:10px;}
+  .dealz-pdf-download{font-size:13px;font-weight:700;color:var(--dz-blue-dark);text-decoration:none;}
+  .dealz-pdf-actions{display:flex;gap:10px;padding:14px;border-top:1px solid var(--dz-line);flex-shrink:0;}
+  .dealz-pdf-actions button{flex:1;padding:11px;font-size:14px;border-radius:22px;}
+
+  :root{--dz-blue:#a0522d;--dz-blue-dark:#7b3f21;--dz-navy:#7b3f21;--dz-sky-light:#f5e1d3;}
+  .dealz-lead-gate{flex:1;display:flex;flex-direction:column;gap:8px;padding:20px 18px;justify-content:center;}
+  .dlg-intro{font-size:13.5px;color:var(--dz-muted);margin:0 0 4px;font-weight:600;}
+  .dlg-msg{font-size:12.5px;margin:6px 0 0;display:none;} .dlg-msg.show{display:block;} .dlg-msg.ok{color:var(--dz-green);} .dlg-msg.err{color:#e30613;}
+  .dealz-chat-body{flex:1;display:flex;flex-direction:column;min-height:0;}
+  .dealz-post-cta{align-self:stretch;background:#fff;border:1.5px solid var(--dz-blue);border-radius:14px;overflow:hidden;}
+  .dealz-post-cta .dpc-text{margin:0;padding:14px 14px 10px;font-size:13.5px;font-weight:700;color:var(--dz-ink);}
+  .dealz-post-cta .dpc-actions{display:flex;gap:10px;padding:4px 14px 14px;}
+  .dealz-post-cta .dpc-btn{flex:1;text-align:center;border-radius:20px;padding:9px 12px;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;}
+  .dealz-post-cta .dpc-btn-primary{background:linear-gradient(135deg,var(--dz-blue),var(--dz-blue-dark));color:#fff;}
+  .dealz-post-cta .dpc-btn-secondary{background:#fff;color:var(--dz-muted);border:1.5px solid var(--dz-line);}
+  </style>
+</head>
+<body>
+  <div id="dealz-window">
+    <div class="dealz-embed-header" id="dealz-window-header">
+      <div class="dealz-header-brand"><div><div class="t">MeubleMontage Pro · Devis</div><div class="s">Réponse habituellement instantanée</div></div></div>
+      <button id="dealz-window-close" aria-label="Fermer">✕</button>
+    </div>
+
+    <div class="dealz-lead-gate" id="dealz-lead-gate">
+      <p class="dlg-intro">Avant votre devis instantané, laissez-nous vos coordonnées professionnelles :</p>
+      <input class="dcf-input" id="dlg-company" placeholder="Nom de votre entreprise (optionnel)" />
+      <input class="dcf-input" id="dlg-email" type="email" placeholder="E-mail professionnel" required />
+      <input class="dcf-input" id="dlg-phone" placeholder="Téléphone (optionnel)" />
+      <button class="dcf-submit" id="dlg-submit">Essayer la démo</button>
+      <p class="dlg-msg" id="dlg-msg"></p>
+    </div>
+
+    <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+      <div class="dealz-messages" id="dealz-messages"></div>
+      <div class="dealz-inputbar">
+        <input id="dealz-input" type="text" placeholder="Décrivez vos meubles…" autocomplete="off" />
+        <button id="dealz-send">Envoyer</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var params = new URLSearchParams(location.search);
+    window.DEALZ_API_BASE = params.get("api-base") || location.origin;
+    window.DEALZ_LANG = "fr";
+    window.DEALZ_SECTOR = "montage-meubles";
+    if (params.get("embedded") === "1") document.body.classList.add("dz-embedded");
+    // Closing only works if this page was opened as a popup window; otherwise go back.
+    document.getElementById("dealz-window-close").addEventListener("click", function () {
+      window.close();
+      setTimeout(function () { if (!window.closed && window.history.length > 1) window.history.back(); }, 50);
+    });
+  </script>
+  <script src="/secteurs/data/montage-meubles.js"></script>
+  <script src="/sector-quote.js"></script>
+  <script src="/lead-gate.js"></script>
+</body>
+</html>

@@ -53,6 +53,7 @@
       label: "Nettoyage de canapés, tapis et matelas",
       forWho: "entreprises de nettoyage de canapés, tapis et matelas",
       pitch: "Chiffrez canapés, tapis et matelas d'après leur taille et leur état.",
+      emailNoun: "le nettoyage de vos textiles",
       landing: {
         h1: ["VOUS DÉTACHEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de nettoyage de canapé ou de matelas perdez-vous le soir ?",

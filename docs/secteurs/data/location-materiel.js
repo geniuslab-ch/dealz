@@ -36,6 +36,7 @@
       label: "Location de matériel professionnel",
       forWho: "entreprises de location de matériel professionnel",
       pitch: "Chiffrez machine, durée, livraison et assurance sans appeler le dépôt.",
+      emailNoun: "votre location de matériel",
       landing: {
         h1: ["VOUS LOUEZ.", "DEALZ CHIFFRE."],
         question: "Combien de locations perdez-vous parce que le dépôt ne décroche pas à 7 h du matin ?",

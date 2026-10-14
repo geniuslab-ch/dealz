@@ -17,6 +17,7 @@ const {
   sendReferralNotification,
 } = require("./src/notifications");
 const store = require("./src/store");
+const { getSector } = require("./src/sectors");
 const { recordTrialAttempt } = require("./src/leads");
 const whatsapp = require("./src/whatsapp");
 const { getCompanyBySlug } = require("./src/companies");
@@ -74,7 +75,8 @@ app.use((req, res, next) => {
 app.get("/api/whatsapp-trial", (req, res) => {
   const number = process.env.WHATSAPP_TRIAL_NUMBER_E164;
   if (!number) return res.json({ enabled: false });
-  const prefill = "Bonjour, je voudrais un devis de nettoyage";
+  const sector = getSector(req.query.sector);
+  const prefill = sector ? `Bonjour, je voudrais un devis — ${sector.label}` : "Bonjour, je voudrais un devis de nettoyage";
   res.json({ enabled: true, waLink: `https://wa.me/${number}?text=${encodeURIComponent(prefill)}` });
 });
 
@@ -84,6 +86,7 @@ app.get("/api/whatsapp-trial", (req, res) => {
 app.post("/api/lead", async (req, res) => {
   try {
     const { email, phone, companyName } = req.body;
+    const sector = getSector(req.body.sector);
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: "E-mail professionnel requis" });
     }
@@ -97,7 +100,12 @@ app.post("/api/lead", async (req, res) => {
       fetch(process.env.CRM_DEMO_TESTED_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          email,
+          // Sector demos also hand the CRM who tried it and which trade, so
+          // the visitor shows up as a lead tagged with its sector.
+          ...(sector ? { companyName: companyName || "", phone: phone || "", sector: sector.slug, sectorLabel: sector.label } : {}),
+        }),
       }).catch((err) => console.error("[lead] CRM demo_tested forward failed:", err.message));
     }
 
@@ -389,6 +397,44 @@ app.post("/api/chat", async (req, res) => {
 
 // ---- Decline -> objection -> counteroffer -> re-offer -> accept loop ----
 
+// ---- Sector demos: real e-mails + CRM trail ----
+function htmlToText(html) {
+  const links = [...String(html || "").matchAll(/href="([^"]+)"/g)].map((m) => m[1]).filter((u) => /^https?:/.test(u));
+  const text = String(html || "")
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<\/(p|h2|tr|div)>/gi, "\n")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/[ \t]+/g, " ")
+    .replace(/ *\n */g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  return links.length ? text + "\n\nLien(s) : " + links.join(" · ") : text;
+}
+
+// Fire-and-forget: tells the CRM a sector-demo e-mail went out, so the
+// prospect's thread shows what was sent and when. Never blocks the demo.
+function logDemoActivity({ email, sector, event, result }) {
+  const base = process.env.CRM_DEMO_TESTED_URL;
+  if (!base || !process.env.CRM_INBOUND_SECRET || !email || !sector) return;
+  const sent = (result && (result.preview || result)) || {};
+  fetch(base.replace(/demo-tested\/?$/, "demo-activity"), {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
+    body: JSON.stringify({
+      email,
+      sector: sector.slug,
+      sectorLabel: sector.label,
+      companyName: sector.company.name,
+      event,
+      subject: sent.subject || "",
+      text: htmlToText(sent.html),
+      sentAt: new Date().toISOString(),
+      simulated: !!(result && result.simulated),
+    }),
+  }).catch((err) => console.error("[demo-activity] CRM forward failed:", err.message));
+}
+
 app.post("/api/decline", async (req, res) => {
   try {
     const { quote, category, text, customer, companyEmail } = req.body;
@@ -399,8 +445,13 @@ app.post("/api/decline", async (req, res) => {
     // wins if both are somehow present, since that's an explicit visitor
     // override on the single-tenant demo, not something a real embed sends.
     const company = await getCompanyBySlug(req.body.company);
+    // Sector demos (docs/secteurs/<slug>/demo.html): the visitor plays the
+    // fictional company of that trade — its name and the trade's own
+    // vocabulary are used all through the decline → counteroffer chain.
+    const sector = getSector(req.body.sector);
     const resolvedNotifyEmail = companyEmail || company?.notifyEmail || undefined;
-    const resolvedCompanyName = company?.name;
+    const resolvedCompanyName = sector ? sector.company.name : company?.name;
+    const serviceNoun = sector ? sector.emailNoun : undefined;
     const resolvedSignature = company?.signature;
     const resolvedLogoUrl = company?.logoUrl;
     const resolvedTagline = company?.tagline;
@@ -413,7 +464,7 @@ app.post("/api/decline", async (req, res) => {
     let finalCategory = category;
     let summary = text || "";
     if (!finalCategory || !CATEGORIES[finalCategory]) {
-      const classified = await classifyObjection(text || "");
+      const classified = await classifyObjection(text || "", { sectorLabel: sector?.label });
       finalCategory = classified.category;
       summary = classified.summary;
     }
@@ -424,6 +475,7 @@ app.post("/api/decline", async (req, res) => {
       rawText: text || "",
       quote,
       customer: customer || {},
+      context: { sectorLabel: sector?.label },
     });
 
     const declineToken = await store.put({
@@ -440,6 +492,7 @@ app.post("/api/decline", async (req, res) => {
       logoUrl: resolvedLogoUrl || null,
       tagline: resolvedTagline || null,
       lang,
+      serviceNoun: serviceNoun || null,
       status: "pending",
     });
 
@@ -453,13 +506,18 @@ app.post("/api/decline", async (req, res) => {
       suggestedReply,
       baseUrl: requestBaseUrl(req),
       notifyEmail: resolvedNotifyEmail,
+      sectorLabel: sector?.label,
+      companyName: sector ? resolvedCompanyName : undefined,
     });
+
+    if (sector && companyEmail) logDemoActivity({ email: companyEmail, sector, event: "decline", result: emailResult });
 
     res.json({
       ok: true,
       category: finalCategory,
       categoryLabel: CATEGORIES[finalCategory].label,
       emailPreview: emailResult.preview || null,
+      sentTo: emailResult.simulated ? null : resolvedNotifyEmail || null,
     });
   } catch (err) {
     console.error(err);
@@ -553,6 +611,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
         lang: entry.lang,
+        serviceNoun: entry.serviceNoun || undefined,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendCounterofferToCustomer({
@@ -568,6 +627,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
         lang: entry.lang,
+        serviceNoun: entry.serviceNoun || undefined,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -589,6 +649,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
         lang: entry.lang,
+        serviceNoun: entry.serviceNoun || undefined,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRescheduleToCustomer({
@@ -603,6 +664,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
         lang: entry.lang,
+        serviceNoun: entry.serviceNoun || undefined,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -626,6 +688,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
         lang: entry.lang,
+        serviceNoun: entry.serviceNoun || undefined,
       });
       await store.update(req.params.token, { status: "counter-sent" });
       const emailResult = await sendRevisedOfferToCustomer({
@@ -640,6 +703,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
         lang: entry.lang,
+        serviceNoun: entry.serviceNoun || undefined,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -657,6 +721,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
         lang: entry.lang,
+        serviceNoun: entry.serviceNoun || undefined,
       });
       await store.update(req.params.token, { status: "followup-sent" });
       const emailResult = await sendFollowupToCustomer({
@@ -670,6 +735,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         logoUrl: entry.logoUrl,
         tagline: entry.tagline,
         lang: entry.lang,
+        serviceNoun: entry.serviceNoun || undefined,
       });
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
@@ -730,6 +796,7 @@ app.post("/api/offer/:token/respond", async (req, res) => {
       logoUrl: entry.logoUrl || undefined,
       tagline: entry.tagline || undefined,
       lang: entry.lang || undefined,
+      serviceNoun: entry.serviceNoun || undefined,
     });
     await store.update(req.params.token, { status: "accepted" });
 
@@ -750,22 +817,28 @@ app.post("/api/accept", async (req, res) => {
     if (!quote || !quote.items) return res.status(400).json({ error: "quote is required" });
 
     const company = await getCompanyBySlug(req.body.company);
+    const sector = getSector(req.body.sector);
     const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
 
     const result = await sendBookingConfirmation({
       quote,
       customer: customer || {},
       notifyEmail: companyEmail || company?.notifyEmail || undefined,
-      companyName: company?.name || undefined,
+      companyName: sector ? sector.company.name : company?.name || undefined,
+      serviceNoun: sector ? sector.emailNoun : undefined,
       signature: company?.signature || undefined,
       logoUrl: company?.logoUrl || undefined,
       tagline: company?.tagline || undefined,
       lang,
     });
+
+    if (sector && companyEmail) logDemoActivity({ email: companyEmail, sector, event: "accept", result: result.companyEmail });
+
     res.json({
       ok: true,
       calendarLink: result.calendarLink,
       emailPreview: result.customerEmail.preview || result.companyEmail.preview || null,
+      sentTo: result.companyEmail.simulated ? null : companyEmail || company?.notifyEmail || null,
     });
   } catch (err) {
     console.error(err);

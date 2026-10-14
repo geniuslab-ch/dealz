@@ -41,6 +41,7 @@
       label: "Entretien de piscines",
       forWho: "entreprises d'entretien de piscines",
       pitch: "Chiffrez mise en service, hivernage et entretien selon le bassin.",
+      emailNoun: "l'entretien de votre piscine",
       landing: {
         h1: ["VOUS ENTRETENEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de mise en service perdez-vous au premier week-end de beau temps ?",

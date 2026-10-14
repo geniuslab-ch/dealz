@@ -54,6 +54,7 @@
       label: "Impression et signalétique",
       forWho: "imprimeries et entreprises de signalétique",
       pitch: "Chiffrez tirages, formats et finitions sans passer par un devis manuel.",
+      emailNoun: "votre commande d'impression",
       landing: {
         h1: ["VOUS IMPRIMEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de devis d'impression perdez-vous parce qu'elles attendent dans une boîte mail ?",

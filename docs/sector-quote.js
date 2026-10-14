@@ -25,6 +25,10 @@
   var UI_ALL = {
     fr: {
       typing: "En train d'écrire…",
+      acceptDone: function (c, to) { return "✓ Réservation confirmée ! Un e-mail de confirmation est parti vers le client, et " + c + " est notifiée" + (to ? " : regardez votre boîte <b>" + to + "</b>." : "."); },
+      declineDone: function (c, to) { return "Merci pour votre retour ! " + c + " vient de recevoir un e-mail de refus avec une réponse suggérée et un bouton d'action" + (to ? " — pour cette démo, il est arrivé dans votre boîte <b>" + to + "</b>." : "."); },
+      addCalendar: "📅 Ajouter à mon agenda",
+      error: function (m) { return "Erreur : " + m; },
       quoteReady: function (n) { return (n ? "Merci " + n + " ! " : "") + "Voici votre devis, ferme et détaillé — vous pouvez l'accepter ou le refuser ci-dessous."; },
       contactIntro: "Pour établir votre devis, laissez-nous vos coordonnées :",
       name: "Nom", email: "E-mail", phone: "Téléphone (optionnel)", address: "Adresse",
@@ -74,6 +78,10 @@
     },
     en: {
       typing: "Typing…",
+      acceptDone: function (c, to) { return "✓ Booking confirmed! A confirmation email went to the customer, and " + c + " has been notified" + (to ? " — check your inbox <b>" + to + "</b>." : "."); },
+      declineDone: function (c, to) { return "Thanks for the feedback! " + c + " just received a decline email with a suggested reply and an action button" + (to ? " — for this demo it landed in your inbox <b>" + to + "</b>." : "."); },
+      addCalendar: "📅 Add to my calendar",
+      error: function (m) { return "Error: " + m; },
       quoteReady: function (n) { return (n ? "Thank you " + n + "! " : "") + "Here is your firm, detailed quote — you can accept or decline it below."; },
       contactIntro: "To prepare your quote, please leave your contact details:",
       name: "Name", email: "Email", phone: "Phone (optional)", address: "Address",
@@ -123,6 +131,10 @@
     },
     de: {
       typing: "Schreibt…",
+      acceptDone: function (c, to) { return "✓ Buchung bestätigt! Eine Bestätigungs-E-Mail ging an den Kunden, und " + c + " wurde benachrichtigt" + (to ? " — schauen Sie in Ihr Postfach <b>" + to + "</b>." : "."); },
+      declineDone: function (c, to) { return "Danke für Ihr Feedback! " + c + " hat soeben eine Ablehnungs-E-Mail mit Antwortvorschlag und Aktionsknopf erhalten" + (to ? " — für diese Demo ist sie in Ihrem Postfach <b>" + to + "</b> gelandet." : "."); },
+      addCalendar: "📅 Zu meinem Kalender hinzufügen",
+      error: function (m) { return "Fehler: " + m; },
       quoteReady: function (n) { return (n ? "Vielen Dank " + n + "! " : "") + "Hier ist Ihre feste, detaillierte Offerte — Sie können sie unten annehmen oder ablehnen."; },
       contactIntro: "Für Ihre Offerte hinterlassen Sie uns bitte Ihre Kontaktdaten:",
       name: "Name", email: "E-Mail", phone: "Telefon (optional)", address: "Adresse",
@@ -571,7 +583,7 @@
     });
   }
 
-  // ---------- accept / decline (simulated, with e-mail previews) ----------
+  // ---------- accept / decline (real e-mails via the backend, simulated fallback) ----------
   function emailPreview(preview) {
     var wrap = el("div", "dealz-email-preview");
     var head = el("div", "dep-head", UI.previewHead);
@@ -604,8 +616,30 @@
     scroll();
   }
 
-  function handleAccept(quote) {
-    pending = null;
+  function companyEmail() {
+    try { return sessionStorage.getItem("dealz_company_email") || ""; } catch (e) { return ""; }
+  }
+
+  // Same contract as quote-app.js's postJSON: a non-JSON answer means "no
+  // backend at all" (static hosting) -> caller falls back to a simulation;
+  // a JSON error from a reachable backend is shown as-is.
+  async function postJSON(path, body) {
+    var res = await fetch((window.DEALZ_API_BASE || "") + path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    var data;
+    try { data = await res.json(); } catch (e) { throw new Error("no-backend"); }
+    if (!res.ok) {
+      var err = new Error(data.error || "error");
+      err.isAppError = true;
+      throw err;
+    }
+    return data;
+  }
+
+  function simulatedAccept(quote) {
     system("system-success", UI.acceptThanks(DEMO.brand) + '<br/><br/><i style="opacity:.7">' + UI.staticNote + "</i>");
     var c = quote.customer || {};
     emailPreview({
@@ -614,6 +648,25 @@
       html: "<h2>" + UI.bookingTitle + "</h2><p>" + UI.bookingBody(c.name || "", DEMO.brand, fmtCHF(quote.total)) + "</p>" + itemsTable(quote) +
         "<p><i>" + UI.bookingFoot + "</i></p>",
     });
+  }
+
+  // Real flow: the visitor plays the fictional company, so the e-mails go
+  // through the same /api/accept as the cleaning demo — the company-side
+  // notification lands in the mailbox the visitor typed at the lead gate.
+  async function handleAccept(quote) {
+    pending = null;
+    try {
+      var data = await postJSON("/api/accept", { quote: quote, customer: quote.customer || {}, companyEmail: companyEmail(), sector: SECTOR.slug, lang: LANG });
+      system(
+        "system-success",
+        UI.acceptDone(DEMO.brand, data.sentTo) +
+          (data.calendarLink ? '<br/><br/><a href="' + data.calendarLink + '" target="_blank" rel="noopener">' + UI.addCalendar + "</a>" : "")
+      );
+      if (data.emailPreview) emailPreview(data.emailPreview);
+    } catch (err) {
+      if (err.isAppError) { system("system-decline", UI.error(err.message)); return; }
+      simulatedAccept(quote);
+    }
     postCta();
   }
 
@@ -647,8 +700,7 @@
     scroll();
   }
 
-  function finishDecline(quote, o, text) {
-    user(text);
+  function simulatedDecline(quote, o, text) {
     var c = quote.customer || {};
     var label = o ? o[2] : UI.other;
     var emoji = o ? o[3] : "⚠️";
@@ -665,6 +717,18 @@
         "<p><b>" + UI.clientMsg + " :</b><br/>« " + text.replace(/</g, "&lt;") + " »</p>" +
         "<p><b>" + UI.action + " :</b> " + action + "</p>",
     });
+  }
+
+  async function finishDecline(quote, o, text) {
+    user(text);
+    try {
+      var data = await postJSON("/api/decline", { quote: quote, category: o ? o[0] : null, text: text, customer: quote.customer || {}, companyEmail: companyEmail(), sector: SECTOR.slug, lang: LANG });
+      system("system-decline", UI.declineDone(DEMO.brand, data.sentTo));
+      if (data.emailPreview) emailPreview(data.emailPreview);
+    } catch (err) {
+      if (err.isAppError) system("system-decline", UI.error(err.message));
+      else simulatedDecline(quote, o, text);
+    }
     postCta();
   }
 

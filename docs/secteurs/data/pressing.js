@@ -38,6 +38,7 @@
       label: "Blanchisserie et pressing",
       forWho: "blanchisseries et pressings",
       pitch: "Chiffrez chemises, costumes et linge de maison avant même la dépose.",
+      emailNoun: "le nettoyage de votre linge",
       landing: {
         h1: ["VOUS REPASSEZ.", "DEALZ CHIFFRE."],
         question: "Combien de clients repartent sans avoir osé demander un prix à votre comptoir ?",

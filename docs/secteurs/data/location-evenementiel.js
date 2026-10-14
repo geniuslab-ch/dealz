@@ -38,6 +38,7 @@
       label: "Location de matériel événementiel",
       forWho: "entreprises de location de matériel événementiel",
       pitch: "Chiffrez tables, tentes, son et lumière selon le nombre d'invités.",
+      emailNoun: "votre événement",
       landing: {
         h1: ["VOUS ÉQUIPEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de location perdez-vous parce qu'un devis prend trois jours ?",

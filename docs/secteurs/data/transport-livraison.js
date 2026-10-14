@@ -38,6 +38,7 @@
       label: "Transport et livraison",
       forWho: "entreprises de transport et de livraison",
       pitch: "Chiffrez volume, distance et accès sans passer par le téléphone.",
+      emailNoun: "votre transport",
       landing: {
         h1: ["VOUS ROULEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de transport perdez-vous parce que vos chauffeurs sont sur la route ?",

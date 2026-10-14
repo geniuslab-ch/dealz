@@ -90,7 +90,7 @@ const CATEGORY_KEYS = Object.keys(CATEGORIES);
  * guessing — a wrong CTA (e.g. offering a discount for a scope objection)
  * is worse than a generic "review the conversation" one.
  */
-async function classifyObjection(text) {
+async function classifyObjection(text, context) {
   if (!text || !text.trim()) return { category: "other", summary: "" };
 
   if (client) {
@@ -99,7 +99,9 @@ async function classifyObjection(text) {
         model: MODEL,
         max_tokens: 100,
         system:
-          "Tu classes le motif de refus d'un devis de nettoyage en une seule catégorie parmi : " +
+          "Tu classes le motif de refus d'un devis " +
+          (context && context.sectorLabel ? `du secteur « ${context.sectorLabel} »` : "de nettoyage") +
+          " en une seule catégorie parmi : " +
           CATEGORY_KEYS.join(", ") +
           '. Si le message est ambigu ou ne correspond clairement à aucune, réponds "other". ' +
           'Réponds uniquement avec un objet JSON strict: {"category": "...", "summary": "résumé en une courte phrase"}.',
@@ -161,7 +163,7 @@ const FALLBACK_REPLIES = {
  * existing counteroffer/reply flow, same human-in-the-loop posture as
  * every other customer-facing action in this app.
  */
-async function draftSuggestedReply({ category, summary, rawText, quote, customer }) {
+async function draftSuggestedReply({ category, summary, rawText, quote, customer, context }) {
   const cfg = CATEGORIES[category] || CATEGORIES.other;
   if (!client) return FALLBACK_REPLIES[category] || FALLBACK_REPLIES.other;
 
@@ -170,7 +172,9 @@ async function draftSuggestedReply({ category, summary, rawText, quote, customer
       model: MODEL,
       max_tokens: 200,
       system:
-        "Tu rédiges, pour le compte d'une entreprise de nettoyage suisse, une courte réponse (2 à 4 phrases, en français, ton chaleureux et professionnel) à un client qui a refusé un devis. " +
+        "Tu rédiges, pour le compte d'une entreprise suisse " +
+        (context && context.sectorLabel ? `du secteur « ${context.sectorLabel} »` : "de nettoyage") +
+        ", une courte réponse (2 à 4 phrases, en français, ton chaleureux et professionnel) à un client qui a refusé un devis. " +
         "La réponse doit répondre précisément à ce que le client a dit — jamais une formule générique — et orienter vers une solution concrète adaptée à la catégorie du refus. " +
         "Ne mentionne jamais de nouveau prix ou de remise chiffrée toi-même — l'entreprise décide du montant séparément. " +
         "Ne signe pas et n'ajoute pas de formule de politesse finale (bonjour/cordialement) — juste le corps du message, prêt à être complété par l'entreprise. " +
@@ -194,4 +198,13 @@ async function draftSuggestedReply({ category, summary, rawText, quote, customer
   }
 }
 
-module.exports = { classifyObjection, draftSuggestedReply, CATEGORIES };
+// The two categories whose label/emoji are cleaning-flavoured get neutral
+// ones when the e-mail is for a sector demo (generic = true).
+function categoryView(category, generic) {
+  const cfg = CATEGORIES[category] || CATEGORIES.other;
+  if (generic && category === "conditions") return { label: "Conditions / détails de la prestation", emoji: "📋" };
+  if (generic && category === "scope") return { label: cfg.label, emoji: "✂️" };
+  return { label: cfg.label, emoji: cfg.emoji };
+}
+
+module.exports = { classifyObjection, draftSuggestedReply, CATEGORIES, categoryView };

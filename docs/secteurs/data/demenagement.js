@@ -56,6 +56,7 @@
       label: "Déménagement et débarras",
       forWho: "entreprises de déménagement et de débarras",
       pitch: "Chiffrez volume, étages et distance sans visite préalable.",
+      emailNoun: "votre déménagement",
       landing: {
         h1: ["VOUS DÉMÉNAGEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de déménagement perdez-vous quand vos équipes sont sur la route ?",

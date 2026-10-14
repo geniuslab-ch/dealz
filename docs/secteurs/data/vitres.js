@@ -38,6 +38,7 @@
       label: "Nettoyage de vitres",
       forWho: "entreprises de nettoyage de vitres",
       pitch: "Chiffrez le nombre de vitres, la hauteur et la fréquence en quelques clics.",
+      emailNoun: "le nettoyage de vos vitres",
       landing: {
         h1: ["VOUS LAVEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de nettoyage de vitres perdez-vous parce que vous êtes sur une nacelle ?",

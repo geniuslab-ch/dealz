@@ -113,6 +113,12 @@ const STR = {
     howTitle: "Comment ça marche",
     flow: ["Vous décrivez votre besoin", "Quelques questions rapides", "Calcul selon notre grille tarifaire", "Devis ferme affiché", "Vous acceptez ou refusez"],
     quoteSub: "Réponse habituellement instantanée", quoteWord: "Devis",
+    tabPage: "📄 Onglet dédié", tabPopup: "🪟 Pop-up", tabChat: "💬 Widget de chat", tabWhatsapp: "📱 WhatsApp Business",
+    notePage: "Onglet dédié — comme celui sur lequel vous venez de cliquer en allant sur « ✨ Obtenir un devis ». Le devis vit sur une vraie page de votre site, sous votre propre en-tête et navigation, sans jamais le quitter.",
+    notePopup: "Un bouton « Devis » dans votre menu ouvre le même devis en plein écran, dans sa propre fenêtre — davantage d'espace que la bulle, sans jamais quitter votre site.",
+    noteChat: "Une bulle flottante sur votre site, dans un coin de l'écran — l'intégration la plus simple : une seule ligne de code, fonctionne sur n'importe quelle plateforme (Wix, Shopify, WordPress, site fait main…). Cliquez sur la bulle en bas à droite pour l'essayer.",
+    noteWhatsapp: "Vos clients écrivent directement sur votre WhatsApp Business — sans rien installer sur leur téléphone.",
+    tryPopup: "Essayer le pop-up →", tryWhatsapp: "Essayer sur WhatsApp →", openQuote: "Ouvrir le devis en ligne", closeLbl: "Fermer", quoteTitle: "Devis en ligne",
     gateIntro: "Avant votre devis instantané, laissez-nous vos coordonnées professionnelles :",
     gateCompany: "Nom de votre entreprise (optionnel)", gateEmail: "E-mail professionnel", gatePhone: "Téléphone (optionnel)", gateGo: "Essayer la démo",
     followTitle: "Imaginez ceci sur VOTRE site.",
@@ -161,7 +167,7 @@ function validateSector(S, lang, errors) {
   const T = S[lang];
   const err = (m) => errors.push(where + ": " + m);
   if (!T) return err("missing language block");
-  ["label", "forWho", "pitch"].forEach((k) => { if (!T[k]) err("missing " + k); });
+  ["label", "forWho", "pitch", "emailNoun"].forEach((k) => { if (!T[k]) err("missing " + k); });
   const L = T.landing || {};
   ["question", "text", "clientQ", "step1", "step2", "roi"].forEach((k) => { if (!L[k]) err("landing." + k + " missing"); });
   if (!Array.isArray(L.h1) || L.h1.length !== 2) err("landing.h1 must be [line1, line2]");
@@ -630,38 +636,86 @@ ${D.about.bullets.map((b) => '        <li><span class="sc-check">✓</span><span
       <h2 class="sc-title">${cfg.devisTitle}</h2>
       <p class="sc-devis-note">${esc(D.devisNote)}</p>
 
-      <div class="quote-wrap">
-        <div class="quote-side">
-          <h3>${cfg.howTitle}</h3>
-          <div class="flow-steps">
-${cfg.flow.map((f, i) => '            <div class="flow-step"><div class="num">' + (i + 1) + '</div><span class="label">' + esc(f) + "</span></div>").join('\n            <div class="flow-connector"></div>\n')}
+      <div class="devis-mode-tabs" id="devis-mode-tabs">
+        <button class="dmt-btn active" data-devis-mode="page">${cfg.tabPage}</button>
+        <button class="dmt-btn" data-devis-mode="popup">${cfg.tabPopup}</button>
+        <button class="dmt-btn" data-devis-mode="chat">${cfg.tabChat}</button>
+        <button class="dmt-btn" data-devis-mode="whatsapp" id="devis-whatsapp-tab" style="display: none">${cfg.tabWhatsapp}</button>
+      </div>
+
+      <div class="devis-mode-panel active" data-devis-panel="page">
+        <p class="sc-devis-note">${cfg.notePage}</p>
+        <div class="quote-wrap" id="quote-wrap-anchor">
+          <div class="quote-side">
+            <h3>${cfg.howTitle}</h3>
+            <div class="flow-steps">
+${cfg.flow.map((f, i) => '              <div class="flow-step"><div class="num">' + (i + 1) + '</div><span class="label">' + esc(f) + "</span></div>").join('\n              <div class="flow-connector"></div>\n')}
+            </div>
           </div>
-        </div>
 
-        <div class="quote-panel-slot">
-          <div class="quote-panel" id="quote-panel">
-            <div class="quote-panel-head">
-              <div class="title">${esc(D.brand)} · ${cfg.quoteWord}</div>
-              <div class="subtitle">${cfg.quoteSub}</div>
-            </div>
+          <div class="quote-panel-slot" id="quote-panel-slot">
+            <!-- .quote-panel is the single, real chat instance — JS moves this
+                 exact node between this slot and the floating bubble slot
+                 depending on the active tab, so there is only ever one
+                 conversation/state. -->
+            <div class="quote-panel" id="quote-panel">
+              <div class="quote-panel-head">
+                <div class="title">${esc(D.brand)} · ${cfg.quoteWord}</div>
+                <div class="subtitle">${cfg.quoteSub}</div>
+              </div>
 
-            <div class="dealz-lead-gate" id="dealz-lead-gate">
-              <p class="dlg-intro">${cfg.gateIntro}</p>
-              <input class="dcf-input" id="dlg-company" placeholder="${cfg.gateCompany}" />
-              <input class="dcf-input" id="dlg-email" type="email" placeholder="${cfg.gateEmail}" required />
-              <input class="dcf-input" id="dlg-phone" placeholder="${cfg.gatePhone}" />
-              <button class="dcf-submit" id="dlg-submit">${cfg.gateGo}</button>
-              <p class="dlg-msg" id="dlg-msg"></p>
-            </div>
+              <div class="dealz-lead-gate" id="dealz-lead-gate">
+                <p class="dlg-intro">${cfg.gateIntro}</p>
+                <input class="dcf-input" id="dlg-company" placeholder="${cfg.gateCompany}" />
+                <input class="dcf-input" id="dlg-email" type="email" placeholder="${cfg.gateEmail}" required />
+                <input class="dcf-input" id="dlg-phone" placeholder="${cfg.gatePhone}" />
+                <button class="dcf-submit" id="dlg-submit">${cfg.gateGo}</button>
+                <p class="dlg-msg" id="dlg-msg"></p>
+              </div>
 
-            <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
-              <div class="dealz-messages" id="dealz-messages"></div>
-              <div class="dealz-inputbar">
-                <input id="dealz-input" type="text" placeholder="${esc(D.inputPlaceholder)}" autocomplete="off" />
-                <button id="dealz-send">${cfg.sendLabel}</button>
+              <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+                <div class="dealz-messages" id="dealz-messages"></div>
+                <div class="dealz-inputbar">
+                  <input id="dealz-input" type="text" placeholder="${esc(D.inputPlaceholder)}" autocomplete="off" />
+                  <button id="dealz-send">${cfg.sendLabel}</button>
+                </div>
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="popup">
+        <p class="sc-devis-note">${cfg.notePopup}</p>
+        <div class="devis-mode-try">
+          <button class="sc-btn sc-btn-primary" id="try-popup-btn">${cfg.tryPopup}</button>
+        </div>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="chat">
+        <p class="sc-devis-note">${cfg.noteChat}</p>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="whatsapp">
+        <p class="sc-devis-note">${cfg.noteWhatsapp}</p>
+        <div class="devis-mode-try">
+          <a href="#" id="whatsapp-trial-link" class="sc-btn sc-btn-primary" target="_blank" rel="noopener">${cfg.tryWhatsapp}</a>
+        </div>
+      </div>
+
+      <!-- Real floating bubble, matching embed.js's bubble mode — shown only
+           while the "Widget de chat" tab is active; .quote-panel is moved in
+           here, so the bubble opens the exact same live conversation. -->
+      <button id="demo-widget-launcher" class="demo-widget-launcher" aria-label="${cfg.openQuote}">💬</button>
+      <div id="demo-widget-panel-slot" class="demo-widget-panel-slot"></div>
+
+      <!-- Pop-up: an in-page modal (backdrop + centered card) loading this
+           sector's quote-window.html in an iframe — what a real client site
+           gets via embed.js's data-dealz-mode="window". -->
+      <div id="demo-popup-overlay" class="demo-popup-overlay">
+        <div class="demo-popup-card">
+          <button id="demo-popup-close" class="demo-popup-close" aria-label="${cfg.closeLbl}">✕</button>
+          <iframe id="demo-popup-iframe" title="${cfg.quoteTitle}"></iframe>
         </div>
       </div>
 
@@ -687,6 +741,7 @@ ${cfg.flow.map((f, i) => '            <div class="flow-step"><div class="num">' 
   <script src="/secteurs/data/${S.slug}.js"></script>
   <script src="/sector-quote.js"></script>
   <script src="/lead-gate.js"></script>
+  <script src="/whatsapp-trial-card.js"></script>
   <script>
     document.addEventListener("dealz:quote-delivered", function () {
       var el = document.getElementById("demo-followup");
@@ -695,7 +750,135 @@ ${cfg.flow.map((f, i) => '            <div class="flow-step"><div class="num">' 
         el.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }
     });
+
+    // Switches between the four "how this looks on your site" panels (same
+    // behaviour as the SwissClean demo). The chat mode is the real
+    // floating-bubble behaviour: the single .quote-panel node is physically
+    // moved between the inline slot and the fixed-position bubble slot.
+    (function () {
+      var tabButtons = document.querySelectorAll("#devis-mode-tabs .dmt-btn");
+      var panels = document.querySelectorAll(".devis-mode-panel");
+      var quotePanel = document.getElementById("quote-panel");
+      var inlineSlot = document.getElementById("quote-panel-slot");
+      var bubbleSlot = document.getElementById("demo-widget-panel-slot");
+      var launcher = document.getElementById("demo-widget-launcher");
+
+      function setMode(mode) {
+        tabButtons.forEach(function (b) { b.classList.toggle("active", b.dataset.devisMode === mode); });
+        panels.forEach(function (p) { p.classList.toggle("active", p.dataset.devisPanel === mode); });
+        if (mode === "chat") {
+          bubbleSlot.appendChild(quotePanel);
+          launcher.classList.add("show");
+          bubbleSlot.classList.remove("open");
+        } else {
+          inlineSlot.appendChild(quotePanel);
+          launcher.classList.remove("show");
+          bubbleSlot.classList.remove("open");
+        }
+      }
+      tabButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () { setMode(btn.dataset.devisMode); });
+      });
+      launcher.addEventListener("click", function () { bubbleSlot.classList.toggle("open"); });
+    })();
+
+    // Pop-up mode: in-page modal (stays on this page), not a new window.
+    (function () {
+      var overlay = document.getElementById("demo-popup-overlay");
+      var iframe = document.getElementById("demo-popup-iframe");
+      function openPopup() {
+        if (!iframe.src) iframe.src = "${cfg.base}/${S.slug}/quote-window.html?embedded=1";
+        overlay.classList.add("open");
+      }
+      function closePopup() { overlay.classList.remove("open"); }
+      document.getElementById("try-popup-btn").addEventListener("click", openPopup);
+      document.getElementById("demo-popup-close").addEventListener("click", closePopup);
+      overlay.addEventListener("click", function (e) { if (e.target === overlay) closePopup(); });
+    })();
   </script>
+</body>
+</html>
+`;
+}
+
+// ---------- pop-up / embedded quote page ----------
+// Counterpart of docs/quote-window.html for a sector: the same page real
+// client sites get via embed.js's "window" mode, loaded in an iframe by the
+// demo's Pop-up tab. Reuses quote-window.html's own stylesheet verbatim
+// (extracted at build time) so both look identical, themed with the sector's
+// palette, plus the lead gate (the pop-up can be opened before the gate was
+// passed on the page) and the post-quote call-to-action styles.
+function buildQuoteWindow(S, lang) {
+  const cfg = STR[lang];
+  const D = S[lang].demo;
+  const c = S.colors;
+  const src = fs.readFileSync(path.join(DOCS, "quote-window.html"), "utf8");
+  const a = src.indexOf("<style>"), b = src.indexOf("</style>");
+  if (a < 0 || b < 0) throw new Error("could not find the stylesheet in docs/quote-window.html");
+  const baseCss = src.slice(a + "<style>".length, b);
+  const extraCss = `
+  :root{--dz-blue:${c.main};--dz-blue-dark:${c.dark};--dz-navy:${c.dark};--dz-sky-light:${c.light};}
+  .dealz-lead-gate{flex:1;display:flex;flex-direction:column;gap:8px;padding:20px 18px;justify-content:center;}
+  .dlg-intro{font-size:13.5px;color:var(--dz-muted);margin:0 0 4px;font-weight:600;}
+  .dlg-msg{font-size:12.5px;margin:6px 0 0;display:none;} .dlg-msg.show{display:block;} .dlg-msg.ok{color:var(--dz-green);} .dlg-msg.err{color:#e30613;}
+  .dealz-chat-body{flex:1;display:flex;flex-direction:column;min-height:0;}
+  .dealz-post-cta{align-self:stretch;background:#fff;border:1.5px solid var(--dz-blue);border-radius:14px;overflow:hidden;}
+  .dealz-post-cta .dpc-text{margin:0;padding:14px 14px 10px;font-size:13.5px;font-weight:700;color:var(--dz-ink);}
+  .dealz-post-cta .dpc-actions{display:flex;gap:10px;padding:4px 14px 14px;}
+  .dealz-post-cta .dpc-btn{flex:1;text-align:center;border-radius:20px;padding:9px 12px;font-size:13px;font-weight:700;text-decoration:none;cursor:pointer;}
+  .dealz-post-cta .dpc-btn-primary{background:linear-gradient(135deg,var(--dz-blue),var(--dz-blue-dark));color:#fff;}
+  .dealz-post-cta .dpc-btn-secondary{background:#fff;color:var(--dz-muted);border:1.5px solid var(--dz-line);}
+  `;
+  return `<!doctype html>
+<html lang="${cfg.htmlLang}">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>${esc(D.brand)} · ${cfg.quoteWord}</title>
+<!-- Généré par scripts/build-sectors.js depuis docs/secteurs/data/${S.slug}.js — ne pas éditer à la main.
+     ?embedded=1 : masque l'en-tête et les marges pour une intégration en iframe (mode « pop-up »). -->
+<style>${baseCss}${extraCss}</style>
+</head>
+<body>
+  <div id="dealz-window">
+    <div class="dealz-embed-header" id="dealz-window-header">
+      <div class="dealz-header-brand"><div><div class="t">${esc(D.brand)} · ${cfg.quoteWord}</div><div class="s">${cfg.quoteSub}</div></div></div>
+      <button id="dealz-window-close" aria-label="${cfg.closeLbl}">✕</button>
+    </div>
+
+    <div class="dealz-lead-gate" id="dealz-lead-gate">
+      <p class="dlg-intro">${cfg.gateIntro}</p>
+      <input class="dcf-input" id="dlg-company" placeholder="${cfg.gateCompany}" />
+      <input class="dcf-input" id="dlg-email" type="email" placeholder="${cfg.gateEmail}" required />
+      <input class="dcf-input" id="dlg-phone" placeholder="${cfg.gatePhone}" />
+      <button class="dcf-submit" id="dlg-submit">${cfg.gateGo}</button>
+      <p class="dlg-msg" id="dlg-msg"></p>
+    </div>
+
+    <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+      <div class="dealz-messages" id="dealz-messages"></div>
+      <div class="dealz-inputbar">
+        <input id="dealz-input" type="text" placeholder="${esc(D.inputPlaceholder)}" autocomplete="off" />
+        <button id="dealz-send">${cfg.sendLabel}</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var params = new URLSearchParams(location.search);
+    window.DEALZ_API_BASE = params.get("api-base") || location.origin;
+    window.DEALZ_LANG = "${lang}";
+    window.DEALZ_SECTOR = "${S.slug}";
+    if (params.get("embedded") === "1") document.body.classList.add("dz-embedded");
+    // Closing only works if this page was opened as a popup window; otherwise go back.
+    document.getElementById("dealz-window-close").addEventListener("click", function () {
+      window.close();
+      setTimeout(function () { if (!window.closed && window.history.length > 1) window.history.back(); }, 50);
+    });
+  </script>
+  <script src="/secteurs/data/${S.slug}.js"></script>
+  <script src="/sector-quote.js"></script>
+  <script src="/lead-gate.js"></script>
 </body>
 </html>
 `;
@@ -807,15 +990,25 @@ function main() {
     all.forEach((S) => {
       write(path.join(baseDir, S.slug, "index.html"), buildLanding(S, lang, all, tarifs));
       write(path.join(baseDir, S.slug, "demo.html"), buildDemo(S, lang));
-      pages += 2;
+      write(path.join(baseDir, S.slug, "quote-window.html"), buildQuoteWindow(S, lang));
+      pages += 3;
     });
   });
   if (langs.includes("fr")) injectIndexChips(all);
 
-  // Static slug -> label map for the server (install-request e-mail + CRM lead).
-  const labels = {};
-  all.forEach((S) => { labels[S.slug] = S.fr.label; });
-  write(path.join(ROOT, "src", "sector-labels.json"), JSON.stringify(labels, null, 2) + "\n");
+  // Static slug -> metadata map for the server (src/sectors.js): used by the
+  // install-request e-mail / CRM lead and by the real demo e-mails, which are
+  // sent under the demo company's name with the trade's own vocabulary.
+  const meta = {};
+  all.forEach((S) => {
+    const d = S.fr.demo;
+    meta[S.slug] = {
+      label: S.fr.label,
+      emailNoun: S.fr.emailNoun,
+      company: { name: d.pdfCompany.name, email: d.contact.email, phone: d.contact.phone, address: d.pdfCompany.address },
+    };
+  });
+  write(path.join(ROOT, "src", "sector-meta.json"), JSON.stringify(meta, null, 2) + "\n");
 
   console.log((CHECK_ONLY ? "OK (check only) — " : "Built ") + all.length + " sectors, languages [" + langs.join(", ") + "], " + pages + " pages.");
 }

@@ -37,6 +37,7 @@
       label: "Lavage automobile et detailing",
       forWho: "entreprises de lavage automobile et de detailing",
       pitch: "Chiffrez lavage, detailing et protection selon le véhicule et son état.",
+      emailNoun: "le soin de votre véhicule",
       landing: {
         h1: ["VOUS BRILLEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de detailing perdez-vous quand vous avez les mains dans la mousse ?",

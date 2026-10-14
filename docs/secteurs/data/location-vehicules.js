@@ -40,6 +40,7 @@
       label: "Location de véhicules",
       forWho: "entreprises de location de véhicules",
       pitch: "Chiffrez véhicule, durée, kilométrage et assurance en quelques clics.",
+      emailNoun: "votre location de véhicule",
       landing: {
         h1: ["VOUS LOUEZ.", "DEALZ CHIFFRE."],
         question: "Combien de réservations perdez-vous parce que le comparateur répond avant vous ?",

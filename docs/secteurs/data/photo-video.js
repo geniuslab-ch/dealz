@@ -39,6 +39,7 @@
       label: "Photographie et vidéographie",
       forWho: "photographes et vidéastes",
       pitch: "Chiffrez séance, durée, livrables et déplacement avant le premier appel.",
+      emailNoun: "votre séance",
       landing: {
         h1: ["VOUS CAPTUREZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de séance perdez-vous parce que vous étiez en tournage ?",

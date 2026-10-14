@@ -78,6 +78,7 @@
       label: "Peinture et rénovation",
       forWho: "entreprises de peinture et de rénovation",
       pitch: "Chiffrez surfaces, préparation et finitions sans visite préalable.",
+      emailNoun: "vos travaux de peinture",
       landing: {
         h1: ["VOUS PEIGNEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de devis peinture perdez-vous parce que vous êtes sur un chantier ?",

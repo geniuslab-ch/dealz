@@ -52,6 +52,7 @@
       label: "Désinfection et lutte antiparasitaire",
       forWho: "entreprises de désinfection et de lutte antiparasitaire",
       pitch: "Chiffrez traitement, urgence et suivi selon le problème et les locaux.",
+      emailNoun: "votre intervention antiparasitaire",
       landing: {
         h1: ["VOUS TRAITEZ.", "DEALZ CHIFFRE."],
         question: "Combien d'appels urgents perdez-vous parce que personne ne décroche à 21 h ?",

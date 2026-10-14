@@ -36,6 +36,7 @@
       label: "Montage et démontage de meubles",
       forWho: "entreprises de montage et de démontage de meubles",
       pitch: "Chiffrez montage, démontage et évacuation selon le nombre de pièces.",
+      emailNoun: "le montage de vos meubles",
       landing: {
         h1: ["VOUS MONTEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de montage perdez-vous parce que vous avez les mains dans une armoire ?",

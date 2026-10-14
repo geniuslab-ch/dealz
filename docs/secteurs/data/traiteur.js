@@ -36,6 +36,7 @@
       label: "Traiteurs et services événementiels",
       forWho: "traiteurs et prestataires de services événementiels",
       pitch: "Chiffrez menu, invités, boissons et service sans aller-retour de mails.",
+      emailNoun: "votre événement",
       landing: {
         h1: ["VOUS RÉGALEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes de devis traiteur perdez-vous parce que vous étiez en cuisine ?",

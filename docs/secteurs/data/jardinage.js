@@ -62,6 +62,7 @@
       label: "Jardinage et paysagisme",
       forWho: "entreprises de jardinage et de paysagisme",
       pitch: "Chiffrez tonte, taille et entretien selon la surface et l'état du jardin.",
+      emailNoun: "l'entretien de votre jardin",
       landing: {
         h1: ["VOUS JARDINEZ.", "DEALZ CHIFFRE."],
         question: "Combien de demandes d'entretien de jardin perdez-vous quand vous êtes chez un client ?",
