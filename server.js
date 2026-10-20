@@ -17,7 +17,7 @@ const {
   sendReferralNotification,
 } = require("./src/notifications");
 const store = require("./src/store");
-const { getSector } = require("./src/sectors");
+const { getSector, platformName } = require("./src/sectors");
 const { recordTrialAttempt } = require("./src/leads");
 const whatsapp = require("./src/whatsapp");
 const { getCompanyBySlug } = require("./src/companies");
@@ -508,6 +508,7 @@ app.post("/api/decline", async (req, res) => {
       notifyEmail: resolvedNotifyEmail,
       sectorLabel: sector?.label,
       companyName: sector ? resolvedCompanyName : undefined,
+      platformName: sector ? platformName(req.body.platform) : undefined,
     });
 
     if (sector && companyEmail) logDemoActivity({ email: companyEmail, sector, event: "decline", result: emailResult });

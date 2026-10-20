@@ -14,4 +14,13 @@ function sectorLabel(slug) {
   return s ? s.label : "";
 }
 
-module.exports = { getSector, sectorLabel };
+// Marketplaces/partners a private demo is staged for. Only these exact keys
+// are accepted from the browser, so the name shown in e-mails cannot be
+// chosen by a visitor.
+const PLATFORMS = { "devis-ch": "devis.ch" };
+
+function platformName(key) {
+  return key && Object.prototype.hasOwnProperty.call(PLATFORMS, key) ? PLATFORMS[key] : "";
+}
+
+module.exports = { getSector, sectorLabel, platformName };

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
+  <title>devis.ch × Dealz — démonstration privée</title>
+  <!--
+    Page privée de démonstration préparée pour devis.ch.
+    Volontairement NON liée depuis le site principal, non référencée
+    (noindex), à une adresse non devinable. Réutilise le moteur de devis des
+    démos sectorielles (docs/sector-quote.js) avec une grille de métiers.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/demo.css" />
+  <style>
+    /* Re-themes every Dealz component (panel, chips, buttons) in devis.ch's green. */
+    :root {
+      --blue: #5aaa1f; --blue-dark: #3f8a14; --blue-light: #eaf7dc; --sky: #8fd957; --navy: #2d2d2d;
+      --sc-teal: #6bc62b; --sc-teal-dark: #4f9a1c; --sc-teal-light: #eaf7dc; --sc-coral: #2d2d2d; --sc-coral-dark: #111; --sc-bg: #ffffff;
+      --dc-green: #6bc62b; --dc-ink: #2d2d2d;
+    }
+    body { background: #fff; color: var(--dc-ink); font-family: "Poppins", Arial, Helvetica, sans-serif; }
+    .dc-ribbon { background: var(--dc-ink); color: #fff; text-align: center; font-size: 12.5px; font-weight: 700; padding: 9px 16px; }
+    .dc-ribbon b { background: var(--dc-green); color: #fff; border-radius: 4px; padding: 2px 8px; margin-right: 8px; letter-spacing: .05em; font-size: 10.5px; }
+    .dc-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 28px; border-bottom: 1px solid #eee; flex-wrap: wrap; gap: 8px; }
+    .dc-logo { font-size: 26px; font-weight: 800; letter-spacing: -.02em; color: var(--dc-ink); }
+    .dc-logo span { color: var(--dc-green); }
+    .dc-head small { color: #777; font-weight: 600; font-size: 12.5px; }
+    .dc-hero { text-align: center; padding: 44px 20px 16px; max-width: 880px; margin: 0 auto; }
+    .dc-hero h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 10px; letter-spacing: -.02em; }
+    .dc-hero h1 em { font-style: normal; color: var(--dc-green); }
+    .dc-hero p { color: #666; font-size: 16px; margin: 0 auto; max-width: 640px; }
+    .dc-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; max-width: 980px; margin: 26px auto 8px; padding: 0 20px; }
+    .dc-tile { border: 2px solid #e6e6e6; background: #fff; border-radius: 14px; padding: 16px 10px; cursor: pointer; font: inherit; font-weight: 700; font-size: 13.5px; color: var(--dc-ink); display: flex; flex-direction: column; align-items: center; gap: 6px; transition: border-color .15s, transform .15s, background .15s; }
+    .dc-tile .ic { font-size: 26px; }
+    .dc-tile:hover { border-color: var(--dc-green); transform: translateY(-2px); }
+    .dc-tile[aria-pressed="true"] { border-color: var(--dc-green); background: #eaf7dc; }
+    .dc-hint { text-align: center; color: #888; font-size: 12.5px; margin: 6px 0 22px; }
+    .dc-main { max-width: 1040px; margin: 0 auto; padding: 0 20px 20px; }
+    .dc-partner { background: #f7f7f7; padding: 46px 20px; margin-top: 30px; }
+    .dc-partner-inner { max-width: 980px; margin: 0 auto; }
+    .dc-partner h2 { font-size: 26px; margin: 0 0 6px; letter-spacing: -.02em; }
+    .dc-partner p.sub { color: #666; margin: 0 0 22px; }
+    .dc-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+    .dc-card { background: #fff; border: 1px solid #e8e8e8; border-radius: 14px; padding: 20px; }
+    .dc-card .ic { font-size: 24px; }
+    .dc-card h3 { margin: 8px 0 4px; font-size: 16px; }
+    .dc-card p { margin: 0; color: #666; font-size: 14px; }
+    .dc-cta { text-align: center; padding: 44px 20px 30px; }
+    .dc-cta h2 { font-size: 26px; margin: 0 0 8px; letter-spacing: -.02em; }
+    .dc-cta p { color: #666; margin: 0 0 18px; }
+    .dc-btn { display: inline-block; background: var(--dc-green); color: #fff; font-weight: 800; padding: 13px 26px; border-radius: 28px; text-decoration: none; }
+    .dc-foot { border-top: 1px solid #eee; padding: 20px; text-align: center; color: #888; font-size: 12px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+
+  <div class="dc-ribbon"><b>DÉMO PRIVÉE</b>Conçue pour l'équipe devis.ch — non publique, non référencée.</div>
+
+  <header class="dc-head">
+    <div class="dc-logo">devis<span>.ch</span></div>
+    <small>Démonstration · propulsé par <b>Dealz</b></small>
+  </header>
+
+  <section class="dc-hero">
+    <h1>Décrivez votre projet.<br>Recevez <em>votre prix</em> en moins d'une minute.</h1>
+    <p>Choisissez un métier, répondez à quelques questions : vous obtenez un devis ferme, et le partenaire reçoit une demande déjà qualifiée.</p>
+  </section>
+
+  <div class="dc-tiles" id="dc-tiles">
+    <button class="dc-tile" data-sector="demenagement" aria-pressed="true"><span class="ic">🚚</span>Déménagement</button>
+    <button class="dc-tile" data-sector="vitres" aria-pressed="false"><span class="ic">🪟</span>Nettoyage de vitres</button>
+    <button class="dc-tile" data-sector="nettoyage-textiles" aria-pressed="false"><span class="ic">🛋️</span>Canapés, tapis, matelas</button>
+    <button class="dc-tile" data-sector="jardinage" aria-pressed="false"><span class="ic">🌿</span>Jardin</button>
+    <button class="dc-tile" data-sector="piscines" aria-pressed="false"><span class="ic">🏊</span>Piscine</button>
+    <button class="dc-tile" data-sector="peinture" aria-pressed="false"><span class="ic">🎨</span>Peinture</button>
+    <button class="dc-tile" data-sector="montage-meubles" aria-pressed="false"><span class="ic">🪛</span>Montage de meubles</button>
+    <button class="dc-tile" data-sector="traiteur" aria-pressed="false"><span class="ic">🍽️</span>Traiteur</button>
+  </div>
+  <p class="dc-hint">Changez de métier à tout moment : la conversation repart de zéro.</p>
+
+  <main class="dc-main">
+    <div class="quote-wrap">
+      <div class="quote-side">
+        <h3>Ce que vit le client</h3>
+        <div class="flow-steps">
+          <div class="flow-step"><div class="num">1</div><span class="label">Il choisit son métier</span></div>
+          <div class="flow-connector"></div>
+          <div class="flow-step"><div class="num">2</div><span class="label">Quelques questions adaptées</span></div>
+          <div class="flow-connector"></div>
+          <div class="flow-step"><div class="num">3</div><span class="label">Prix calculé sur la grille du partenaire</span></div>
+          <div class="flow-connector"></div>
+          <div class="flow-step"><div class="num">4</div><span class="label">Devis ferme (PDF) en moins d'une minute</span></div>
+          <div class="flow-connector"></div>
+          <div class="flow-step"><div class="num">5</div><span class="label">Il accepte ou refuse</span></div>
+        </div>
+      </div>
+
+      <div class="quote-panel-slot">
+        <div class="quote-panel" id="quote-panel">
+          <div class="quote-panel-head">
+            <div class="title" id="dc-panel-title">devis.ch · Déménagement</div>
+            <div class="subtitle">Réponse habituellement instantanée</div>
+          </div>
+
+          <div class="dealz-lead-gate" id="dealz-lead-gate">
+            <p class="dlg-intro">Avant votre devis instantané, laissez-nous vos coordonnées professionnelles :</p>
+            <input class="dcf-input" id="dlg-company" placeholder="Nom de votre entreprise (optionnel)" />
+            <input class="dcf-input" id="dlg-email" type="email" placeholder="E-mail professionnel" required />
+            <input class="dcf-input" id="dlg-phone" placeholder="Téléphone (optionnel)" />
+            <button class="dcf-submit" id="dlg-submit">Essayer la démo</button>
+            <p class="dlg-msg" id="dlg-msg"></p>
+          </div>
+
+          <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+            <div class="dealz-messages" id="dealz-messages"></div>
+            <div class="dealz-inputbar">
+              <input id="dealz-input" type="text" placeholder="Décrivez votre projet…" autocomplete="off" />
+              <button id="dealz-send">Envoyer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section class="dc-partner">
+    <div class="dc-partner-inner">
+      <h2>Et côté partenaire ?</h2>
+      <p class="sub">Refusez un devis ci-dessus : l'e-mail que reçoit le partenaire arrive dans votre boîte, à l'adresse que vous avez saisie.</p>
+      <div class="dc-cards">
+        <div class="dc-card"><div class="ic">🎯</div><h3>Une demande déjà qualifiée</h3><p>Surface, accès, date, options : le partenaire reçoit un besoin précis, pas un formulaire à moitié rempli.</p></div>
+        <div class="dc-card"><div class="ic">⚡</div><h3>Un prix avant que le client parte</h3><p>Le client a son devis ferme pendant qu'il est encore sur la page, et non quelques jours plus tard.</p></div>
+        <div class="dc-card"><div class="ic">🔁</div><h3>Un refus qui n'est plus une perte</h3><p>Le motif est identifié, une réponse est déjà rédigée, la contre-offre se fait en un clic.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="dc-cta">
+    <h2>20 minutes pour en parler ?</h2>
+    <p>Je vous montre le reste, et ce que cela donne pour vos propres catégories.</p>
+    <a class="dc-btn" href="mailto:dealz@dealz.website?subject=D%C3%A9mo%20devis.ch">Répondre par e-mail</a>
+  </section>
+
+  <footer class="dc-foot">
+    Démonstration indépendante conçue par Dealz à l'attention de devis.ch ; le nom « devis.ch » et la palette sont utilisés à titre illustratif<br />
+    dans le seul cadre de cette présentation. Les entreprises, tarifs et e-mails affichés sont fictifs.
+  </footer>
+
+  <script>
+    window.DEALZ_LANG = "fr";
+    window.DEALZ_SECTOR = "demenagement";
+    window.DEALZ_PLATFORM = "devis-ch";
+    window.DEALZ_CTA_HREF = "mailto:dealz@dealz.website?subject=D%C3%A9mo%20devis.ch";
+  </script>
+  <script src="/secteurs/data/demenagement.js"></script>
+  <script src="/secteurs/data/vitres.js"></script>
+  <script src="/secteurs/data/nettoyage-textiles.js"></script>
+  <script src="/secteurs/data/jardinage.js"></script>
+  <script src="/secteurs/data/piscines.js"></script>
+  <script src="/secteurs/data/peinture.js"></script>
+  <script src="/secteurs/data/montage-meubles.js"></script>
+  <script src="/secteurs/data/traiteur.js"></script>
+  <script src="/sector-quote.js"></script>
+  <script src="/lead-gate.js"></script>
+  <script>
+    (function () {
+      var tiles = document.querySelectorAll(".dc-tile");
+      var title = document.getElementById("dc-panel-title");
+      tiles.forEach(function (tile) {
+        tile.addEventListener("click", function () {
+          var slug = tile.dataset.sector;
+          if (!window.DealzSectorQuote || !window.DealzSectorQuote.setSector(slug)) return;
+          tiles.forEach(function (t) { t.setAttribute("aria-pressed", t === tile ? "true" : "false"); });
+          title.textContent = "devis.ch · " + tile.lastChild.textContent.trim();
+          document.getElementById("quote-panel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

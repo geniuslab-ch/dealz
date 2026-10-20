@@ -159,6 +159,7 @@ async function sendDeclineNotification({
   notifyEmail = COMPANY_NOTIFY_EMAIL,
   sectorLabel: sectorName,
   companyName: demoCompanyName,
+  platformName,
 }) {
   const cfg = CATEGORIES[category] || CATEGORIES.other;
   const view = categoryView(category, !!sectorName);
@@ -167,7 +168,7 @@ async function sendDeclineNotification({
   // Sector demos: say whose quote this is, so the trial e-mail reads like
   // the real thing for that trade.
   const demoBanner = sectorName
-    ? `<p style="margin:0 0 10px;font-size:12.5px;color:#5b6472;">Démo Dealz · <b>${demoCompanyName}</b> — secteur ${sectorName}</p>`
+    ? `<p style="margin:0 0 10px;font-size:12.5px;color:#5b6472;">Démo Dealz${platformName ? " × " + platformName : ""} · <b>${demoCompanyName}</b> — secteur ${sectorName}</p>`
     : "";
 
   const html = `

@@ -15,12 +15,18 @@
   "use strict";
 
   var LANG = window.DEALZ_LANG || "fr";
-  var SECTOR = (window.DEALZ_SECTORS || {})[window.DEALZ_SECTOR];
-  if (!SECTOR) return;
-  var TXT = SECTOR[LANG] || SECTOR.fr;
-  var QT = TXT.quote;
-  var DEMO = TXT.demo;
-  var LOGIC = SECTOR.quote;
+  var SECTOR, TXT, QT, DEMO, LOGIC;
+  function useSector(slug) {
+    var s = (window.DEALZ_SECTORS || {})[slug];
+    if (!s) return false;
+    SECTOR = s;
+    TXT = s[LANG] || s.fr;
+    QT = TXT.quote;
+    DEMO = TXT.demo;
+    LOGIC = s.quote;
+    return true;
+  }
+  if (!useSector(window.DEALZ_SECTOR)) return;
 
   var UI_ALL = {
     fr: {
@@ -607,7 +613,7 @@
     wrap.appendChild(el("p", "dpc-text", UI.postCta));
     var actions = el("div", "dpc-actions");
     var a = el("a", "dpc-btn dpc-btn-primary", UI.integrate);
-    a.href = "/secteurs/" + SECTOR.slug + "/#contact";
+    a.href = window.DEALZ_CTA_HREF || "/secteurs/" + SECTOR.slug + "/#contact";
     var c = el("a", "dpc-btn dpc-btn-secondary", UI.contact);
     c.href = "mailto:dealz@dealz.website";
     actions.appendChild(a); actions.appendChild(c);
@@ -656,7 +662,7 @@
   async function handleAccept(quote) {
     pending = null;
     try {
-      var data = await postJSON("/api/accept", { quote: quote, customer: quote.customer || {}, companyEmail: companyEmail(), sector: SECTOR.slug, lang: LANG });
+      var data = await postJSON("/api/accept", { quote: quote, customer: quote.customer || {}, companyEmail: companyEmail(), sector: SECTOR.slug, platform: window.DEALZ_PLATFORM || undefined, lang: LANG });
       system(
         "system-success",
         UI.acceptDone(DEMO.brand, data.sentTo) +
@@ -722,7 +728,7 @@
   async function finishDecline(quote, o, text) {
     user(text);
     try {
-      var data = await postJSON("/api/decline", { quote: quote, category: o ? o[0] : null, text: text, customer: quote.customer || {}, companyEmail: companyEmail(), sector: SECTOR.slug, lang: LANG });
+      var data = await postJSON("/api/decline", { quote: quote, category: o ? o[0] : null, text: text, customer: quote.customer || {}, companyEmail: companyEmail(), sector: SECTOR.slug, platform: window.DEALZ_PLATFORM || undefined, lang: LANG });
       system("system-decline", UI.declineDone(DEMO.brand, data.sentTo));
       if (data.emailPreview) emailPreview(data.emailPreview);
     } catch (err) {
@@ -759,6 +765,17 @@
     input.addEventListener("keydown", function (e) { if (e.key === "Enter") submit(); });
     greet();
   }
+
+  // Pages that offer several trades (private prospect demos) switch the
+  // engine at runtime; the conversation restarts for the chosen trade.
+  window.DealzSectorQuote = {
+    setSector: function (slug) {
+      if (!useSector(slug)) return false;
+      window.DEALZ_SECTOR = slug;
+      if (container) restart();
+      return true;
+    },
+  };
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
   else init();
