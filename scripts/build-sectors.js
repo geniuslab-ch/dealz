@@ -263,6 +263,21 @@ function extractTarifs(lang) {
   return html.slice(start, end + "</section>".length);
 }
 
+// Link-preview card (WhatsApp, LinkedIn, Slack…): these read Open Graph tags,
+// and fall back to <title>/<meta description> only when they are missing.
+function ogTags({ url, title, desc, locale }) {
+  return '  <meta property="og:type" content="website" />\n' +
+    '  <meta property="og:site_name" content="Dealz" />\n' +
+    '  <meta property="og:locale" content="' + locale + '" />\n' +
+    '  <meta property="og:url" content="https://dealz.website' + url + '" />\n' +
+    '  <meta property="og:title" content="' + esc(title) + '" />\n' +
+    '  <meta property="og:description" content="' + esc(desc) + '" />\n' +
+    '  <meta property="og:image" content="https://dealz.website/images/dealz-logo-sm.png" />\n' +
+    '  <meta property="og:image:width" content="400" />\n' +
+    '  <meta property="og:image:height" content="400" />\n' +
+    '  <meta name="twitter:card" content="summary" />\n';
+}
+
 function fonts() {
   return '  <link rel="preconnect" href="https://fonts.googleapis.com" />\n' +
     '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\n' +
@@ -315,7 +330,7 @@ function buildLanding(S, lang, all, tarifs) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(desc)}" />
-${fonts()}  <link rel="stylesheet" href="/styles.css" />
+${ogTags({ url: cfg.base + "/" + S.slug + "/", title: L.question, desc: T.pitch, locale: "fr_CH" })}${fonts()}  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
 <!-- Généré par scripts/build-sectors.js depuis docs/secteurs/data/${S.slug}.js — ne pas éditer à la main. -->
@@ -901,7 +916,7 @@ function buildHub(lang, all) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(desc)}" />
-${fonts()}  <link rel="stylesheet" href="/styles.css" />
+${ogTags({ url: cfg.base + "/", title, desc: cfg.sectorsQuestion, locale: "fr_CH" })}${fonts()}  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
 <!-- Généré par scripts/build-sectors.js — ne pas éditer à la main. -->
