@@ -24,6 +24,9 @@
     const chat = document.getElementById("dealz-chat-body");
     if (gate) gate.style.display = "none";
     if (chat) chat.style.display = "flex";
+    // Lets the demo chat (already greeted on page load) show where the
+    // "company" e-mails of this demo will land.
+    window.dispatchEvent(new CustomEvent("dealz-lead-ok", { detail: { email: sessionStorage.getItem(EMAIL_KEY) || "" } }));
   }
 
   function showMessage(text, isError) {

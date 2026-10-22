@@ -15,6 +15,7 @@ const {
   sendInstallRequestNotification,
   sectorLabel,
   sendReferralNotification,
+  errorText,
 } = require("./src/notifications");
 const store = require("./src/store");
 const { getSector, platformName } = require("./src/sectors");
@@ -46,6 +47,17 @@ app.use(express.static(path.join(__dirname, "docs")));
 // works on the developer's own machine.
 function requestBaseUrl(req) {
   return process.env.APP_BASE_URL || `${req.protocol}://${req.get("host")}`;
+}
+
+// What really happened to one e-mail, for the demo to show: "sent",
+// "failed" (with the SMTP error), "simulated" (no SMTP configured) or
+// "skipped" (no address). Without this a failed send looked like a success.
+function deliveryOf(result, to) {
+  if (!result) return { state: "skipped", to: to || null };
+  if (result.failed) return { state: "failed", to: to || null, error: result.error || null };
+  if (result.skipped) return { state: "skipped", to: to || null };
+  if (result.simulated) return { state: "simulated", to: to || null };
+  return { state: "sent", to: result.to || to || null };
 }
 
 // Allows /api/* and /pricing.json to be called from a client's own website
@@ -496,20 +508,28 @@ app.post("/api/decline", async (req, res) => {
       status: "pending",
     });
 
-    const emailResult = await sendDeclineNotification({
-      quote,
-      category: finalCategory,
-      summary,
-      rawText: text || "",
-      customer: customer || {},
-      declineToken,
-      suggestedReply,
-      baseUrl: requestBaseUrl(req),
-      notifyEmail: resolvedNotifyEmail,
-      sectorLabel: sector?.label,
-      companyName: sector ? resolvedCompanyName : undefined,
-      platformName: sector ? platformName(req.body.platform) : undefined,
-    });
+    // A failed send must not turn into a 500: the decline itself is stored,
+    // and the demo shows the SMTP error next to the "thanks" message.
+    let emailResult;
+    try {
+      emailResult = await sendDeclineNotification({
+        quote,
+        category: finalCategory,
+        summary,
+        rawText: text || "",
+        customer: customer || {},
+        declineToken,
+        suggestedReply,
+        baseUrl: requestBaseUrl(req),
+        notifyEmail: resolvedNotifyEmail,
+        sectorLabel: sector?.label,
+        companyName: sector ? resolvedCompanyName : undefined,
+        platformName: sector ? platformName(req.body.platform) : undefined,
+      });
+    } catch (err) {
+      console.error("[decline] company notification failed:", err);
+      emailResult = { simulated: true, failed: true, error: errorText(err) };
+    }
 
     if (sector && companyEmail) logDemoActivity({ email: companyEmail, sector, event: "decline", result: emailResult });
 
@@ -519,6 +539,7 @@ app.post("/api/decline", async (req, res) => {
       categoryLabel: CATEGORIES[finalCategory].label,
       emailPreview: emailResult.preview || null,
       sentTo: emailResult.simulated ? null : resolvedNotifyEmail || null,
+      delivery: { company: deliveryOf(emailResult, resolvedNotifyEmail) },
     });
   } catch (err) {
     console.error(err);
@@ -840,6 +861,10 @@ app.post("/api/accept", async (req, res) => {
       calendarLink: result.calendarLink,
       emailPreview: result.customerEmail.preview || result.companyEmail.preview || null,
       sentTo: result.companyEmail.simulated ? null : companyEmail || company?.notifyEmail || null,
+      delivery: {
+        company: deliveryOf(result.companyEmail, companyEmail || company?.notifyEmail),
+        customer: deliveryOf(result.customerEmail, (customer || {}).email),
+      },
     });
   } catch (err) {
     console.error(err);

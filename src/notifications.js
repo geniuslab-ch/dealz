@@ -64,6 +64,13 @@ async function sendEmail({ to, subject, html, replyTo }) {
   return { simulated: false, to, subject, html };
 }
 
+// Short, credential-free description of a failed send (SMTP code + message).
+function errorText(err) {
+  if (!err) return "erreur inconnue";
+  const code = err.responseCode || err.code;
+  return `${code ? code + " " : ""}${(err.response || err.message || String(err)).slice(0, 200)}`;
+}
+
 function escapeHtml(s) {
   return String(s || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
@@ -419,8 +426,16 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
 
   return {
     calendarLink: calLink,
-    customerEmail: customerResult.status === "fulfilled" ? customerResult.value : { simulated: true, failed: true },
-    companyEmail: companyResult.status === "fulfilled" ? companyResult.value : { simulated: true, failed: true },
+    // The SMTP error travels back to the demo (see deliveryOf in server.js)
+    // so a failed send is shown as failed instead of looking like a success.
+    customerEmail:
+      customerResult.status === "fulfilled"
+        ? customerResult.value
+        : { simulated: true, failed: true, error: errorText(customerResult.reason) },
+    companyEmail:
+      companyResult.status === "fulfilled"
+        ? companyResult.value
+        : { simulated: true, failed: true, error: errorText(companyResult.reason) },
   };
 }
 
@@ -493,6 +508,7 @@ async function sendReferralNotification({
 }
 
 module.exports = {
+  errorText,
   sendEmail,
   sendDeclineNotification,
   sendCounterofferToCustomer,

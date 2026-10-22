@@ -31,13 +31,23 @@
   var UI_ALL = {
     fr: {
       typing: "En train d'écrire…",
-      acceptDone: function (c, to) { return "✓ Réservation confirmée ! Un e-mail de confirmation est parti vers le client, et " + c + " est notifiée" + (to ? " : regardez votre boîte <b>" + to + "</b>." : "."); },
-      declineDone: function (c, to) { return "Merci pour votre retour ! " + c + " vient de recevoir un e-mail de refus avec une réponse suggérée et un bouton d'action" + (to ? " — pour cette démo, il est arrivé dans votre boîte <b>" + to + "</b>." : "."); },
+      acceptDone: function (c) { return "✓ Réservation confirmée !"; },
+      declineDone: function (c) { return "Merci pour votre retour ! " + c + " reçoit un e-mail de refus avec une réponse suggérée et un bouton d'action."; },
+      dlv: {
+        company: "E-mail « entreprise » (ce que reçoit " + "{c}" + ")",
+        customer: "E-mail « client final »",
+        sent: function (to) { return "envoyé à <b>" + to + "</b> — vérifiez aussi vos spams."; },
+        failed: function (to, e) { return "<b>non envoyé</b>" + (to ? " à " + to : "") + " — erreur d'envoi : <code>" + (e || "inconnue") + "</code>"; },
+        simulated: "non envoyé : l'envoi d'e-mails n'est pas configuré sur ce serveur.",
+        skipped: "aucune adresse renseignée.",
+        intro: function (to, c) { return "📩 Démo : les e-mails que reçoit " + c + " arriveront à <b>" + to + "</b> dès que le client aura accepté ou refusé le devis."; },
+      },
       addCalendar: "📅 Ajouter à mon agenda",
       error: function (m) { return "Erreur : " + m; },
       quoteReady: function (n) { return (n ? "Merci " + n + " ! " : "") + "Voici votre devis, ferme et détaillé — vous pouvez l'accepter ou le refuser ci-dessous."; },
-      contactIntro: "Pour établir votre devis, laissez-nous vos coordonnées :",
-      name: "Nom", email: "E-mail", phone: "Téléphone (optionnel)", address: "Adresse",
+      contactIntro: "Jouez maintenant le client : indiquez une adresse e-mail réelle, <b>différente de la vôtre</b>, pour recevoir ce que reçoit le client final (devis accepté, contre-offre…).",
+      name: "Nom du client", email: "E-mail du client (réel, différent du vôtre)", phone: "Téléphone (optionnel)", address: "Adresse",
+      sameEmail: "Pour tester les deux côtés, utilisez une autre adresse que celle donnée au début (les e-mails « entreprise » y arrivent déjà).",
       cont: "Continuer",
       confirmDate: "Confirmer la date",
       dateErr: function (min) { return "Merci de choisir une date valide (au plus tôt : " + min + ")."; },
@@ -84,13 +94,23 @@
     },
     en: {
       typing: "Typing…",
-      acceptDone: function (c, to) { return "✓ Booking confirmed! A confirmation email went to the customer, and " + c + " has been notified" + (to ? " — check your inbox <b>" + to + "</b>." : "."); },
-      declineDone: function (c, to) { return "Thanks for the feedback! " + c + " just received a decline email with a suggested reply and an action button" + (to ? " — for this demo it landed in your inbox <b>" + to + "</b>." : "."); },
+      acceptDone: function (c) { return "✓ Booking confirmed!"; },
+      declineDone: function (c) { return "Thanks for the feedback! " + c + " gets a decline email with a suggested reply and an action button."; },
+      dlv: {
+        company: "“Company” email (what {c} receives)",
+        customer: "“End customer” email",
+        sent: function (to) { return "sent to <b>" + to + "</b> — check your spam folder too."; },
+        failed: function (to, e) { return "<b>not sent</b>" + (to ? " to " + to : "") + " — sending error: <code>" + (e || "unknown") + "</code>"; },
+        simulated: "not sent: email sending isn't configured on this server.",
+        skipped: "no address provided.",
+        intro: function (to, c) { return "📩 Demo: the emails " + c + " receives will land in <b>" + to + "</b> as soon as the customer accepts or declines the quote."; },
+      },
       addCalendar: "📅 Add to my calendar",
       error: function (m) { return "Error: " + m; },
       quoteReady: function (n) { return (n ? "Thank you " + n + "! " : "") + "Here is your firm, detailed quote — you can accept or decline it below."; },
-      contactIntro: "To prepare your quote, please leave your contact details:",
-      name: "Name", email: "Email", phone: "Phone (optional)", address: "Address",
+      contactIntro: "Now play the customer: enter a real email address, <b>different from yours</b>, to receive what the end customer receives (accepted quote, counter-offer…).",
+      name: "Customer name", email: "Customer email (real, not yours)", phone: "Phone (optional)", address: "Address",
+      sameEmail: "To test both sides, use a different address from the one given at the start (the “company” emails already go there).",
       cont: "Continue",
       confirmDate: "Confirm date",
       dateErr: function (min) { return "Please choose a valid date (earliest: " + min + ")."; },
@@ -137,13 +157,23 @@
     },
     de: {
       typing: "Schreibt…",
-      acceptDone: function (c, to) { return "✓ Buchung bestätigt! Eine Bestätigungs-E-Mail ging an den Kunden, und " + c + " wurde benachrichtigt" + (to ? " — schauen Sie in Ihr Postfach <b>" + to + "</b>." : "."); },
-      declineDone: function (c, to) { return "Danke für Ihr Feedback! " + c + " hat soeben eine Ablehnungs-E-Mail mit Antwortvorschlag und Aktionsknopf erhalten" + (to ? " — für diese Demo ist sie in Ihrem Postfach <b>" + to + "</b> gelandet." : "."); },
+      acceptDone: function (c) { return "✓ Buchung bestätigt!"; },
+      declineDone: function (c) { return "Danke für Ihr Feedback! " + c + " erhält eine Ablehnungs-E-Mail mit Antwortvorschlag und Aktionsknopf."; },
+      dlv: {
+        company: "E-Mail «Unternehmen» (was {c} erhält)",
+        customer: "E-Mail «Endkunde»",
+        sent: function (to) { return "gesendet an <b>" + to + "</b> — prüfen Sie auch den Spam-Ordner."; },
+        failed: function (to, e) { return "<b>nicht gesendet</b>" + (to ? " an " + to : "") + " — Versandfehler: <code>" + (e || "unbekannt") + "</code>"; },
+        simulated: "nicht gesendet: Der E-Mail-Versand ist auf diesem Server nicht eingerichtet.",
+        skipped: "keine Adresse angegeben.",
+        intro: function (to, c) { return "📩 Demo: Die E-Mails, die " + c + " erhält, landen in <b>" + to + "</b>, sobald der Kunde die Offerte annimmt oder ablehnt."; },
+      },
       addCalendar: "📅 Zu meinem Kalender hinzufügen",
       error: function (m) { return "Fehler: " + m; },
       quoteReady: function (n) { return (n ? "Vielen Dank " + n + "! " : "") + "Hier ist Ihre feste, detaillierte Offerte — Sie können sie unten annehmen oder ablehnen."; },
-      contactIntro: "Für Ihre Offerte hinterlassen Sie uns bitte Ihre Kontaktdaten:",
-      name: "Name", email: "E-Mail", phone: "Telefon (optional)", address: "Adresse",
+      contactIntro: "Spielen Sie jetzt den Kunden: Geben Sie eine echte E-Mail-Adresse an, <b>nicht Ihre eigene</b>, um zu erhalten, was der Endkunde erhält (angenommene Offerte, Gegenangebot…).",
+      name: "Name des Kunden", email: "E-Mail des Kunden (echt, nicht Ihre)", phone: "Telefon (optional)", address: "Adresse",
+      sameEmail: "Um beide Seiten zu testen, verwenden Sie eine andere Adresse als zu Beginn (die «Unternehmens»-E-Mails gehen bereits dorthin).",
       cont: "Weiter",
       confirmDate: "Datum bestätigen",
       dateErr: function (min) { return "Bitte wählen Sie ein gültiges Datum (frühestens: " + min + ")."; },
@@ -242,6 +272,16 @@
   // French typography: keep ? ! : ; » attached to the preceding word.
   function typo(text) { return LANG === "fr" ? String(text).replace(/ ([?!:;»])/g, "\u00a0$1").replace(/« /g, "«\u00a0") : text; }
   function assistant(text) { container.appendChild(el("div", "dealz-msg assistant", typo(text))); scroll(); }
+  // For our own fixed strings that carry markup (e.g. <b>), never user input.
+  function assistantHtml(html) {
+    var b = el("div", "dealz-msg assistant");
+    b.innerHTML = typo(html);
+    container.appendChild(b);
+    scroll();
+  }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; });
+  }
   function user(text) { container.appendChild(el("div", "dealz-msg user", text)); scroll(); }
   function system(kind, html) {
     var b = el("div", "dealz-msg " + kind);
@@ -427,7 +467,7 @@
 
   // ---------- contact + quote ----------
   function askContact() {
-    assistant(UI.contactIntro);
+    assistantHtml(UI.contactIntro);
     var wrap = el("div", "dealz-contact-form");
     var nameI = el("input", "dcf-input"); nameI.placeholder = UI.name;
     var emailI = el("input", "dcf-input"); emailI.type = "email"; emailI.placeholder = UI.email;
@@ -442,6 +482,11 @@
     var go = el("button", "dcf-submit", UI.cont);
     go.addEventListener("click", function () {
       if (!emailI.value.trim()) { emailI.focus(); return; }
+      if (companyEmail() && emailI.value.trim().toLowerCase() === companyEmail().toLowerCase()) {
+        assistant(UI.sameEmail);
+        emailI.focus();
+        return;
+      }
       if (addrI && !addrI.value.trim()) { addrI.focus(); return; }
       go.disabled = true;
       wrap.querySelectorAll("input").forEach(function (i) { i.disabled = true; });
@@ -622,6 +667,23 @@
     scroll();
   }
 
+  // One line per e-mail with its real outcome, so a failed send is visible
+  // instead of being reported as delivered.
+  function deliveryHtml(delivery) {
+    if (!delivery) return "";
+    var lines = [];
+    [["company", UI.dlv.company.replace("{c}", DEMO.brand)], ["customer", UI.dlv.customer]].forEach(function (k) {
+      var d = delivery[k[0]];
+      if (!d) return;
+      var icon = d.state === "sent" ? "📩" : d.state === "skipped" ? "➖" : "⚠️";
+      var text = d.state === "sent" ? UI.dlv.sent(escapeHtml(d.to || "")) :
+        d.state === "failed" ? UI.dlv.failed(escapeHtml(d.to || ""), escapeHtml(d.error || "")) :
+        d.state === "simulated" ? UI.dlv.simulated : UI.dlv.skipped;
+      lines.push(icon + " " + k[1] + " : " + text);
+    });
+    return lines.length ? "<br/><br/>" + lines.join("<br/>") : "";
+  }
+
   function companyEmail() {
     try { return sessionStorage.getItem("dealz_company_email") || ""; } catch (e) { return ""; }
   }
@@ -665,7 +727,7 @@
       var data = await postJSON("/api/accept", { quote: quote, customer: quote.customer || {}, companyEmail: companyEmail(), sector: SECTOR.slug, platform: window.DEALZ_PLATFORM || undefined, lang: LANG });
       system(
         "system-success",
-        UI.acceptDone(DEMO.brand, data.sentTo) +
+        UI.acceptDone(DEMO.brand) + deliveryHtml(data.delivery) +
           (data.calendarLink ? '<br/><br/><a href="' + data.calendarLink + '" target="_blank" rel="noopener">' + UI.addCalendar + "</a>" : "")
       );
       if (data.emailPreview) emailPreview(data.emailPreview);
@@ -729,7 +791,7 @@
     user(text);
     try {
       var data = await postJSON("/api/decline", { quote: quote, category: o ? o[0] : null, text: text, customer: quote.customer || {}, companyEmail: companyEmail(), sector: SECTOR.slug, platform: window.DEALZ_PLATFORM || undefined, lang: LANG });
-      system("system-decline", UI.declineDone(DEMO.brand, data.sentTo));
+      system("system-decline", UI.declineDone(DEMO.brand) + deliveryHtml(data.delivery));
       if (data.emailPreview) emailPreview(data.emailPreview);
     } catch (err) {
       if (err.isAppError) system("system-decline", UI.error(err.message));
@@ -739,8 +801,18 @@
   }
 
   // ---------- lifecycle ----------
+  // Reminds the visitor where the "company" e-mails of this demo will land,
+  // at the top of the conversation.
+  function showDeliveryIntro(email) {
+    if (!email || !container || container.querySelector(".dealz-delivery-intro")) return;
+    var b = el("div", "dealz-msg system-success dealz-delivery-intro");
+    b.innerHTML = UI.dlv.intro(escapeHtml(email), DEMO.brand);
+    container.insertBefore(b, container.firstChild);
+  }
+
   function greet() {
     assistant(QT.greeting);
+    showDeliveryIntro(companyEmail());
     ask();
   }
 
@@ -763,6 +835,7 @@
     }
     sendBtn.addEventListener("click", submit);
     input.addEventListener("keydown", function (e) { if (e.key === "Enter") submit(); });
+    window.addEventListener("dealz-lead-ok", function (e) { showDeliveryIntro(e.detail && e.detail.email); });
     greet();
   }
 

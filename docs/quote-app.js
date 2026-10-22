@@ -243,6 +243,15 @@
     "Une erreur est survenue.": { en: "Something went wrong.", de: "Ein Fehler ist aufgetreten." },
     "Nom": { en: "Name", de: "Name" },
     "E-mail": { en: "Email", de: "E-Mail" },
+    "E-mail du client (réel, différent du vôtre)": { en: "Customer email (real, not yours)", de: "E-Mail des Kunden (echt, nicht Ihre)" },
+    "Vous jouez maintenant le client : indiquez une adresse e-mail réelle, différente de la vôtre, pour recevoir ce que reçoit le client final.": {
+      en: "You're now playing the customer: enter a real email address, different from yours, to receive what the end customer receives.",
+      de: "Sie spielen jetzt den Kunden: Geben Sie eine echte E-Mail-Adresse an, nicht Ihre eigene, um zu erhalten, was der Endkunde erhält.",
+    },
+    "Pour tester les deux côtés, utilisez une autre adresse que celle donnée au début (les e-mails « entreprise » y arrivent déjà).": {
+      en: "To test both sides, use a different address from the one given at the start (the “company” emails already go there).",
+      de: "Um beide Seiten zu testen, verwenden Sie eine andere Adresse als zu Beginn (die «Unternehmens»-E-Mails gehen bereits dorthin).",
+    },
     "Téléphone (optionnel)": { en: "Phone (optional)", de: "Telefon (optional)" },
     "Adresse du logement à nettoyer": { en: "Address of the property to clean", de: "Adresse der zu reinigenden Wohnung" },
     "Confirmer la date": { en: "Confirm the date", de: "Datum bestätigen" },
@@ -345,6 +354,38 @@
   // — when set, company-facing demo notifications (decline, booking) are
   // addressed to it instead of the fictional company inbox, so testing the
   // demo for your own business shows what *you* would actually receive.
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+  }
+
+  // One line per e-mail with its real outcome (sent / failed with the SMTP
+  // error / not configured / no address), so a failed send is visible.
+  function deliveryHtml(delivery) {
+    if (!delivery) return "";
+    const lang = window.DEALZ_LANG === "en" || window.DEALZ_LANG === "de" ? window.DEALZ_LANG : "fr";
+    const L = {
+      fr: { company: "E-mail « entreprise »", customer: "E-mail « client final »", sent: "envoyé à", spam: "vérifiez aussi vos spams",
+            failed: "non envoyé", error: "erreur d'envoi", simulated: "non envoyé : l'envoi d'e-mails n'est pas configuré sur ce serveur", skipped: "aucune adresse renseignée" },
+      en: { company: "“Company” email", customer: "“End customer” email", sent: "sent to", spam: "check your spam folder too",
+            failed: "not sent", error: "sending error", simulated: "not sent: email sending isn't configured on this server", skipped: "no address provided" },
+      de: { company: "E-Mail «Unternehmen»", customer: "E-Mail «Endkunde»", sent: "gesendet an", spam: "prüfen Sie auch den Spam-Ordner",
+            failed: "nicht gesendet", error: "Versandfehler", simulated: "nicht gesendet: Der E-Mail-Versand ist auf diesem Server nicht eingerichtet", skipped: "keine Adresse angegeben" },
+    }[lang];
+    const lines = [];
+    for (const key of ["company", "customer"]) {
+      const d = delivery[key];
+      if (!d) continue;
+      const to = escapeHtml(d.to || "");
+      const text =
+        d.state === "sent" ? `📩 ${L[key]} : ${L.sent} <b>${to}</b> — ${L.spam}.` :
+        d.state === "failed" ? `⚠️ ${L[key]} : <b>${L.failed}</b>${to ? " (" + to + ")" : ""} — ${L.error} : <code>${escapeHtml(d.error || "?")}</code>` :
+        d.state === "simulated" ? `⚠️ ${L[key]} : ${L.simulated}.` :
+        `➖ ${L[key]} : ${L.skipped}.`;
+      lines.push(text);
+    }
+    return lines.length ? "<br/><br/>" + lines.join("<br/>") : "";
+  }
+
   function getCompanyEmail() {
     try {
       return sessionStorage.getItem("dealz_company_email") || "";
@@ -453,12 +494,15 @@
   function renderContactForm(container, { intro, submitLabel, needAddress }, onSubmit) {
     const wrap = el("div", "dealz-contact-form");
     if (intro) wrap.appendChild(el("p", "dcf-intro", intro));
+    // The visitor typed their own address at the lead gate (company side);
+    // here they play the customer, so they need a second, real address.
+    wrap.appendChild(el("p", "dcf-intro", T("Vous jouez maintenant le client : indiquez une adresse e-mail réelle, différente de la vôtre, pour recevoir ce que reçoit le client final.")));
 
     const nameInput = el("input", "dcf-input");
     nameInput.placeholder = T("Nom");
     const emailInput = el("input", "dcf-input");
     emailInput.type = "email";
-    emailInput.placeholder = T("E-mail");
+    emailInput.placeholder = T("E-mail du client (réel, différent du vôtre)");
     emailInput.required = true;
     const phoneInput = el("input", "dcf-input");
     phoneInput.placeholder = T("Téléphone (optionnel)");
@@ -480,6 +524,12 @@
 
     submitBtn.addEventListener("click", () => {
       if (!emailInput.value.trim()) {
+        emailInput.focus();
+        return;
+      }
+      const companyEmail = getCompanyEmail();
+      if (companyEmail && emailInput.value.trim().toLowerCase() === companyEmail.toLowerCase()) {
+        renderAssistantText(container, T("Pour tester les deux côtés, utilisez une autre adresse que celle donnée au début (les e-mails « entreprise » y arrivent déjà)."));
         emailInput.focus();
         return;
       }
@@ -714,13 +764,11 @@
         null,
         "system-success",
         (window.DEALZ_LANG === "en"
-          ? `✓ Booking confirmed! A confirmation email has been sent, and the appointment ` +
-            `is ready to be added to the company's calendar.`
+          ? `✓ Booking confirmed! The appointment is ready to be added to the company's calendar.`
           : window.DEALZ_LANG === "de"
-          ? `✓ Buchung bestätigt! Eine Bestätigungs-E-Mail wurde versendet, und der Termin ` +
-            `ist bereit, in den Kalender des Unternehmens eingetragen zu werden.`
-          : `✓ Réservation confirmée ! Un e-mail de confirmation a été envoyé, et le rendez-vous ` +
-            `est prêt à être ajouté à l'agenda de l'entreprise.`) +
+          ? `✓ Buchung bestätigt! Der Termin ist bereit, in den Kalender des Unternehmens eingetragen zu werden.`
+          : `✓ Réservation confirmée ! Le rendez-vous est prêt à être ajouté à l'agenda de l'entreprise.`) +
+          deliveryHtml(data.delivery) +
           (data.calendarLink
             ? `<br/><br/><a href="${data.calendarLink}" target="_blank" rel="noopener">${T("📅 Ajouter à mon Google Agenda")}</a>`
             : "")
@@ -766,9 +814,14 @@
       });
       renderSystemMessage(
         container,
-        "Merci pour votre retour ! Nous avons transmis votre message à l'équipe — vous serez " +
-          "recontacté(e) rapidement si une meilleure offre est possible.",
-        "system-decline"
+        null,
+        "system-decline",
+        escapeHtml(
+          T(
+            "Merci pour votre retour ! Nous avons transmis votre message à l'équipe — vous serez " +
+              "recontacté(e) rapidement si une meilleure offre est possible."
+          )
+        ) + deliveryHtml(data.delivery)
       );
       renderEmailPreview(container, data.emailPreview);
     } catch (err) {
