@@ -126,6 +126,223 @@ const STR = {
     followInstall: "Demander l'installation", followPricing: "Voir les tarifs", followContact: "Contacter Dealz",
     footerDemo: function (d) { return d.pdfCompany.name + " — site de démonstration, cette entreprise n'existe pas réellement."; },
     poweredBy: "Propulsé par",
+    sectorTitle: function (label) { return "Dealz pour " + label.toLowerCase() + " — devis instantané par IA"; },
+    sectorDesc: function (pitch) { return pitch + " Dealz répond à vos clients 24/7, calcule votre prix selon vos tarifs et prépare le devis. Dès CHF 49/mois."; },
+    demoTitle: function (name) { return name + " — Site de démonstration (propulsé par Dealz)"; },
+    hubTitle: "Dealz par secteur — devis instantané par IA pour votre métier",
+    hubDesc: "Déménagement, jardinage, peinture, pressing, piscines, traiteurs… Découvrez Dealz pour votre secteur et essayez une démo adaptée à votre métier.",
+  },
+
+  en: {
+    htmlLang: "en",
+    ogLocale: "en_CH",
+    base: "/en/secteurs",
+    home: "/en/index.html",
+    demoHome: "/en/demo.html",
+    indexFile: "en/index.html",
+    cleaningLabel: "Cleaning",
+    cleaningPitch: "End-of-lease, regular upkeep, offices: the original instant quote.",
+    seeDemoNav: "✨ Try the demo",
+    navHome: "Home", navProblem: "The problem", navHow: "How it works", navPricing: "Pricing", navContact: "Contact", navSectors: "Sectors",
+    forWho: function (s) { return "For " + s.en.forWho; },
+    sectorsHeroEyebrow: "Dealz by sector",
+    sectorsH1: ["YOUR TRADE.", "YOUR DEALZ."],
+    sectorsQuestion: "Whatever your sector, your clients ask for a price first.",
+    sectorsText: "Dealz adapts to your business: questions built for your trade, a price calculated from your own rates, and a quote ready to confirm. Pick your sector to see the dedicated page and try a demo on a fictional site for your trade.",
+    discover: "Discover →", tryDemo: "Try the demo",
+    sectorsCtaTitle: "Your sector isn't on the list?",
+    sectorsCtaText: "Dealz works as soon as you can price a service from a few questions. Tell us about your trade.",
+    problemEyebrow: "The problem", problemTitle: "How many quote requests are you losing?",
+    problemSub: "Every minute without a reply is one more opportunity for your competitors.",
+    without: "Without Dealz", withDealz: "With Dealz",
+    clientPrefix: "Client: ",
+    withoutLines: ["Business: \"Please give us a call.\"", "The client calls. No one answers.", "The client sends an e-mail. Reply... later.", "The client has already contacted 3 competitors."],
+    withLines: ["Dealz replies instantly, any time of day.", "A few quick, targeted questions.", "A firm price, calculated from your own rates."],
+    withLast: "A qualified request lands directly with you.",
+    valueEyebrow: "Why Dealz", valueTitle: "More requests. Fewer interruptions.",
+    valueSub: "Dealz doesn't replace your team — it filters and qualifies before a quote request lands on your desk.",
+    genericValues: [
+      { icon: "🌙", title: "Available 24/7", text: "The assistant keeps working outside your opening hours." },
+      { icon: "🏷️", title: "Your own rates, always up to date", text: "Dealz reads your Excel price list. Change a price, the assistant updates itself — no re-entry needed." },
+      { icon: "🔗", title: "Built into your current site", text: "Not a new site, not a redirect — Dealz adds directly onto yours, under your own brand." },
+      { icon: "💸", title: "No commission per lead", text: "Unlike lead-matching platforms, your requests stay with you — a fixed fee." },
+    ],
+    stepsEyebrow: "How it works", stepsTitle: "Four steps, zero complexity",
+    step1Title: "Connect your rates", step2Title: "Dealz learns your rules",
+    step3Title: "The AI chats with your clients", step3Text: "It only asks the questions needed to price the request accurately.",
+    step4Title: "The client gets a price", step4Text: "Quote generated instantly — you get a qualified request, ready to convert.",
+    discoverExp: "See the experience →",
+    changeEyebrow: "What changes everything", changeTitle: "From your Excel sheet to an accepted quote — in one conversation.",
+    changeSub: "The AI asks the questions. Your pricing rules decide. It never makes up a price.",
+    offerHead: "📄 Quote — ", offerTotal: "Price for your client", accept: "✓ Client: Accept", decline: "Decline",
+    acceptedMsg: "✓ Quote accepted by the client — confirmation e-mailed, appointment added to the business's calendar.",
+    declinedMsg: "The client declined this quote — they can adjust their request and get a new one instantly.",
+    diffNote: function (total) { return "☝️ <b>CHF " + total + " is the price paid by the business's client — not Dealz's own fee.</b> Dealz plans (from CHF 49/month) are further down this page."; },
+    layerEyebrow: "What Dealz isn't", layerTitle: "Dealz is the AI sales layer. Not a replacement.",
+    layerSub: "You already have your planning, invoicing and management tools. Dealz occupies a different spot: the first conversation with the client.",
+    keep: "You keep", add: "Dealz adds",
+    keepList: ["✓ Your existing CRM", "✓ Your accounting", "✓ Your invoicing", "✓ Your scheduling", "✓ Your Excel sheet", "✓ Your current software"],
+    addList: ["+ AI quote assistant, built into your current site", "+ Automatic sync with your Excel sheet", "+ Instant estimates", "+ Lead qualification", "+ Quote generation", "+ Client follow-up"],
+    layerNote: "Don't replace your software. Add an AI sales layer.",
+    ctaEyebrow: "Ready to try it?", ctaTitle: "Your clients are already asking: \"How much does it cost?\"",
+    ctaLead: "Let Dealz answer — while you focus on everything else.",
+    ctaDemo: "✨ Try the free demo", ctaInstall: "Request installation",
+    ctaReassure: "No commitment. See the client journey before you decide.",
+    contactEyebrow: "Contact", contactTitle: "Let's talk about your business",
+    contactSub: "Answer a few questions. Dealz will help you find the best-fit plan.",
+    panelTitle: "Dealz · Setup", panelSub: "A few quick questions", inputPh: "Type your answer…", sendLabel: "Send",
+    emailLbl: "E-mail", zoneLbl: "Service area", zoneVal: "All of French-speaking Switzerland",
+    otherSectors: "Other sectors", otherSectorsTitle: "Dealz for every service trade",
+    footerLine: function (s) { return "Dealz — AI sales assistant for Swiss " + s.en.forWho + ". 🇨🇭"; },
+    slogan: "Keep your website. Keep your tools. Add Dealz.",
+    referral: "Already a client? Keep it to yourself… or refer a fellow business owner 😏",
+    allSectors: "All sectors",
+    // demo
+    demoBanner: function (s) { return "This is the fictional site of a business in the \"" + s.en.label + "\" sector, using Dealz."; },
+    discoverDealz: "Discover Dealz →",
+    tabHome: "Home", tabServices: "Services", tabAbout: "About", tabQuote: "✨ Get a quote", tabContact: "Contact",
+    ctaQuoteInstant: "✨ Get an instant quote", seeServices: "See our services",
+    whyEyebrow: function (d) { return "Why " + d.brand; },
+    whyTitle: "A clear price, before you even book",
+    whySub: "Answer a few questions and get a detailed quote right away.",
+    whyCards: [
+      { icon: "⚡", title: "Instant price", text: "Detailed quote in under a minute, any time of day." },
+      { icon: "🎯", title: "Guided step by step", text: "A few simple questions — no complicated form." },
+      { icon: "🔒", title: "Firm quote", text: "The price shown is the price paid." },
+    ],
+    servicesEyebrow: "Services",
+    aboutEyebrow: "About",
+    contactDemoTitle: "Talk to a person, or get an instant quote",
+    contactDemoSub: "Would rather answer a few questions than call? Head to the <b>Get a quote</b> tab.",
+    phoneLbl: "Phone", mailLbl: "E-mail", zoneLbl2: "Service area", hoursLbl: "Hours",
+    devisEyebrow: "✨ Get a quote", devisTitle: "Your price in under a minute",
+    howTitle: "How it works",
+    flow: ["You describe your need", "A few quick questions", "Calculated from our price list", "Firm quote displayed", "You accept or decline"],
+    quoteSub: "Usually an instant reply", quoteWord: "Quote",
+    tabPage: "📄 Dedicated tab", tabPopup: "🪟 Pop-up", tabChat: "💬 Chat widget", tabWhatsapp: "📱 WhatsApp Business",
+    notePage: "Dedicated tab — like the one you just clicked by going to \"✨ Get a quote\". The quote lives on a real page of your site, under your own header and navigation, without ever leaving it.",
+    notePopup: "A \"Quote\" button in your menu opens the same quote full-screen, in its own window — more room than the bubble, without ever leaving your site.",
+    noteChat: "A floating bubble on your site, in a corner of the screen — the simplest integration: a single line of code, works on any platform (Wix, Shopify, WordPress, hand-built site…). Click the bubble in the bottom right to try it.",
+    noteWhatsapp: "Your clients write directly to your WhatsApp Business — nothing to install on their phone.",
+    tryPopup: "Try the pop-up →", tryWhatsapp: "Try on WhatsApp →", openQuote: "Open the quote online", closeLbl: "Close", quoteTitle: "Online quote",
+    gateIntro: "To try the whole journey, enter <b>your</b> e-mail: you'll receive the e-mails the business receives (new booking, decline with a suggested reply…). At the end of the demo, you'll play the client with a <b>different</b> address.",
+    gateCompany: "Your company name (optional)", gateEmail: "Your e-mail (you'll receive the business's e-mails)", gatePhone: "Phone (optional)", gateGo: "Try the demo",
+    followTitle: "Picture this on YOUR site.",
+    followLines: "Your prices. Your services. Your brand. Your clients.<br />Your AI sales assistant, available 24 hours a day.",
+    followInstall: "Request installation", followPricing: "See pricing", followContact: "Contact Dealz",
+    footerDemo: function (d) { return d.pdfCompany.name + " — demonstration site, this business doesn't really exist."; },
+    poweredBy: "Powered by",
+    sectorTitle: function (label) { return "Dealz for " + label.toLowerCase() + " — instant AI quotes"; },
+    sectorDesc: function (pitch) { return pitch + " Dealz replies to your clients 24/7, calculates your price from your rates and prepares the quote. From CHF 49/month."; },
+    demoTitle: function (name) { return name + " — Demo site (powered by Dealz)"; },
+    hubTitle: "Dealz by sector — instant AI quotes for your trade",
+    hubDesc: "Moving, gardening, painting, dry cleaning, pools, catering… Discover Dealz for your sector and try a demo tailored to your trade.",
+  },
+
+  de: {
+    htmlLang: "de",
+    ogLocale: "de_CH",
+    base: "/de/secteurs",
+    home: "/de/index.html",
+    demoHome: "/de/demo.html",
+    indexFile: "de/index.html",
+    cleaningLabel: "Reinigung",
+    cleaningPitch: "Endreinigung, regelmässiger Unterhalt, Büros: das ursprüngliche Sofort-Angebot.",
+    seeDemoNav: "✨ Demo testen",
+    navHome: "Startseite", navProblem: "Das Problem", navHow: "So funktioniert's", navPricing: "Preise", navContact: "Kontakt", navSectors: "Branchen",
+    forWho: function (s) { return "Für " + s.de.forWho; },
+    sectorsHeroEyebrow: "Dealz nach Branche",
+    sectorsH1: ["IHR HANDWERK.", "IHR DEALZ."],
+    sectorsQuestion: "Egal in welcher Branche: Ihre Kunden fragen zuerst nach dem Preis.",
+    sectorsText: "Dealz passt sich Ihrer Tätigkeit an: Fragen, die auf Ihr Handwerk zugeschnitten sind, ein Preis nach Ihren eigenen Tarifen berechnet, und eine Offerte bereit zur Bestätigung. Wählen Sie Ihre Branche, um die passende Seite zu entdecken und eine Demo auf einer fiktiven Website Ihres Handwerks auszuprobieren.",
+    discover: "Entdecken →", tryDemo: "Demo testen",
+    sectorsCtaTitle: "Ihre Branche ist nicht aufgeführt?",
+    sectorsCtaText: "Dealz funktioniert, sobald Sie eine Dienstleistung anhand weniger Fragen berechnen können. Erzählen Sie uns von Ihrem Handwerk.",
+    problemEyebrow: "Das Problem", problemTitle: "Wie viele Offertanfragen verlieren Sie?",
+    problemSub: "Jede Minute ohne Antwort ist eine weitere Gelegenheit für Ihre Konkurrenz.",
+    without: "Ohne Dealz", withDealz: "Mit Dealz",
+    clientPrefix: "Kunde: ",
+    withoutLines: ["Unternehmen: «Bitte rufen Sie uns an.»", "Der Kunde ruft an. Niemand antwortet.", "Der Kunde schreibt eine E-Mail. Antwort... später.", "Der Kunde hat bereits 3 Mitbewerber kontaktiert."],
+    withLines: ["Dealz antwortet sofort, rund um die Uhr.", "Ein paar kurze, gezielte Fragen.", "Ein fester Preis, berechnet nach Ihren eigenen Tarifen."],
+    withLast: "Eine qualifizierte Anfrage landet direkt bei Ihnen.",
+    valueEyebrow: "Warum Dealz", valueTitle: "Mehr Anfragen. Weniger Unterbrechungen.",
+    valueSub: "Dealz ersetzt Ihr Team nicht — es filtert und qualifiziert, bevor eine Offertanfrage auf Ihrem Schreibtisch landet.",
+    genericValues: [
+      { icon: "🌙", title: "Rund um die Uhr verfügbar", text: "Der Assistent arbeitet auch ausserhalb Ihrer Öffnungszeiten weiter." },
+      { icon: "🏷️", title: "Ihre eigenen Tarife, immer aktuell", text: "Dealz liest Ihre Excel-Preisliste. Ändern Sie einen Preis, der Assistent aktualisiert sich automatisch — ohne erneute Eingabe." },
+      { icon: "🔗", title: "In Ihre bestehende Website integriert", text: "Keine neue Website, keine Weiterleitung — Dealz wird direkt in Ihre eigene integriert, mit Ihrer Marke." },
+      { icon: "💸", title: "Keine Provision pro Anfrage", text: "Anders als bei Vermittlungsplattformen bleiben Ihre Anfragen bei Ihnen — zum Fixpreis." },
+    ],
+    stepsEyebrow: "So funktioniert's", stepsTitle: "Vier Schritte, keine Komplexität",
+    step1Title: "Verbinden Sie Ihre Tarife", step2Title: "Dealz lernt Ihre Regeln",
+    step3Title: "Die KI unterhält sich mit Ihren Kunden", step3Text: "Sie stellt nur die Fragen, die nötig sind, um den Bedarf genau zu berechnen.",
+    step4Title: "Der Kunde erhält einen Preis", step4Text: "Offerte sofort generiert — Sie erhalten eine qualifizierte Anfrage, bereit zum Abschluss.",
+    discoverExp: "Erlebnis entdecken →",
+    changeEyebrow: "Was alles verändert", changeTitle: "Von Ihrem Excel zu einer akzeptierten Offerte — in einem Gespräch.",
+    changeSub: "Die KI stellt die Fragen. Ihre Tarifregeln entscheiden. Sie erfindet nie einen Preis.",
+    offerHead: "📄 Offerte — ", offerTotal: "Preis für Ihren Kunden", accept: "✓ Kunde: Annehmen", decline: "Ablehnen",
+    acceptedMsg: "✓ Offerte vom Kunden angenommen — Bestätigung per E-Mail versandt, Termin im Kalender des Unternehmens eingetragen.",
+    declinedMsg: "Der Kunde hat diese Offerte abgelehnt — er kann seine Anfrage anpassen und sofort eine neue erhalten.",
+    diffNote: function (total) { return "☝️ <b>CHF " + total + " ist der Preis, den der Kunde des Unternehmens bezahlt — nicht der Tarif von Dealz.</b> Die Dealz-Pläne (ab CHF 49/Monat) finden Sie weiter unten auf dieser Seite."; },
+    layerEyebrow: "Was Dealz nicht ist", layerTitle: "Dealz ist die KI-Verkaufsschicht. Kein Ersatz.",
+    layerSub: "Sie haben bereits Ihre Planungs-, Fakturierungs- und Verwaltungstools. Dealz übernimmt eine andere Rolle: das erste Gespräch mit dem Kunden.",
+    keep: "Sie behalten", add: "Dealz ergänzt",
+    keepList: ["✓ Ihr bestehendes CRM", "✓ Ihre Buchhaltung", "✓ Ihre Fakturierung", "✓ Ihre Planung", "✓ Ihr Excel", "✓ Ihre aktuelle Software"],
+    addList: ["+ KI-Offertassistent, in Ihre bestehende Website integriert", "+ Automatische Synchronisation mit Ihrem Excel", "+ Sofortige Schätzungen", "+ Qualifizierung von Anfragen", "+ Offertenerstellung", "+ Kunden-Nachfassung"],
+    layerNote: "Ersetzen Sie Ihre Software nicht. Ergänzen Sie sie mit einer KI-Verkaufsschicht.",
+    ctaEyebrow: "Bereit zum Testen?", ctaTitle: "Ihre Kunden fragen bereits: «Wie viel kostet das?»",
+    ctaLead: "Lassen Sie Dealz antworten — während Sie sich auf den Rest konzentrieren.",
+    ctaDemo: "✨ Kostenlose Demo testen", ctaInstall: "Installation anfragen",
+    ctaReassure: "Keine Verpflichtung. Entdecken Sie den Kundenweg, bevor Sie sich entscheiden.",
+    contactEyebrow: "Kontakt", contactTitle: "Erzählen Sie uns von Ihrem Unternehmen",
+    contactSub: "Beantworten Sie ein paar Fragen. Dealz hilft Ihnen, den passenden Plan zu finden.",
+    panelTitle: "Dealz · Konfiguration", panelSub: "Ein paar kurze Fragen", inputPh: "Schreiben Sie Ihre Antwort…", sendLabel: "Senden",
+    emailLbl: "E-Mail", zoneLbl: "Einsatzgebiet", zoneVal: "Die ganze Suisse romande",
+    otherSectors: "Weitere Branchen", otherSectorsTitle: "Dealz für alle Dienstleistungsberufe",
+    footerLine: function (s) { return "Dealz — KI-Verkaufsassistent für Schweizer " + s.de.forWho + ". 🇨🇭"; },
+    slogan: "Keep your website. Keep your tools. Add Dealz.",
+    referral: "Bereits Kunde? Behalten Sie das Geheimnis… oder empfehlen Sie einen Berufskollegen 😏",
+    allSectors: "Alle Branchen",
+    // demo
+    demoBanner: function (s) { return "Dies ist die fiktive Website eines Unternehmens aus der Branche «" + s.de.label + "», das Dealz einsetzt."; },
+    discoverDealz: "Dealz entdecken →",
+    tabHome: "Startseite", tabServices: "Leistungen", tabAbout: "Über uns", tabQuote: "✨ Offerte erhalten", tabContact: "Kontakt",
+    ctaQuoteInstant: "✨ Sofortofferte erhalten", seeServices: "Unsere Leistungen ansehen",
+    whyEyebrow: function (d) { return "Warum " + d.brand; },
+    whyTitle: "Ein klarer Preis, noch vor der Buchung",
+    whySub: "Beantworten Sie ein paar Fragen und erhalten Sie sofort eine detaillierte Offerte.",
+    whyCards: [
+      { icon: "⚡", title: "Sofortpreis", text: "Detaillierte Offerte in unter einer Minute, rund um die Uhr." },
+      { icon: "🎯", title: "Schritt für Schritt geführt", text: "Ein paar einfache Fragen — kein kompliziertes Formular." },
+      { icon: "🔒", title: "Feste Offerte", text: "Der angezeigte Preis ist der bezahlte Preis." },
+    ],
+    servicesEyebrow: "Leistungen",
+    aboutEyebrow: "Über uns",
+    contactDemoTitle: "Sprechen Sie mit jemandem oder erhalten Sie eine Sofortofferte",
+    contactDemoSub: "Lieber ein paar Fragen beantworten statt anrufen? Wechseln Sie zum Tab <b>Offerte erhalten</b>.",
+    phoneLbl: "Telefon", mailLbl: "E-Mail", zoneLbl2: "Einsatzgebiet", hoursLbl: "Öffnungszeiten",
+    devisEyebrow: "✨ Offerte erhalten", devisTitle: "Ihr Preis in unter einer Minute",
+    howTitle: "So funktioniert's",
+    flow: ["Sie beschreiben Ihr Anliegen", "Ein paar kurze Fragen", "Berechnung nach unserer Preisliste", "Feste Offerte angezeigt", "Sie nehmen an oder lehnen ab"],
+    quoteSub: "Antwort meist sofort", quoteWord: "Offerte",
+    tabPage: "📄 Eigener Tab", tabPopup: "🪟 Pop-up", tabChat: "💬 Chat-Widget", tabWhatsapp: "📱 WhatsApp Business",
+    notePage: "Eigener Tab — wie der, auf den Sie gerade über «✨ Offerte erhalten» geklickt haben. Die Offerte lebt auf einer echten Seite Ihrer Website, unter Ihrem eigenen Header und Ihrer Navigation, ohne diese je zu verlassen.",
+    notePopup: "Ein Button «Offerte» in Ihrem Menü öffnet dieselbe Offerte im Vollbild, in einem eigenen Fenster — mehr Platz als die Sprechblase, ohne Ihre Website je zu verlassen.",
+    noteChat: "Eine schwebende Sprechblase auf Ihrer Website, in einer Ecke des Bildschirms — die einfachste Integration: eine einzige Codezeile, funktioniert auf jeder Plattform (Wix, Shopify, WordPress, selbst programmierte Website…). Klicken Sie unten rechts auf die Sprechblase, um es auszuprobieren.",
+    noteWhatsapp: "Ihre Kunden schreiben direkt an Ihr WhatsApp Business — ohne irgendetwas auf ihrem Telefon zu installieren.",
+    tryPopup: "Pop-up testen →", tryWhatsapp: "Auf WhatsApp testen →", openQuote: "Offerte online öffnen", closeLbl: "Schliessen", quoteTitle: "Offerte online",
+    gateIntro: "Um den gesamten Ablauf zu testen, geben Sie <b>Ihre</b> E-Mail-Adresse ein: Dort erhalten Sie die E-Mails, die das Unternehmen erhält (neue Buchung, Ablehnung mit Antwortvorschlag…). Am Ende der Demo schlüpfen Sie mit einer <b>anderen</b> Adresse in die Rolle des Kunden.",
+    gateCompany: "Name Ihres Unternehmens (optional)", gateEmail: "Ihre E-Mail (Sie erhalten die E-Mails des Unternehmens)", gatePhone: "Telefon (optional)", gateGo: "Demo testen",
+    followTitle: "Stellen Sie sich das auf IHRER Website vor.",
+    followLines: "Ihre Preise. Ihre Leistungen. Ihre Marke. Ihre Kunden.<br />Ihr KI-Verkaufsassistent, rund um die Uhr verfügbar.",
+    followInstall: "Installation anfragen", followPricing: "Preise ansehen", followContact: "Dealz kontaktieren",
+    footerDemo: function (d) { return d.pdfCompany.name + " — Demo-Website, dieses Unternehmen existiert nicht wirklich."; },
+    poweredBy: "Unterstützt von",
+    sectorTitle: function (label) { return "Dealz für " + label + " — Sofort-Offerten per KI"; },
+    sectorDesc: function (pitch) { return pitch + " Dealz antwortet Ihren Kunden rund um die Uhr, berechnet Ihren Preis nach Ihren Tarifen und erstellt die Offerte. Ab CHF 49 pro Monat."; },
+    demoTitle: function (name) { return name + " — Demo-Website (unterstützt von Dealz)"; },
+    hubTitle: "Dealz nach Branche — Sofort-Offerten per KI für Ihr Handwerk",
+    hubDesc: "Umzug, Gartenbau, Malerarbeiten, Reinigung, Pools, Catering… Entdecken Sie Dealz für Ihre Branche und testen Sie eine Demo passend zu Ihrem Handwerk.",
   },
 };
 
@@ -320,8 +537,8 @@ function buildLanding(S, lang, all, tarifs) {
     .replace(/<p class="pricing-roi-note">[\s\S]*?<\/p>/, '<p class="pricing-roi-note">💡 ' + esc(L.roi) + "</p>")
     .replace(/href="\/demo\.html"/g, 'href="' + demoUrl + '"');
 
-  const title = "Dealz pour " + T.label.toLowerCase() + " — devis instantané par IA";
-  const desc = T.pitch + " Dealz répond à vos clients 24/7, calcule votre prix selon vos tarifs et prépare le devis. Dès CHF 49/mois.";
+  const title = cfg.sectorTitle(T.label);
+  const desc = cfg.sectorDesc(T.pitch);
 
   return `<!doctype html>
 <html lang="${cfg.htmlLang}">
@@ -330,7 +547,7 @@ function buildLanding(S, lang, all, tarifs) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(desc)}" />
-${ogTags({ url: cfg.base + "/" + S.slug + "/", title: L.question, desc: T.pitch, locale: "fr_CH" })}${fonts()}  <link rel="stylesheet" href="/styles.css" />
+${ogTags({ url: cfg.base + "/" + S.slug + "/", title: L.question, desc: T.pitch, locale: cfg.ogLocale || "fr_CH" })}${fonts()}  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
 <!-- Généré par scripts/build-sectors.js depuis docs/secteurs/data/${S.slug}.js — ne pas éditer à la main. -->
@@ -547,7 +764,7 @@ function buildDemo(S, lang) {
   const c = S.colors;
   const landingUrl = cfg.base + "/" + S.slug + "/";
   const cards = (list) => list.map((x) => '        <div class="sc-card"><div class="icon">' + esc(x.icon) + "</div><h3>" + esc(x.title) + "</h3><p>" + esc(x.text) + "</p>" + (x.tag ? '<span class="tag">' + esc(x.tag) + "</span>" : "") + "</div>").join("\n");
-  const title = D.pdfCompany.name + " — Site de démonstration (propulsé par Dealz)";
+  const title = cfg.demoTitle(D.pdfCompany.name);
 
   return `<!doctype html>
 <html lang="${cfg.htmlLang}">
@@ -907,8 +1124,8 @@ function buildHub(lang, all) {
   const cards = [card("🧽", cfg.cleaningLabel, cfg.cleaningPitch, cfg.home, cfg.demoHome)]
     .concat(all.map((s) => card(s.icon, s[lang].label, s[lang].pitch, cfg.base + "/" + s.slug + "/", cfg.base + "/" + s.slug + "/demo.html")))
     .join("\n");
-  const title = "Dealz par secteur — devis instantané par IA pour votre métier";
-  const desc = "Déménagement, jardinage, peinture, pressing, piscines, traiteurs… Découvrez Dealz pour votre secteur et essayez une démo adaptée à votre métier.";
+  const title = cfg.hubTitle;
+  const desc = cfg.hubDesc;
   return `<!doctype html>
 <html lang="${cfg.htmlLang}">
 <head>
@@ -916,7 +1133,7 @@ function buildHub(lang, all) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(desc)}" />
-${ogTags({ url: cfg.base + "/", title, desc: cfg.sectorsQuestion, locale: "fr_CH" })}${fonts()}  <link rel="stylesheet" href="/styles.css" />
+${ogTags({ url: cfg.base + "/", title, desc: cfg.sectorsQuestion, locale: cfg.ogLocale || "fr_CH" })}${fonts()}  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
 <!-- Généré par scripts/build-sectors.js — ne pas éditer à la main. -->
