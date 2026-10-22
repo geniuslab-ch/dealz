@@ -62,6 +62,12 @@
     { id: "plan_choice", kind: "plan", question: "Quelle formule vous intéresse ?" },
     { id: "billing_choice", kind: "billing", question: "Comment souhaitez-vous commencer ?" },
     {
+      id: "whatsapp_addon",
+      kind: "single",
+      question: "💬 Envie d'ajouter WhatsApp Business ? Disponible en option sur toutes les formules : CHF 25 / mois pour 100 conversations, puis CHF 0.30 par conversation supplémentaire.",
+      options: ["Oui, ajouter WhatsApp (+ CHF 25/mois)", "Non merci"],
+    },
+    {
       id: "website_url",
       kind: "url",
       question: "Sur quel site souhaitez-vous installer Dealz ?",
@@ -210,6 +216,9 @@
       en: "💬 Want to add WhatsApp Business? Available as an add-on on any plan: CHF 25 / month for 100 conversations, then CHF 0.30 per extra conversation.",
       de: "💬 Möchten Sie WhatsApp Business hinzufügen? Als Zusatzoption bei jedem Plan verfügbar: CHF 25 / Monat für 100 Konversationen, danach CHF 0.30 pro zusätzlicher Konversation.",
     },
+    "Oui, ajouter WhatsApp (+ CHF 25/mois)": { en: "Yes, add WhatsApp (+ CHF 25/month)", de: "Ja, WhatsApp hinzufügen (+ CHF 25/Monat)" },
+    "Non merci": { en: "No thanks", de: "Nein danke" },
+    "WhatsApp Business": { en: "WhatsApp Business", de: "WhatsApp Business" },
   };
 
   function T(fr) {
@@ -284,6 +293,12 @@
     if (lang === "en") return "<s>CHF 390 setup</s> — <b>FREE</b>";
     if (lang === "de") return "<s>CHF 390 Einrichtung</s> — <b>GRATIS</b>";
     return "<s>CHF 390 installation</s> — <b>OFFERTE</b>";
+  }
+  function whatsappAddonValue() {
+    const lang = window.DEALZ_LANG;
+    if (lang === "en") return "+ CHF 25/month (100 conversations incl.)";
+    if (lang === "de") return "+ CHF 25/Monat (100 Konversationen inkl.)";
+    return "+ CHF 25/mois (100 conversations incl.)";
   }
 
   function el(tag, cls, text) {
@@ -545,7 +560,6 @@
     grid.appendChild(onetimeCard);
 
     wrap.appendChild(grid);
-    wrap.appendChild(el("p", "flow-whatsapp-note", "💬 Envie d'ajouter WhatsApp Business ? Disponible en option sur toutes les formules : CHF 25 / mois pour 100 conversations, puis CHF 0.30 par conversation supplémentaire."));
   }
 
   function chooseBilling(wrap, mode, monthly, yearly, onetime) {
@@ -620,6 +634,7 @@
         websiteUrl: a.website_url || "",
         planChoice: a.plan_choice || "",
         billingChoice: a.billing_choice || "",
+        whatsappAddon: /Oui, ajouter WhatsApp/.test(a.whatsapp_addon || ""),
         teamSize: a.team_size || "",
         mainProblem: a.main_problem || "",
         requestSources: a.request_sources || "",
@@ -652,15 +667,17 @@
         : perMonth(a.billing_monthly);
     const installationValue = a.billing_choice === "monthly" ? "CHF 390" : "OFFERTE";
 
+    const wantsWhatsapp = /Oui, ajouter WhatsApp/.test(a.whatsapp_addon || "");
+
     const rows = [
       ["Entreprise", a.company_name || "—"],
       ["Formule", a.plan_choice || "—"],
       ["Facturation", billingLabel],
       [amountRowLabel, amountRowValue],
       ["Installation", installationValue],
-      ["Site", a.website_url || "—"],
-      ["Votre objectif", a.main_problem || "—"],
     ];
+    if (wantsWhatsapp) rows.push(["WhatsApp Business", whatsappAddonValue()]);
+    rows.push(["Site", a.website_url || "—"], ["Votre objectif", a.main_problem || "—"]);
     rows.forEach(([label, value]) => {
       const row = el("div", "flow-summary-row");
       row.appendChild(el("span", "flow-summary-label", label));
