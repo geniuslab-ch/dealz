@@ -7,6 +7,16 @@
       "email": "hello@leman-demenagements.demo",
       "phone": "021 000 00 00",
       "address": "Avenue de Cour 18, 1007 Lausanne"
+    },
+    "i18n": {
+      "en": {
+        "label": "Moving and house clearance",
+        "emailNoun": "your move"
+      },
+      "de": {
+        "label": "Umzug und Räumung",
+        "emailNoun": "Ihren Umzug"
+      }
     }
   },
   "jardinage": {
@@ -17,6 +27,16 @@
       "email": "hello@vert-leman.demo",
       "phone": "021 000 00 10",
       "address": "Route de Lausanne 45, 1110 Morges"
+    },
+    "i18n": {
+      "en": {
+        "label": "Gardening and landscaping",
+        "emailNoun": "your garden maintenance"
+      },
+      "de": {
+        "label": "Gartenbau und Gartenpflege",
+        "emailNoun": "die Pflege Ihres Gartens"
+      }
     }
   },
   "peinture": {
@@ -27,6 +47,16 @@
       "email": "hello@atelier-couleur.demo",
       "phone": "026 000 00 20",
       "address": "Rue de Romont 12, 1700 Fribourg"
+    },
+    "i18n": {
+      "en": {
+        "label": "Painting and renovation",
+        "emailNoun": "your painting work"
+      },
+      "de": {
+        "label": "Maler- und Renovationsarbeiten",
+        "emailNoun": "Ihre Malerarbeiten"
+      }
     }
   },
   "nettoyage-textiles": {
@@ -37,6 +67,16 @@
       "email": "hello@fraicheurtex.demo",
       "phone": "022 000 00 30",
       "address": "Rue de la Gare 22, 1260 Nyon"
+    },
+    "i18n": {
+      "en": {
+        "label": "Sofa, rug and mattress cleaning",
+        "emailNoun": "cleaning your upholstery"
+      },
+      "de": {
+        "label": "Reinigung von Sofas, Teppichen und Matratzen",
+        "emailNoun": "die Reinigung Ihrer Textilien"
+      }
     }
   },
   "lavage-auto": {
@@ -47,6 +87,16 @@
       "email": "hello@brillance-auto.demo",
       "phone": "022 000 00 40",
       "address": "Rue des Vieux-Grenadiers 8, 1205 Genève"
+    },
+    "i18n": {
+      "en": {
+        "label": "Car washing and detailing",
+        "emailNoun": "caring for your vehicle"
+      },
+      "de": {
+        "label": "Autowäsche und Fahrzeugaufbereitung",
+        "emailNoun": "die Pflege Ihres Fahrzeugs"
+      }
     }
   },
   "location-evenementiel": {
@@ -57,6 +107,16 @@
       "email": "hello@eventbox.demo",
       "phone": "027 000 00 50",
       "address": "Zone industrielle 5, 1950 Sion"
+    },
+    "i18n": {
+      "en": {
+        "label": "Event equipment rental",
+        "emailNoun": "your event"
+      },
+      "de": {
+        "label": "Vermietung von Eventmaterial",
+        "emailNoun": "Ihren Anlass"
+      }
     }
   },
   "desinfection": {
@@ -67,6 +127,16 @@
       "email": "hello@sanitsafe.demo",
       "phone": "032 000 00 60",
       "address": "Rue du Seyon 14, 2000 Neuchâtel"
+    },
+    "i18n": {
+      "en": {
+        "label": "Disinfection and pest control",
+        "emailNoun": "your pest control treatment"
+      },
+      "de": {
+        "label": "Desinfektion und Schädlingsbekämpfung",
+        "emailNoun": "Ihre Schädlingsbekämpfung"
+      }
     }
   },
   "photo-video": {
@@ -77,6 +147,16 @@
       "email": "hello@studio-lumiere.demo",
       "phone": "021 000 00 70",
       "address": "Rue Saint-Laurent 20, 1003 Lausanne"
+    },
+    "i18n": {
+      "en": {
+        "label": "Photography and videography",
+        "emailNoun": "your shoot"
+      },
+      "de": {
+        "label": "Fotografie und Videografie",
+        "emailNoun": "Ihr Shooting"
+      }
     }
   },
   "transport-livraison": {
@@ -87,6 +167,16 @@
       "email": "hello@rapido-transport.demo",
       "phone": "031 000 00 80",
       "address": "Wankdorffeldstrasse 40, 3014 Berne"
+    },
+    "i18n": {
+      "en": {
+        "label": "Transport and delivery",
+        "emailNoun": "your transport"
+      },
+      "de": {
+        "label": "Transport und Lieferung",
+        "emailNoun": "Ihren Transport"
+      }
     }
   },
   "pressing": {
@@ -97,6 +187,16 @@
       "email": "hello@pressing-du-lac.demo",
       "phone": "021 000 00 90",
       "address": "Avenue de Rumine 4, 1005 Lausanne"
+    },
+    "i18n": {
+      "en": {
+        "label": "Laundry and dry cleaning",
+        "emailNoun": "cleaning your laundry"
+      },
+      "de": {
+        "label": "Wäscherei und chemische Reinigung",
+        "emailNoun": "die Reinigung Ihrer Wäsche"
+      }
     }
   },
   "location-vehicules": {
@@ -107,6 +207,16 @@
       "email": "hello@alpirent.demo",
       "phone": "022 000 00 11",
       "address": "Route de Meyrin 120, 1215 Genève"
+    },
+    "i18n": {
+      "en": {
+        "label": "Vehicle rental",
+        "emailNoun": "your vehicle rental"
+      },
+      "de": {
+        "label": "Fahrzeugvermietung",
+        "emailNoun": "Ihre Fahrzeugmiete"
+      }
     }
   },
   "conciergerie": {
@@ -117,6 +227,16 @@
       "email": "hello@conciergecare.demo",
       "phone": "021 000 00 12",
       "address": "Avenue de la Gare 30, 1003 Lausanne"
+    },
+    "i18n": {
+      "en": {
+        "label": "Concierge and property maintenance",
+        "emailNoun": "your maintenance contract"
+      },
+      "de": {
+        "label": "Hauswartung und Liegenschaftsunterhalt",
+        "emailNoun": "Ihren Unterhaltsvertrag"
+      }
     }
   },
   "piscines": {
@@ -127,6 +247,16 @@
       "email": "hello@aquapur.demo",
       "phone": "021 000 00 13",
       "address": "Avenue Nestlé 25, 1820 Montreux"
+    },
+    "i18n": {
+      "en": {
+        "label": "Pool maintenance",
+        "emailNoun": "your pool maintenance"
+      },
+      "de": {
+        "label": "Poolunterhalt",
+        "emailNoun": "den Unterhalt Ihres Pools"
+      }
     }
   },
   "vitres": {
@@ -137,6 +267,16 @@
       "email": "hello@clairvue.demo",
       "phone": "021 000 00 14",
       "address": "Rue du Simplon 40, 1800 Vevey"
+    },
+    "i18n": {
+      "en": {
+        "label": "Window cleaning",
+        "emailNoun": "your window cleaning"
+      },
+      "de": {
+        "label": "Fensterreinigung",
+        "emailNoun": "Ihre Fensterreinigung"
+      }
     }
   },
   "montage-meubles": {
@@ -147,6 +287,16 @@
       "email": "hello@meublemontage.demo",
       "phone": "022 000 00 15",
       "address": "Rue de Carouge 55, 1205 Genève"
+    },
+    "i18n": {
+      "en": {
+        "label": "Furniture assembly and disassembly",
+        "emailNoun": "your furniture assembly"
+      },
+      "de": {
+        "label": "Möbelmontage und -demontage",
+        "emailNoun": "die Montage Ihrer Möbel"
+      }
     }
   },
   "impression": {
@@ -157,6 +307,16 @@
       "email": "hello@imprivision.demo",
       "phone": "021 000 00 16",
       "address": "Chemin de la Vuachère 6, 1005 Lausanne"
+    },
+    "i18n": {
+      "en": {
+        "label": "Printing and signage",
+        "emailNoun": "your print order"
+      },
+      "de": {
+        "label": "Druck und Beschriftung",
+        "emailNoun": "Ihren Druckauftrag"
+      }
     }
   },
   "traiteur": {
@@ -167,6 +327,16 @@
       "email": "hello@saveurs-fetes.demo",
       "phone": "026 000 00 17",
       "address": "Route de la Glâne 14, 1700 Fribourg"
+    },
+    "i18n": {
+      "en": {
+        "label": "Caterers and event services",
+        "emailNoun": "your event"
+      },
+      "de": {
+        "label": "Caterer und Eventservices",
+        "emailNoun": "Ihren Anlass"
+      }
     }
   },
   "location-materiel": {
@@ -177,6 +347,16 @@
       "email": "hello@prooutil.demo",
       "phone": "024 000 00 18",
       "address": "Rue des Moulins 9, 1400 Yverdon-les-Bains"
+    },
+    "i18n": {
+      "en": {
+        "label": "Professional equipment rental",
+        "emailNoun": "your equipment rental"
+      },
+      "de": {
+        "label": "Vermietung von Profi-Geräten",
+        "emailNoun": "Ihre Gerätemiete"
+      }
     }
   }
 }

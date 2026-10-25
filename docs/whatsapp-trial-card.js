@@ -16,7 +16,9 @@
 
     try {
       // Sector demos pass their trade so the pre-filled WhatsApp message names it.
-      const q = window.DEALZ_SECTOR ? "?sector=" + encodeURIComponent(window.DEALZ_SECTOR) : "";
+      const q = window.DEALZ_SECTOR
+        ? "?sector=" + encodeURIComponent(window.DEALZ_SECTOR) + "&lang=" + encodeURIComponent(window.DEALZ_LANG || "fr")
+        : "";
       const res = await fetch(apiUrl("/api/whatsapp-trial" + q));
       const data = await res.json();
       if (data.enabled && data.waLink) {

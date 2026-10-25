@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const { runTurn } = require("./src/claude");
 const { runTurnMock } = require("./src/mock");
-const { classifyObjection, draftSuggestedReply, CATEGORIES } = require("./src/objections");
+const { classifyObjection, draftSuggestedReply, CATEGORIES, categoryConfig } = require("./src/objections");
 const {
   sendDeclineNotification,
   sendCounterofferToCustomer,
@@ -21,6 +21,7 @@ const store = require("./src/store");
 const { getSector, platformName } = require("./src/sectors");
 const { recordTrialAttempt } = require("./src/leads");
 const whatsapp = require("./src/whatsapp");
+const whatsappDemo = require("./src/whatsappSector");
 const { getCompanyBySlug } = require("./src/companies");
 const defaultPricing = require("./docs/pricing.json");
 
@@ -87,14 +88,39 @@ app.use((req, res, next) => {
 app.get("/api/whatsapp-trial", (req, res) => {
   const number = process.env.WHATSAPP_TRIAL_NUMBER_E164;
   if (!number) return res.json({ enabled: false });
-  const sector = getSector(req.query.sector);
-  const prefill = sector ? `Bonjour, je voudrais un devis — ${sector.label}` : "Bonjour, je voudrais un devis de nettoyage";
+  // The pre-filled message names the trade and the page's language, so the
+  // WhatsApp demo bot (src/whatsappSector.js) starts the right sector demo.
+  const prefill = whatsappDemo.prefillText(req.query.sector, req.query.lang);
   res.json({ enabled: true, waLink: `https://wa.me/${number}?text=${encodeURIComponent(prefill)}` });
 });
 
 // Gate in front of the public demo widget (docs/demo.html + docs/lead-gate.js)
 // — records who's trying it and caps free trials, so the demo doesn't run up
 // real Anthropic API cost from unlimited anonymous use. See src/leads.js.
+// Records a demo trial and tells the CRM — shared by the website lead gate
+// and the WhatsApp demo bot (which asks for the tester's e-mail instead).
+async function recordLead({ email, phone, companyName, sector }) {
+  const result = await recordTrialAttempt({ email, phone: phone || "", companyName: companyName || "" });
+
+  // Fire-and-forget: if this e-mail matches an existing CRM prospect
+  // (e.g. an outbound FREN target trying the real demo on their own),
+  // flip their demo_tested flag. Never blocks or fails the lead-gate
+  // response — same posture as the install-request forward.
+  if (process.env.CRM_DEMO_TESTED_URL && process.env.CRM_INBOUND_SECRET) {
+    fetch(process.env.CRM_DEMO_TESTED_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
+      body: JSON.stringify({
+        email,
+        // Sector demos also hand the CRM who tried it and which trade, so
+        // the visitor shows up as a lead tagged with its sector.
+        ...(sector ? { companyName: companyName || "", phone: phone || "", sector: sector.slug, sectorLabel: sector.label } : {}),
+      }),
+    }).catch((err) => console.error("[lead] CRM demo_tested forward failed:", err.message));
+  }
+  return result;
+}
+
 app.post("/api/lead", async (req, res) => {
   try {
     const { email, phone, companyName } = req.body;
@@ -102,26 +128,7 @@ app.post("/api/lead", async (req, res) => {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return res.status(400).json({ error: "E-mail professionnel requis" });
     }
-    const result = await recordTrialAttempt({ email, phone: phone || "", companyName: companyName || "" });
-
-    // Fire-and-forget: if this e-mail matches an existing CRM prospect
-    // (e.g. an outbound FREN target trying the real demo on their own),
-    // flip their demo_tested flag. Never blocks or fails the lead-gate
-    // response — same posture as the install-request forward.
-    if (process.env.CRM_DEMO_TESTED_URL && process.env.CRM_INBOUND_SECRET) {
-      fetch(process.env.CRM_DEMO_TESTED_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
-        body: JSON.stringify({
-          email,
-          // Sector demos also hand the CRM who tried it and which trade, so
-          // the visitor shows up as a lead tagged with its sector.
-          ...(sector ? { companyName: companyName || "", phone: phone || "", sector: sector.slug, sectorLabel: sector.label } : {}),
-        }),
-      }).catch((err) => console.error("[lead] CRM demo_tested forward failed:", err.message));
-    }
-
-    res.json(result);
+    res.json(await recordLead({ email, phone, companyName, sector }));
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Internal error" });
@@ -291,38 +298,46 @@ app.post("/api/whatsapp/webhook", async (req, res) => {
     console.warn("[whatsapp webhook] invalid or missing signature — rejecting");
     return res.sendStatus(401);
   }
-  // Meta expects a fast 200 regardless of what we do with the payload, and
-  // will retry (or eventually disable the webhook) if it doesn't get one —
-  // acknowledge first, then process.
-  res.sendStatus(200);
+  // On Vercel nothing may run after the response is sent, so the message is
+  // handled first (a few seconds at most) and acknowledged after. Meta
+  // retries unacknowledged deliveries, so each message id is handled once.
   try {
     const value = req.body?.entry?.[0]?.changes?.[0]?.value;
     const message = value?.messages?.[0];
-    if (!message) return; // delivery/read receipts and other non-message events
+    if (!message) return res.sendStatus(200); // delivery/read receipts and other non-message events
+
+    const seenKey = "wa-msg:" + message.id;
+    if (message.id && (await store.getKey(seenKey))) return res.sendStatus(200);
+    if (message.id) await store.setKey(seenKey, { at: Date.now() });
 
     // Which of (potentially many) companies' own WhatsApp numbers this
-    // message came in on — src/companies.js resolves it to that company's
-    // name/pricing, and replies get sent from this same number.
+    // message came in on — replies get sent from this same number.
     const phoneNumberId = value?.metadata?.phone_number_id;
     const from = message.from;
+    const name = value?.contacts?.[0]?.profile?.name || "";
+    const reply = (body) => whatsapp.sendWhatsAppText(from, body, phoneNumberId);
+    // Dealz's own trial number runs the sector demos; a real company's
+    // number (src/companies.js) keeps its own quote assistant.
+    const isDemoNumber = !!phoneNumberId && phoneNumberId === process.env.WHATSAPP_PHONE_NUMBER_ID;
+
     let text = "";
     if (message.type === "text") {
       text = message.text?.body || "";
     } else if (message.type === "interactive") {
       text = message.interactive?.button_reply?.title || message.interactive?.list_reply?.title || "";
+    } else if (message.type === "button") {
+      text = message.button?.text || "";
     } else {
-      await whatsapp.sendWhatsAppText(
-        from,
-        "Merci de nous écrire votre demande sous forme de texte — je ne peux pas encore traiter les photos, notes vocales ou fichiers.",
-        phoneNumberId
-      );
-      return;
+      await reply(isDemoNumber ? whatsappDemo.textOnlyReply() : "Merci de nous écrire votre demande sous forme de texte — je ne peux pas encore traiter les photos, notes vocales ou fichiers.");
+      return res.sendStatus(200);
     }
 
-    await whatsapp.handleIncomingMessage(phoneNumberId, from, text);
+    if (isDemoNumber) await whatsappDemo.handleIncoming({ phoneNumberId, from, text, name }, reply);
+    else await whatsapp.handleIncomingMessage(phoneNumberId, from, text);
   } catch (err) {
     console.error("[whatsapp webhook]", err);
   }
+  res.sendStatus(200);
 });
 
 // Company-aware pricing lookup — docs/quote-app.js's loadPricing() calls
@@ -447,10 +462,12 @@ function logDemoActivity({ email, sector, event, result }) {
   }).catch((err) => console.error("[demo-activity] CRM forward failed:", err.message));
 }
 
-app.post("/api/decline", async (req, res) => {
-  try {
-    const { quote, category, text, customer, companyEmail } = req.body;
-    if (!quote || !quote.items) return res.status(400).json({ error: "quote is required" });
+// The whole decline step — classify, draft a reply, store the token, e-mail
+// the company — shared by the website widget (POST /api/decline) and the
+// WhatsApp demo bot (src/whatsappSector.js), so both send the same e-mails.
+async function processDecline(body, baseUrl) {
+    const { quote, category, text, customer, companyEmail } = body;
+    const req = { body };
 
     // `company` (a data-dealz-company slug) is the real-tenant path; the
     // demo's session-captured companyEmail (see docs/lead-gate.js) still
@@ -460,7 +477,7 @@ app.post("/api/decline", async (req, res) => {
     // Sector demos (docs/secteurs/<slug>/demo.html): the visitor plays the
     // fictional company of that trade — its name and the trade's own
     // vocabulary are used all through the decline → counteroffer chain.
-    const sector = getSector(req.body.sector);
+    const sector = getSector(req.body.sector, req.body.lang);
     const resolvedNotifyEmail = companyEmail || company?.notifyEmail || undefined;
     const resolvedCompanyName = sector ? sector.company.name : company?.name;
     const serviceNoun = sector ? sector.emailNoun : undefined;
@@ -488,6 +505,7 @@ app.post("/api/decline", async (req, res) => {
       quote,
       customer: customer || {},
       context: { sectorLabel: sector?.label },
+      lang,
     });
 
     const declineToken = await store.put({
@@ -520,11 +538,12 @@ app.post("/api/decline", async (req, res) => {
         customer: customer || {},
         declineToken,
         suggestedReply,
-        baseUrl: requestBaseUrl(req),
+        baseUrl,
         notifyEmail: resolvedNotifyEmail,
         sectorLabel: sector?.label,
         companyName: sector ? resolvedCompanyName : undefined,
         platformName: sector ? platformName(req.body.platform) : undefined,
+        lang,
       });
     } catch (err) {
       console.error("[decline] company notification failed:", err);
@@ -533,14 +552,20 @@ app.post("/api/decline", async (req, res) => {
 
     if (sector && companyEmail) logDemoActivity({ email: companyEmail, sector, event: "decline", result: emailResult });
 
-    res.json({
+    return {
       ok: true,
       category: finalCategory,
-      categoryLabel: CATEGORIES[finalCategory].label,
+      categoryLabel: categoryConfig(finalCategory, lang).label,
       emailPreview: emailResult.preview || null,
       sentTo: emailResult.simulated ? null : resolvedNotifyEmail || null,
       delivery: { company: deliveryOf(emailResult, resolvedNotifyEmail) },
-    });
+    };
+}
+
+app.post("/api/decline", async (req, res) => {
+  try {
+    if (!req.body.quote || !req.body.quote.items) return res.status(400).json({ error: "quote is required" });
+    res.json(await processDecline(req.body, requestBaseUrl(req)));
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Internal error" });
@@ -551,8 +576,10 @@ app.get("/api/counteroffer/:token", async (req, res) => {
   try {
     const entry = await store.get(req.params.token);
     if (!entry || entry.type !== "decline") return res.status(404).json({ error: "Introuvable ou expiré" });
-    const cfg = CATEGORIES[entry.category] || CATEGORIES.other;
+    // Same language as the decline e-mail that linked here (entry.lang).
+    const cfg = categoryConfig(entry.category, entry.lang);
     res.json({
+      lang: entry.lang || "fr",
       quote: entry.quote,
       category: entry.category,
       categoryLabel: cfg.label,
@@ -602,6 +629,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
       const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail, signature: entry.signature, logoUrl: entry.logoUrl, tagline: entry.tagline, lang: entry.lang });
       await store.update(req.params.token, { status: "replied" });
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "reply", companyName: entry.companyName, message }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -609,6 +637,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
       const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail, signature: entry.signature, logoUrl: entry.logoUrl, tagline: entry.tagline, lang: entry.lang });
       await store.update(req.params.token, { status: "replied" });
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "reply", companyName: entry.companyName, message }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -651,6 +680,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "price", companyName: entry.companyName, amount, message, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -688,6 +718,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "date", companyName: entry.companyName, date, message, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -727,6 +758,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "revise", companyName: entry.companyName, amount: total, message, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -759,6 +791,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "followup", companyName: entry.companyName, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -781,6 +814,9 @@ app.get("/api/offer/:token", async (req, res) => {
       originalQuote: entry.originalQuote,
       message: entry.message,
       customer: entry.customer,
+      // Sector demos and real tenants make offers under their own name.
+      companyName: entry.companyName || null,
+      lang: entry.lang || "fr",
     });
   } catch (err) {
     console.error(err);
@@ -805,7 +841,7 @@ app.post("/api/offer/:token/respond", async (req, res) => {
         ? entry.revisedQuote
         : {
             currency: entry.originalQuote.currency,
-            items: [{ label: "Prestation", amount: entry.amount }],
+            items: [{ label: { en: "Service", de: "Leistung" }[entry.lang] || "Prestation", amount: entry.amount }],
             total: entry.amount,
           };
 
@@ -821,6 +857,7 @@ app.post("/api/offer/:token/respond", async (req, res) => {
       serviceNoun: entry.serviceNoun || undefined,
     });
     await store.update(req.params.token, { status: "accepted" });
+    await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "booked", companyName: entry.companyName }, whatsapp.sendWhatsAppText);
 
     res.json({
       ok: true,
@@ -833,13 +870,14 @@ app.post("/api/offer/:token/respond", async (req, res) => {
   }
 });
 
-app.post("/api/accept", async (req, res) => {
-  try {
-    const { quote, customer, companyEmail } = req.body;
-    if (!quote || !quote.items) return res.status(400).json({ error: "quote is required" });
+// Booking confirmation e-mails (customer + company) — shared by the website
+// widget (POST /api/accept) and the WhatsApp demo bot.
+async function processAccept(body) {
+    const { quote, customer, companyEmail } = body;
+    const req = { body };
 
     const company = await getCompanyBySlug(req.body.company);
-    const sector = getSector(req.body.sector);
+    const sector = getSector(req.body.sector, req.body.lang);
     const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
 
     const result = await sendBookingConfirmation({
@@ -856,7 +894,7 @@ app.post("/api/accept", async (req, res) => {
 
     if (sector && companyEmail) logDemoActivity({ email: companyEmail, sector, event: "accept", result: result.companyEmail });
 
-    res.json({
+    return {
       ok: true,
       calendarLink: result.calendarLink,
       emailPreview: result.customerEmail.preview || result.companyEmail.preview || null,
@@ -865,11 +903,24 @@ app.post("/api/accept", async (req, res) => {
         company: deliveryOf(result.companyEmail, companyEmail || company?.notifyEmail),
         customer: deliveryOf(result.customerEmail, (customer || {}).email),
       },
-    });
+    };
+}
+
+app.post("/api/accept", async (req, res) => {
+  try {
+    if (!req.body.quote || !req.body.quote.items) return res.status(400).json({ error: "quote is required" });
+    res.json(await processAccept(req.body));
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Internal error" });
   }
+});
+
+whatsappDemo.configure({
+  processDecline,
+  processAccept,
+  recordLead,
+  baseUrl: () => process.env.APP_BASE_URL || "https://dealz.website",
 });
 
 const PORT = process.env.PORT || 3000;

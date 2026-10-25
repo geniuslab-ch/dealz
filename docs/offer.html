@@ -36,7 +36,7 @@
   <nav class="nav"><div class="nav-logo"><img src="/images/dealz-logo-sm.png" alt="Dealz" /></div></nav>
 
   <div class="of-wrap">
-    <div class="of-card" id="of-card">Chargement…</div>
+    <div class="of-card" id="of-card">…</div>
   </div>
 
   <script>
@@ -46,43 +46,56 @@
 
     function fmt(n) { return "CHF " + Number(n).toFixed(2); }
 
+    // Copy in the customer's language (entry.lang from /api/offer); before
+    // that's known, the browser's language picks the loading/error texts.
+    const TXT = {
+      fr: { invalid: "Lien invalide.", gone: "Cette offre n'est plus disponible.", server: "Cette page nécessite le serveur Dealz en ligne.", title: "Nouvelle offre", proposes: (c) => c.toUpperCase() + " VOUS PROPOSE", date: "NOUVELLE DATE PROPOSÉE", revised: "DEVIS RÉVISÉ", followup: "VOTRE DEVIS RESTE DISPONIBLE", address: "Adresse (pour la réservation)", addressPh: "Rue, numéro, ville", accept: "✓ Accepter", decline: "Refuser", error: "Erreur", confirmed: "✓ Réservation confirmée ! Vous recevrez un e-mail de confirmation.", calendar: "📅 Ajouter à mon Google Agenda", thanks: "Pas de souci — merci pour votre réponse.", preview: "📧 Aperçu de l'e-mail (démo)", to: "À :", subject: "Objet :" },
+      en: { invalid: "Invalid link.", gone: "This offer is no longer available.", server: "This page needs the Dealz server online.", title: "New offer", proposes: (c) => c.toUpperCase() + " OFFERS YOU", date: "NEW DATE PROPOSED", revised: "REVISED QUOTE", followup: "YOUR QUOTE IS STILL AVAILABLE", address: "Address (for the booking)", addressPh: "Street, number, town", accept: "✓ Accept", decline: "Decline", error: "Error", confirmed: "✓ Booking confirmed! You'll receive a confirmation email.", calendar: "📅 Add to my Google Calendar", thanks: "No problem — thank you for your reply.", preview: "📧 Email preview (demo)", to: "To:", subject: "Subject:" },
+      de: { invalid: "Ungültiger Link.", gone: "Diese Offerte ist nicht mehr verfügbar.", server: "Diese Seite benötigt den Dealz-Server online.", title: "Neues Angebot", proposes: (c) => c.toUpperCase() + " SCHLÄGT IHNEN VOR", date: "NEUES DATUM VORGESCHLAGEN", revised: "ÜBERARBEITETE OFFERTE", followup: "IHRE OFFERTE BLEIBT VERFÜGBAR", address: "Adresse (für die Buchung)", addressPh: "Strasse, Nummer, Ort", accept: "✓ Annehmen", decline: "Ablehnen", error: "Fehler", confirmed: "✓ Buchung bestätigt! Sie erhalten eine Bestätigung per E-Mail.", calendar: "📅 Zu meinem Google Kalender hinzufügen", thanks: "Kein Problem — danke für Ihre Antwort.", preview: "📧 E-Mail-Vorschau (Demo)", to: "An:", subject: "Betreff:" },
+    };
+    let T = TXT[(navigator.language || "fr").slice(0, 2)] || TXT.fr;
+
     async function load() {
-      if (!token) { card.innerHTML = "<p>Lien invalide.</p>"; return; }
+      if (!token) { card.innerHTML = `<p>${T.invalid}</p>`; return; }
       try {
         const res = await fetch(`/api/offer/${token}`);
-        if (!res.ok) { card.innerHTML = "<p>Cette offre n'est plus disponible.</p>"; return; }
+        if (!res.ok) { card.innerHTML = `<p>${T.gone}</p>`; return; }
         render(await res.json());
       } catch (e) {
-        card.innerHTML = "<p><b>Cette page nécessite le serveur Dealz en ligne.</b></p>";
+        card.innerHTML = `<p><b>${T.server}</b></p>`;
       }
     }
 
     function render(data) {
-      let headline = "SWISSCLEAN SÀRL VOUS PROPOSE";
+      T = TXT[data.lang] || TXT.fr;
+      document.documentElement.lang = data.lang || "fr";
+      const company = String(data.companyName || "SwissClean Sàrl").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+      document.title = T.title + " — " + (data.companyName || "SwissClean Sàrl");
+      let headline = T.proposes(company);
       let centerHtml = `<div class="of-amount">${fmt(data.amount)}</div>`;
 
       if (data.kind === "date") {
-        headline = "NOUVELLE DATE PROPOSÉE";
+        headline = T.date;
         centerHtml = `<div class="of-date">${data.date}</div>`;
       } else if (data.kind === "revise" && data.revisedQuote) {
-        headline = "DEVIS RÉVISÉ";
+        headline = T.revised;
         const rows = data.revisedQuote.items
           .map((i) => `<div class="row"><span>${i.label}</span><span>${fmt(i.amount)}</span></div>`)
           .join("");
         centerHtml = `<div class="of-items">${rows}<div class="row total"><span>TOTAL</span><span>${fmt(data.revisedQuote.total)}</span></div></div>`;
       } else if (data.kind === "followup") {
-        headline = "VOTRE DEVIS RESTE DISPONIBLE";
+        headline = T.followup;
       }
 
       card.innerHTML = `
         <div style="font-size:13px; color:var(--muted); font-weight:700;">${headline}</div>
         ${centerHtml}
         ${data.message ? `<div class="of-msg">${data.message}</div>` : ""}
-        <div class="of-label">Adresse (pour la réservation)</div>
-        <input class="of-input" id="of-address" placeholder="Rue, numéro, ville" />
+        <div class="of-label">${T.address}</div>
+        <input class="of-input" id="of-address" placeholder="${T.addressPh}" />
         <div class="of-actions">
-          <button class="of-accept" id="of-accept">✓ Accepter</button>
-          <button class="of-decline" id="of-decline">Refuser</button>
+          <button class="of-accept" id="of-accept">${T.accept}</button>
+          <button class="of-decline" id="of-decline">${T.decline}</button>
         </div>
         <div class="of-result" id="of-result"></div>
       `;
@@ -101,15 +114,15 @@
             }),
           });
           const result = await res.json();
-          if (!res.ok) throw new Error(result.error || "Erreur");
+          if (!res.ok) throw new Error(result.error || T.error);
           if (action === "accept") {
             resEl.innerHTML =
-              "✓ Réservation confirmée ! Vous recevrez un e-mail de confirmation." +
+              T.confirmed +
               (result.calendarLink
-                ? `<br/><br/><a href="${result.calendarLink}" target="_blank" rel="noopener">📅 Ajouter à mon Google Agenda</a>`
+                ? `<br/><br/><a href="${result.calendarLink}" target="_blank" rel="noopener">${T.calendar}</a>`
                 : "");
           } else {
-            resEl.textContent = "Pas de souci — merci pour votre réponse.";
+            resEl.textContent = T.thanks;
           }
           resEl.className = "of-result show ok";
           if (result.emailPreview) {
@@ -117,13 +130,13 @@
             const preview = document.createElement("div");
             preview.className = "of-email-preview";
             preview.innerHTML =
-              "<div class=\"ofp-head\">📧 Aperçu de l'e-mail (démo)</div>" +
-              `<div class="ofp-meta"><b>À :</b> ${p.to}<br/><b>Objet :</b> ${p.subject}</div>` +
+              `<div class="ofp-head">${T.preview}</div>` +
+              `<div class="ofp-meta"><b>${T.to}</b> ${p.to}<br/><b>${T.subject}</b> ${p.subject}</div>` +
               `<div class="ofp-body">${p.html}</div>`;
             resEl.insertAdjacentElement("afterend", preview);
           }
         } catch (e) {
-          resEl.textContent = "Erreur : " + e.message;
+          resEl.textContent = T.error + " : " + e.message;
           resEl.className = "of-result show ok";
         }
       }

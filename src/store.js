@@ -79,4 +79,27 @@ async function update(token, patch) {
   return next;
 }
 
-module.exports = { put, get, update };
+// Fixed-key entries (e.g. one WhatsApp conversation per sender), stored in
+// the same table under a caller-chosen token so every serverless instance
+// sees the same state. Same 48h expiry as put/get.
+async function getKey(key) {
+  return get(key);
+}
+
+async function setKey(key, data) {
+  if (!supabase) {
+    const existing = memoryStore.get(key);
+    memoryStore.set(key, { data, createdAt: existing ? existing.createdAt : Date.now() });
+    return;
+  }
+  const { error } = await supabase.from("store_entries").upsert({ token: key, data }, { onConflict: "token" });
+  if (error) throw error;
+}
+
+async function deleteKey(key) {
+  if (!supabase) return void memoryStore.delete(key);
+  const { error } = await supabase.from("store_entries").delete().eq("token", key);
+  if (error) throw error;
+}
+
+module.exports = { put, get, update, getKey, setKey, deleteKey };

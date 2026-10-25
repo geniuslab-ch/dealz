@@ -5,8 +5,13 @@
 // public form, so only known slugs resolve; anything else yields null.
 const META = require("./sector-meta.json");
 
-function getSector(slug) {
-  return slug && Object.prototype.hasOwnProperty.call(META, slug) ? { slug, ...META[slug] } : null;
+// `lang` picks the trade's label and e-mail vocabulary for EN/DE demos;
+// the fictional company's identity is the same in every language.
+function getSector(slug, lang) {
+  if (!slug || !Object.prototype.hasOwnProperty.call(META, slug)) return null;
+  const { i18n, ...base } = META[slug];
+  const local = (i18n && i18n[lang]) || {};
+  return { slug, ...base, ...local };
 }
 
 function sectorLabel(slug) {
