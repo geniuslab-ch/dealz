@@ -126,6 +126,17 @@
     ".dealz-pdf-download{font-size:13px;font-weight:700;color:var(--dz-blue-dark);text-decoration:none;}",
     ".dealz-pdf-actions{display:flex;gap:10px;padding:14px;border-top:1px solid var(--dz-line);flex-shrink:0;}",
     ".dealz-pdf-actions button{flex:1;padding:11px;font-size:14px;border-radius:22px;}",
+    // Phones: the panel fills the space above the bubble (fixed edges, so
+    // Safari's bars never hide the input), inputs stay at 16px so iOS
+    // doesn't zoom the page on focus, and the PDF modal goes full screen.
+    "@media (max-width:600px){",
+    "#dealz-embed-launcher{bottom:16px;right:16px;}",
+    "#dealz-embed-panel{top:10px;left:10px;right:10px;bottom:88px;width:auto;max-width:none;height:auto;max-height:none;}",
+    ".dealz-inputbar input,.dcf-input,.dop-free-input{font-size:16px;}",
+    ".dealz-pdf-overlay{padding:0;}",
+    ".dealz-pdf-modal{max-width:none;height:100vh;height:100dvh;max-height:none;border-radius:0;}",
+    ".dealz-pdf-frame{height:auto;flex:1;}",
+    "}",
   ].join("");
   // Applied unconditionally (both modes need the launcher bubble's CSS,
   // even in "window" mode where the chat-panel rules below just go unused).
@@ -167,7 +178,10 @@
       "background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.4);}" +
       "#dealz-modal-close{position:absolute;top:10px;right:10px;z-index:2;background:rgba(11,18,32,.5);" +
       "color:#fff;border:none;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;line-height:1;}" +
-      "#dealz-modal-iframe{width:100%;height:100%;border:0;display:block;}";
+      "#dealz-modal-iframe{width:100%;height:100%;border:0;display:block;}" +
+      // Phones: the pop-up takes the whole screen.
+      "@media (max-width:600px){#dealz-modal-overlay{padding:0;}" +
+      "#dealz-modal-card{max-width:none;height:100vh;height:100dvh;max-height:none;border-radius:0;}}";
     document.head.appendChild(MODAL_STYLE);
 
     var overlay = null;

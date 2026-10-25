@@ -302,7 +302,11 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
   gap: 26px;
   align-items: start;
 }
-@media (max-width: 820px) { .quote-wrap { grid-template-columns: 1fr; } }
+@media (max-width: 820px) {
+  .quote-wrap { grid-template-columns: 1fr; }
+  /* On a phone the chat comes first; "how it works" is secondary. */
+  .quote-panel-slot { order: -1; }
+}
 
 .quote-side {
   background: linear-gradient(160deg, var(--blue), var(--navy));
@@ -1427,3 +1431,14 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 .sector-chip:hover { border-color: var(--blue); background: var(--blue-light); }
+
+/* Phones — kept last so it overrides the base rules above. */
+@media (max-width: 600px) {
+  /* Fits the screen instead of a fixed 560px box (svh = height with the
+     browser's bars shown, so the input bar is never hidden behind them). */
+  .quote-panel { height: 82vh; height: 82svh; max-height: 640px; min-height: 420px; }
+  /* iOS zooms the whole page when a field under 16px gets focus. */
+  .dealz-inputbar input, .dcf-input, .dop-free-input, .dealz-lead-gate input { font-size: 16px; }
+  .dealz-pdf-overlay { padding: 0; }
+  .dealz-pdf-modal { max-width: none; height: 100vh; height: 100dvh; max-height: none; border-radius: 0; }
+}

@@ -84,6 +84,12 @@
   .dealz-pdf-download{font-size:13px;font-weight:700;color:var(--dz-blue-dark);text-decoration:none;}
   .dealz-pdf-actions{display:flex;gap:10px;padding:14px;border-top:1px solid var(--dz-line);flex-shrink:0;}
   .dealz-pdf-actions button{flex:1;padding:11px;font-size:14px;border-radius:22px;}
+  /* Phones: iOS zooms the page when a field under 16px gets focus. */
+  @media (max-width:600px){
+    .dealz-inputbar input,.dcf-input,.dop-free-input,.dealz-lead-gate input{font-size:16px;}
+    .dealz-pdf-overlay{padding:0;}
+    .dealz-pdf-modal{max-width:none;height:100vh;height:100dvh;max-height:none;border-radius:0;}
+  }
 
   :root{--dz-blue:#15aabf;--dz-blue-dark:#0c8599;--dz-navy:#0c8599;--dz-sky-light:#c5f6fa;}
   .dealz-lead-gate{flex:1;display:flex;flex-direction:column;gap:8px;padding:20px 18px;justify-content:center;}

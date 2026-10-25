@@ -455,7 +455,10 @@ async function handle(session, text, reply) {
   }
 
   if (session.step === "reason") {
-    const n = /^\s*\d+\s*$/.test(text) ? Number(text) : 0;
+    // "5", "5.", "5)" or "n° 5" all pick reason 5; anything longer is the
+    // customer's own words and gets classified.
+    const m = text.match(/^\s*(?:n[°o]\s*)?(\d{1,2})\s*[.)\-:]?\s*$/i);
+    const n = m ? Number(m[1]) : 0;
     const o = n >= 1 && n <= OBJECTIONS[lang].length ? OBJECTIONS[lang][n - 1] : null;
     const data = await deps.processDecline(
       { quote: session.quote, category: o ? o[0] : null, text: o ? o[1] : text, customer: session.quote.customer, companyEmail: session.email, sector: session.slug, lang },
