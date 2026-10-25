@@ -629,17 +629,17 @@ app.post("/api/counteroffer/:token", async (req, res) => {
     // same reason as "keep" above.
     if (req.body.action === "send-reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
-      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail, signature: entry.signature, logoUrl: entry.logoUrl, tagline: entry.tagline, lang: entry.lang });
+      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName || undefined, companyEmail: entry.companyEmail || undefined, signature: entry.signature || undefined, logoUrl: entry.logoUrl || undefined, tagline: entry.tagline || undefined, lang: entry.lang });
       await store.update(req.params.token, { status: "replied" });
-      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "reply", companyName: entry.companyName, message }, whatsapp.sendWhatsAppText);
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "reply", companyName: entry.companyName || undefined, message }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
     if (cfg.action === "reply") {
       if (!message.trim()) return res.status(400).json({ error: "Message requis" });
-      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName, companyEmail: entry.companyEmail, signature: entry.signature, logoUrl: entry.logoUrl, tagline: entry.tagline, lang: entry.lang });
+      const emailResult = await sendReplyToCustomer({ message, customer, companyName: entry.companyName || undefined, companyEmail: entry.companyEmail || undefined, signature: entry.signature || undefined, logoUrl: entry.logoUrl || undefined, tagline: entry.tagline || undefined, lang: entry.lang });
       await store.update(req.params.token, { status: "replied" });
-      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "reply", companyName: entry.companyName, message }, whatsapp.sendWhatsAppText);
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "reply", companyName: entry.companyName || undefined, message }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -658,11 +658,11 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         amount,
         message,
         customer,
-        companyEmail: entry.companyEmail,
-        companyName: entry.companyName,
-        signature: entry.signature,
-        logoUrl: entry.logoUrl,
-        tagline: entry.tagline,
+        companyEmail: entry.companyEmail || undefined,
+        companyName: entry.companyName || undefined,
+        signature: entry.signature || undefined,
+        logoUrl: entry.logoUrl || undefined,
+        tagline: entry.tagline || undefined,
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
@@ -674,15 +674,15 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         offerToken,
         baseUrl: requestBaseUrl(req),
-        companyName: entry.companyName,
-        companyEmail: entry.companyEmail,
-        signature: entry.signature,
-        logoUrl: entry.logoUrl,
-        tagline: entry.tagline,
+        companyName: entry.companyName || undefined,
+        companyEmail: entry.companyEmail || undefined,
+        signature: entry.signature || undefined,
+        logoUrl: entry.logoUrl || undefined,
+        tagline: entry.tagline || undefined,
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
-      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "price", companyName: entry.companyName, amount, message, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "price", companyName: entry.companyName || undefined, amount, message, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -697,11 +697,11 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         date,
         message,
         customer,
-        companyEmail: entry.companyEmail,
-        companyName: entry.companyName,
-        signature: entry.signature,
-        logoUrl: entry.logoUrl,
-        tagline: entry.tagline,
+        companyEmail: entry.companyEmail || undefined,
+        companyName: entry.companyName || undefined,
+        signature: entry.signature || undefined,
+        logoUrl: entry.logoUrl || undefined,
+        tagline: entry.tagline || undefined,
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
@@ -712,15 +712,15 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         offerToken,
         baseUrl: requestBaseUrl(req),
-        companyName: entry.companyName,
-        companyEmail: entry.companyEmail,
-        signature: entry.signature,
-        logoUrl: entry.logoUrl,
-        tagline: entry.tagline,
+        companyName: entry.companyName || undefined,
+        companyEmail: entry.companyEmail || undefined,
+        signature: entry.signature || undefined,
+        logoUrl: entry.logoUrl || undefined,
+        tagline: entry.tagline || undefined,
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
-      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "date", companyName: entry.companyName, date, message, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "date", companyName: entry.companyName || undefined, date, message, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -737,11 +737,11 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         amount: total,
         message,
         customer,
-        companyEmail: entry.companyEmail,
-        companyName: entry.companyName,
-        signature: entry.signature,
-        logoUrl: entry.logoUrl,
-        tagline: entry.tagline,
+        companyEmail: entry.companyEmail || undefined,
+        companyName: entry.companyName || undefined,
+        signature: entry.signature || undefined,
+        logoUrl: entry.logoUrl || undefined,
+        tagline: entry.tagline || undefined,
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
@@ -752,15 +752,15 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         offerToken,
         baseUrl: requestBaseUrl(req),
-        companyName: entry.companyName,
-        companyEmail: entry.companyEmail,
-        signature: entry.signature,
-        logoUrl: entry.logoUrl,
-        tagline: entry.tagline,
+        companyName: entry.companyName || undefined,
+        companyEmail: entry.companyEmail || undefined,
+        signature: entry.signature || undefined,
+        logoUrl: entry.logoUrl || undefined,
+        tagline: entry.tagline || undefined,
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
-      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "revise", companyName: entry.companyName, amount: total, message, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "revise", companyName: entry.companyName || undefined, amount: total, message, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 
@@ -771,11 +771,11 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         originalQuote: entry.quote,
         amount: entry.quote.total,
         customer,
-        companyEmail: entry.companyEmail,
-        companyName: entry.companyName,
-        signature: entry.signature,
-        logoUrl: entry.logoUrl,
-        tagline: entry.tagline,
+        companyEmail: entry.companyEmail || undefined,
+        companyName: entry.companyName || undefined,
+        signature: entry.signature || undefined,
+        logoUrl: entry.logoUrl || undefined,
+        tagline: entry.tagline || undefined,
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
@@ -785,15 +785,15 @@ app.post("/api/counteroffer/:token", async (req, res) => {
         customer,
         offerToken,
         baseUrl: requestBaseUrl(req),
-        companyName: entry.companyName,
-        companyEmail: entry.companyEmail,
-        signature: entry.signature,
-        logoUrl: entry.logoUrl,
-        tagline: entry.tagline,
+        companyName: entry.companyName || undefined,
+        companyEmail: entry.companyEmail || undefined,
+        signature: entry.signature || undefined,
+        logoUrl: entry.logoUrl || undefined,
+        tagline: entry.tagline || undefined,
         lang: entry.lang,
         serviceNoun: entry.serviceNoun || undefined,
       });
-      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "followup", companyName: entry.companyName, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
+      await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "followup", companyName: entry.companyName || undefined, url: `${requestBaseUrl(req)}/offer.html?token=${offerToken}` }, whatsapp.sendWhatsAppText);
       return res.json({ ok: true, emailPreview: emailResult.preview || null });
     }
 

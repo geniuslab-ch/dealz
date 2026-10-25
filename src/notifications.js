@@ -95,6 +95,9 @@ function quoteItemsHtml(quote) {
 // falls back gracefully: no logo -> no image column; no tagline -> no
 // italic line; no signature text -> just "Cordialement, [name]".
 function signatureHtml(companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr") {
+  // A stored token can carry null (no company on the cleaning demo); a
+  // default parameter only covers undefined, so it would print "null".
+  companyName = companyName || COMPANY_NAME;
   const closing = lang === "en" ? "Best regards" : lang === "de" ? "Freundliche Grüsse" : "Cordialement";
   const contactBlock = signature
     ? `<div style="font-size:12.5px; color:#5b6472; margin-top:6px; line-height:1.5;">${escapeHtml(signature).replace(/\n/g, "<br>")}</div>`
