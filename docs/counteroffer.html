@@ -16,7 +16,9 @@
     .ao-quote .row input[type="checkbox"] { margin-right: 8px; }
     .ao-quote .total { font-weight: 800; border-top: 1px solid var(--line); margin-top: 6px; padding-top: 6px; }
     .ao-input { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; font-family: inherit; font-size: 15px; margin-top: 6px; }
-    .ao-textarea { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; font-family: inherit; font-size: 13.5px; margin-top: 6px; min-height: 70px; resize: vertical; }
+    .ao-textarea { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; font-family: inherit; font-size: 13.5px; margin-top: 6px; min-height: 110px; resize: vertical; }
+    /* Phones: iOS zooms the page when a field under 16px gets focus. */
+    @media (max-width: 600px) { .ao-input, .ao-textarea { font-size: 16px; } }
     .ao-btn { margin-top: 18px; width: 100%; background: linear-gradient(135deg, var(--blue), var(--blue-dark)); color: white; border: none; border-radius: 24px; padding: 12px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
     .ao-btn.secondary { margin-top: 8px; background: white; color: var(--muted); border: 1.5px solid var(--line); }
     .ao-btn:disabled { opacity: 0.5; }
@@ -49,9 +51,9 @@
     // Same language as the decline e-mail that linked here (data.lang);
     // before it's known, the browser's language picks the error texts.
     const TXT = {
-      fr: { invalid: "Lien invalide — aucun jeton fourni.", expired: "Ce lien n'est plus valide ou a expiré.", server: "<b>Cette page nécessite le serveur Dealz en ligne.</b><br/>Elle ne fonctionne pas en hébergement statique seul (ex. GitHub Pages sans backend).", declinedBy: "Devis refusé par", theCustomer: "le client", custMsg: "Message du client", original: "Devis original", error: "Erreur", preview: "📧 Aperçu de l'e-mail (démo)", to: "À :", subject: "Objet :", yourOffer: "Votre contre-offre (CHF)", eg: "ex.", optMsg: "Message (optionnel)", offerPh: "Nous pouvons vous faire ce prix exceptionnellement…", newDate: "Nouvelle date proposée", datePh: "ex. Lundi 8 septembre, 14h", datePh2: "Cette date vous conviendrait-elle ?", removeItems: "Cochez les prestations à retirer", revisePh: "Voici votre devis sans le nettoyage des vitres…", yourReply: "Votre réponse", replyPh: "Répondez à la question du client…", followupBtn: "Relancer maintenant", closeBtn: "Clôturer la demande", sendBtn: "Envoyer au client", suggested: "💬 Réponse suggérée — relisez et adaptez avant l'envoi", editSend: "✏️ Modifier et envoyer", okOffer: "✓ Contre-offre envoyée au client par e-mail.", okDate: "✓ Nouvelle date envoyée au client.", okRevise: "✓ Offre révisée envoyée au client.", okReply: "✓ Réponse envoyée au client.", okFollowup: "✓ Relance envoyée au client.", okClose: "✓ Demande clôturée.", okKeep: "✓ Prix maintenu — demande clôturée." },
-      en: { invalid: "Invalid link — no token provided.", expired: "This link is no longer valid or has expired.", server: "<b>This page needs the Dealz server online.</b><br/>It doesn't work on static hosting alone (e.g. GitHub Pages without a backend).", declinedBy: "Quote declined by", theCustomer: "the customer", custMsg: "Customer's message", original: "Original quote", error: "Error", preview: "📧 Email preview (demo)", to: "To:", subject: "Subject:", yourOffer: "Your counter-offer (CHF)", eg: "e.g.", optMsg: "Message (optional)", offerPh: "We can exceptionally offer you this price…", newDate: "New date proposed", datePh: "e.g. Monday 8 September, 2pm", datePh2: "Would this date suit you?", removeItems: "Tick the services to remove", revisePh: "Here is your quote without the window cleaning…", yourReply: "Your reply", replyPh: "Answer the customer's question…", followupBtn: "Follow up now", closeBtn: "Close the request", sendBtn: "Send to the customer", suggested: "💬 Suggested reply — review and adapt before sending", editSend: "✏️ Edit and send", okOffer: "✓ Counter-offer emailed to the customer.", okDate: "✓ New date sent to the customer.", okRevise: "✓ Revised offer sent to the customer.", okReply: "✓ Reply sent to the customer.", okFollowup: "✓ Follow-up sent to the customer.", okClose: "✓ Request closed.", okKeep: "✓ Price kept — request closed." },
-      de: { invalid: "Ungültiger Link — kein Token angegeben.", expired: "Dieser Link ist nicht mehr gültig oder abgelaufen.", server: "<b>Diese Seite benötigt den Dealz-Server online.</b><br/>Sie funktioniert nicht mit rein statischem Hosting (z. B. GitHub Pages ohne Backend).", declinedBy: "Offerte abgelehnt von", theCustomer: "dem Kunden", custMsg: "Nachricht des Kunden", original: "Ursprüngliche Offerte", error: "Fehler", preview: "📧 E-Mail-Vorschau (Demo)", to: "An:", subject: "Betreff:", yourOffer: "Ihr Gegenangebot (CHF)", eg: "z. B.", optMsg: "Nachricht (optional)", offerPh: "Wir können Ihnen diesen Preis ausnahmsweise anbieten…", newDate: "Neues vorgeschlagenes Datum", datePh: "z. B. Montag, 8. September, 14 Uhr", datePh2: "Würde Ihnen dieses Datum passen?", removeItems: "Kreuzen Sie die zu entfernenden Leistungen an", revisePh: "Hier Ihre Offerte ohne Fensterreinigung…", yourReply: "Ihre Antwort", replyPh: "Beantworten Sie die Frage des Kunden…", followupBtn: "Jetzt nachfassen", closeBtn: "Anfrage abschliessen", sendBtn: "An den Kunden senden", suggested: "💬 Vorgeschlagene Antwort — vor dem Senden prüfen und anpassen", editSend: "✏️ Bearbeiten und senden", okOffer: "✓ Gegenangebot per E-Mail an den Kunden gesendet.", okDate: "✓ Neues Datum an den Kunden gesendet.", okRevise: "✓ Überarbeitete Offerte an den Kunden gesendet.", okReply: "✓ Antwort an den Kunden gesendet.", okFollowup: "✓ Nachfassmail an den Kunden gesendet.", okClose: "✓ Anfrage abgeschlossen.", okKeep: "✓ Preis beibehalten — Anfrage abgeschlossen." },
+      fr: { invalid: "Lien invalide — aucun jeton fourni.", expired: "Ce lien n'est plus valide ou a expiré.", server: "<b>Cette page nécessite le serveur Dealz en ligne.</b><br/>Elle ne fonctionne pas en hébergement statique seul (ex. GitHub Pages sans backend).", declinedBy: "Devis refusé par", theCustomer: "le client", custMsg: "Message du client", original: "Devis original", error: "Erreur", preview: "📧 Aperçu de l'e-mail (démo)", to: "À :", subject: "Objet :", yourOffer: "Votre contre-offre (CHF)", eg: "ex.", optMsg: "Message (optionnel)", msgAi: "Message au client — pré-rempli par l'IA, relisez et adaptez", offerPh: "Nous pouvons vous faire ce prix exceptionnellement…", newDate: "Nouvelle date proposée", datePh: "ex. Lundi 8 septembre, 14h", datePh2: "Cette date vous conviendrait-elle ?", removeItems: "Cochez les prestations à retirer", revisePh: "Voici votre devis sans le nettoyage des vitres…", yourReply: "Votre réponse", replyPh: "Répondez à la question du client…", followupBtn: "Relancer maintenant", closeBtn: "Clôturer la demande", sendBtn: "Envoyer au client", suggested: "💬 Réponse suggérée — relisez et adaptez avant l'envoi", editSend: "✏️ Modifier et envoyer", okOffer: "✓ Contre-offre envoyée au client par e-mail.", okDate: "✓ Nouvelle date envoyée au client.", okRevise: "✓ Offre révisée envoyée au client.", okReply: "✓ Réponse envoyée au client.", okFollowup: "✓ Relance envoyée au client.", okClose: "✓ Demande clôturée.", okKeep: "✓ Prix maintenu — demande clôturée." },
+      en: { invalid: "Invalid link — no token provided.", expired: "This link is no longer valid or has expired.", server: "<b>This page needs the Dealz server online.</b><br/>It doesn't work on static hosting alone (e.g. GitHub Pages without a backend).", declinedBy: "Quote declined by", theCustomer: "the customer", custMsg: "Customer's message", original: "Original quote", error: "Error", preview: "📧 Email preview (demo)", to: "To:", subject: "Subject:", yourOffer: "Your counter-offer (CHF)", eg: "e.g.", optMsg: "Message (optional)", msgAi: "Message to the customer — drafted by AI, review and adapt", offerPh: "We can exceptionally offer you this price…", newDate: "New date proposed", datePh: "e.g. Monday 8 September, 2pm", datePh2: "Would this date suit you?", removeItems: "Tick the services to remove", revisePh: "Here is your quote without the window cleaning…", yourReply: "Your reply", replyPh: "Answer the customer's question…", followupBtn: "Follow up now", closeBtn: "Close the request", sendBtn: "Send to the customer", suggested: "💬 Suggested reply — review and adapt before sending", editSend: "✏️ Edit and send", okOffer: "✓ Counter-offer emailed to the customer.", okDate: "✓ New date sent to the customer.", okRevise: "✓ Revised offer sent to the customer.", okReply: "✓ Reply sent to the customer.", okFollowup: "✓ Follow-up sent to the customer.", okClose: "✓ Request closed.", okKeep: "✓ Price kept — request closed." },
+      de: { invalid: "Ungültiger Link — kein Token angegeben.", expired: "Dieser Link ist nicht mehr gültig oder abgelaufen.", server: "<b>Diese Seite benötigt den Dealz-Server online.</b><br/>Sie funktioniert nicht mit rein statischem Hosting (z. B. GitHub Pages ohne Backend).", declinedBy: "Offerte abgelehnt von", theCustomer: "dem Kunden", custMsg: "Nachricht des Kunden", original: "Ursprüngliche Offerte", error: "Fehler", preview: "📧 E-Mail-Vorschau (Demo)", to: "An:", subject: "Betreff:", yourOffer: "Ihr Gegenangebot (CHF)", eg: "z. B.", optMsg: "Nachricht (optional)", msgAi: "Nachricht an den Kunden — von der KI vorformuliert, prüfen und anpassen", offerPh: "Wir können Ihnen diesen Preis ausnahmsweise anbieten…", newDate: "Neues vorgeschlagenes Datum", datePh: "z. B. Montag, 8. September, 14 Uhr", datePh2: "Würde Ihnen dieses Datum passen?", removeItems: "Kreuzen Sie die zu entfernenden Leistungen an", revisePh: "Hier Ihre Offerte ohne Fensterreinigung…", yourReply: "Ihre Antwort", replyPh: "Beantworten Sie die Frage des Kunden…", followupBtn: "Jetzt nachfassen", closeBtn: "Anfrage abschliessen", sendBtn: "An den Kunden senden", suggested: "💬 Vorgeschlagene Antwort — vor dem Senden prüfen und anpassen", editSend: "✏️ Bearbeiten und senden", okOffer: "✓ Gegenangebot per E-Mail an den Kunden gesendet.", okDate: "✓ Neues Datum an den Kunden gesendet.", okRevise: "✓ Überarbeitete Offerte an den Kunden gesendet.", okReply: "✓ Antwort an den Kunden gesendet.", okFollowup: "✓ Nachfassmail an den Kunden gesendet.", okClose: "✓ Anfrage abgeschlossen.", okKeep: "✓ Preis beibehalten — Anfrage abgeschlossen." },
     };
     let T = TXT[(navigator.language || "fr").slice(0, 2)] || TXT.fr;
 
@@ -121,21 +123,28 @@
 
     function render(data) {
       T = TXT[data.lang] || TXT.fr;
+      // The AI-drafted reply pre-fills the message that goes out with the
+      // action (counter-offer, new date, revised quote, answer), so it all
+      // reaches the customer in one e-mail. It only stays a separate block
+      // for actions with no message field (follow-up, close).
+      const draft = data.suggestedReply ? escapeHtml(data.suggestedReply) : "";
+      const msgLabel = draft ? T.msgAi : T.optMsg;
+      const hasMessage = ["counteroffer", "reschedule", "revise", "reply"].includes(data.action);
       document.documentElement.lang = data.lang || "fr";
       let extraFields = "";
       if (data.action === "counteroffer") {
         extraFields = `
           <div class="ao-label">${T.yourOffer}</div>
           <input type="number" class="ao-input" id="ao-amount" placeholder="${T.eg} ${Math.round(data.quote.total * 0.9)}" />
-          <div class="ao-label">${T.optMsg}</div>
-          <textarea class="ao-textarea" id="ao-message" placeholder="${T.offerPh}"></textarea>
+          <div class="ao-label">${msgLabel}</div>
+          <textarea class="ao-textarea" id="ao-message" placeholder="${T.offerPh}">${draft}</textarea>
         `;
       } else if (data.action === "reschedule") {
         extraFields = `
           <div class="ao-label">${T.newDate}</div>
           <input type="text" class="ao-input" id="ao-date" placeholder="${T.datePh}" />
-          <div class="ao-label">${T.optMsg}</div>
-          <textarea class="ao-textarea" id="ao-message" placeholder="${T.datePh2}"></textarea>
+          <div class="ao-label">${msgLabel}</div>
+          <textarea class="ao-textarea" id="ao-message" placeholder="${T.datePh2}">${draft}</textarea>
         `;
       } else if (data.action === "revise") {
         const checks = data.quote.items
@@ -147,13 +156,13 @@
         extraFields = `
           <div class="ao-label">${T.removeItems}</div>
           <div class="ao-quote">${checks}</div>
-          <div class="ao-label">${T.optMsg}</div>
-          <textarea class="ao-textarea" id="ao-message" placeholder="${T.revisePh}"></textarea>
+          <div class="ao-label">${msgLabel}</div>
+          <textarea class="ao-textarea" id="ao-message" placeholder="${T.revisePh}">${draft}</textarea>
         `;
       } else if (data.action === "reply") {
         extraFields = `
-          <div class="ao-label">${T.yourReply}</div>
-          <textarea class="ao-textarea" id="ao-message" placeholder="${T.replyPh}"></textarea>
+          <div class="ao-label">${draft ? T.msgAi : T.yourReply}</div>
+          <textarea class="ao-textarea" id="ao-message" placeholder="${T.replyPh}" style="min-height:110px;">${draft}</textarea>
         `;
       }
       // followup / close / review: no extra fields, just the primary button.
@@ -165,7 +174,7 @@
         ${data.secondaryCta ? `<button class="ao-btn secondary" id="ao-secondary">${data.secondaryCta}</button>` : ""}
         <div class="ao-msg" id="ao-msg"></div>
         ${
-          data.suggestedReply
+          data.suggestedReply && !hasMessage
             ? `
         <hr style="border:none; border-top:1px solid var(--line); margin:22px 0;" />
         <div class="ao-label">${T.suggested}</div>
