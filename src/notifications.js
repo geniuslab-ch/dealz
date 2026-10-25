@@ -88,40 +88,92 @@ function quoteItemsHtml(quote) {
 // Every customer-facing e-mail (counteroffer, reschedule, revised offer,
 // free-text reply, follow-up) ends with this — without it, a message the
 // owner personally wrote reads as if it came from nobody in particular.
-// This signs off as the CLEANING COMPANY, not Dealz — the customer's
-// relationship is with their cleaner, not with the software behind it.
-// `logoUrl`/`tagline`/`signature` all come from the company's own record
-// (set in the CRM's companies.html) — every piece is optional and each
-// falls back gracefully: no logo -> no image column; no tagline -> no
-// italic line; no signature text -> just "Cordialement, [name]".
+// `logoUrl`/`tagline`/`signature` come from the company's own record (set
+// in the CRM's companies.html) — each optional; with none of them it is
+// just "Cordialement, [name]".
+// The fictional demo companies (docs/secteurs/data/), by legal name — their
+// e-mails sign with the full card: logo, team line, trade, tagline, contact.
+const DEMO_COMPANIES = (() => {
+  const fs = require("fs");
+  const path = require("path");
+  const dir = path.join(__dirname, "..", "docs", "secteurs", "data");
+  const map = {};
+  for (const f of fs.readdirSync(dir).filter((f) => f.endsWith(".js"))) {
+    const S = require(path.join(dir, f));
+    map[S.fr.demo.pdfCompany.name] = S;
+  }
+  return map;
+})();
+const SITE_URL = (process.env.APP_BASE_URL && !/localhost/.test(process.env.APP_BASE_URL) ? process.env.APP_BASE_URL : "https://dealz.website").replace(/\/$/, "");
+const TEAM = { fr: (n) => `Équipe ${n}`, en: (n) => `The ${n} team`, de: (n) => `Team ${n}` };
+
+// Same layout as the Dealz team's own signature: logo on the left, a
+// coloured bar, then "Team <brand>", the company name in its colour, an
+// italic tagline and the contact lines. Tables and inline styles only, so it
+// renders the same in every mail client.
+function signatureCard({ logoUrl, team, name, icon, tagline, lines, accent }) {
+  const esc = escapeHtml;
+  const contact = lines
+    .filter(Boolean)
+    .map((l) =>
+      l.href
+        ? `<div style="font-size:14px; line-height:1.5;"><a href="${esc(l.href)}" style="color:${accent}; text-decoration:none;">${esc(l.text)}</a></div>`
+        : `<div style="font-size:14px; line-height:1.5; color:#5b6472;">${esc(l.text)}</div>`
+    )
+    .join("");
+  return `
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:22px; border-collapse:collapse; font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;">
+        <tr>
+          ${logoUrl ? `<td style="vertical-align:middle; padding-right:18px;">
+            <img src="${esc(logoUrl)}" alt="${esc(name)}" width="84" height="84" style="display:block; width:84px; height:84px; border-radius:16px;" />
+          </td>` : ""}
+          <td style="border-left:3px solid ${accent}; padding-left:18px; vertical-align:middle;">
+            <div style="font-weight:bold; font-size:17px; color:#10131a; line-height:1.3;">${esc(team)}</div>
+            <div style="font-weight:bold; font-size:15px; color:${accent}; margin-top:6px;">${icon ? esc(icon) + " " : ""}${esc(name)}</div>
+            ${tagline ? `<div style="font-style:italic; color:#5b6472; font-size:13px; margin-top:4px;">${esc(tagline)}</div>` : ""}
+            ${contact ? `<div style="margin-top:8px;">${contact}</div>` : ""}
+          </td>
+        </tr>
+      </table>`;
+}
+
+// This signs off as the COMPANY, not Dealz — the customer's relationship
+// is with the business, not with the software behind it. Demo companies get
+// their full card; a real company's own record (logo, tagline, signature
+// text from the CRM) fills the same card, each piece optional.
 function signatureHtml(companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr") {
   // A stored token can carry null (no company on the cleaning demo); a
   // default parameter only covers undefined, so it would print "null".
   companyName = companyName || COMPANY_NAME;
-  const closing = lang === "en" ? "Best regards" : lang === "de" ? "Freundliche Grüsse" : "Cordialement";
-  const contactBlock = signature
-    ? `<div style="font-size:12.5px; color:#5b6472; margin-top:6px; line-height:1.5;">${escapeHtml(signature).replace(/\n/g, "<br>")}</div>`
-    : `<div style="font-size:13px; color:#10131a; margin-top:6px;">${closing}</div>`;
+  const l = ["en", "de"].includes(lang) ? lang : "fr";
+  const closing = l === "en" ? "Best regards" : l === "de" ? "Freundliche Grüsse" : "Cordialement";
+  const opener = `<p style="margin:20px 0 0;">${closing},</p>`;
 
-  if (logoUrl) {
-    return `
-      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:22px; border-collapse:collapse;">
-        <tr>
-          <td style="vertical-align:middle; padding-right:16px;">
-            <img src="${escapeHtml(logoUrl)}" alt="${escapeHtml(companyName)}" width="72" style="display:block; max-width:72px; height:auto; border-radius:8px;" />
-          </td>
-          <td style="border-left:3px solid #0b5fff; padding-left:16px; vertical-align:middle;">
-            <div style="font-weight:bold; font-size:15px; color:#10131a;">${escapeHtml(companyName)}</div>
-            ${tagline ? `<div style="font-style:italic; color:#5b6472; font-size:12.5px; margin-top:2px;">${escapeHtml(tagline)}</div>` : ""}
-            ${contactBlock}
-          </td>
-        </tr>
-      </table>
-    `;
+  const S = DEMO_COMPANIES[companyName];
+  if (S) {
+    const D = S[l].demo;
+    const domain = D.contact.email.split("@")[1];
+    const site = `${SITE_URL}${l === "fr" ? "" : "/" + l}/secteurs/${S.slug}/demo.html`;
+    return opener + signatureCard({
+      logoUrl: logoUrl || `${SITE_URL}/images/demo-logos/${S.slug}-mark.png`,
+      team: TEAM[l](D.brand),
+      name: companyName,
+      icon: S.icon,
+      tagline: D.hero.h1,
+      lines: [{ text: D.contact.email, href: "mailto:" + D.contact.email }, { text: D.contact.phone }, { text: domain, href: site }],
+      accent: (S.colors && S.colors.main) || "#0b5fff",
+    });
   }
 
-  if (signature) {
-    return `<p style="margin-top:20px; margin-bottom:0; white-space:normal;">${escapeHtml(signature).replace(/\n/g, "<br>")}</p>`;
+  if (logoUrl || tagline || signature) {
+    return opener + signatureCard({
+      logoUrl,
+      team: TEAM[l](companyName),
+      name: companyName,
+      tagline,
+      lines: signature ? String(signature).split("\n").map((t) => ({ text: t })) : [],
+      accent: "#0b5fff",
+    });
   }
   return `
     <p style="margin-top:20px; margin-bottom:2px;">${closing},</p>
