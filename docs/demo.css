@@ -70,6 +70,7 @@ body.swissclean { background: var(--sc-bg); color: var(--sc-ink); }
   border-bottom: 1px solid var(--sc-line);
 }
 .sc-nav-logo { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 19px; color: var(--sc-ink); }
+.sc-logo-mark { width: 34px; height: 34px; border-radius: 9px; display: block; }
 .sc-nav-logo .dot {
   width: 30px; height: 30px;
   border-radius: 9px;

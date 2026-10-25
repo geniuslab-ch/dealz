@@ -58,6 +58,7 @@
       viewPdf: "📄 Voir mon devis (PDF)", yourQuote: "📄 Votre devis", generating: "Génération du devis…",
       accept: "✓ Accepter le devis", decline: "Refuser", close: "Fermer", download: "⬇ Télécharger le PDF",
       pdfError: "Impossible de générer le PDF (connexion requise). Vous pouvez tout de même accepter ou refuser ci-dessous.",
+      logoHint: "💡 Avec Dealz, ce devis porte votre logo, vos coordonnées et vos conditions.",
       restart: "↺ Nouveau devis",
       declineAsk: "Bien sûr. Auriez-vous deux minutes pour me dire ce qui ne convenait pas dans notre offre ?",
       freePh: "Ou décrivez avec vos mots…", send: "Envoyer",
@@ -121,6 +122,7 @@
       viewPdf: "📄 View my quote (PDF)", yourQuote: "📄 Your quote", generating: "Generating your quote…",
       accept: "✓ Accept quote", decline: "Decline", close: "Close", download: "⬇ Download PDF",
       pdfError: "Couldn't generate the PDF (connection required). You can still accept or decline below.",
+      logoHint: "💡 With Dealz, this quote carries your logo, your contact details and your terms.",
       restart: "↺ New quote",
       declineAsk: "Of course. Would you have two minutes to tell me what didn't work in our offer?",
       freePh: "Or describe it in your own words…", send: "Send",
@@ -184,6 +186,7 @@
       viewPdf: "📄 Meine Offerte ansehen (PDF)", yourQuote: "📄 Ihre Offerte", generating: "Offerte wird erstellt…",
       accept: "✓ Offerte annehmen", decline: "Ablehnen", close: "Schliessen", download: "⬇ PDF herunterladen",
       pdfError: "PDF konnte nicht erstellt werden (Verbindung erforderlich). Sie können unten trotzdem annehmen oder ablehnen.",
+      logoHint: "💡 Mit Dealz trägt diese Offerte Ihr Logo, Ihre Kontaktdaten und Ihre Bedingungen.",
       restart: "↺ Neue Offerte",
       declineAsk: "Natürlich. Hätten Sie zwei Minuten, um mir zu sagen, was an unserem Angebot nicht gepasst hat?",
       freePh: "Oder beschreiben Sie es mit eigenen Worten…", send: "Senden",
@@ -562,6 +565,27 @@
   }
 
   // ---------- PDF modal ----------
+  // The fictional company's logo (docs/images/demo-logos/), as a PNG data
+  // URL for the PDF; resolves to null if it can't be loaded.
+  var logoPromise = null;
+  function loadLogo() {
+    if (logoPromise) return logoPromise;
+    logoPromise = new Promise(function (resolve) {
+      var img = new Image();
+      img.onload = function () {
+        try {
+          var c = document.createElement("canvas");
+          c.width = img.naturalWidth; c.height = img.naturalHeight;
+          c.getContext("2d").drawImage(img, 0, 0);
+          resolve({ data: c.toDataURL("image/png"), w: img.naturalWidth, h: img.naturalHeight });
+        } catch (e) { resolve(null); }
+      };
+      img.onerror = function () { resolve(null); };
+      img.src = "/images/demo-logos/" + SECTOR.slug + ".png";
+    });
+    return logoPromise;
+  }
+
   var pdfLibPromise = null;
   function loadPdfLibs() {
     if (pdfLibPromise) return pdfLibPromise;
@@ -611,9 +635,10 @@
     acc.addEventListener("click", function () { closePdf(); handleAccept(quote); });
     dec.addEventListener("click", function () { closePdf(); handleDecline(quote); });
 
-    loadPdfLibs().then(function () {
+    Promise.all([loadPdfLibs(), loadLogo()]).then(function (r) {
+      var company = Object.assign({}, DEMO.pdfCompany, r[1] ? { logo: r[1] } : {});
       var res = window.DealzPDF.generate(quote, quote.customer || {}, LANG, {
-        company: DEMO.pdfCompany,
+        company: company,
         detailLines: quote.detailLines,
         terms: QT.terms || UI.terms,
         generated: UI.generated(DEMO.brand),
@@ -628,6 +653,7 @@
       dl.href = res.blobUrl;
       dl.download = "devis-" + SECTOR.slug + ".pdf";
       body.appendChild(dl);
+      body.appendChild(el("p", "dealz-pdf-hint", UI.logoHint));
     }).catch(function () {
       overlay.querySelector(".dealz-pdf-body").innerHTML = '<p class="dealz-pdf-loading"></p>';
       overlay.querySelector(".dealz-pdf-loading").textContent = UI.pdfError;

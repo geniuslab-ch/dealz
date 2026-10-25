@@ -788,7 +788,7 @@ ${fonts()}  <link rel="stylesheet" href="/styles.css" />
   </div>
 
   <nav class="sc-nav">
-    <div class="sc-nav-logo"><span class="dot">${esc(S.icon)}</span> ${esc(D.brand)}</div>
+    <div class="sc-nav-logo"><img class="sc-logo-mark" src="/images/demo-logos/${S.slug}-mark.png" alt="" width="34" height="34" /> ${esc(D.brand)}</div>
     <div class="sc-nav-links">
       <button data-tab="accueil" class="active">${cfg.tabHome}</button>
       <button data-tab="prestations">${cfg.tabServices}</button>
@@ -1237,7 +1237,7 @@ function main() {
     meta[S.slug] = {
       label: S.fr.label,
       emailNoun: S.fr.emailNoun,
-      company: { name: d.pdfCompany.name, email: d.contact.email, phone: d.contact.phone, address: d.pdfCompany.address },
+      company: { name: d.pdfCompany.name, email: d.contact.email, phone: d.contact.phone, address: d.pdfCompany.address, logo: "/images/demo-logos/" + S.slug + "-mark.png" },
       // Trade name and e-mail vocabulary in the other site languages, for
       // e-mails sent from the EN/DE demos (see getSector's `lang`).
       i18n: Object.fromEntries(

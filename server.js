@@ -50,6 +50,12 @@ function requestBaseUrl(req) {
   return process.env.APP_BASE_URL || `${req.protocol}://${req.get("host")}`;
 }
 
+// Absolute URL for an asset path, for e-mails (which can't resolve "/…").
+function publicUrl(p) {
+  if (!p) return undefined;
+  return (process.env.APP_BASE_URL || "https://dealz.website").replace(/\/$/, "") + p;
+}
+
 // What really happened to one e-mail, for the demo to show: "sent",
 // "failed" (with the SMTP error), "simulated" (no SMTP configured) or
 // "skipped" (no address). Without this a failed send looked like a success.
@@ -484,7 +490,8 @@ async function processDecline(body, baseUrl) {
     const resolvedCompanyName = sector ? sector.company.name : company?.name;
     const serviceNoun = sector ? sector.emailNoun : undefined;
     const resolvedSignature = company?.signature;
-    const resolvedLogoUrl = company?.logoUrl;
+    // Sector demos sign with the fictional company's own logo.
+    const resolvedLogoUrl = sector ? publicUrl(sector.company.logo) : company?.logoUrl;
     const resolvedTagline = company?.tagline;
     // The language the customer was actually talking to the widget in
     // (window.DEALZ_LANG on the page) — every customer-facing email in this
@@ -818,6 +825,7 @@ app.get("/api/offer/:token", async (req, res) => {
       customer: entry.customer,
       // Sector demos and real tenants make offers under their own name.
       companyName: entry.companyName || null,
+      logoUrl: entry.logoUrl || null,
       lang: entry.lang || "fr",
     });
   } catch (err) {
@@ -889,7 +897,7 @@ async function processAccept(body) {
       companyName: sector ? sector.company.name : company?.name || undefined,
       serviceNoun: sector ? sector.emailNoun : undefined,
       signature: company?.signature || undefined,
-      logoUrl: company?.logoUrl || undefined,
+      logoUrl: (sector ? publicUrl(sector.company.logo) : company?.logoUrl) || undefined,
       tagline: company?.tagline || undefined,
       lang,
     });

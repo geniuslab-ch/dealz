@@ -6,7 +6,8 @@
       "name": "Léman Déménagements SA",
       "email": "hello@leman-demenagements.demo",
       "phone": "021 000 00 00",
-      "address": "Avenue de Cour 18, 1007 Lausanne"
+      "address": "Avenue de Cour 18, 1007 Lausanne",
+      "logo": "/images/demo-logos/demenagement-mark.png"
     },
     "i18n": {
       "en": {
@@ -26,7 +27,8 @@
       "name": "Vert Léman Paysage Sàrl",
       "email": "hello@vert-leman.demo",
       "phone": "021 000 00 10",
-      "address": "Route de Lausanne 45, 1110 Morges"
+      "address": "Route de Lausanne 45, 1110 Morges",
+      "logo": "/images/demo-logos/jardinage-mark.png"
     },
     "i18n": {
       "en": {
@@ -46,7 +48,8 @@
       "name": "Atelier Couleur Rénovation SA",
       "email": "hello@atelier-couleur.demo",
       "phone": "026 000 00 20",
-      "address": "Rue de Romont 12, 1700 Fribourg"
+      "address": "Rue de Romont 12, 1700 Fribourg",
+      "logo": "/images/demo-logos/peinture-mark.png"
     },
     "i18n": {
       "en": {
@@ -66,7 +69,8 @@
       "name": "FraîcheurTex Sàrl",
       "email": "hello@fraicheurtex.demo",
       "phone": "022 000 00 30",
-      "address": "Rue de la Gare 22, 1260 Nyon"
+      "address": "Rue de la Gare 22, 1260 Nyon",
+      "logo": "/images/demo-logos/nettoyage-textiles-mark.png"
     },
     "i18n": {
       "en": {
@@ -86,7 +90,8 @@
       "name": "Brillance Auto Detailing",
       "email": "hello@brillance-auto.demo",
       "phone": "022 000 00 40",
-      "address": "Rue des Vieux-Grenadiers 8, 1205 Genève"
+      "address": "Rue des Vieux-Grenadiers 8, 1205 Genève",
+      "logo": "/images/demo-logos/lavage-auto-mark.png"
     },
     "i18n": {
       "en": {
@@ -106,7 +111,8 @@
       "name": "EventBox Location Sàrl",
       "email": "hello@eventbox.demo",
       "phone": "027 000 00 50",
-      "address": "Zone industrielle 5, 1950 Sion"
+      "address": "Zone industrielle 5, 1950 Sion",
+      "logo": "/images/demo-logos/location-evenementiel-mark.png"
     },
     "i18n": {
       "en": {
@@ -126,7 +132,8 @@
       "name": "SanitSafe Antiparasitaires SA",
       "email": "hello@sanitsafe.demo",
       "phone": "032 000 00 60",
-      "address": "Rue du Seyon 14, 2000 Neuchâtel"
+      "address": "Rue du Seyon 14, 2000 Neuchâtel",
+      "logo": "/images/demo-logos/desinfection-mark.png"
     },
     "i18n": {
       "en": {
@@ -146,7 +153,8 @@
       "name": "Studio Lumière Visuel",
       "email": "hello@studio-lumiere.demo",
       "phone": "021 000 00 70",
-      "address": "Rue Saint-Laurent 20, 1003 Lausanne"
+      "address": "Rue Saint-Laurent 20, 1003 Lausanne",
+      "logo": "/images/demo-logos/photo-video-mark.png"
     },
     "i18n": {
       "en": {
@@ -166,7 +174,8 @@
       "name": "Rapido Transport Sàrl",
       "email": "hello@rapido-transport.demo",
       "phone": "031 000 00 80",
-      "address": "Wankdorffeldstrasse 40, 3014 Berne"
+      "address": "Wankdorffeldstrasse 40, 3014 Berne",
+      "logo": "/images/demo-logos/transport-livraison-mark.png"
     },
     "i18n": {
       "en": {
@@ -186,7 +195,8 @@
       "name": "Pressing Express du Lac",
       "email": "hello@pressing-du-lac.demo",
       "phone": "021 000 00 90",
-      "address": "Avenue de Rumine 4, 1005 Lausanne"
+      "address": "Avenue de Rumine 4, 1005 Lausanne",
+      "logo": "/images/demo-logos/pressing-mark.png"
     },
     "i18n": {
       "en": {
@@ -206,7 +216,8 @@
       "name": "AlpiRent Location",
       "email": "hello@alpirent.demo",
       "phone": "022 000 00 11",
-      "address": "Route de Meyrin 120, 1215 Genève"
+      "address": "Route de Meyrin 120, 1215 Genève",
+      "logo": "/images/demo-logos/location-vehicules-mark.png"
     },
     "i18n": {
       "en": {
@@ -226,7 +237,8 @@
       "name": "ConciergeCare Immobilier Sàrl",
       "email": "hello@conciergecare.demo",
       "phone": "021 000 00 12",
-      "address": "Avenue de la Gare 30, 1003 Lausanne"
+      "address": "Avenue de la Gare 30, 1003 Lausanne",
+      "logo": "/images/demo-logos/conciergerie-mark.png"
     },
     "i18n": {
       "en": {
@@ -246,7 +258,8 @@
       "name": "AquaPur Piscines Sàrl",
       "email": "hello@aquapur.demo",
       "phone": "021 000 00 13",
-      "address": "Avenue Nestlé 25, 1820 Montreux"
+      "address": "Avenue Nestlé 25, 1820 Montreux",
+      "logo": "/images/demo-logos/piscines-mark.png"
     },
     "i18n": {
       "en": {
@@ -266,7 +279,8 @@
       "name": "ClairVue Vitrerie Services",
       "email": "hello@clairvue.demo",
       "phone": "021 000 00 14",
-      "address": "Rue du Simplon 40, 1800 Vevey"
+      "address": "Rue du Simplon 40, 1800 Vevey",
+      "logo": "/images/demo-logos/vitres-mark.png"
     },
     "i18n": {
       "en": {
@@ -286,7 +300,8 @@
       "name": "MeubleMontage Pro Sàrl",
       "email": "hello@meublemontage.demo",
       "phone": "022 000 00 15",
-      "address": "Rue de Carouge 55, 1205 Genève"
+      "address": "Rue de Carouge 55, 1205 Genève",
+      "logo": "/images/demo-logos/montage-meubles-mark.png"
     },
     "i18n": {
       "en": {
@@ -306,7 +321,8 @@
       "name": "ImpriVision Print Sàrl",
       "email": "hello@imprivision.demo",
       "phone": "021 000 00 16",
-      "address": "Chemin de la Vuachère 6, 1005 Lausanne"
+      "address": "Chemin de la Vuachère 6, 1005 Lausanne",
+      "logo": "/images/demo-logos/impression-mark.png"
     },
     "i18n": {
       "en": {
@@ -326,7 +342,8 @@
       "name": "Saveurs & Fêtes Traiteur",
       "email": "hello@saveurs-fetes.demo",
       "phone": "026 000 00 17",
-      "address": "Route de la Glâne 14, 1700 Fribourg"
+      "address": "Route de la Glâne 14, 1700 Fribourg",
+      "logo": "/images/demo-logos/traiteur-mark.png"
     },
     "i18n": {
       "en": {
@@ -346,7 +363,8 @@
       "name": "ProOutil Location SA",
       "email": "hello@prooutil.demo",
       "phone": "024 000 00 18",
-      "address": "Rue des Moulins 9, 1400 Yverdon-les-Bains"
+      "address": "Rue des Moulins 9, 1400 Yverdon-les-Bains",
+      "logo": "/images/demo-logos/location-materiel-mark.png"
     },
     "i18n": {
       "en": {

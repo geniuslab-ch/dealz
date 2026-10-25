@@ -163,7 +163,8 @@
   // Returns { doc, blobUrl } — doc is the jsPDF instance (for .save()),
   // blobUrl is for previewing in an <iframe> without triggering a download.
   // opts (optional, used by the sector demos in docs/sector-quote.js):
-  //   company     — { name, address, phone, email } replacing the SwissClean header
+  //   company     — { name, address, phone, email } replacing the SwissClean header,
+  //                 plus optional logo { data (PNG data URL), w, h } drawn instead of the name
   //   detailLines — already-formatted "label : value" recap lines
   //   terms / generated — footer sentences
   function generate(quote, customer, lang, opts) {
@@ -178,16 +179,26 @@
     let y = 20;
 
     // --- Company header ---
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(18);
-    doc.setTextColor(11, 18, 32); // navy
-    doc.text(company.name, marginX, y);
+    // With a logo, it replaces the bold name and the contact lines move
+    // down below it.
+    let contactY = y + 6;
+    if (company.logo && company.logo.data) {
+      const h = 14;
+      const w = Math.min(85, (h * company.logo.w) / company.logo.h);
+      doc.addImage(company.logo.data, "PNG", marginX, y - 9, w, (w * company.logo.h) / company.logo.w);
+      contactY = y + 11;
+    } else {
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(18);
+      doc.setTextColor(11, 18, 32); // navy
+      doc.text(company.name, marginX, y);
+    }
 
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9);
     doc.setTextColor(91, 100, 114); // muted
-    doc.text(company.address, marginX, y + 6);
-    doc.text(`${company.phone} · ${company.email}`, marginX, y + 11);
+    doc.text(company.address, marginX, contactY);
+    doc.text(`${company.phone} · ${company.email}`, marginX, contactY + 5);
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
@@ -198,7 +209,7 @@
     doc.setTextColor(91, 100, 114);
     doc.text(fmtDate(new Date(), lang), pageWidth - marginX, y + 6, { align: "right" });
 
-    y += 22;
+    y = contactY + 16;
     doc.setDrawColor(228, 233, 242);
     doc.line(marginX, y, pageWidth - marginX, y);
     y += 10;
