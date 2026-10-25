@@ -478,6 +478,7 @@ async function sendInstallRequestNotification({
   websiteUrl,
   planChoice,
   billingChoice,
+  whatsappAddon,
   teamSize,
   mainProblem,
   requestSources,
@@ -494,6 +495,7 @@ async function sendInstallRequestNotification({
        <b>Site web :</b> ${websiteUrl || "(non fourni)"}</p>
     <p><b>Secteur :</b> ${sectorName || sector || "— (page générale)"}<br/>
        <b>Formule :</b> ${planChoice || "—"} (${billingLabelFr(billingChoice)})<br/>
+       <b>Option WhatsApp Business :</b> ${whatsappAddon ? "Oui (+ CHF 25/mois)" : "Non"}<br/>
        <b>Taille de l'équipe :</b> ${teamSize || "—"}<br/>
        <b>Problème principal :</b> ${mainProblem || "—"}<br/>
        <b>Sources de demandes actuelles :</b> ${requestSources || "—"}</p>
