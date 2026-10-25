@@ -80,11 +80,16 @@ function verifySignature(req) {
   const secret = process.env.WHATSAPP_APP_SECRET;
   if (!secret) return true;
   const signature = req.headers["x-hub-signature-256"];
-  if (!signature || !req.rawBody) return false;
+  // Says why a request is refused (never the secret), so a wrong
+  // WHATSAPP_APP_SECRET can be told apart from a body that didn't arrive.
+  if (!signature) return console.warn("[whatsapp webhook] no X-Hub-Signature-256 header"), false;
+  if (!req.rawBody) return console.warn("[whatsapp webhook] raw body missing — cannot check signature"), false;
   const expected = "sha256=" + crypto.createHmac("sha256", secret).update(req.rawBody).digest("hex");
   const a = Buffer.from(signature);
   const b = Buffer.from(expected);
-  return a.length === b.length && crypto.timingSafeEqual(a, b);
+  const ok = a.length === b.length && crypto.timingSafeEqual(a, b);
+  if (!ok) console.warn(`[whatsapp webhook] signature mismatch (body ${req.rawBody.length} bytes, content-length ${req.headers["content-length"]}, secret length ${secret.length}) — check WHATSAPP_APP_SECRET`);
+  return ok;
 }
 
 // ---- Per-sender conversation state ----
