@@ -5,6 +5,7 @@ const { classifyObjection, draftSuggestedReply } = require("./objections");
 const { sendBookingConfirmation, sendDeclineNotification } = require("./notifications");
 const store = require("./store");
 const { getCompanyByPhoneNumberId } = require("./companies");
+const { hasFeature } = require("./plans");
 
 /**
  * WhatsApp channel for the same quote engine the website chat widget uses
@@ -203,6 +204,13 @@ async function handleIncomingMessage(phoneNumberId, from, rawText) {
     if (NO_RE.test(text)) {
       session.pendingQuote = null;
       try {
+        // CAPTURE plan: just tell the company, no recovery flow.
+        if (!hasFeature(company, "recovery")) {
+          await sendDeclineNotification({ quote, customer: quote.customer || {}, notifyEmail: company.notifyEmail, basic: true });
+          await reply("Compris, merci pour votre retour — nous en tenons compte. N'hésitez pas à nous recontacter si vous changez d'avis.");
+          clearSession(phoneNumberId, from);
+          return;
+        }
         const classified = await classifyObjection(text);
         const suggestedReply = await draftSuggestedReply({
           category: classified.category,

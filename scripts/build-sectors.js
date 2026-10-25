@@ -71,7 +71,7 @@ const STR = {
     offerHead: "📄 Devis — ", offerTotal: "Prix pour votre client", accept: "✓ Client : Accepter", decline: "Refuser",
     acceptedMsg: "✓ Devis accepté par le client — confirmation envoyée par e-mail, rendez-vous ajouté à l'agenda de l'entreprise.",
     declinedMsg: "Le client a refusé ce devis — il peut ajuster sa demande et en recevoir un nouveau instantanément.",
-    diffNote: function (total) { return "☝️ <b>CHF " + total + " est le prix payé par le client de l'entreprise — pas le tarif de Dealz.</b> Les formules Dealz (dès CHF 49/mois) sont plus bas sur cette page."; },
+    diffNote: function (total) { return "☝️ <b>CHF " + total + " est le prix payé par le client de l'entreprise — pas le tarif de Dealz.</b> Les formules Dealz (dès <span data-price='48.30'>CHF 48.30</span>/mois) sont plus bas sur cette page."; },
     layerEyebrow: "Ce que Dealz n'est pas", layerTitle: "Dealz est la couche de vente IA. Pas un remplacement.",
     layerSub: "Vous avez déjà vos outils de planification, de facturation et de gestion. Dealz occupe une autre place : la première conversation avec le client.",
     keep: "Vous gardez", add: "Dealz ajoute",
@@ -127,7 +127,7 @@ const STR = {
     footerDemo: function (d) { return d.pdfCompany.name + " — site de démonstration, cette entreprise n'existe pas réellement."; },
     poweredBy: "Propulsé par",
     sectorTitle: function (label) { return "Dealz pour " + label.toLowerCase() + " — devis instantané par IA"; },
-    sectorDesc: function (pitch) { return pitch + " Dealz répond à vos clients 24/7, calcule votre prix selon vos tarifs et prépare le devis. Dès CHF 49/mois."; },
+    sectorDesc: function (pitch) { return pitch + " Dealz répond à vos clients 24/7, calcule votre prix selon vos tarifs et prépare le devis. Dès CHF 48.30/mois."; },
     demoTitle: function (name) { return name + " — Site de démonstration (propulsé par Dealz)"; },
     hubTitle: "Dealz par secteur — devis instantané par IA pour votre métier",
     hubDesc: "Déménagement, jardinage, peinture, pressing, piscines, traiteurs… Découvrez Dealz pour votre secteur et essayez une démo adaptée à votre métier.",
@@ -177,7 +177,7 @@ const STR = {
     offerHead: "📄 Quote — ", offerTotal: "Price for your client", accept: "✓ Client: Accept", decline: "Decline",
     acceptedMsg: "✓ Quote accepted by the client — confirmation e-mailed, appointment added to the business's calendar.",
     declinedMsg: "The client declined this quote — they can adjust their request and get a new one instantly.",
-    diffNote: function (total) { return "☝️ <b>CHF " + total + " is the price paid by the business's client — not Dealz's own fee.</b> Dealz plans (from CHF 49/month) are further down this page."; },
+    diffNote: function (total) { return "☝️ <b>CHF " + total + " is the price paid by the business's client — not Dealz's own fee.</b> Dealz plans (from <span data-price='48.30'>CHF 48.30</span>/month) are further down this page."; },
     layerEyebrow: "What Dealz isn't", layerTitle: "Dealz is the AI sales layer. Not a replacement.",
     layerSub: "You already have your planning, invoicing and management tools. Dealz occupies a different spot: the first conversation with the client.",
     keep: "You keep", add: "Dealz adds",
@@ -233,7 +233,7 @@ const STR = {
     footerDemo: function (d) { return d.pdfCompany.name + " — demonstration site, this business doesn't really exist."; },
     poweredBy: "Powered by",
     sectorTitle: function (label) { return "Dealz for " + label.toLowerCase() + " — instant AI quotes"; },
-    sectorDesc: function (pitch) { return pitch + " Dealz replies to your clients 24/7, calculates your price from your rates and prepares the quote. From CHF 49/month."; },
+    sectorDesc: function (pitch) { return pitch + " Dealz replies to your clients 24/7, calculates your price from your rates and prepares the quote. From CHF 48.30/month."; },
     demoTitle: function (name) { return name + " — Demo site (powered by Dealz)"; },
     hubTitle: "Dealz by sector — instant AI quotes for your trade",
     hubDesc: "Moving, gardening, painting, dry cleaning, pools, catering… Discover Dealz for your sector and try a demo tailored to your trade.",
@@ -283,7 +283,7 @@ const STR = {
     offerHead: "📄 Offerte — ", offerTotal: "Preis für Ihren Kunden", accept: "✓ Kunde: Annehmen", decline: "Ablehnen",
     acceptedMsg: "✓ Offerte vom Kunden angenommen — Bestätigung per E-Mail versandt, Termin im Kalender des Unternehmens eingetragen.",
     declinedMsg: "Der Kunde hat diese Offerte abgelehnt — er kann seine Anfrage anpassen und sofort eine neue erhalten.",
-    diffNote: function (total) { return "☝️ <b>CHF " + total + " ist der Preis, den der Kunde des Unternehmens bezahlt — nicht der Tarif von Dealz.</b> Die Dealz-Pläne (ab CHF 49/Monat) finden Sie weiter unten auf dieser Seite."; },
+    diffNote: function (total) { return "☝️ <b>CHF " + total + " ist der Preis, den der Kunde des Unternehmens bezahlt — nicht der Tarif von Dealz.</b> Die Dealz-Pläne (ab <span data-price='48.30'>CHF 48.30</span>/Monat) finden Sie weiter unten auf dieser Seite."; },
     layerEyebrow: "Was Dealz nicht ist", layerTitle: "Dealz ist die KI-Verkaufsschicht. Kein Ersatz.",
     layerSub: "Sie haben bereits Ihre Planungs-, Fakturierungs- und Verwaltungstools. Dealz übernimmt eine andere Rolle: das erste Gespräch mit dem Kunden.",
     keep: "Sie behalten", add: "Dealz ergänzt",
@@ -339,7 +339,7 @@ const STR = {
     footerDemo: function (d) { return d.pdfCompany.name + " — Demo-Website, dieses Unternehmen existiert nicht wirklich."; },
     poweredBy: "Unterstützt von",
     sectorTitle: function (label) { return "Dealz für " + label + " — Sofort-Offerten per KI"; },
-    sectorDesc: function (pitch) { return pitch + " Dealz antwortet Ihren Kunden rund um die Uhr, berechnet Ihren Preis nach Ihren Tarifen und erstellt die Offerte. Ab CHF 49 pro Monat."; },
+    sectorDesc: function (pitch) { return pitch + " Dealz antwortet Ihren Kunden rund um die Uhr, berechnet Ihren Preis nach Ihren Tarifen und erstellt die Offerte. Ab CHF 48.30 pro Monat."; },
     demoTitle: function (name) { return name + " — Demo-Website (unterstützt von Dealz)"; },
     hubTitle: "Dealz nach Branche — Sofort-Offerten per KI für Ihr Handwerk",
     hubDesc: "Umzug, Gartenbau, Malerarbeiten, Reinigung, Pools, Catering… Entdecken Sie Dealz für Ihre Branche und testen Sie eine Demo passend zu Ihrem Handwerk.",
@@ -732,6 +732,7 @@ ${cfg.addList.map((l) => "          <li>" + esc(l) + "</li>").join("\n")}
   </footer>
 
   <script>window.DEALZ_SECTOR = "${S.slug}";</script>
+  <script src="/currency.js"></script>
   <script src="/contact-flow.js"></script>
   <script>
     (function () {

@@ -1304,6 +1304,7 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 .install-offer-price .per { font-size: 12px; font-weight: 600; color: var(--muted); }
 .install-offer-line { font-size: 13px; color: var(--muted); }
 .install-offer-free { font-size: 13.5px; font-weight: 800; color: var(--blue-dark); margin-top: 2px; }
+.install-offer-launch { display: inline-block; font-size: 11.5px; font-weight: 800; color: #b45309; background: #fff4e0; border-radius: 999px; padding: 3px 10px; margin: 4px 0 2px; }
 .install-offer-caption { font-size: 12px; color: var(--muted); margin: 14px 0 0; }
 
 .pricing-usp { text-align: center; margin-top: 28px; }
@@ -1435,11 +1436,25 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 
 /* Phones — kept last so it overrides the base rules above. */
 @media (max-width: 600px) {
+  /* Header: logo on one line, the links in a single row that scrolls
+     sideways, and it stops being sticky — wrapped and sticky it took
+     ~290px and covered whatever the visitor was reading (e.g. the chat). */
+  .nav { position: static; padding: 8px 14px; row-gap: 6px; }
+  .nav-logo { flex-direction: row; align-items: center; gap: 10px; }
+  .nav-logo img { height: 40px; }
+  .nav-links { flex: 1 1 100%; flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin: 0 -14px; padding: 0 14px 2px; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a, .nav-links button { padding: 8px 11px; font-size: 13.5px; }
+  .nav-lang { margin-left: 2px; padding-left: 6px; }
+
   /* Fits the screen instead of a fixed 560px box (svh = height with the
      browser's bars shown, so the input bar is never hidden behind them). */
   .quote-panel { height: 82vh; height: 82svh; max-height: 640px; min-height: 420px; }
   /* iOS zooms the whole page when a field under 16px gets focus. */
   .dealz-inputbar input, .dcf-input, .dop-free-input, .dealz-lead-gate input { font-size: 16px; }
+  /* Let the field shrink so the send button never gets pushed off-screen. */
+  .dealz-inputbar input { min-width: 0; }
+  .dealz-inputbar button { flex-shrink: 0; }
   .dealz-pdf-overlay { padding: 0; }
   .dealz-pdf-modal { max-width: none; height: 100vh; height: 100dvh; max-height: none; border-radius: 0; }
 }

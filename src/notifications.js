@@ -203,13 +203,13 @@ function googleCalendarLink({ title, details, location, startISO, endISO }) {
 
 // Company-facing wording of the decline e-mail, per demo language.
 const DECLINE_TEXT = {
-  fr: { refused: "Devis refusé", actionTitle: "Devis refusé — action possible", aClient: "un client", client: "Client", email: "E-mail", phone: "Téléphone", address: "Adresse",
+  fr: { basicNote: "Le client a refusé ce devis en ligne. Contactez-le si vous souhaitez en discuter.", refused: "Devis refusé", actionTitle: "Devis refusé — action possible", aClient: "un client", client: "Client", email: "E-mail", phone: "Téléphone", address: "Adresse",
         none: "(non fourni)", noneF: "(non fournie)", original: "Devis original", reason: "Motif du refus", message: "Message du client", suggested: "💬 Réponse suggérée (à relire et adapter avant envoi)",
         banner: (p, c, s) => `Démo Dealz${p} · <b>${c}</b> — secteur ${s}`, q: (t) => `« ${t} »` },
-  en: { refused: "Quote declined", actionTitle: "Quote declined — action possible", aClient: "a customer", client: "Customer", email: "Email", phone: "Phone", address: "Address",
+  en: { basicNote: "The customer declined this quote online. Get in touch with them if you'd like to discuss it.", refused: "Quote declined", actionTitle: "Quote declined — action possible", aClient: "a customer", client: "Customer", email: "Email", phone: "Phone", address: "Address",
         none: "(not provided)", noneF: "(not provided)", original: "Original quote", reason: "Reason for declining", message: "Customer's message", suggested: "💬 Suggested reply (review and adapt before sending)",
         banner: (p, c, s) => `Dealz demo${p} · <b>${c}</b> — ${s}`, q: (t) => `“${t}”` },
-  de: { refused: "Offerte abgelehnt", actionTitle: "Offerte abgelehnt — Aktion möglich", aClient: "ein Kunde", client: "Kunde", email: "E-Mail", phone: "Telefon", address: "Adresse",
+  de: { basicNote: "Der Kunde hat diese Offerte online abgelehnt. Kontaktieren Sie ihn, wenn Sie darüber sprechen möchten.", refused: "Offerte abgelehnt", actionTitle: "Offerte abgelehnt — Aktion möglich", aClient: "ein Kunde", client: "Kunde", email: "E-Mail", phone: "Telefon", address: "Adresse",
         none: "(nicht angegeben)", noneF: "(nicht angegeben)", original: "Ursprüngliche Offerte", reason: "Ablehnungsgrund", message: "Nachricht des Kunden", suggested: "💬 Antwortvorschlag (vor dem Senden prüfen und anpassen)",
         banner: (p, c, s) => `Dealz-Demo${p} · <b>${c}</b> — Branche ${s}`, q: (t) => `«${t}»` },
 };
@@ -237,6 +237,7 @@ async function sendDeclineNotification({
   companyName: demoCompanyName,
   platformName,
   lang = "fr",
+  basic = false,
 }) {
   const cfg = categoryConfig(category, lang);
   const view = categoryView(category, !!sectorName, lang);
@@ -248,6 +249,23 @@ async function sendDeclineNotification({
   const demoBanner = sectorName
     ? `<p style="margin:0 0 10px;font-size:12.5px;color:#5b6472;">${T.banner(platformName ? " × " + platformName : "", demoCompanyName, sectorName)}</p>`
     : "";
+
+  // CAPTURE plan: the company learns the quote was declined and who to call
+  // — no reason analysis, suggested reply or recovery action (that is CLOSE).
+  if (basic) {
+    return sendEmail({
+      to: notifyEmail,
+      subject: `${T.refused} — ${customer.name || T.aClient} — ${fmtCHF(quote.total)}`,
+      html: `
+    <h2>${T.refused}</h2>
+    <p><b>${T.client} :</b> ${customer.name || T.none}<br/>
+       <b>${T.email} :</b> ${customer.email || T.none}<br/>
+       <b>${T.phone} :</b> ${customer.phone || T.none}<br/>
+       <b>${T.address} :</b> ${customer.address || T.noneF}</p>
+    <p><b>${T.original} :</b> ${fmtCHF(quote.total)}</p><table>${quoteItemsHtml(quote)}</table>
+    <p>${T.basicNote}</p>`,
+    });
+  }
 
   const html = `
     ${demoBanner}

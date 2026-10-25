@@ -133,6 +133,7 @@
     "#dealz-embed-launcher{bottom:16px;right:16px;}",
     "#dealz-embed-panel{top:10px;left:10px;right:10px;bottom:88px;width:auto;max-width:none;height:auto;max-height:none;}",
     ".dealz-inputbar input,.dcf-input,.dop-free-input{font-size:16px;}",
+    ".dealz-inputbar input{min-width:0;}.dealz-inputbar button{flex-shrink:0;}",
     ".dealz-pdf-overlay{padding:0;}",
     ".dealz-pdf-modal{max-width:none;height:100vh;height:100dvh;max-height:none;border-radius:0;}",
     ".dealz-pdf-frame{height:auto;flex:1;}",

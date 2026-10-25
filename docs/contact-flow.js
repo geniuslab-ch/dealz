@@ -15,12 +15,23 @@
  */
 (function () {
   const PLANS = {
-    CAPTURE: { price: 49, tagline: "Ne manquez plus aucune demande." },
-    CLOSE: { price: 79, tagline: "Ne laissez plus un « non » devenir une vente perdue." },
-    SCALE: { price: 149, tagline: "Plus de demandes sans plus de gestion." },
+    CAPTURE: { price: 48.3, tagline: "Ne manquez plus aucune demande." },
+    CLOSE: { price: 77.5, tagline: "Ne laissez plus un « non » devenir une vente perdue." },
+    SCALE: { price: 145.2, tagline: "Plus de demandes sans plus de gestion." },
   };
 
-  const ONE_TIME_PRICES = { CAPTURE: 880, CLOSE: 1420, SCALE: 2680 };
+  // Lifetime access, as a launch offer: offered until the end of 2026 only.
+  const ONE_TIME_PRICES = { CAPTURE: 1420.3, CLOSE: 1897.1, SCALE: 2158.8 };
+  const ONE_TIME_UNTIL = new Date("2027-01-01T00:00:00+01:00");
+  const oneTimeOpen = () => new Date() < ONE_TIME_UNTIL;
+
+  // Prices are shown in the visitor's currency (docs/currency.js): same
+  // amounts, the symbol changes. Texts keep "CHF n" as written and money()
+  // swaps it when displayed.
+  const fmt = (n) => (window.DealzCurrency ? window.DealzCurrency.format(n) : "CHF " + n);
+  function money(s) {
+    return typeof s === "string" ? s.replace(/CHF (\d+(?:\.\d+)?)/g, (m, n) => fmt(n)) : s;
+  }
 
   const STEPS = [
     {
@@ -188,6 +199,8 @@
       de: "Vielen Dank! Ihre Anfrage wurde erfasst. Wir prüfen Ihre Website und Konfiguration, um die Installation von Dealz vorzubereiten. Sie erhalten Ihre Zusammenfassung per E-Mail.",
     },
     "+ CHF 390 d'installation unique": { en: "+ CHF 390 one-time setup fee", de: "+ CHF 390 einmalige Einrichtungsgebühr" },
+    "🚀 OFFRE DE LANCEMENT": { en: "🚀 LAUNCH OFFER", de: "🚀 EINFÜHRUNGSANGEBOT" },
+    "Jusqu'au 31 décembre 2026.": { en: "Until 31 December 2026.", de: "Bis 31. Dezember 2026." },
     "Vous économisez CHF 390 sur l'installation.": { en: "You save CHF 390 on setup.", de: "Sie sparen CHF 390 bei der Einrichtung." },
     "Vous êtes plusieurs à gérer les réservations, ou la gestion des agendas devient compliquée — SCALE ajoute les collaborateurs, les agendas partagés et la répartition automatique dont vous avez besoin.": {
       en: "Several of you manage bookings, or calendar management is becoming complicated — SCALE adds the team members, shared calendars, and automatic assignment you need.",
@@ -222,6 +235,9 @@
   };
 
   function T(fr) {
+    return money(translate(fr));
+  }
+  function translate(fr) {
     const lang = window.DEALZ_LANG;
     if (!lang || lang === "fr" || !fr) return fr;
     const entry = I18N[fr];
@@ -232,15 +248,15 @@
   // which a plain T() exact-match lookup can't catch. ----
   function perMonth(n) {
     const lang = window.DEALZ_LANG;
-    if (lang === "en") return `CHF ${n} / month`;
-    if (lang === "de") return `CHF ${n} / Monat`;
-    return `CHF ${n} / mois`;
+    if (lang === "en") return `${fmt(n)} / month`;
+    if (lang === "de") return `${fmt(n)} / Monat`;
+    return `${fmt(n)} / mois`;
   }
   function perYear(n) {
     const lang = window.DEALZ_LANG;
-    if (lang === "en") return `CHF ${n} / year`;
-    if (lang === "de") return `CHF ${n} / Jahr`;
-    return `CHF ${n} / an`;
+    if (lang === "en") return `${fmt(n)} / year`;
+    if (lang === "de") return `${fmt(n)} / Jahr`;
+    return `${fmt(n)} / an`;
   }
   function chooseLabel(plan) {
     const lang = window.DEALZ_LANG;
@@ -269,36 +285,36 @@
   function billingLine(mode, monthly, yearly, onetime) {
     const lang = window.DEALZ_LANG;
     if (mode === "onetime") {
-      if (lang === "en") return `One-time — CHF ${onetime} (lifetime access, no subscription)`;
-      if (lang === "de") return `Einmalig — CHF ${onetime} (lebenslanger Zugang, kein Abo)`;
-      return `Paiement unique — CHF ${onetime} (accès à vie, sans abonnement)`;
+      if (lang === "en") return money(`One-time — ${fmt(onetime)} (lifetime access, no subscription)`);
+      if (lang === "de") return money(`Einmalig — ${fmt(onetime)} (lebenslanger Zugang, kein Abo)`);
+      return money(`Paiement unique — ${fmt(onetime)} (accès à vie, sans abonnement)`);
     }
     if (mode === "yearly") {
-      if (lang === "en") return `Yearly — CHF ${yearly}/year (setup free)`;
-      if (lang === "de") return `Jährlich — CHF ${yearly}/Jahr (Einrichtung gratis)`;
-      return `Annuel — CHF ${yearly}/an (installation offerte)`;
+      if (lang === "en") return money(`Yearly — ${fmt(yearly)}/year (setup free)`);
+      if (lang === "de") return money(`Jährlich — ${fmt(yearly)}/Jahr (Einrichtung gratis)`);
+      return money(`Annuel — ${fmt(yearly)}/an (installation offerte)`);
     }
-    if (lang === "en") return `Monthly — CHF ${monthly}/month + CHF 390 setup`;
-    if (lang === "de") return `Monatlich — CHF ${monthly}/Monat + CHF 390 Einrichtung`;
-    return `Mensuel — CHF ${monthly}/mois + CHF 390 installation`;
+    if (lang === "en") return money(`Monthly — ${fmt(monthly)}/month + CHF 390 setup`);
+    if (lang === "de") return money(`Monatlich — ${fmt(monthly)}/Monat + CHF 390 Einrichtung`);
+    return money(`Mensuel — ${fmt(monthly)}/mois + CHF 390 installation`);
   }
   function oneTimeLabel(n) {
     const lang = window.DEALZ_LANG;
-    if (lang === "en") return `CHF ${n} (one-time)`;
-    if (lang === "de") return `CHF ${n} (einmalig)`;
-    return `CHF ${n} (paiement unique)`;
+    if (lang === "en") return `${fmt(n)} (one-time)`;
+    if (lang === "de") return `${fmt(n)} (einmalig)`;
+    return `${fmt(n)} (paiement unique)`;
   }
   function installedLine() {
     const lang = window.DEALZ_LANG;
-    if (lang === "en") return "<s>CHF 390 setup</s> — <b>FREE</b>";
-    if (lang === "de") return "<s>CHF 390 Einrichtung</s> — <b>GRATIS</b>";
-    return "<s>CHF 390 installation</s> — <b>OFFERTE</b>";
+    if (lang === "en") return money("<s>CHF 390 setup</s> — <b>FREE</b>");
+    if (lang === "de") return money("<s>CHF 390 Einrichtung</s> — <b>GRATIS</b>");
+    return money("<s>CHF 390 installation</s> — <b>OFFERTE</b>");
   }
   function whatsappAddonValue() {
     const lang = window.DEALZ_LANG;
-    if (lang === "en") return "+ CHF 25/month (100 conversations incl.)";
-    if (lang === "de") return "+ CHF 25/Monat (100 Konversationen inkl.)";
-    return "+ CHF 25/mois (100 conversations incl.)";
+    if (lang === "en") return money("+ CHF 25/month (100 conversations incl.)");
+    if (lang === "de") return money("+ CHF 25/Monat (100 Konversationen inkl.)");
+    return money("+ CHF 25/mois (100 conversations incl.)");
   }
 
   function el(tag, cls, text) {
@@ -520,7 +536,7 @@
   function renderBillingChoice(wrap) {
     const plan = state.answers.plan_choice || "CAPTURE";
     const monthly = PLANS[plan].price;
-    const yearly = monthly * 12;
+    const yearly = Math.round(monthly * 1200) / 100;
     const onetime = ONE_TIME_PRICES[plan] || ONE_TIME_PRICES.CAPTURE;
 
     const grid = el("div", "flow-billing-grid");
@@ -549,10 +565,16 @@
     yearlyCard.appendChild(pickYearly);
     grid.appendChild(yearlyCard);
 
+    if (!oneTimeOpen()) {
+      wrap.appendChild(grid);
+      return;
+    }
     const onetimeCard = el("div", "flow-billing-card");
+    onetimeCard.appendChild(el("span", "flow-plan-badge", "🚀 OFFRE DE LANCEMENT"));
     onetimeCard.appendChild(el("div", "flow-billing-label", "Paiement unique"));
     onetimeCard.appendChild(el("div", "flow-billing-price", oneTimeLabel(onetime)));
     onetimeCard.appendChild(el("div", "flow-billing-line", "Accès à vie, sans abonnement."));
+    onetimeCard.appendChild(el("div", "flow-billing-line", "Jusqu'au 31 décembre 2026."));
     const pickOnetime = el("button", "btn btn-secondary flow-billing-pick", "Choisir paiement unique");
     pickOnetime.type = "button";
     pickOnetime.addEventListener("click", () => chooseBilling(wrap, "onetime", monthly, yearly, onetime));
@@ -665,7 +687,7 @@
         : a.billing_choice === "onetime"
         ? oneTimeLabel(a.billing_onetime)
         : perMonth(a.billing_monthly);
-    const installationValue = a.billing_choice === "monthly" ? "CHF 390" : "OFFERTE";
+    const installationValue = a.billing_choice === "monthly" ? fmt(390) : "OFFERTE";
 
     const wantsWhatsapp = /Oui, ajouter WhatsApp/.test(a.whatsapp_addon || "");
 

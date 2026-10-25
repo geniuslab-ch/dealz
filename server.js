@@ -23,6 +23,7 @@ const { recordTrialAttempt } = require("./src/leads");
 const whatsapp = require("./src/whatsapp");
 const whatsappDemo = require("./src/whatsappSector");
 const { getCompanyBySlug } = require("./src/companies");
+const { hasFeature } = require("./src/plans");
 const defaultPricing = require("./docs/pricing.json");
 
 const MOCK_MODE = process.env.MOCK_MODE === "true";
@@ -91,6 +92,14 @@ app.use((req, res, next) => {
 // WHATSAPP_TRIAL_NUMBER_E164 is set — this must be the SAME physical
 // number registered as WHATSAPP_PHONE_NUMBER_ID, just in public E.164
 // digits-only form instead of Meta's internal id.
+// The visitor's country, for docs/currency.js (prices in CHF / EUR / GBP /
+// USD). Vercel sets x-vercel-ip-country on every request; locally there is
+// none and the page falls back to the browser's language.
+app.get("/api/geo", (req, res) => {
+  res.set("Cache-Control", "private, no-store");
+  res.json({ country: req.get("x-vercel-ip-country") || null });
+});
+
 app.get("/api/whatsapp-trial", (req, res) => {
   const number = process.env.WHATSAPP_TRIAL_NUMBER_E164;
   if (!number) return res.json({ enabled: false });
@@ -498,6 +507,25 @@ async function processDecline(body, baseUrl) {
     // decline → counteroffer → accept chain re-reads this off the stored
     // token, so it stays consistent through the whole flow.
     const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
+
+    // CAPTURE plan: a plain "quote declined" e-mail, without the recovery
+    // flow (reason analysis, suggested reply, counter-offer) that CLOSE adds.
+    if (company && !hasFeature(company, "recovery")) {
+      let basicResult;
+      try {
+        basicResult = await sendDeclineNotification({ quote, customer: customer || {}, notifyEmail: resolvedNotifyEmail, lang, basic: true });
+      } catch (err) {
+        console.error("[decline] company notification failed:", err);
+        basicResult = { simulated: true, failed: true, error: errorText(err) };
+      }
+      return {
+        ok: true,
+        category: null,
+        emailPreview: basicResult.preview || null,
+        sentTo: basicResult.simulated ? null : resolvedNotifyEmail || null,
+        delivery: { company: deliveryOf(basicResult, resolvedNotifyEmail) },
+      };
+    }
 
     let finalCategory = category;
     let summary = text || "";

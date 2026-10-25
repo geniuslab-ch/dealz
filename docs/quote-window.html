@@ -102,6 +102,8 @@
   /* Phones: iOS zooms the page when a field under 16px gets focus. */
   @media (max-width:600px){
     .dealz-inputbar input,.dcf-input,.dop-free-input,.dealz-lead-gate input{font-size:16px;}
+    .dealz-inputbar input{min-width:0;}
+    .dealz-inputbar button{flex-shrink:0;}
     .dealz-pdf-overlay{padding:0;}
     .dealz-pdf-modal{max-width:none;height:100vh;height:100dvh;max-height:none;border-radius:0;}
   }

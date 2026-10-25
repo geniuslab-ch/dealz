@@ -35,6 +35,7 @@ function defaultCompany() {
     tagline: null,
     website: null,
     brandColor: null,
+    plan: null,
   };
 }
 
@@ -50,6 +51,7 @@ function rowToCompany(row) {
     tagline: row.tagline || null,
     website: row.website || null,
     brandColor: row.brand_color || null,
+    plan: row.plan || null,
   };
 }
 
