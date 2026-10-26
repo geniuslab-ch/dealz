@@ -156,6 +156,12 @@ const PREFILL = {
   de: (label) => `Hallo, ich möchte die Dealz-Demo testen — ${label}`,
 };
 
+// Shown only when we truly have no signal yet (no sector tag, no greeting
+// word in any of the three languages) — written in all three at once since
+// we don't know which one to use for it.
+const LANGUAGE_PICKER = "🌐 *Dealz*\n\nChoisissez votre langue / Choose your language / Wählen Sie Ihre Sprache :\n\n1. 🇫🇷 Français\n2. 🇬🇧 English\n3. 🇩🇪 Deutsch";
+const LANGUAGE_BY_NUMBER = { 1: "fr", 2: "en", 3: "de" };
+
 // The "#slug" tag at the end makes detection exact; labels and greetings
 // are only a fallback for people who type the message themselves.
 function prefillText(slug, lang) {
@@ -399,9 +405,25 @@ async function handle(session, text, reply) {
     const lang = found.lang || detectLang(text) || session.lang || "fr";
     return startSector(session, found.slug, lang, reply);
   }
-  if (RESTART_RE.test(text.trim()) || !session.slug && session.step !== "menu") {
-    session.lang = detectLang(text) || session.lang || "fr";
+  if (RESTART_RE.test(text.trim()) || (!session.slug && session.step !== "menu" && session.step !== "language")) {
+    const detected = detectLang(text);
+    if (!detected && !session.lang) {
+      // First contact, and nothing in the message tells us a language —
+      // ask explicitly instead of silently defaulting to French.
+      Object.assign(session, { slug: null, step: "language", answers: {}, quote: null, waitingFor: null });
+      return reply(LANGUAGE_PICKER);
+    }
+    session.lang = detected || session.lang;
     Object.assign(session, { slug: null, step: "menu", answers: {}, quote: null, waitingFor: null });
+    return reply(sectorMenu(session.lang));
+  }
+
+  if (session.step === "language") {
+    const n = Number((text.match(/\d+/) || [])[0]);
+    const picked = LANGUAGE_BY_NUMBER[n] || detectLang(text);
+    if (!picked) return reply(LANGUAGE_PICKER);
+    session.lang = picked;
+    session.step = "menu";
     return reply(sectorMenu(session.lang));
   }
 
