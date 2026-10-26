@@ -29,6 +29,17 @@
     window.dispatchEvent(new CustomEvent("dealz-lead-ok", { detail: { email: sessionStorage.getItem(EMAIL_KEY) || "" } }));
   }
 
+  // Messages in the page's language (window.DEALZ_LANG).
+  const MSG = {
+    fr: { invalid: "Merci d'indiquer un e-mail valide.", checking: "Vérification…", error: "Une erreur est survenue.",
+          limit: (n) => `Vous avez déjà essayé la démo ${n} fois — c'est le maximum en libre-accès. Contactez-nous pour une démo personnalisée avec votre propre grille tarifaire.` },
+    en: { invalid: "Please enter a valid email.", checking: "Checking…", error: "Something went wrong.",
+          limit: (n) => `You've already tried the demo ${n} times — that's the maximum for open access. Contact us for a personalised demo with your own price list.` },
+    de: { invalid: "Bitte geben Sie eine gültige E-Mail-Adresse an.", checking: "Wird geprüft…", error: "Ein Fehler ist aufgetreten.",
+          limit: (n) => `Sie haben die Demo bereits ${n}-mal getestet — das ist das Maximum im freien Zugang. Kontaktieren Sie uns für eine persönliche Demo mit Ihrer eigenen Preisliste.` },
+  };
+  const M = MSG[window.DEALZ_LANG] || MSG.fr;
+
   function showMessage(text, isError) {
     const msg = document.getElementById("dlg-msg");
     if (!msg) return;
@@ -52,12 +63,12 @@
       const companyName = (document.getElementById("dlg-company").value || "").trim();
 
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showMessage("Merci d'indiquer un e-mail valide.", true);
+        showMessage(M.invalid, true);
         return;
       }
 
       submitBtn.disabled = true;
-      showMessage("Vérification…", false);
+      showMessage(M.checking, false);
 
       try {
         const res = await fetch(apiUrl("/api/lead"), {
@@ -72,7 +83,7 @@
           throw new Error("no-backend");
         }
         if (!res.ok) {
-          showMessage(data.error || "Une erreur est survenue.", true);
+          showMessage(res.status === 400 ? M.invalid : M.error, true);
           submitBtn.disabled = false;
           return;
         }
@@ -84,11 +95,7 @@
           return;
         }
 
-        showMessage(
-          `Vous avez déjà essayé la démo ${data.trialsUsed - 1} fois — c'est le maximum en libre-accès. ` +
-            "Contactez-nous pour une démo personnalisée avec votre propre grille tarifaire.",
-          true
-        );
+        showMessage(M.limit(data.trialsUsed - 1), true);
       } catch (err) {
         // No reachable backend at all — nothing to protect, let them through.
         sessionStorage.setItem(SESSION_KEY, "true");

@@ -160,7 +160,7 @@
         addressPlaceholder: "Event location (street, postcode, town)",
         terms: "Firm quote, valid for 30 days, subject to availability on the date given. Deposit returned after the equipment is checked. Swiss VAT included where applicable.",
         q: {
-          event: { text: "What kind of event are you organising?", short: "Event", opts: { wedding: "Wedding", corp: "Corporate event", party: "Birthday / private party", public: "Village fête / association" } },
+          event: { text: "What kind of event are you organising?", short: "Event", opts: { wedding: "Wedding", corp: "Corporate event", party: "Birthday / private party", public: "Village festival / association" } },
           guests: { text: "How many guests are you expecting?", short: "Guests", opts: { g1: "Under 30", g2: "30 to 60", g3: "60 to 100", g4: "100 to 200", g5: "Over 200" } },
           items: { text: "What equipment do you need?", short: "Equipment", none: "I don't know yet", opts: { tables: "Tables and chairs", tent: "Tent / marquee", sound: "Sound system", light: "Ambient lighting", tableware: "Tableware, glasses and cutlery", lounge: "Lounge furniture" } },
           duration: { text: "How long is the rental?", short: "Duration", opts: { day: "1 day", weekend: "Weekend (2 days)", multi: "3 days or more" } },

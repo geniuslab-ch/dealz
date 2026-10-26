@@ -88,6 +88,9 @@ const STR = {
     emailLbl: "E-mail", zoneLbl: "Zone d'intervention", zoneVal: "Toute la Suisse romande",
     otherSectors: "Autres secteurs", otherSectorsTitle: "Dealz pour tous les métiers de service",
     footerLine: function (s) { return "Dealz — Assistant de vente IA pour les " + s.fr.forWho + " suisses. 🇨🇭"; },
+    hubFooter: "Dealz — Assistant de vente IA pour entreprises de services suisses. 🇨🇭",
+    heroUsp: "Pas de nouveau site. Pas de nouveau logiciel.<br><b>Vous gardez vos outils. Dealz s'ajoute.</b>",
+    seeAction: "Voir Dealz en action →", talkToUs: "Parlez-nous →",
     slogan: "Keep your website. Keep your tools. Add Dealz.",
     referral: "Déjà client ? Gardez le secret… ou présentez un confrère 😏",
     allSectors: "Tous les secteurs",
@@ -194,6 +197,9 @@ const STR = {
     emailLbl: "E-mail", zoneLbl: "Service area", zoneVal: "All of French-speaking Switzerland",
     otherSectors: "Other sectors", otherSectorsTitle: "Dealz for every service trade",
     footerLine: function (s) { return "Dealz — AI sales assistant for Swiss " + s.en.forWho + ". 🇨🇭"; },
+    hubFooter: "Dealz — AI sales assistant for Swiss service businesses. 🇨🇭",
+    heroUsp: "No new website. No new software.<br><b>Keep your tools. Dealz adds itself on top.</b>",
+    seeAction: "See Dealz in action →", talkToUs: "Talk to us →",
     slogan: "Keep your website. Keep your tools. Add Dealz.",
     referral: "Already a client? Keep it to yourself… or refer a fellow business owner 😏",
     allSectors: "All sectors",
@@ -300,6 +306,9 @@ const STR = {
     emailLbl: "E-Mail", zoneLbl: "Einsatzgebiet", zoneVal: "Die ganze Suisse romande",
     otherSectors: "Weitere Branchen", otherSectorsTitle: "Dealz für alle Dienstleistungsberufe",
     footerLine: function (s) { return "Dealz — KI-Verkaufsassistent für Schweizer " + s.de.forWho + ". 🇨🇭"; },
+    hubFooter: "Dealz — KI-Verkaufsassistent für Schweizer Dienstleistungsunternehmen. 🇨🇭",
+    heroUsp: "Keine neue Website. Keine neue Software.<br><b>Sie behalten Ihre Tools. Dealz kommt einfach dazu.</b>",
+    seeAction: "Dealz in Aktion sehen →", talkToUs: "Kontaktieren Sie uns →",
     slogan: "Keep your website. Keep your tools. Add Dealz.",
     referral: "Bereits Kunde? Behalten Sie das Geheimnis… oder empfehlen Sie einen Berufskollegen 😏",
     allSectors: "Alle Branchen",
@@ -559,10 +568,10 @@ ${siteNav(lang, S.slug, true)}
       <h1>${esc(L.h1[0])}<br>${esc(L.h1[1])}</h1>
       <p class="hero-question">${esc(L.question)}</p>
       <p>${esc(L.text)}</p>
-      <p class="hero-usp">Pas de nouveau site. Pas de nouveau logiciel.<br><b>Vous gardez vos outils. Dealz s'ajoute.</b></p>
+      <p class="hero-usp">${cfg.heroUsp}</p>
       <div class="hero-ctas">
-        <a href="${demoUrl}" class="btn btn-primary">Voir Dealz en action →</a>
-        <a href="#contact" class="btn btn-secondary">Parlez-nous →</a>
+        <a href="${demoUrl}" class="btn btn-primary">${cfg.seeAction}</a>
+        <a href="#contact" class="btn btn-secondary">${cfg.talkToUs}</a>
       </div>
       <p class="hero-tagline">${cfg.slogan}</p>
     </div>
@@ -731,7 +740,7 @@ ${cfg.addList.map((l) => "          <li>" + esc(l) + "</li>").join("\n")}
     <div class="site-footer-referral"><a href="/parrainage.html">${cfg.referral}</a></div>
   </footer>
 
-  <script>window.DEALZ_SECTOR = "${S.slug}";</script>
+  <script>window.DEALZ_LANG = "${lang}"; window.DEALZ_SECTOR = "${S.slug}";</script>
   <script src="/currency.js"></script>
   <script src="/contact-flow.js"></script>
   <script>
@@ -1172,7 +1181,7 @@ ${cards}
   </section>
 
   <footer class="site-footer">
-    <div>Dealz — Assistant de vente IA pour entreprises de services suisses. 🇨🇭</div>
+    <div>${cfg.hubFooter}</div>
     <div class="site-footer-slogan">${cfg.slogan}</div>
     <div class="site-footer-referral"><a href="/parrainage.html">${cfg.referral}</a></div>
   </footer>

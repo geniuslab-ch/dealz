@@ -199,6 +199,7 @@
       de: "Vielen Dank! Ihre Anfrage wurde erfasst. Wir prüfen Ihre Website und Konfiguration, um die Installation von Dealz vorzubereiten. Sie erhalten Ihre Zusammenfassung per E-Mail.",
     },
     "+ CHF 390 d'installation unique": { en: "+ CHF 390 one-time setup fee", de: "+ CHF 390 einmalige Einrichtungsgebühr" },
+    "← Modifier": { en: "← Edit", de: "← Ändern" },
     "💳 Payer et démarrer": { en: "💳 Pay and get started", de: "💳 Bezahlen und starten" },
     "Redirection vers le paiement sécurisé…": { en: "Redirecting to secure payment…", de: "Weiterleitung zur sicheren Zahlung…" },
     "Le paiement n'a pas pu démarrer — votre demande est bien enregistrée, nous vous recontactons.": {
