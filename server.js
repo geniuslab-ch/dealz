@@ -1,6 +1,7 @@
 require("dotenv").config({ quiet: true });
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
 const { runTurn } = require("./src/claude");
 const { runTurnMock } = require("./src/mock");
 const { classifyObjection, draftSuggestedReply, CATEGORIES, categoryConfig } = require("./src/objections");
@@ -40,6 +41,36 @@ app.set("trust proxy", 1);
 // Meta's X-Hub-Signature-256 on the WhatsApp webhook (see src/whatsapp.js's
 // verifySignature). Harmless for every other route, which never reads it.
 app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf; } }));
+
+// Cache-busts every same-origin CSS/JS reference in served HTML with a
+// version tag (the deployed commit on Vercel, or this process's boot time
+// locally) — one new value per deploy. Without this, a browser or edge node
+// can pair fresh HTML from a new deploy with a stylesheet/script it already
+// cached from the previous one (most visible right after a deploy, or a
+// burst of them): missing styles, a half-built menu, dead buttons. Giving
+// every asset URL a new query string each deploy means there is nothing
+// stale to reuse — not a caching *policy* change, just a cache-miss by
+// construction. Runs ahead of express.static, which still serves every
+// non-HTML request (and ignores the query string, so the underlying file on
+// disk is unaffected); HTML requests it can't resolve fall through to it too.
+const DOCS_DIR = path.join(__dirname, "docs");
+const ASSET_VERSION = (process.env.VERCEL_GIT_COMMIT_SHA || String(Date.now())).slice(0, 10);
+const ASSET_REF_RE = /((?:href|src)=")(\/[\w\-./]+\.(?:css|js))(")/g;
+function versionAssets(html) {
+  return html.replace(ASSET_REF_RE, (m, pre, assetPath, post) => `${pre}${assetPath}?v=${ASSET_VERSION}${post}`);
+}
+app.get("*", (req, res, next) => {
+  if (req.method !== "GET" || req.path.includes("..")) return next();
+  const rel = req.path.endsWith("/") ? req.path + "index.html" : req.path;
+  if (!/\.html$/.test(rel)) return next();
+  const filePath = path.join(DOCS_DIR, rel);
+  if (!filePath.startsWith(DOCS_DIR)) return next();
+  fs.readFile(filePath, "utf8", (err, html) => {
+    if (err) return next();
+    res.set("Content-Type", "text/html; charset=utf-8");
+    res.send(versionAssets(html));
+  });
+});
 app.use(express.static(path.join(__dirname, "docs")));
 
 // The public URL this server is reachable at, for links built into e-mails
