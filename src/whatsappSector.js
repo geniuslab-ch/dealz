@@ -43,6 +43,7 @@ const UI = {
     intro: (brand, label) => `Vous êtes le client de *${brand}* (exemple fictif — ${label}). Je vous pose quelques questions, puis je vous envoie un devis ferme, calculé avec les tarifs de l'entreprise.`,
     single: "_Répondez avec le numéro._",
     multi: "_Répondez avec un ou plusieurs numéros (ex. 1,3), ou 0 pour aucun._",
+    backHint: "Pour revenir à la question précédente, écrivez *retour*.",
     none: "Aucune",
     date: (min) => `_Répondez avec une date (ex. ${min}), au plus tôt le ${min}._`,
     dateErr: (min) => `Merci d'indiquer une date valide, au plus tôt le ${min} (format JJ.MM.AAAA).`,
@@ -77,6 +78,7 @@ const UI = {
     intro: (brand, label) => `You're a customer of *${brand}* (fictional example — ${label}). I'll ask you a few questions, then send you a firm quote calculated with the company's own rates.`,
     single: "_Reply with the number._",
     multi: "_Reply with one or more numbers (e.g. 1,3), or 0 for none._",
+    backHint: "To go back to the previous question, type *back*.",
     none: "None",
     date: (min) => `_Reply with a date (e.g. ${min}), no earlier than ${min}._`,
     dateErr: (min) => `Please give a valid date, no earlier than ${min} (format DD.MM.YYYY).`,
@@ -111,6 +113,7 @@ const UI = {
     intro: (brand, label) => `Sie sind Kunde von *${brand}* (fiktives Beispiel — ${label}). Ich stelle Ihnen ein paar Fragen und sende Ihnen dann eine verbindliche Offerte, berechnet mit den Tarifen des Unternehmens.`,
     single: "_Antworten Sie mit der Nummer._",
     multi: "_Antworten Sie mit einer oder mehreren Nummern (z. B. 1,3), oder 0 für keine._",
+    backHint: "Um zur vorherigen Frage zurückzukehren, schreiben Sie *zurück*.",
     none: "Keine",
     date: (min) => `_Antworten Sie mit einem Datum (z. B. ${min}), frühestens am ${min}._`,
     dateErr: (min) => `Bitte geben Sie ein gültiges Datum an, frühestens am ${min} (Format TT.MM.JJJJ).`,
@@ -290,17 +293,18 @@ function sectorMenu(lang) {
   return `${U.hello}\n\n${U.pickSector}\n\n${lines.join("\n")}`;
 }
 
-function questionText(S, lang, q) {
+function questionText(S, lang, q, canGoBack) {
   const QT = S[lang].quote;
   const U = UI[lang];
   const qt = QT.q[q.id] || {};
+  const backLine = canGoBack ? `\n\n_${U.backHint}_` : "";
   if (q.type === "date") {
     const min = showDate(isoDatePlus(q.minDays === undefined ? 2 : q.minDays));
-    return `${qt.text || q.id}\n\n${U.date(min)}`;
+    return `${qt.text || q.id}\n\n${U.date(min)}${backLine}`;
   }
   const lines = q.options.map((o, i) => `${i + 1}. ${optLabel(QT, q, o)}`);
   if (q.type === "multi") lines.push(`0. ${qt.none || U.none}`);
-  return `${qt.text || q.id}\n\n${lines.join("\n")}\n\n${q.type === "multi" ? U.multi : U.single}`;
+  return `${qt.text || q.id}\n\n${lines.join("\n")}\n\n${q.type === "multi" ? U.multi : U.single}${backLine}`;
 }
 
 function quoteText(S, lang, quote) {
@@ -360,11 +364,12 @@ function sessionKey(phoneNumberId, from) {
 }
 
 const RESTART_RE = /^(menu|menü|start|restart|demo|démo|reset|neu|nouveau|recommencer)$/i;
+const BACK_RE = /^(retour|precedent|back|zuruck|zurueck)$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 async function startSector(session, slug, lang, reply) {
   const S = SECTORS[slug];
-  Object.assign(session, { slug, lang, answers: {}, step: "questions", quote: null, waitingFor: null });
+  Object.assign(session, { slug, lang, answers: {}, historyOrder: [], step: "questions", quote: null, waitingFor: null });
   await reply(`${S[lang].quote.greeting}\n\n${UI[lang].intro(S[lang].demo.brand, S[lang].label)}`);
   await askNext(session, reply);
 }
@@ -372,15 +377,16 @@ async function startSector(session, slug, lang, reply) {
 async function askNext(session, reply) {
   const S = SECTORS[session.slug];
   const q = nextQuestion(S, session.answers);
+  const canGoBack = !!(session.historyOrder && session.historyOrder.length);
   if (q) {
     session.waitingFor = q.id;
-    await reply(questionText(S, session.lang, q));
+    await reply(questionText(S, session.lang, q, canGoBack));
     return;
   }
   session.waitingFor = null;
   if (session.email) return sendQuote(session, reply);
   session.step = "email";
-  await reply(UI[session.lang].askEmail(S[session.lang].demo.brand));
+  await reply(UI[session.lang].askEmail(S[session.lang].demo.brand) + (canGoBack ? `\n\n_${UI[session.lang].backHint}_` : ""));
 }
 
 async function sendQuote(session, reply) {
@@ -439,6 +445,13 @@ async function handle(session, text, reply) {
   const lang = session.lang;
 
   if (session.step === "questions") {
+    if (BACK_RE.test(norm(text)) && session.historyOrder && session.historyOrder.length) {
+      const prevId = session.historyOrder.pop();
+      delete session.answers[prevId];
+      session.step = "questions";
+      session.waitingFor = null;
+      return askNext(session, reply);
+    }
     const q = S.quote.questions.find((x) => x.id === session.waitingFor) || nextQuestion(S, session.answers);
     const value = readAnswer(S, lang, q, text);
     if (value === null) {
@@ -446,10 +459,18 @@ async function handle(session, text, reply) {
       return reply(q.type === "date" ? U.dateErr(min) : U.misunderstood);
     }
     session.answers[q.id] = value;
+    (session.historyOrder = session.historyOrder || []).push(q.id);
     return askNext(session, reply);
   }
 
   if (session.step === "email") {
+    if (BACK_RE.test(norm(text)) && session.historyOrder && session.historyOrder.length) {
+      const prevId = session.historyOrder.pop();
+      delete session.answers[prevId];
+      session.step = "questions";
+      session.waitingFor = null;
+      return askNext(session, reply);
+    }
     const email = text.trim().replace(/^mailto:/i, "");
     if (!EMAIL_RE.test(email)) return reply(U.emailErr);
     session.email = email;

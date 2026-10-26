@@ -60,6 +60,7 @@
       pdfError: "Impossible de générer le PDF (connexion requise). Vous pouvez tout de même accepter ou refuser ci-dessous.",
       logoHint: "💡 Avec Dealz, ce devis porte votre logo, vos coordonnées et vos conditions.",
       restart: "↺ Nouveau devis",
+      back: "← Modifier la réponse précédente",
       declineAsk: "Bien sûr. Auriez-vous deux minutes pour me dire ce qui ne convenait pas dans notre offre ?",
       freePh: "Ou décrivez avec vos mots…", send: "Envoyer",
       declineThanks: function (c) { return "Merci pour votre retour ! En conditions réelles, ce message serait transmis à " + c + " par e-mail, avec une action adaptée à votre motif de refus."; },
@@ -124,6 +125,7 @@
       pdfError: "Couldn't generate the PDF (connection required). You can still accept or decline below.",
       logoHint: "💡 With Dealz, this quote carries your logo, your contact details and your terms.",
       restart: "↺ New quote",
+      back: "← Edit the previous answer",
       declineAsk: "Of course. Would you have two minutes to tell me what didn't work in our offer?",
       freePh: "Or describe it in your own words…", send: "Send",
       declineThanks: function (c) { return "Thanks for the feedback! Under real conditions, this message would be sent to " + c + " by email, with an action tailored to your reason for declining."; },
@@ -188,6 +190,7 @@
       pdfError: "PDF konnte nicht erstellt werden (Verbindung erforderlich). Sie können unten trotzdem annehmen oder ablehnen.",
       logoHint: "💡 Mit Dealz trägt diese Offerte Ihr Logo, Ihre Kontaktdaten und Ihre Bedingungen.",
       restart: "↺ Neue Offerte",
+      back: "← Vorherige Antwort ändern",
       declineAsk: "Natürlich. Hätten Sie zwei Minuten, um mir zu sagen, was an unserem Angebot nicht gepasst hat?",
       freePh: "Oder beschreiben Sie es mit eigenen Worten…", send: "Senden",
       declineThanks: function (c) { return "Danke für Ihr Feedback! Unter realen Bedingungen würde diese Nachricht per E-Mail an " + c + " übermittelt, mit einer auf Ihren Ablehnungsgrund abgestimmten Massnahme."; },
@@ -261,6 +264,7 @@
   // ---------- state ----------
   var container, input, sendBtn;
   var answers, pending, pendingWrap, customer, lastQuote, busy;
+  var history, currentAssistantNode;
 
   function resetState() {
     answers = {};
@@ -269,6 +273,8 @@
     customer = null;
     lastQuote = null;
     busy = false;
+    history = [];
+    currentAssistantNode = null;
   }
 
   // On a phone the chat grows with the page (styles.css) instead of
@@ -288,18 +294,19 @@
   function scroll() { followChat(container); }
   // French typography: keep ? ! : ; » attached to the preceding word.
   function typo(text) { return LANG === "fr" ? String(text).replace(/ ([?!:;»])/g, "\u00a0$1").replace(/« /g, "«\u00a0") : text; }
-  function assistant(text) { container.appendChild(el("div", "dealz-msg assistant", typo(text))); scroll(); }
+  function assistant(text) { var b = el("div", "dealz-msg assistant", typo(text)); container.appendChild(b); scroll(); return b; }
   // For our own fixed strings that carry markup (e.g. <b>), never user input.
   function assistantHtml(html) {
     var b = el("div", "dealz-msg assistant");
     b.innerHTML = typo(html);
     container.appendChild(b);
     scroll();
+    return b;
   }
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; });
   }
-  function user(text) { container.appendChild(el("div", "dealz-msg user", text)); scroll(); }
+  function user(text) { var b = el("div", "dealz-msg user", text); container.appendChild(b); scroll(); return b; }
   function system(kind, html) {
     var b = el("div", "dealz-msg " + kind);
     b.innerHTML = html;
@@ -322,10 +329,39 @@
     var q = nextQuestion();
     if (!q) { askContact(); return; }
     var qt = QT.q[q.id] || {};
-    assistant(qt.text || q.id);
+    currentAssistantNode = assistant(qt.text || q.id);
     pending = q;
     if (q.type === "date") renderDate(q);
     else renderChips(q);
+    if (history.length) addBackLink(pendingWrap);
+  }
+
+  function addBackLink(wrap) {
+    if (!wrap) return;
+    var back = el("button", "flow-back", UI.back);
+    back.type = "button";
+    back.addEventListener("click", goBack);
+    wrap.appendChild(back);
+  }
+
+  // Discards the current (not yet answered) question, then un-answers and
+  // re-asks the one before it — same semantics as docs/contact-flow.js's
+  // goBack(), adapted to this engine's flat message stream instead of one
+  // DOM block per step.
+  function goBack() {
+    if (!history.length) return;
+    if (currentAssistantNode) currentAssistantNode.remove();
+    if (pendingWrap) pendingWrap.remove();
+    pendingWrap = null;
+    currentAssistantNode = null;
+    pending = null;
+
+    var prev = history.pop();
+    if (prev.userNode) prev.userNode.remove();
+    if (prev.wrapNode) prev.wrapNode.remove();
+    if (prev.assistantNode) prev.assistantNode.remove();
+    delete answers[prev.q.id];
+    ask();
   }
 
   function answerDisplay(q, value) {
@@ -334,10 +370,15 @@
     return optLabel(q, value);
   }
 
+  function recordHistory(q, uNode) {
+    history.push({ q: q, assistantNode: currentAssistantNode, wrapNode: pendingWrap, userNode: uNode });
+  }
+
   function commit(q, value) {
     pending = null;
     answers[q.id] = value;
-    user(answerDisplay(q, value));
+    var uNode = user(answerDisplay(q, value));
+    recordHistory(q, uNode);
     ask();
   }
 
@@ -466,8 +507,9 @@
     if (q.type === "date") {
       var iso = parseDate(text);
       var min = isoDatePlus(q.minDays === undefined ? 2 : q.minDays);
-      user(text);
+      var uNodeDate = user(text);
       if (iso && iso >= min) {
+        recordHistory(q, uNodeDate);
         disablePending();
         pending = null;
         answers[q.id] = iso;
@@ -476,8 +518,9 @@
       return;
     }
     var hits = matchOptions(q, text, q.type === "multi");
-    user(text);
+    var uNode = user(text);
     if (!hits.length) { assistant(UI.misunderstood); return; }
+    recordHistory(q, uNode);
     disablePending();
     pending = null;
     answers[q.id] = q.type === "multi" ? hits : hits[0];
