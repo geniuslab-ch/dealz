@@ -199,6 +199,20 @@
       de: "Vielen Dank! Ihre Anfrage wurde erfasst. Wir prüfen Ihre Website und Konfiguration, um die Installation von Dealz vorzubereiten. Sie erhalten Ihre Zusammenfassung per E-Mail.",
     },
     "+ CHF 390 d'installation unique": { en: "+ CHF 390 one-time setup fee", de: "+ CHF 390 einmalige Einrichtungsgebühr" },
+    "💳 Payer et démarrer": { en: "💳 Pay and get started", de: "💳 Bezahlen und starten" },
+    "Redirection vers le paiement sécurisé…": { en: "Redirecting to secure payment…", de: "Weiterleitung zur sicheren Zahlung…" },
+    "Le paiement n'a pas pu démarrer — votre demande est bien enregistrée, nous vous recontactons.": {
+      en: "The payment couldn't start — your request has been recorded, we'll get back to you.",
+      de: "Die Zahlung konnte nicht gestartet werden — Ihre Anfrage ist erfasst, wir melden uns.",
+    },
+    "✅ Paiement reçu, merci ! Bienvenue chez Dealz. Vous recevez la confirmation de Stripe par e-mail, et nous vous contactons très vite pour l'installation.": {
+      en: "✅ Payment received, thank you! Welcome to Dealz. You'll get Stripe's confirmation by email, and we'll contact you very soon about the setup.",
+      de: "✅ Zahlung erhalten, vielen Dank! Willkommen bei Dealz. Sie erhalten die Bestätigung von Stripe per E-Mail, und wir melden uns sehr bald für die Einrichtung.",
+    },
+    "Paiement annulé — rien n'a été débité. Votre demande est enregistrée : vous pouvez reprendre quand vous voulez.": {
+      en: "Payment cancelled — nothing was charged. Your request is recorded: you can pick it up whenever you like.",
+      de: "Zahlung abgebrochen — es wurde nichts belastet. Ihre Anfrage ist erfasst: Sie können jederzeit fortfahren.",
+    },
     "🚀 OFFRE DE LANCEMENT": { en: "🚀 LAUNCH OFFER", de: "🚀 EINFÜHRUNGSANGEBOT" },
     "Jusqu'au 31 décembre 2026.": { en: "Until 31 December 2026.", de: "Bis 31. Dezember 2026." },
     "Vous économisez CHF 390 sur l'installation.": { en: "You save CHF 390 on setup.", de: "Sie sparen CHF 390 bei der Einrichtung." },
@@ -709,7 +723,13 @@
     wrap.appendChild(card);
 
     const actions = el("div", "flow-summary-actions");
-    const submitBtn = el("button", "btn btn-primary", "🚀 Demander mon installation Dealz");
+    // Pay now with Stripe Checkout (src/billing.js). The request is sent
+    // first too, so the lead is never lost if the payment is abandoned.
+    const payBtn = el("button", "btn btn-primary", "💳 Payer et démarrer");
+    payBtn.type = "button";
+    payBtn.addEventListener("click", () => startCheckout(a, actions, payBtn));
+    actions.appendChild(payBtn);
+    const submitBtn = el("button", "btn btn-secondary", "🚀 Demander mon installation Dealz");
     submitBtn.type = "button";
     submitBtn.addEventListener("click", () => {
       actions.querySelectorAll("button").forEach((b) => (b.disabled = true));
@@ -723,6 +743,54 @@
     actions.appendChild(editBtn);
     wrap.appendChild(actions);
 
+    scrollToBottom(container);
+  }
+
+  async function startCheckout(a, actions, payBtn) {
+    actions.querySelectorAll("button").forEach((b) => (b.disabled = true));
+    payBtn.textContent = T("Redirection vers le paiement sécurisé…");
+    submitInstallRequest(a);
+    try {
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          plan: a.plan_choice,
+          billing: a.billing_choice,
+          whatsapp: /Oui, ajouter WhatsApp/.test(a.whatsapp_addon || ""),
+          currency: window.DealzCurrency ? window.DealzCurrency.code.toLowerCase() : "chf",
+          lang: window.DEALZ_LANG || "fr",
+          companyName: a.company_name || "",
+          contactName: a.contact_name || "",
+          contactEmail: a.contact_email || "",
+          contactPhone: a.contact_phone || "",
+          websiteUrl: a.website_url || "",
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.url) throw new Error(data.error || "Paiement indisponible");
+      window.location.href = data.url;
+    } catch (err) {
+      container.appendChild(el("div", "dealz-msg system-decline", T("Le paiement n'a pas pu démarrer — votre demande est bien enregistrée, nous vous recontactons.")));
+      scrollToBottom(container);
+      payBtn.textContent = T("💳 Payer et démarrer");
+    }
+  }
+
+  // Back from Stripe Checkout (?checkout=success|cancel on this page).
+  function showCheckoutReturn() {
+    const status = new URLSearchParams(location.search).get("checkout");
+    if (!status || !container) return;
+    const ok = status === "success";
+    container.appendChild(
+      el(
+        "div",
+        ok ? "dealz-msg system-success" : "dealz-msg system-decline",
+        ok
+          ? "✅ Paiement reçu, merci ! Bienvenue chez Dealz. Vous recevez la confirmation de Stripe par e-mail, et nous vous contactons très vite pour l'installation."
+          : "Paiement annulé — rien n'a été débité. Votre demande est enregistrée : vous pouvez reprendre quand vous voulez."
+      )
+    );
     scrollToBottom(container);
   }
 
@@ -829,6 +897,7 @@
       if (e.key === "Enter") submitPendingText();
     });
 
+    showCheckoutReturn();
     renderIntro();
   }
 

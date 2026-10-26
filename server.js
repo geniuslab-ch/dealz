@@ -25,6 +25,7 @@ const whatsappDemo = require("./src/whatsappSector");
 const { getCompanyBySlug } = require("./src/companies");
 const { hasFeature } = require("./src/plans");
 const scale = require("./src/scale");
+const billing = require("./src/billing");
 const defaultPricing = require("./docs/pricing.json");
 
 const MOCK_MODE = process.env.MOCK_MODE === "true";
@@ -974,6 +975,41 @@ app.post("/api/accept", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Internal error" });
+  }
+});
+
+// ---- Stripe: paying for Dealz itself (src/billing.js) ----
+
+// A Checkout Session for the plan chosen in the "Request my Dealz setup"
+// chat. The currency follows the visitor's country, like the prices shown.
+app.post("/api/stripe/checkout", async (req, res) => {
+  try {
+    const b = req.body || {};
+    if (!b.contactEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(b.contactEmail)) return res.status(400).json({ error: "E-mail requis" });
+    const currency = billing.currencyForCountry(req.get("x-vercel-ip-country")) || String(b.currency || "").toLowerCase();
+    const session = await billing.createCheckout({
+      plan: b.plan,
+      billing: b.billing,
+      whatsapp: !!b.whatsapp,
+      currency,
+      lang: b.lang,
+      baseUrl: process.env.APP_BASE_URL || `${req.protocol}://${req.get("host")}`,
+      lead: { companyName: b.companyName, contactName: b.contactName, contactEmail: b.contactEmail, contactPhone: b.contactPhone, websiteUrl: b.websiteUrl },
+    });
+    res.json(session);
+  } catch (err) {
+    console.error("[stripe checkout]", err);
+    res.status(err.status || 500).json({ error: err.status ? err.message : "Paiement indisponible pour le moment." });
+  }
+});
+
+// Stripe's events, verified with STRIPE_WEBHOOK_SECRET on the raw body.
+app.post("/api/stripe/webhook", async (req, res) => {
+  try {
+    res.json(await billing.handleWebhook(req.rawBody, req.get("stripe-signature")));
+  } catch (err) {
+    console.error("[stripe webhook]", err.message);
+    res.status(err.status || 500).json({ error: err.message });
   }
 });
 
