@@ -1,7 +1,25 @@
 {
-  "redirects": [{ "source": "/crm", "destination": "/crm/", "permanent": false }],
+  "redirects": [
+    {
+      "source": "/crm",
+      "destination": "/crm/",
+      "permanent": false
+    }
+  ],
   "rewrites": [
-    { "source": "/crm/", "destination": "https://dealz-crm.vercel.app/" },
-    { "source": "/crm/:path+", "destination": "https://dealz-crm.vercel.app/:path*" }
+    {
+      "source": "/crm/",
+      "destination": "https://dealz-crm.vercel.app/"
+    },
+    {
+      "source": "/crm/:path+",
+      "destination": "https://dealz-crm.vercel.app/:path*"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/daily",
+      "schedule": "0 6 * * *"
+    }
   ]
 }

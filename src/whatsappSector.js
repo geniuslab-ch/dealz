@@ -266,7 +266,8 @@ function buildQuote(S, lang, raw, customer) {
     const shown = q.type === "date" ? showDate(v) : Array.isArray(v) ? (v.length ? v.map((o) => optLabel(QT, q, o)).join(", ") : UI[lang].none) : optLabel(QT, q, v);
     detailLines.push(`${short} : ${shown}`);
   }
-  return { currency: "CHF", items, total: Math.round(total * 100) / 100, customer, detailLines, sector: S.slug };
+  const dateQ = S.quote.questions.find((q) => q.type === "date" && answers[q.id]);
+  return { currency: "CHF", items, total: Math.round(total * 100) / 100, customer, detailLines, sector: S.slug, date: dateQ ? answers[dateQ.id] : undefined };
 }
 
 // ---- message formatting ----

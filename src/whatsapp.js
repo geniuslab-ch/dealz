@@ -184,6 +184,8 @@ async function handleIncomingMessage(phoneNumberId, from, rawText) {
     if (YES_RE.test(text)) {
       session.pendingQuote = null;
       try {
+        // Real client companies: record the booking (and route it on SCALE).
+        if (company.id) await require("./scale").createBooking({ company, quote, customer: quote.customer || {}, source: "whatsapp", lang: "fr" });
         const result = await sendBookingConfirmation({
           quote,
           customer: quote.customer || {},

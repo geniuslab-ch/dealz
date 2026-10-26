@@ -38,7 +38,7 @@ if (process.env.SMTP_HOST) {
  * accept loop run and be verified end to end with zero email credentials,
  * and starts actually sending the moment SMTP_* is set in .env.
  */
-async function sendEmail({ to, subject, html, replyTo }) {
+async function sendEmail({ to, subject, html, replyTo, icalEvent }) {
   if (!transporter) {
     const links = [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
     console.log("\n===== [EMAIL SIMULÉ — configurez SMTP_HOST dans .env pour un envoi réel] =====");
@@ -60,6 +60,9 @@ async function sendEmail({ to, subject, html, replyTo }) {
     subject,
     html,
     ...(replyTo ? { replyTo } : {}),
+    // A calendar invitation (.ics) mail clients turn into an "add to
+    // calendar" event — used for staff assignments (src/scale.js).
+    ...(icalEvent ? { icalEvent } : {}),
   });
   return { simulated: false, to, subject, html };
 }
@@ -448,9 +451,11 @@ async function sendFollowupToCustomer({
   return sendEmail({ to: customer.email, subject: t.subject, html, replyTo: companyEmail });
 }
 
-async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr", serviceNoun }) {
+async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr", serviceNoun, date }) {
   const now = new Date();
-  const start = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000); // placeholder: 3 days out
+  // The service date the customer chose (YYYY-MM-DD, 9:00 Swiss time);
+  // without one, a placeholder 3 days out.
+  const start = date ? new Date(`${date}T08:00:00.000Z`) : new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
   const end = new Date(start.getTime() + 2 * 60 * 60 * 1000); // 2h duration placeholder
   const calTitle =
     serviceNoun
@@ -605,6 +610,9 @@ async function sendReferralNotification({
 }
 
 module.exports = {
+  sendEmail,
+  googleCalendarLink,
+  signatureHtml,
   errorText,
   sendEmail,
   sendDeclineNotification,

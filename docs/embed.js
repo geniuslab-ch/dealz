@@ -42,6 +42,8 @@
   var CURRENT_SCRIPT = document.currentScript;
   var API_BASE = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-api-base")) || "";
   window.DEALZ_COMPANY = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-company")) || "";
+  // SCALE: which team/location price grid this page uses (set in the CRM).
+  window.DEALZ_GRID = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-grid")) || "";
   // "fr" (default), "en" or "de" — quote-app.js's own T() dictionary reads
   // this for the bubble/inline panel; the popup modal below passes it on
   // to quote-window.html as ?lang=.
@@ -212,6 +214,7 @@
           encodeURIComponent(window.DEALZ_COMPANY) +
           "&api-base=" +
           encodeURIComponent(ORIGIN) +
+          (window.DEALZ_GRID ? "&grid=" + encodeURIComponent(window.DEALZ_GRID) : "") +
           "&embedded=1&lang=" +
           encodeURIComponent(window.DEALZ_LANG || "fr");
       }

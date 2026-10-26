@@ -24,6 +24,7 @@ const whatsapp = require("./src/whatsapp");
 const whatsappDemo = require("./src/whatsappSector");
 const { getCompanyBySlug } = require("./src/companies");
 const { hasFeature } = require("./src/plans");
+const scale = require("./src/scale");
 const defaultPricing = require("./docs/pricing.json");
 
 const MOCK_MODE = process.env.MOCK_MODE === "true";
@@ -363,9 +364,17 @@ app.post("/api/whatsapp/webhook", async (req, res) => {
 // (docs/pricing-engine-client.js, used for the offline/no-backend static
 // fallback) also uses the right tenant's numbers. No slug, or an
 // unrecognized one, falls back to the single-tenant demo grid.
+// A client company with the price grid its widget asked for: SCALE
+// companies can give each team/location its own grid (data-dealz-grid).
+async function companyWithGrid(slug, grid) {
+  const company = await getCompanyBySlug(slug);
+  if (!company || !grid) return company;
+  return { ...company, pricing: await scale.pricingFor(company, String(grid)) };
+}
+
 app.get("/api/pricing", async (req, res) => {
   try {
-    const company = await getCompanyBySlug(req.query.company);
+    const company = await companyWithGrid(req.query.company, req.query.grid);
     res.json(company ? company.pricing : defaultPricing);
   } catch (err) {
     console.error(err);
@@ -406,7 +415,7 @@ app.post("/api/chat", async (req, res) => {
     // src/companies.js). Unset or unrecognized falls back to the original
     // single-tenant demo (SwissClean Sàrl + docs/pricing.json), same as
     // every caller that predates multi-tenant support.
-    const company = (await getCompanyBySlug(req.body.company)) || undefined;
+    const company = (await companyWithGrid(req.body.company, req.body.grid)) || undefined;
     // "fr" (default), "en" or "de" — set by the page/widget the visitor is
     // on (window.DEALZ_LANG in quote-app.js). Only affects item.label text
     // in the returned quote and the assistant's own copy; the pricing math
@@ -553,6 +562,8 @@ async function processDecline(body, baseUrl) {
       rawText: text || "",
       customer: customer || {},
       suggestedReply,
+      // Lets the offer the company sends back become a booking of theirs.
+      companyId: company?.id || null,
       companyEmail: resolvedNotifyEmail || null,
       companyName: resolvedCompanyName || null,
       signature: resolvedSignature || null,
@@ -688,6 +699,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
       if (!amount || amount <= 0) return res.status(400).json({ error: "Montant invalide" });
       const offerToken = await store.put({
         type: "offer",
+        companyId: entry.companyId || undefined,
         kind: "price",
         originalQuote: entry.quote,
         amount,
@@ -726,6 +738,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
       if (!date) return res.status(400).json({ error: "Date requise" });
       const offerToken = await store.put({
         type: "offer",
+        companyId: entry.companyId || undefined,
         kind: "date",
         originalQuote: entry.quote,
         amount: entry.quote.total,
@@ -766,6 +779,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
       const revisedQuote = { currency: entry.quote.currency, items, total };
       const offerToken = await store.put({
         type: "offer",
+        companyId: entry.companyId || undefined,
         kind: "revise",
         originalQuote: entry.quote,
         revisedQuote,
@@ -802,6 +816,7 @@ app.post("/api/counteroffer/:token", async (req, res) => {
     if (cfg.action === "followup") {
       const offerToken = await store.put({
         type: "offer",
+        companyId: entry.companyId || undefined,
         kind: "followup",
         originalQuote: entry.quote,
         amount: entry.quote.total,
@@ -895,6 +910,11 @@ app.post("/api/offer/:token/respond", async (req, res) => {
       serviceNoun: entry.serviceNoun || undefined,
     });
     await store.update(req.params.token, { status: "accepted" });
+    if (entry.companyId) {
+      const company = await getCompanyBySlug(entry.companyId);
+      const date = scale.bookingDate(entry.originalQuote);
+      if (company) await scale.createBooking({ company, quote: { ...quote, date }, customer, source: "offer", lang: entry.lang });
+    }
     await whatsappDemo.notifyCustomer({ customer, lang: entry.lang, kind: "booked", companyName: entry.companyName }, whatsapp.sendWhatsAppText);
 
     res.json({
@@ -921,6 +941,7 @@ async function processAccept(body) {
     const result = await sendBookingConfirmation({
       quote,
       customer: customer || {},
+      date: scale.bookingDate(quote),
       notifyEmail: companyEmail || company?.notifyEmail || undefined,
       companyName: sector ? sector.company.name : company?.name || undefined,
       serviceNoun: sector ? sector.emailNoun : undefined,
@@ -931,6 +952,8 @@ async function processAccept(body) {
     });
 
     if (sector && companyEmail) logDemoActivity({ email: companyEmail, sector, event: "accept", result: result.companyEmail });
+    // Real client companies: record the booking (and route it on SCALE).
+    if (company) await scale.createBooking({ company, quote, customer: customer || {}, source: "web", lang, gridSlug: body.grid });
 
     return {
       ok: true,
@@ -951,6 +974,69 @@ app.post("/api/accept", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: err.message || "Internal error" });
+  }
+});
+
+// Shared agenda (SCALE): an iCalendar feed per company or staff member,
+// behind the secret token shown in the CRM. Subscribed to from Google
+// Calendar / Outlook / Apple Calendar.
+app.get("/api/calendar/:token.ics", async (req, res) => {
+  try {
+    const ics = await scale.calendarFeed(req.params.token);
+    if (!ics) return res.status(404).send("Not found");
+    res.set("Content-Type", "text/calendar; charset=utf-8");
+    res.set("Cache-Control", "private, max-age=300");
+    res.send(ics);
+  } catch (err) {
+    console.error("[calendar feed]", err);
+    res.status(500).send("Error");
+  }
+});
+
+// Automatic follow-up of a decline the company left unanswered — the same
+// e-mail as the "Follow up" button on the counter-offer page.
+async function autoFollowup(entry, token) {
+  const offerToken = await store.put({
+    type: "offer",
+    kind: "followup",
+    companyId: entry.companyId || undefined,
+    originalQuote: entry.quote,
+    amount: entry.quote.total,
+    customer: entry.customer,
+    companyEmail: entry.companyEmail || undefined,
+    companyName: entry.companyName || undefined,
+    signature: entry.signature || undefined,
+    logoUrl: entry.logoUrl || undefined,
+    tagline: entry.tagline || undefined,
+    lang: entry.lang,
+    serviceNoun: entry.serviceNoun || undefined,
+  });
+  await store.update(token, { status: "followup-auto" });
+  await sendFollowupToCustomer({
+    quote: entry.quote,
+    customer: entry.customer,
+    offerToken,
+    baseUrl: process.env.APP_BASE_URL || "https://dealz.website",
+    companyName: entry.companyName || undefined,
+    companyEmail: entry.companyEmail || undefined,
+    signature: entry.signature || undefined,
+    logoUrl: entry.logoUrl || undefined,
+    tagline: entry.tagline || undefined,
+    lang: entry.lang,
+    serviceNoun: entry.serviceNoun || undefined,
+  });
+}
+
+// Daily SCALE automations (reminders, automatic follow-ups), called by
+// Vercel Cron (vercel.json). Vercel sends "Authorization: Bearer
+// $CRON_SECRET" when that variable is set; without it the route is closed.
+app.get("/api/cron/daily", async (req, res) => {
+  if (!process.env.CRON_SECRET || req.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) return res.sendStatus(401);
+  try {
+    res.json(await scale.runDailyAutomations({ followup: autoFollowup }));
+  } catch (err) {
+    console.error("[cron daily]", err);
+    res.status(500).json({ error: err.message });
   }
 });
 

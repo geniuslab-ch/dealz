@@ -129,6 +129,7 @@
     var params = new URLSearchParams(location.search);
     var company = params.get("company") || "";
     window.DEALZ_COMPANY = company;
+    window.DEALZ_GRID = params.get("grid") || "";
     window.DEALZ_API_BASE = params.get("api-base") || location.origin;
     if (params.get("embedded") === "1") document.body.classList.add("dz-embedded");
 

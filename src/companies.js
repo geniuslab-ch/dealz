@@ -102,4 +102,4 @@ async function getCompanyBySlug(slug) {
   }
 }
 
-module.exports = { getCompanyByPhoneNumberId, getCompanyBySlug, defaultCompany };
+module.exports = { getCompanyByPhoneNumberId, getCompanyBySlug, defaultCompany, supabase };

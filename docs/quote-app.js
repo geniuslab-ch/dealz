@@ -401,7 +401,7 @@
   function loadPricing() {
     if (!pricingPromise) {
       const url = window.DEALZ_COMPANY
-        ? apiUrl("/api/pricing?company=" + encodeURIComponent(window.DEALZ_COMPANY))
+        ? apiUrl("/api/pricing?company=" + encodeURIComponent(window.DEALZ_COMPANY) + (window.DEALZ_GRID ? "&grid=" + encodeURIComponent(window.DEALZ_GRID) : ""))
         : apiUrl("/pricing.json");
       pricingPromise = fetch(url).then((r) => r.json());
     }
@@ -420,6 +420,7 @@
       body: JSON.stringify({
         messages: payloadMessages,
         company: window.DEALZ_COMPANY || undefined,
+        grid: window.DEALZ_GRID || undefined,
         lang: window.DEALZ_LANG || undefined,
       }),
     });
@@ -757,6 +758,7 @@
         customer,
         companyEmail: getCompanyEmail(),
         company: window.DEALZ_COMPANY || undefined,
+        grid: window.DEALZ_GRID || undefined,
         lang: window.DEALZ_LANG || undefined,
       });
       renderSystemMessage(
@@ -810,6 +812,7 @@
         customer,
         companyEmail: getCompanyEmail(),
         company: window.DEALZ_COMPANY || undefined,
+        grid: window.DEALZ_GRID || undefined,
         lang: window.DEALZ_LANG || undefined,
       });
       renderSystemMessage(

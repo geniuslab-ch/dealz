@@ -517,7 +517,9 @@
       if (!short) return;
       details.push(short + " : " + answerDisplay(q, answers[q.id]));
     });
-    return { items: items, total: Math.round(total * 100) / 100, customer: customer, detailLines: details, sector: SECTOR.slug };
+    // The service date (YYYY-MM-DD) as data, for the booking and calendars.
+    var dateQ = LOGIC.questions.filter(function (q) { return q.type === "date" && answers[q.id]; })[0];
+    return { items: items, total: Math.round(total * 100) / 100, customer: customer, detailLines: details, sector: SECTOR.slug, date: dateQ ? answers[dateQ.id] : undefined };
   }
 
   function deliverQuote() {
