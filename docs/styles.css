@@ -45,6 +45,7 @@ img { max-width: 100%; }
   background: #ffffff;
   border-bottom: 1px solid var(--line);
 }
+.nav-toggle { display: none; }
 .nav-logo {
   display: flex;
   flex-direction: column;
@@ -1436,16 +1437,28 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 
 /* Phones — kept last so it overrides the base rules above. */
 @media (max-width: 600px) {
-  /* Header: logo on one line, the links in a single row that scrolls
-     sideways, and it stops being sticky — wrapped and sticky it took
-     ~290px and covered whatever the visitor was reading (e.g. the chat). */
-  .nav { position: static; padding: 8px 14px; row-gap: 6px; }
+  /* Header: logo + a ☰ button (docs/nav.js); the links open as a list. */
+  .nav { position: sticky; top: 0; padding: 8px 14px; flex-wrap: nowrap; }
   .nav-logo { flex-direction: row; align-items: center; gap: 10px; }
   .nav-logo img { height: 40px; }
-  .nav-links { flex: 1 1 100%; flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; margin: 0 -14px; padding: 0 14px 2px; }
-  .nav-links::-webkit-scrollbar { display: none; }
-  .nav-links a, .nav-links button { padding: 8px 11px; font-size: 13.5px; }
-  .nav-lang { margin-left: 2px; padding-left: 6px; }
+  .nav-toggle { display: inline-flex; margin-left: auto; align-items: center; justify-content: center; width: 44px; height: 44px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; font-size: 20px; color: var(--ink); cursor: pointer; }
+  .nav .nav-links { display: none; }
+  .nav.open { flex-wrap: wrap; }
+  .nav.open .nav-links { display: flex; flex: 1 1 100%; flex-direction: column; align-items: stretch; gap: 2px; padding: 6px 0 4px; }
+  .nav.open .nav-links a, .nav.open .nav-links button { padding: 12px 14px; font-size: 15px; border-radius: 12px; text-align: left; }
+  .nav.open .nav-links a.cta { text-align: center; margin-top: 4px; }
+  .nav.open .nav-lang { margin: 6px 0 0; padding: 8px 0 0; border-left: none; border-top: 1px solid var(--line); justify-content: center; gap: 8px; }
+
+  /* Chats on a phone grow with the page instead of scrolling inside a
+     fixed box mid-page; the input bar sticks to the bottom of the screen. */
+  .quote-panel-slot .quote-panel, .quote-panel.contact-panel { height: auto; max-height: none; min-height: 60svh; overflow: clip; }
+  .quote-panel-slot .dealz-messages, .quote-panel.contact-panel .dealz-messages { overflow: visible; flex: none; min-height: 40svh; }
+  .quote-panel-slot .dealz-inputbar, .quote-panel.contact-panel .dealz-inputbar { position: sticky; bottom: 0; z-index: 5; }
+  .quote-wrap > * { min-width: 0; }
+  .dop-chip { white-space: normal; text-align: left; }
+  .flow-summary-actions .btn { flex: 1 1 100%; white-space: normal; }
+  .dcf-input[type="date"] { -webkit-appearance: none; appearance: none; display: block; min-height: 44px; background: #fff; color: var(--ink); text-align: left; }
+  .dcf-input[type="date"]::-webkit-date-and-time-value { text-align: left; }
 
   /* Fits the screen instead of a fixed 560px box (svh = height with the
      browser's bars shown, so the input bar is never hidden behind them). */

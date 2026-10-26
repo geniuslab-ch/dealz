@@ -517,7 +517,7 @@ function siteNav(lang, slug, withAnchors) {
   const demo = slug ? '      <a href="' + cfg.base + "/" + slug + '/demo.html" class="cta">' + cfg.seeDemoNav + "</a>\n" : "";
   return '  <nav class="nav">\n    <div class="nav-logo">\n      <a href="' + cfg.home + '"><img src="/images/dealz-logo-sm.png" alt="Dealz" /></a>\n' +
     '      <span class="nav-slogan">Keep your website.<br>Keep your tools.<br>Add Dealz.</span>\n    </div>\n    <div class="nav-links">\n' +
-    (withAnchors ? "" : '      <a href="' + cfg.home + '">' + cfg.navHome + "</a>\n") + links + '      <a href="' + cfg.base + '/">' + cfg.navSectors + "</a>\n" + demo + "    </div>\n  </nav>\n";
+    (withAnchors ? "" : '      <a href="' + cfg.home + '">' + cfg.navHome + "</a>\n") + links + '      <a href="' + cfg.base + '/">' + cfg.navSectors + "</a>\n" + demo + "    </div>\n  </nav>\n  <script src=\"/nav.js\" defer></script>\n";
 }
 
 // ---------- landing ----------

@@ -338,8 +338,22 @@
     return e;
   }
 
-  function scrollToBottom(c) {
+  // On a phone the chat grows with the page (styles.css) instead of
+  // scrolling inside its box: then bring the newest message into view —
+  // only once the visitor has interacted, so the page never jumps on load.
+  var chatTouched = false;
+  document.addEventListener("pointerdown", function (e) { if (e.target.closest && e.target.closest(".quote-panel, .contact-panel")) chatTouched = true; }, true);
+  document.addEventListener("keydown", function (e) { if (e.target.closest && e.target.closest(".quote-panel, .contact-panel")) chatTouched = true; }, true);
+  function followChat(c) {
     c.scrollTop = c.scrollHeight;
+    if (!chatTouched || c.scrollHeight > c.clientHeight + 1 || !c.lastElementChild) return;
+    var bar = c.parentElement && c.parentElement.querySelector(".dealz-inputbar");
+    var r = c.lastElementChild.getBoundingClientRect();
+    var bottom = window.innerHeight - (bar ? bar.offsetHeight : 0) - 12;
+    if (r.bottom > bottom) window.scrollBy({ top: r.bottom - bottom, behavior: "smooth" });
+  }
+  function scrollToBottom(c) {
+    followChat(c);
   }
 
   function assistantBubble(text) {
