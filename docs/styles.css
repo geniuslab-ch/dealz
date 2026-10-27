@@ -295,6 +295,16 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 .site-footer-referral a:hover {
   text-decoration: underline;
 }
+.site-footer-legal {
+  margin-top: 12px;
+  font-size: 13px;
+}
+.site-footer-legal a {
+  color: var(--muted);
+}
+.site-footer-legal a:hover {
+  color: var(--blue-dark);
+}
 
 /* ---------- Quote tab ---------- */
 .quote-wrap {
