@@ -218,133 +218,230 @@
   </section>
 
   <section id="tarifs">
-    <div class="section-inner">
+    <div class="section-inner" data-pz data-wa-month="25" data-install="390" data-once-until="2027-01-01T00:00:00+01:00" data-t-pick="Choisir {plan}" data-t-picked="{plan} choisi ✓" data-t-cont="Continuer avec {plan} →" data-t-cont-wa="Continuer avec {plan} + WhatsApp →" data-t-wa="WhatsApp" data-t-note-monthly="Installation {install}, une seule fois." data-t-note-yearly="Installation offerte ({install} économisés)." data-t-note-onetime="Installation incluse. Offre de lancement valable jusqu&#x27;au 31 décembre 2026." data-t-note-monthly-wa="Installation {install} pour le tout, WhatsApp compris. Pas de supplément." data-t-note-yearly-wa="Installation offerte, WhatsApp compris." data-t-note-onetime-wa="Installation incluse. WhatsApp : + {wa} / mois en plus de votre accès à vie.">
       <span class="eyebrow">Tarifs</span>
-      <h2 class="section-title">Ne perdez plus de demandes. Ne perdez plus de ventes. Gérez plus de réservations.</h2>
-      <p class="pricing-philosophy">Trois niveaux de Dealz pour accompagner votre entreprise : capturer chaque demande, récupérer davantage de ventes, puis gérer plusieurs collaborateurs et agendas.</p>
+      <h2 class="section-title">Sur votre site, sur WhatsApp, ou les deux.</h2>
+      <p class="pricing-philosophy">Dealz répond à vos clients, calcule le prix selon vos propres tarifs et envoie un devis ferme. Il ne reste qu'à choisir où : un prix mensuel clair et une installation unique.</p>
 
-      <div class="pricing-grid">
-        <div class="price-card">
-          <div class="plan-name">CAPTURE</div>
-          <div class="plan-price"><span data-price="48.30">CHF 48.30</span><span class="per"> / mois</span></div>
-          <p class="plan-tagline">« Ne manquez plus jamais une demande. »</p>
-          <p class="plan-desc">Chaque demande reçoit une réponse, même lorsque vous êtes occupé.</p>
-          <ul class="plan-features">
-            <li><span class="chk">✓</span> Dealz intégré à votre site actuel</li>
-            <li><span class="chk">✓</span> Conversation guidée avec le client</li>
-            <li><span class="chk">✓</span> Qualification automatique</li>
-            <li><span class="chk">✓</span> Questions intelligentes selon le besoin</li>
-            <li><span class="chk">✓</span> Calcul du prix selon vos propres tarifs</li>
-            <li><span class="chk">✓</span> Devis instantané</li>
-            <li><span class="chk">✓</span> Devis PDF détaillé</li>
-            <li><span class="chk">✓</span> Acceptation / refus en ligne</li>
-            <li><span class="chk">✓</span> Confirmation par e-mail</li>
-            <li><span class="chk">✓</span> Ajout automatique à l'agenda</li>
-          </ul>
-          <p class="plan-monthly">Chaque demande reçoit une réponse.</p>
-          <a href="#contact" class="btn btn-secondary plan-cta">Commencer avec Dealz</a>
+      <div class="pz-tabs" role="tablist" aria-label="Votre situation">
+        <button type="button" role="tab" class="pz-tab" id="pz-tab-site" aria-controls="pz-panel-site" aria-selected="true" data-mode="site">
+          <span class="pz-tab-title">J'ai un site internet</span>
+          <span class="pz-tab-sub">Dealz s'ajoute à votre site actuel</span>
+        </button>
+        <button type="button" role="tab" class="pz-tab" id="pz-tab-wa" aria-controls="pz-panel-wa" aria-selected="false" tabindex="-1" data-mode="wa">
+          <span class="pz-tab-title">Je n'ai pas de site</span>
+          <span class="pz-tab-sub">WhatsApp seul, dès <span data-price="34.20">CHF 34.20</span> / mois</span>
+        </button>
+      </div>
+
+      <div class="pz-panel" id="pz-panel-site" role="tabpanel" aria-labelledby="pz-tab-site" data-panel="site">
+        <h3 class="pz-panel-title">Avec un site internet</h3>
+
+        <div class="pz-plans" role="group" aria-label="Formules">
+          <div class="pz-plan" data-plan="CAPTURE" data-month="48.30" data-once="1420.30">
+            <div class="pz-plan-head"><span class="pz-plan-name">CAPTURE</span><span class="pz-ring" aria-hidden="true"></span></div>
+            <div class="pz-price"><span data-price="48.30">CHF 48.30</span><span class="pz-per"> / mois</span></div>
+            <p class="pz-tagline">« Ne manquez plus jamais une demande. »</p>
+            <p class="pz-desc">Chaque demande reçoit une réponse, même lorsque vous êtes occupé.</p>
+            <div class="pz-plan-body">
+            <ul class="pz-feats">
+              <li>Dealz intégré à votre site actuel</li>
+              <li>Conversation guidée avec le client</li>
+              <li>Calcul du prix selon vos propres tarifs</li>
+              <li>Devis instantané</li>
+              <li>Devis PDF détaillé</li>
+            </ul>
+            <details class="pz-more">
+              <summary>+ 5 autres fonctionnalités</summary>
+              <ul class="pz-feats">
+              <li>Qualification automatique</li>
+              <li>Questions intelligentes selon le besoin</li>
+              <li>Acceptation / refus en ligne</li>
+              <li>Confirmation par e-mail</li>
+              <li>Ajout automatique à l'agenda</li>
+              </ul>
+            </details>
+            </div>
+            <a href="#contact" class="btn btn-secondary pz-pick" data-pick="CAPTURE">Choisir CAPTURE</a>
+          </div>
+          <div class="pz-plan is-featured is-selected" data-plan="CLOSE" data-month="77.50" data-once="1897.10">
+          <span class="pz-badge">RECOMMANDÉ</span>
+            <div class="pz-plan-head"><span class="pz-plan-name">CLOSE</span><span class="pz-ring" aria-hidden="true"></span></div>
+            <div class="pz-price"><span data-price="77.50">CHF 77.50</span><span class="pz-per"> / mois</span></div>
+            <p class="pz-tagline">« Ne laissez plus un « non » devenir une vente perdue. »</p>
+            <p class="pz-desc">Dealz ne s'arrête pas lorsque le client refuse votre offre.</p>
+            <div class="pz-plan-body">
+            <div class="pz-included">Tout CAPTURE, plus :</div>
+            <ul class="pz-feats">
+              <li>Détection automatique du motif de refus</li>
+              <li>Réponse à l'objection déjà rédigée, prête à valider</li>
+              <li>Contre-offre directement depuis l'e-mail</li>
+              <li>Relance du client</li>
+              <li>Récupération des devis refusés</li>
+            </ul>
+            <details class="pz-more">
+              <summary>+ 4 autres fonctionnalités</summary>
+              <ul class="pz-feats">
+              <li>Motif du refus clairement visible dans l'e-mail</li>
+              <li>Conversation complète envoyée à l'entreprise</li>
+              <li>E-mail contextualisé selon la raison du refus</li>
+              <li>Plusieurs prestations et options</li>
+              </ul>
+            </details>
+            </div>
+            <a href="#contact" class="btn btn-primary pz-pick" data-pick="CLOSE">Choisir CLOSE</a>
+          </div>
+          <div class="pz-plan" data-plan="SCALE" data-month="145.20" data-once="2158.80">
+            <div class="pz-plan-head"><span class="pz-plan-name">SCALE</span><span class="pz-ring" aria-hidden="true"></span></div>
+            <div class="pz-price"><span data-price="145.20">CHF 145.20</span><span class="pz-per"> / mois</span></div>
+            <p class="pz-tagline">« Quand une personne ne suffit plus pour gérer vos réservations. »</p>
+            <p class="pz-desc">Plus de demandes, plusieurs collaborateurs, sans multiplier votre administration.</p>
+            <div class="pz-plan-body">
+            <div class="pz-included">Tout CLOSE, plus :</div>
+            <ul class="pz-feats">
+              <li>Plusieurs collaborateurs</li>
+              <li>Plusieurs calendriers</li>
+              <li>Attribution automatique des réservations</li>
+              <li>Plusieurs équipes / lieux</li>
+              <li>Support prioritaire</li>
+            </ul>
+            <details class="pz-more">
+              <summary>+ 5 autres fonctionnalités</summary>
+              <ul class="pz-feats">
+              <li>Agendas partagés</li>
+              <li>Routage selon disponibilité</li>
+              <li>Plusieurs prestations / grilles tarifaires</li>
+              <li>Synchronisation Excel</li>
+              <li>Automatisations avancées</li>
+              </ul>
+            </details>
+            </div>
+            <a href="#contact" class="btn btn-secondary pz-pick" data-pick="SCALE">Choisir SCALE</a>
+          </div>
         </div>
 
-        <div class="price-card featured">
-          <span class="badge">RECOMMANDÉ</span>
-          <div class="plan-name">CLOSE ⭐</div>
-          <div class="plan-price"><span data-price="77.50">CHF 77.50</span><span class="per"> / mois</span></div>
-          <p class="plan-tagline">« Ne laissez plus un « non » devenir une vente perdue. »</p>
-          <p class="plan-desc">Dealz ne s'arrête pas lorsque le client refuse votre offre.</p>
-          <div class="plan-included-label">Tout CAPTURE, plus :</div>
-          <ul class="plan-features">
-            <li><span class="chk">✓</span> Détection automatique du motif de refus</li>
-            <li><span class="chk">✓</span> Motif du refus clairement visible dans l'e-mail</li>
-            <li><span class="chk">✓</span> Conversation complète envoyée à l'entreprise</li>
-            <li><span class="chk">✓</span> E-mail contextualisé selon la raison du refus</li>
-            <li><span class="chk">✓</span> Réponse à l'objection déjà rédigée, prête à valider</li>
-            <li><span class="chk">✓</span> Contre-offre directement depuis l'e-mail</li>
-            <li><span class="chk">✓</span> Relance du client</li>
-            <li><span class="chk">✓</span> Récupération des devis refusés</li>
-            <li><span class="chk">✓</span> Plusieurs prestations et options</li>
-          </ul>
-          <p class="plan-monthly">Dealz ne s'arrête pas au premier refus.</p>
-          <a href="#contact" class="btn btn-primary plan-cta">Choisir CLOSE</a>
+        <div class="pz-addon">
+          <div class="pz-addon-main">
+            <div>
+              <div class="pz-addon-title" id="pz-addon-title"><span>Ajouter WhatsApp à votre formule</span><span class="pz-addon-price">+ <span data-price="25">CHF 25</span> / mois</span></div>
+              <p>Vos clients vous écrivent déjà sur WhatsApp pour demander un prix ? Le même assistant Dealz y répond aussi : même grille tarifaire, même devis ferme, sans qu'ils ouvrent votre site. <b>L'installation reste à <span data-price="390">CHF 390</span>, pour le tout.</b></p>
+            </div>
+            <button type="button" class="pz-toggle" role="switch" aria-checked="false" aria-labelledby="pz-addon-title" data-pz-toggle></button>
+          </div>
+          <details class="pz-more">
+            <summary>Ce que comprend l'option WhatsApp</summary>
+            <ul class="pz-feats">
+              <li>Votre propre numéro WhatsApp Business</li>
+              <li>Même moteur de devis que sur votre site</li>
+              <li>Un e-mail dès qu'un client accepte ou refuse — jamais avant, jamais à chaque message</li>
+              <li>En cas de refus, une réponse à l'objection déjà rédigée pour vous — vous n'avez qu'à valider et envoyer</li>
+              <li>Contre-offre en un clic depuis l'e-mail, selon les fonctionnalités de votre formule</li>
+              <li>100 conversations incluses par mois, puis <span data-price="0.30">CHF 0.30</span> par conversation supplémentaire</li>
+            </ul>
+          </details>
         </div>
 
-        <div class="price-card">
-          <div class="plan-name">SCALE</div>
-          <div class="plan-price"><span data-price="145.20">CHF 145.20</span><span class="per"> / mois</span></div>
-          <p class="plan-tagline">« Quand une personne ne suffit plus pour gérer vos réservations. »</p>
-          <p class="plan-desc">Plus de demandes, plusieurs collaborateurs, sans multiplier votre administration.</p>
-          <div class="plan-included-label">Tout CLOSE, plus :</div>
-          <ul class="plan-features">
-            <li><span class="chk">✓</span> Plusieurs collaborateurs</li>
-            <li><span class="chk">✓</span> Plusieurs calendriers</li>
-            <li><span class="chk">✓</span> Agendas partagés</li>
-            <li><span class="chk">✓</span> Attribution automatique des réservations</li>
-            <li><span class="chk">✓</span> Routage selon disponibilité</li>
-            <li><span class="chk">✓</span> Plusieurs équipes / lieux</li>
-            <li><span class="chk">✓</span> Plusieurs prestations / grilles tarifaires</li>
-            <li><span class="chk">✓</span> Synchronisation Excel</li>
-            <li><span class="chk">✓</span> Automatisations avancées</li>
-            <li><span class="chk">✓</span> Support prioritaire</li>
-          </ul>
-          <p class="plan-monthly">Plus de demandes. Sans plus de gestion administrative.</p>
-          <a href="#contact" class="btn btn-secondary plan-cta">Passer à SCALE</a>
+        <div class="pz-sum">
+          <div class="pz-sum-head">
+            <span class="pz-sum-label">Votre formule</span>
+            <span class="pz-sum-name" data-pz-name>CLOSE</span>
+          </div>
+          <div class="pz-bills" role="radiogroup" aria-label="Facturation">
+            <label class="pz-bill" data-bill="monthly">
+              <input type="radio" name="pz-bill" value="monthly" />
+              <span class="pz-bill-label">Mensuel</span>
+              <span class="pz-bill-price"><span data-pz-amount="monthly" data-price="77.50">CHF 77.50</span><span class="pz-per"> /mois</span></span>
+              <span class="pz-bill-line">+ <span data-price="390">CHF 390</span> d'installation</span>
+            </label>
+            <label class="pz-bill is-selected is-best" data-bill="yearly">
+              <span class="pz-bill-badge">RECOMMANDÉ</span>
+              <input type="radio" name="pz-bill" value="yearly" checked />
+              <span class="pz-bill-label">Annuel</span>
+              <span class="pz-bill-price"><span data-pz-amount="yearly" data-price="930">CHF 930</span><span class="pz-per"> /an</span></span>
+              <span class="pz-bill-line"><s><span data-price="390">CHF 390</span></s> d'installation</span>
+              <span class="pz-bill-free">Installation OFFERTE</span>
+            </label>
+            <label class="pz-bill" data-bill="onetime">
+              <span class="pz-bill-badge pz-bill-launch">🚀 OFFRE DE LANCEMENT</span>
+              <input type="radio" name="pz-bill" value="onetime" />
+              <span class="pz-bill-label">Paiement unique</span>
+              <span class="pz-bill-price"><span data-pz-amount="onetime" data-price="1897.10">CHF 1'897.10</span></span>
+              <span class="pz-bill-line">Accès à vie, sans abonnement</span>
+              <span class="pz-bill-line">Jusqu'au 31 décembre 2026</span>
+              <span class="pz-bill-free">Installation incluse</span>
+              <span class="pz-bill-line" data-pz-once-wa hidden>+ WhatsApp : <span data-price="25">CHF 25</span> / mois</span>
+            </label>
+          </div>
+          <div class="pz-sum-foot">
+            <p class="pz-note" data-pz-note aria-live="polite">Installation offerte (CHF 390 économisés).</p>
+            <a href="#contact" class="btn btn-primary pz-continue" data-pz-continue>Continuer avec CLOSE →</a>
+          </div>
+          <details class="pz-more">
+            <summary>Ce que comprend l'installation</summary>
+            <ul class="pz-feats pz-cols">
+              <li>Analyse de la grille tarifaire</li>
+              <li>Configuration des services</li>
+              <li>Configuration des prix</li>
+              <li>Configuration du moteur de devis</li>
+              <li>Intégration du widget sur le site existant</li>
+              <li>Configuration des e-mails</li>
+              <li>Configuration du Calendar</li>
+              <li>Tests avec les vrais tarifs de l'entreprise</li>
+              <li>Validation du parcours client</li>
+              <li>Mise en ligne</li>
+            </ul>
+          </details>
+        </div>
+      </div>
+
+      <div class="pz-panel" id="pz-panel-wa" role="tabpanel" aria-labelledby="pz-tab-wa" data-panel="wa">
+        <h3 class="pz-panel-title">Sans site internet : WhatsApp seul</h3>
+        <div class="pz-wa">
+          <div class="pz-plan pz-plan-wa is-selected" data-plan="WHATSAPP" data-month="34.20" data-install="190">
+            <span class="pz-badge pz-badge-green">SANS SITE INTERNET</span>
+            <div class="pz-plan-head"><span class="pz-plan-name">WHATSAPP</span></div>
+            <div class="pz-price"><span data-price="34.20">CHF 34.20</span><span class="pz-per"> / mois</span></div>
+            <p class="pz-setup-line">+ <span data-price="190">CHF 190</span> d'installation, une seule fois</p>
+            <p class="pz-tagline">« Pas de site ? Vos clients vous écrivent, Dealz répond. »</p>
+            <p class="pz-desc">Dealz répond à vos clients directement sur WhatsApp : mêmes questions, même grille tarifaire, même devis ferme. Aucun site internet n'est nécessaire.</p>
+            <div class="pz-plan-body">
+            <ul class="pz-feats">
+              <li>Votre propre numéro WhatsApp Business</li>
+              <li>Conversation guidée et qualification automatique</li>
+              <li>Prix calculé selon vos propres tarifs</li>
+              <li>Devis ferme instantané</li>
+              <li>Un e-mail dès qu'un client accepte ou refuse — jamais avant, jamais à chaque message</li>
+              <li>Ajout automatique à l'agenda</li>
+              <li>100 conversations incluses par mois, puis <span data-price="0.30">CHF 0.30</span> par conversation supplémentaire</li>
+            </ul>
+            </div>
+            <a href="#contact" class="btn btn-primary pz-pick pz-wa-cta" data-pick="WHATSAPP" data-pz-wa-continue>Démarrer avec WhatsApp →</a>
+          </div>
+          <div class="pz-wa-side">
+            <details class="pz-more" open>
+              <summary>Ce que comprend l'installation (<span data-price="190">CHF 190</span>)</summary>
+              <ul class="pz-feats">
+              <li>Analyse de la grille tarifaire</li>
+              <li>Configuration des services</li>
+              <li>Configuration des prix</li>
+              <li>Configuration du moteur de devis</li>
+              <li>Connexion de votre numéro WhatsApp Business</li>
+              <li>Configuration des e-mails</li>
+              <li>Configuration du Calendar</li>
+              <li>Tests avec les vrais tarifs de l'entreprise</li>
+              <li>Validation du parcours client</li>
+              <li>Mise en ligne</li>
+              </ul>
+            </details>
+            <div class="pz-cross">
+              <p>Vous avez un site, ou vous en aurez un ? Avec CAPTURE, CLOSE ou SCALE, WhatsApp s'ajoute pour <span data-price="25">CHF 25</span> / mois et l'installation reste à <span data-price="390">CHF 390</span> pour le tout.</p>
+              <button type="button" class="btn btn-secondary" data-pz-goto="site">Voir les formules avec site →</button>
+            </div>
+          </div>
         </div>
       </div>
 
       <p class="pricing-roi-note">💡 Un seul contrat d'immeuble supplémentaire peut déjà payer votre abonnement pendant des années.</p>
-
-      <div class="install-panel">
-        <span class="install-label">Installation Dealz</span>
-        <div class="install-price"><span data-price="390">CHF 390</span> <span class="lbl">une fois</span></div>
-        <p class="install-desc">Nous configurons vos tarifs, intégrons Dealz à votre site existant, connectons vos outils et testons le parcours complet avant la mise en ligne.</p>
-        <ul class="install-checklist">
-          <li><span class="chk">✓</span> Analyse de la grille tarifaire</li>
-          <li><span class="chk">✓</span> Configuration des services</li>
-          <li><span class="chk">✓</span> Configuration des prix</li>
-          <li><span class="chk">✓</span> Configuration du moteur de devis</li>
-          <li><span class="chk">✓</span> Intégration du widget sur le site existant</li>
-          <li><span class="chk">✓</span> Configuration des e-mails</li>
-          <li><span class="chk">✓</span> Configuration du Calendar</li>
-          <li><span class="chk">✓</span> Tests avec les vrais tarifs de l'entreprise</li>
-          <li><span class="chk">✓</span> Validation du parcours client</li>
-          <li><span class="chk">✓</span> Mise en ligne</li>
-        </ul>
-        <div class="install-offer">
-          <div class="install-offer-col">
-            <div class="install-offer-label">Abonnement mensuel</div>
-            <div class="install-offer-price"><span data-price="77.50">CHF 77.50</span><span class="per">/mois</span></div>
-            <div class="install-offer-line">+ <span data-price="390">CHF 390</span> installation</div>
-          </div>
-          <div class="install-offer-col highlight">
-            <div class="install-offer-label">Abonnement annuel</div>
-            <div class="install-offer-price"><span data-price="930">CHF 930</span><span class="per">/an</span></div>
-            <div class="install-offer-line"><s><span data-price="390">CHF 390</span> installation</s></div>
-            <div class="install-offer-free">Installation OFFERTE</div>
-          </div>
-          <div class="install-offer-col">
-            <div class="install-offer-label">Paiement unique</div>
-            <div class="install-offer-price"><span data-price="1897.10">CHF 1897.10</span></div>
-            <div class="install-offer-launch">🚀 Offre de lancement — jusqu'au 31 décembre 2026</div>
-            <div class="install-offer-line">Accès à vie, sans abonnement</div>
-            <div class="install-offer-free">Installation incluse</div>
-          </div>
-        </div>
-        <p class="install-offer-caption">Exemple avec CLOSE (<span data-price="77.50">CHF 77.50</span>/mois, ou <span data-price="1897.10">CHF 1897.10</span> en paiement unique) — la même logique s'applique quel que soit le plan choisi : CAPTURE <span data-price="1420.30">CHF 1420.30</span> · CLOSE <span data-price="1897.10">CHF 1897.10</span> · SCALE <span data-price="2158.80">CHF 2158.80</span> en paiement unique, installation incluse. Paiement unique : offre de lancement valable jusqu'au 31 décembre 2026.</p>
-      </div>
-
-      <div class="install-panel">
-        <span class="install-label">Option — WhatsApp Dealz</span>
-        <div class="install-price"><span data-price="25">CHF 25</span><span class="lbl"> / mois</span></div>
-        <p class="install-desc">Vos clients vous écrivent déjà sur WhatsApp pour demander un prix ? Le même assistant Dealz y répond aussi — mêmes questions, même grille tarifaire, même devis ferme, sans qu'ils ouvrent votre site.</p>
-        <ul class="install-checklist">
-          <li><span class="chk">✓</span> Votre propre numéro WhatsApp Business</li>
-          <li><span class="chk">✓</span> Même moteur de devis que sur votre site</li>
-          <li><span class="chk">✓</span> Un e-mail dès qu'un client accepte ou refuse — jamais avant, jamais à chaque message</li>
-          <li><span class="chk">✓</span> En cas de refus, une réponse à l'objection déjà rédigée pour vous — vous n'avez qu'à valider et envoyer</li>
-          <li><span class="chk">✓</span> Contre-offre en un clic depuis l'e-mail, selon les fonctionnalités de votre formule</li>
-          <li><span class="chk">✓</span> 100 conversations incluses par mois, puis <span data-price="0.30">CHF 0.30</span> par conversation supplémentaire</li>
-        </ul>
-        <a href="#contact" class="btn btn-primary plan-cta" style="margin-top: 6px;">Ajouter WhatsApp à mon abonnement</a>
-      </div>
 
       <div class="pricing-usp">
         <p class="pricing-usp-headline">Keep your website. Keep your tools. Add Dealz.</p>
@@ -429,6 +526,7 @@
 
   <script>window.DEALZ_LANG = "fr"; window.DEALZ_SECTOR = "conciergerie";</script>
   <script src="/currency.js"></script>
+  <script src="/pricing.js"></script>
   <script src="/contact-flow.js"></script>
   <script>
     (function () {

@@ -742,6 +742,7 @@ ${cfg.addList.map((l) => "          <li>" + esc(l) + "</li>").join("\n")}
 
   <script>window.DEALZ_LANG = "${lang}"; window.DEALZ_SECTOR = "${S.slug}";</script>
   <script src="/currency.js"></script>
+  <script src="/pricing.js"></script>
   <script src="/contact-flow.js"></script>
   <script>
     (function () {
