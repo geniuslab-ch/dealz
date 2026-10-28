@@ -27,6 +27,8 @@ const { getCompanyBySlug } = require("./src/companies");
 const { hasFeature } = require("./src/plans");
 const scale = require("./src/scale");
 const billing = require("./src/billing");
+const crm = require("./src/crm");
+const { rateLimit } = require("./src/rateLimit");
 const defaultPricing = require("./docs/pricing.json");
 
 const MOCK_MODE = process.env.MOCK_MODE === "true";
@@ -150,26 +152,22 @@ app.get("/api/whatsapp-trial", (req, res) => {
 async function recordLead({ email, phone, companyName, sector }) {
   const result = await recordTrialAttempt({ email, phone: phone || "", companyName: companyName || "" });
 
-  // Fire-and-forget: if this e-mail matches an existing CRM prospect
-  // (e.g. an outbound FREN target trying the real demo on their own),
-  // flip their demo_tested flag. Never blocks or fails the lead-gate
-  // response — same posture as the install-request forward.
-  if (process.env.CRM_DEMO_TESTED_URL && process.env.CRM_INBOUND_SECRET) {
-    fetch(process.env.CRM_DEMO_TESTED_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
-      body: JSON.stringify({
-        email,
-        // Sector demos also hand the CRM who tried it and which trade, so
-        // the visitor shows up as a lead tagged with its sector.
-        ...(sector ? { companyName: companyName || "", phone: phone || "", sector: sector.slug, sectorLabel: sector.label } : {}),
-      }),
-    }).catch((err) => console.error("[lead] CRM demo_tested forward failed:", err.message));
-  }
+  // If this e-mail matches an existing CRM prospect (e.g. an outbound FREN
+  // target trying the real demo on their own), the CRM flips their
+  // demo_tested flag. Awaited (see src/crm.js) but never fails the
+  // lead-gate response — same posture as the install-request forward.
+  await crm
+    .post("demoTested", {
+      email,
+      // Sector demos also hand the CRM who tried it and which trade, so
+      // the visitor shows up as a lead tagged with its sector.
+      ...(sector ? { companyName: companyName || "", phone: phone || "", sector: sector.slug, sectorLabel: sector.label } : {}),
+    })
+    .catch((err) => console.error("[lead] CRM demo_tested forward failed:", err.message));
   return result;
 }
 
-app.post("/api/lead", async (req, res) => {
+app.post("/api/lead", rateLimit("lead", 30), async (req, res) => {
   try {
     const { email, phone, companyName } = req.body;
     const sector = getSector(req.body.sector);
@@ -190,7 +188,7 @@ app.post("/api/lead", async (req, res) => {
 // other, and neither ever surfaces as an error to the visitor: the same
 // graceful-degradation posture as everywhere else in this codebase. The CRM
 // forward is skipped (not an error) when CRM_INBOUND_URL isn't configured.
-app.post("/api/install-request", async (req, res) => {
+app.post("/api/install-request", rateLimit("install-request", 5), async (req, res) => {
   const {
     companyName,
     contactName,
@@ -228,19 +226,7 @@ app.post("/api/install-request", async (req, res) => {
 
   const [emailResult, crmResult] = await Promise.allSettled([
     sendInstallRequestNotification(payload),
-    (async () => {
-      if (!process.env.CRM_INBOUND_URL || !process.env.CRM_INBOUND_SECRET) {
-        return { skipped: "CRM_INBOUND_URL/CRM_INBOUND_SECRET not configured" };
-      }
-      const resp = await fetch(process.env.CRM_INBOUND_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
-        body: JSON.stringify(payload),
-      });
-      const data = await resp.json();
-      if (!resp.ok) throw new Error(data.error || `CRM responded ${resp.status}`);
-      return data;
-    })(),
+    crm.post("inboundLeads", payload),
   ]);
 
   if (emailResult.status === "rejected") {
@@ -257,7 +243,7 @@ app.post("/api/install-request", async (req, res) => {
 // Same two-side-effects, never-block-the-visitor posture as install-request
 // above: an internal notification e-mail, and forwarding into the CRM so
 // the referred colleague becomes a real prospect (source: "referral").
-app.post("/api/referral", async (req, res) => {
+app.post("/api/referral", rateLimit("referral", 5), async (req, res) => {
   const { referredById, companyName, contactEmail, contactPhone, note } = req.body || {};
 
   if (!referredById) {
@@ -271,19 +257,7 @@ app.post("/api/referral", async (req, res) => {
 
   const [emailResult, crmResult] = await Promise.allSettled([
     sendReferralNotification(payload),
-    (async () => {
-      if (!process.env.CRM_REFERRAL_URL || !process.env.CRM_INBOUND_SECRET) {
-        return { skipped: "CRM_REFERRAL_URL/CRM_INBOUND_SECRET not configured" };
-      }
-      const resp = await fetch(process.env.CRM_REFERRAL_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
-        body: JSON.stringify(payload),
-      });
-      const data = await resp.json();
-      if (!resp.ok) throw new Error(data.error || `CRM responded ${resp.status}`);
-      return data;
-    })(),
+    crm.post("referral", payload),
   ]);
 
   if (emailResult.status === "rejected") {
@@ -306,21 +280,14 @@ app.post("/api/referral", async (req, res) => {
 // their e-mail to their own client id via the CRM, so the form can still
 // attribute the referral correctly. Relayed straight through to the CRM;
 // nothing here needs to know how that lookup works.
-app.post("/api/referral-identify", async (req, res) => {
+app.post("/api/referral-identify", rateLimit("referral-identify", 10), async (req, res) => {
   try {
     const { email } = req.body || {};
     if (!email) return res.status(400).json({ error: "E-mail requis" });
-    if (!process.env.CRM_REFERRAL_IDENTIFY_URL || !process.env.CRM_INBOUND_SECRET) {
+    if (!crm.isConfigured("referralIdentify")) {
       return res.status(503).json({ error: "Service indisponible pour le moment." });
     }
-    const resp = await fetch(process.env.CRM_REFERRAL_IDENTIFY_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
-      body: JSON.stringify({ email }),
-    });
-    const data = await resp.json();
-    if (!resp.ok) throw new Error(data.error || `CRM responded ${resp.status}`);
-    res.json(data);
+    res.json(await crm.post("referralIdentify", { email }));
   } catch (err) {
     console.error("[referral-identify] CRM lookup failed:", err.message);
     res.status(502).json({ error: "Une erreur est survenue — réessayez dans un instant." });
@@ -382,8 +349,14 @@ app.post("/api/whatsapp/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    if (isDemoNumber) await whatsappDemo.handleIncoming({ phoneNumberId, from, text, name }, reply);
-    else await whatsapp.handleIncomingMessage(phoneNumberId, from, text);
+    // One message per sender at a time: both handlers load the conversation,
+    // run a turn and save it, so two overlapping messages would overwrite
+    // each other's state (see store.withLock).
+    await store.withLock(`wa-lock:${phoneNumberId}:${from}`, () =>
+      isDemoNumber
+        ? whatsappDemo.handleIncoming({ phoneNumberId, from, text, name }, reply)
+        : whatsapp.handleIncomingMessage(phoneNumberId, from, text)
+    );
   } catch (err) {
     console.error("[whatsapp webhook]", err);
   }
@@ -497,16 +470,14 @@ function htmlToText(html) {
   return links.length ? text + "\n\nLien(s) : " + links.join(" · ") : text;
 }
 
-// Fire-and-forget: tells the CRM a sector-demo e-mail went out, so the
-// prospect's thread shows what was sent and when. Never blocks the demo.
-function logDemoActivity({ email, sector, event, result }) {
-  const base = process.env.CRM_DEMO_TESTED_URL;
-  if (!base || !process.env.CRM_INBOUND_SECRET || !email || !sector) return;
+// Tells the CRM a sector-demo e-mail went out, so the prospect's thread
+// shows what was sent and when. Never throws: a CRM hiccup must not break
+// the demo.
+async function logDemoActivity({ email, sector, event, result }) {
+  if (!email || !sector) return;
   const sent = (result && (result.preview || result)) || {};
-  fetch(base.replace(/demo-tested\/?$/, "demo-activity"), {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
-    body: JSON.stringify({
+  await crm
+    .post("demoActivity", {
       email,
       sector: sector.slug,
       sectorLabel: sector.label,
@@ -516,8 +487,8 @@ function logDemoActivity({ email, sector, event, result }) {
       text: htmlToText(sent.html),
       sentAt: new Date().toISOString(),
       simulated: !!(result && result.simulated),
-    }),
-  }).catch((err) => console.error("[demo-activity] CRM forward failed:", err.message));
+    })
+    .catch((err) => console.error("[demo-activity] CRM forward failed:", err.message));
 }
 
 // The whole decline step — classify, draft a reply, store the token, e-mail
@@ -630,7 +601,7 @@ async function processDecline(body, baseUrl) {
       emailResult = { simulated: true, failed: true, error: errorText(err) };
     }
 
-    if (sector && companyEmail) logDemoActivity({ email: companyEmail, sector, event: "decline", result: emailResult });
+    if (sector && companyEmail) await logDemoActivity({ email: companyEmail, sector, event: "decline", result: emailResult });
 
     return {
       ok: true,
@@ -983,7 +954,7 @@ async function processAccept(body) {
       lang,
     });
 
-    if (sector && companyEmail) logDemoActivity({ email: companyEmail, sector, event: "accept", result: result.companyEmail });
+    if (sector && companyEmail) await logDemoActivity({ email: companyEmail, sector, event: "accept", result: result.companyEmail });
     // Real client companies: record the booking (and route it on SCALE).
     if (company) await scale.createBooking({ company, quote, customer: customer || {}, source: "web", lang, gridSlug: body.grid });
 
@@ -1100,7 +1071,9 @@ async function autoFollowup(entry, token) {
 app.get("/api/cron/daily", async (req, res) => {
   if (!process.env.CRON_SECRET || req.get("authorization") !== `Bearer ${process.env.CRON_SECRET}`) return res.sendStatus(401);
   try {
-    res.json(await scale.runDailyAutomations({ followup: autoFollowup }));
+    const out = await scale.runDailyAutomations({ followup: autoFollowup });
+    out.rateLimitKeysPurged = await store.purgeRateLimitKeys();
+    res.json(out);
   } catch (err) {
     console.error("[cron daily]", err);
     res.status(500).json({ error: err.message });
@@ -1128,6 +1101,6 @@ app.listen(PORT, () => {
     console.log("  Set WHATSAPP_ACCESS_TOKEN in .env and add each company's number to src/companies.js (see .env.example).");
   }
   if (!process.env.WHATSAPP_APP_SECRET) {
-    console.warn("⚠ WHATSAPP_APP_SECRET is not set — the WhatsApp webhook will accept unsigned requests from anyone.");
+    console.warn("⚠ WHATSAPP_APP_SECRET is not set — the WhatsApp webhook accepts unsigned requests locally (and refuses all of them in production).");
   }
 });

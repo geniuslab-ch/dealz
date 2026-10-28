@@ -1,5 +1,6 @@
 const Stripe = require("stripe");
 const store = require("./store");
+const crm = require("./crm");
 const { sendEmail } = require("./notifications");
 
 /**
@@ -160,18 +161,8 @@ function planOfSubscription(sub) {
   return { plan: null, billing: null };
 }
 
-async function forwardToCrm(payload) {
-  const base = process.env.CRM_INBOUND_URL;
-  if (!base || !process.env.CRM_INBOUND_SECRET) return { skipped: "CRM not configured" };
-  const url = base.replace(/inbound-leads\/?$/, "billing-events");
-  const resp = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Inbound-Secret": process.env.CRM_INBOUND_SECRET },
-    body: JSON.stringify(payload),
-  });
-  const data = await resp.json().catch(() => ({}));
-  if (!resp.ok) throw new Error(data.error || `CRM responded ${resp.status}`);
-  return data;
+function forwardToCrm(payload) {
+  return crm.post("billingEvents", payload);
 }
 
 async function tellTeam(subject, lines) {
