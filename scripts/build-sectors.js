@@ -552,6 +552,7 @@ function buildLanding(S, lang, all, tarifs) {
   return `<!doctype html>
 <html lang="${cfg.htmlLang}">
 <head>
+  <script src="/consent.js" defer></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${esc(title)}</title>
@@ -780,6 +781,7 @@ function buildDemo(S, lang) {
   return `<!doctype html>
 <html lang="${cfg.htmlLang}">
 <head>
+  <script src="/consent.js" defer></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${esc(title)}</title>
@@ -1140,6 +1142,7 @@ function buildHub(lang, all) {
   return `<!doctype html>
 <html lang="${cfg.htmlLang}">
 <head>
+  <script src="/consent.js" defer></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${esc(title)}</title>

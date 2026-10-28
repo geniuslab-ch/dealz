@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /crm/
+
+Sitemap: https://dealz.website/sitemap.xml

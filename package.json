@@ -8,7 +8,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "build:sectors": "node scripts/build-sectors.js",
-    "check:sectors": "node scripts/build-sectors.js --check"
+    "check:sectors": "node scripts/build-sectors.js --check",
+    "build:sitemap": "node scripts/build-sitemap.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",
