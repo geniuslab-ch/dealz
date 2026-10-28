@@ -22,11 +22,9 @@ const { hasFeature } = require("./plans");
  * grid. A single ACCESS_TOKEN sends on behalf of any of them by just
  * targeting the right phone_number_id per call.
  *
- * The server has no session/database, so per-sender conversation state
- * (the same `messages[]` array the website keeps in a browser-side closure)
- * lives in an in-memory Map here instead, keyed by (receiving number,
- * customer number) — same fine-for-a-single-process-demo tradeoff as
- * src/store.js.
+ * Per-sender conversation state (the same `messages[]` array the website
+ * keeps in a browser-side closure) lives in src/store.js, keyed by
+ * (receiving number, customer number).
  */
 
 const API_VERSION = process.env.WHATSAPP_API_VERSION || "v21.0";
@@ -79,7 +77,14 @@ function verifyWebhookChallenge(mode, token) {
 // if WHATSAPP_APP_SECRET isn't set, so local testing without it still works.
 function verifySignature(req) {
   const secret = process.env.WHATSAPP_APP_SECRET;
-  if (!secret) return true;
+  // Without the secret nothing can be checked: allowed for local testing,
+  // refused in production, where anyone could otherwise post fake messages
+  // that send WhatsApp replies and e-mails.
+  if (!secret) {
+    if (process.env.VERCEL_ENV !== "production") return true;
+    console.error("[whatsapp webhook] WHATSAPP_APP_SECRET is not set in production — rejecting");
+    return false;
+  }
   const signature = req.headers["x-hub-signature-256"];
   // Says why a request is refused (never the secret), so a wrong
   // WHATSAPP_APP_SECRET can be told apart from a body that didn't arrive.
@@ -98,25 +103,26 @@ function verifySignature(req) {
 // phone messaging two different companies' numbers gets two independent
 // conversations.
 
-const sessions = new Map();
+// Stored in Supabase through src/store.js (one fixed key per sender), not in
+// memory: on Vercel each message can land on a different instance, and an
+// in-memory Map there restarted conversations mid-quote.
 const SESSION_TTL_MS = 1000 * 60 * 60 * 6; // 6h of silence starts a fresh conversation
 
 function sessionKey(phoneNumberId, from) {
-  return `${phoneNumberId}:${from}`;
+  return `wa-session:${phoneNumberId}:${from}`;
 }
-function getSession(phoneNumberId, from) {
-  const key = sessionKey(phoneNumberId, from);
-  const existing = sessions.get(key);
+async function getSession(phoneNumberId, from) {
+  const existing = await store.getKey(sessionKey(phoneNumberId, from));
   if (existing && Date.now() - existing.updatedAt < SESSION_TTL_MS) return existing;
-  const fresh = { messages: [], pendingOptions: null, pendingQuote: null, updatedAt: Date.now() };
-  sessions.set(key, fresh);
-  return fresh;
+  return { messages: [], pendingOptions: null, pendingQuote: null, updatedAt: Date.now() };
 }
 function touchSession(session) {
   session.updatedAt = Date.now();
 }
-function clearSession(phoneNumberId, from) {
-  sessions.delete(sessionKey(phoneNumberId, from));
+// A finished conversation (booked or declined) is deleted; any other is saved.
+async function saveSession(phoneNumberId, from, session) {
+  if (session.done) return store.deleteKey(sessionKey(phoneNumberId, from));
+  return store.setKey(sessionKey(phoneNumberId, from), session);
 }
 
 // ---- Formatting helpers ----
@@ -171,10 +177,17 @@ async function handleIncomingMessage(phoneNumberId, from, rawText) {
     console.warn(`[whatsapp] Message reçu sur un numéro non configuré (phone_number_id=${phoneNumberId}) — ignoré.`);
     return;
   }
-  const reply = (body) => sendWhatsAppText(from, body, phoneNumberId);
-
-  const session = getSession(phoneNumberId, from);
+  const session = await getSession(phoneNumberId, from);
   touchSession(session);
+  try {
+    await converse(company, session, phoneNumberId, from, rawText);
+  } finally {
+    await saveSession(phoneNumberId, from, session);
+  }
+}
+
+async function converse(company, session, phoneNumberId, from, rawText) {
+  const reply = (body) => sendWhatsAppText(from, body, phoneNumberId);
   const text = (rawText || "").trim();
   if (!text) return;
 
@@ -199,7 +212,7 @@ async function handleIncomingMessage(phoneNumberId, from, rawText) {
         console.error("[whatsapp] booking confirmation failed:", err);
         await reply("Un souci technique est survenu lors de la confirmation — nous vous recontactons directement.");
       }
-      clearSession(phoneNumberId, from);
+      session.done = true;
       return;
     }
 
@@ -210,7 +223,7 @@ async function handleIncomingMessage(phoneNumberId, from, rawText) {
         if (!hasFeature(company, "recovery")) {
           await sendDeclineNotification({ quote, customer: quote.customer || {}, notifyEmail: company.notifyEmail, basic: true });
           await reply("Compris, merci pour votre retour — nous en tenons compte. N'hésitez pas à nous recontacter si vous changez d'avis.");
-          clearSession(phoneNumberId, from);
+          session.done = true;
           return;
         }
         const classified = await classifyObjection(text);
@@ -245,7 +258,7 @@ async function handleIncomingMessage(phoneNumberId, from, rawText) {
         console.error("[whatsapp] decline notification failed:", err);
       }
       await reply("Compris, merci pour votre retour — nous en tenons compte. N'hésitez pas à nous recontacter si vous changez d'avis.");
-      clearSession(phoneNumberId, from);
+      session.done = true;
       return;
     }
 

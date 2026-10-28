@@ -11,7 +11,9 @@ const COMPANY_NAME = "SwissClean Sàrl";
 // companyEmail (see docs/lead-gate.js / getCompanyEmail()) — this is only
 // the safety-net default when that's missing.
 const COMPANY_NOTIFY_EMAIL = process.env.COMPANY_NOTIFY_EMAIL || "dealz@dealz.website";
-const APP_BASE_URL = process.env.APP_BASE_URL || "http://localhost:3000";
+// Links in e-mails. On Vercel without APP_BASE_URL this used to fall back to
+// localhost, which made every link in those e-mails dead.
+const APP_BASE_URL = process.env.APP_BASE_URL || (process.env.VERCEL ? "https://dealz.website" : "http://localhost:3000");
 
 // Distinct from COMPANY_NOTIFY_EMAIL above: that one is the *fictional
 // demo company's* inbox (SwissClean), used for notifications about a

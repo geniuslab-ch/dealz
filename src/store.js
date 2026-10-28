@@ -102,4 +102,23 @@ async function deleteKey(key) {
   if (error) throw error;
 }
 
-module.exports = { put, get, update, getKey, setKey, deleteKey };
+// Rate-limit counters (src/rateLimit.js) are only read during their own hour
+// and would otherwise pile up: the daily cron deletes those older than a day.
+async function purgeRateLimitKeys() {
+  const cutoff = Date.now() - 24 * 60 * 60 * 1000;
+  if (!supabase) {
+    let n = 0;
+    for (const [k, v] of memoryStore) if (k.startsWith("rl:") && v.createdAt < cutoff) memoryStore.delete(k), n++;
+    return n;
+  }
+  const { data, error } = await supabase
+    .from("store_entries")
+    .delete()
+    .like("token", "rl:%")
+    .lt("created_at", new Date(cutoff).toISOString())
+    .select("token");
+  if (error) throw error;
+  return data.length;
+}
+
+module.exports = { put, get, update, getKey, setKey, deleteKey, purgeRateLimitKeys };
