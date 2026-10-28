@@ -102,6 +102,56 @@ async function deleteKey(key) {
   if (error) throw error;
 }
 
+// ---- Per-key lock (e.g. one WhatsApp sender at a time) ----
+// Two messages from the same customer can arrive in two serverless
+// invocations at once; each would load the same conversation, and the last
+// save would silently drop the other message. withLock() runs them one after
+// the other. The lock is a row in store_entries created with "insert if
+// absent" — the primary key makes that atomic, so no schema change is needed.
+// A lock older than staleMs (a crashed invocation) is taken over.
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function tryLock(key, staleMs) {
+  if (!supabase) {
+    const held = memoryStore.get(key);
+    if (held && Date.now() - held.createdAt < staleMs) return false;
+    memoryStore.set(key, { data: { lock: true }, createdAt: Date.now() });
+    return true;
+  }
+  const { error: staleErr } = await supabase
+    .from("store_entries")
+    .delete()
+    .eq("token", key)
+    .lt("created_at", new Date(Date.now() - staleMs).toISOString());
+  if (staleErr) throw staleErr;
+  const { data, error } = await supabase
+    .from("store_entries")
+    .upsert({ token: key, data: { lock: true } }, { onConflict: "token", ignoreDuplicates: true })
+    .select("token");
+  if (error) throw error;
+  return data.length > 0;
+}
+
+// Runs fn() while holding the lock `key`, waiting up to waitMs for it. If the
+// lock can't be had in time (or the store fails), fn() runs anyway, so a
+// customer is never left without an answer — the old, unserialized behavior.
+async function withLock(key, fn, { waitMs = 20000, staleMs = 60000, pollMs = 400 } = {}) {
+  let locked = false;
+  const deadline = Date.now() + waitMs;
+  try {
+    while (!(locked = await tryLock(key, staleMs)) && Date.now() < deadline) await sleep(pollMs);
+    if (!locked) console.warn(`[store] lock ${key} still held after ${waitMs} ms — continuing without it`);
+  } catch (err) {
+    console.error(`[store] lock ${key} failed, continuing without it:`, err.message);
+  }
+  try {
+    return await fn();
+  } finally {
+    if (locked) await deleteKey(key).catch((err) => console.error(`[store] unlock ${key} failed:`, err.message));
+  }
+}
+
 // Rate-limit counters (src/rateLimit.js) are only read during their own hour
 // and would otherwise pile up: the daily cron deletes those older than a day.
 async function purgeRateLimitKeys() {
@@ -121,4 +171,4 @@ async function purgeRateLimitKeys() {
   return data.length;
 }
 
-module.exports = { put, get, update, getKey, setKey, deleteKey, purgeRateLimitKeys };
+module.exports = { put, get, update, getKey, setKey, deleteKey, withLock, purgeRateLimitKeys };

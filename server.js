@@ -349,8 +349,14 @@ app.post("/api/whatsapp/webhook", async (req, res) => {
       return res.sendStatus(200);
     }
 
-    if (isDemoNumber) await whatsappDemo.handleIncoming({ phoneNumberId, from, text, name }, reply);
-    else await whatsapp.handleIncomingMessage(phoneNumberId, from, text);
+    // One message per sender at a time: both handlers load the conversation,
+    // run a turn and save it, so two overlapping messages would overwrite
+    // each other's state (see store.withLock).
+    await store.withLock(`wa-lock:${phoneNumberId}:${from}`, () =>
+      isDemoNumber
+        ? whatsappDemo.handleIncoming({ phoneNumberId, from, text, name }, reply)
+        : whatsapp.handleIncomingMessage(phoneNumberId, from, text)
+    );
   } catch (err) {
     console.error("[whatsapp webhook]", err);
   }
