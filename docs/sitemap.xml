@@ -253,6 +253,20 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/pressing/" />
   </url>
   <url>
+    <loc>https://dealz.website/de/secteurs/toiture/demo.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/demo.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/demo.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/demo.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/demo.html" />
+  </url>
+  <url>
+    <loc>https://dealz.website/de/secteurs/toiture/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/" />
+  </url>
+  <url>
     <loc>https://dealz.website/de/secteurs/traiteur/demo.html</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/traiteur/demo.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/traiteur/demo.html" />
@@ -547,6 +561,20 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/pressing/" />
   </url>
   <url>
+    <loc>https://dealz.website/en/secteurs/toiture/demo.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/demo.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/demo.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/demo.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/demo.html" />
+  </url>
+  <url>
+    <loc>https://dealz.website/en/secteurs/toiture/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/" />
+  </url>
+  <url>
     <loc>https://dealz.website/en/secteurs/traiteur/demo.html</loc>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/traiteur/demo.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/traiteur/demo.html" />
@@ -818,6 +846,20 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/pressing/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/pressing/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/pressing/" />
+  </url>
+  <url>
+    <loc>https://dealz.website/secteurs/toiture/demo.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/demo.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/demo.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/demo.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/demo.html" />
+  </url>
+  <url>
+    <loc>https://dealz.website/secteurs/toiture/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/" />
   </url>
   <url>
     <loc>https://dealz.website/secteurs/traiteur/demo.html</loc>
