@@ -376,5 +376,26 @@
         "emailNoun": "Ihre Gerätemiete"
       }
     }
+  },
+  "toiture": {
+    "label": "Toiture et couverture",
+    "emailNoun": "vos travaux de toiture",
+    "company": {
+      "name": "Sommet Toitures Sàrl",
+      "email": "hello@sommet-toitures.demo",
+      "phone": "024 000 00 40",
+      "address": "Rue du Simplon 21, 1870 Monthey",
+      "logo": "/images/demo-logos/toiture-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Roofing",
+        "emailNoun": "your roofing work"
+      },
+      "de": {
+        "label": "Dach und Bedachung",
+        "emailNoun": "Ihre Dacharbeiten"
+      }
+    }
   }
 }

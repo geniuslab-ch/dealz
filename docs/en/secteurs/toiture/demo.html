@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <script src="/consent.js" defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sommet Toitures Sàrl — Demo site (powered by Dealz)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/demo.css" />
+  <style>
+    :root { --sc-teal: #3d5a80; --sc-teal-dark: #2c4463; --sc-teal-light: #dde6f2; --sc-coral: #e0712c; --sc-coral-dark: #c25a1a; --sc-bg: #f9fbfd; }
+  </style>
+</head>
+<body class="swissclean">
+<!-- Généré par scripts/build-sectors.js depuis docs/secteurs/data/toiture.js — ne pas éditer à la main. -->
+
+  <div class="sc-demo-banner">
+    <span class="tag">DÉMO</span>
+    This is the fictional site of a business in the &quot;Roofing&quot; sector, using Dealz.
+    <a href="/en/secteurs/toiture/">Discover Dealz →</a>
+  </div>
+
+  <nav class="sc-nav">
+    <div class="sc-nav-logo"><img class="sc-logo-mark" src="/images/demo-logos/toiture-mark.png" alt="" width="34" height="34" /> Sommet Toitures</div>
+    <div class="sc-nav-links">
+      <button data-tab="accueil" class="active">Home</button>
+      <button data-tab="prestations">Services</button>
+      <button data-tab="apropos">About</button>
+      <button data-tab="devis" class="cta">✨ Get a quote</button>
+      <button data-tab="contact">Contact</button>
+    </div>
+  </nav>
+
+  <section id="sc-tab-accueil" class="sc-tab active">
+    <div class="sc-hero">
+      <div class="sc-hero-inner">
+        <span class="sc-eyebrow">Vaud &amp; Valais · Fictional example</span>
+        <h1>A solid roof and a clear price, before anyone visits.</h1>
+        <p>Repairs, moss removal, full re-roofing and metalwork in French-speaking Switzerland — get a firm price in seconds, right here on this site.</p>
+        <div>
+          <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Get an instant quote</button>
+          <button class="sc-btn sc-btn-secondary" data-goto="prestations">See our services</button>
+        </div>
+      </div>
+      <div class="sc-hero-strip">
+        <div class="stat"><div class="num">4.9★</div><div class="lbl">CUSTOMER SATISFACTION</div></div>
+        <div class="stat"><div class="num">900+</div><div class="lbl">ROOFS RENOVATED</div></div>
+        <div class="stat"><div class="num">&lt; 1 min</div><div class="lbl">FOR A QUOTE</div></div>
+      </div>
+    </div>
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Why Sommet Toitures</span>
+      <h2 class="sc-title">A clear price, before you even book</h2>
+      <p class="sc-sub">Answer a few questions and get a detailed quote right away.</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">⚡</div><h3>Instant price</h3><p>Detailed quote in under a minute, any time of day.</p></div>
+        <div class="sc-card"><div class="icon">🎯</div><h3>Guided step by step</h3><p>A few simple questions — no complicated form.</p></div>
+        <div class="sc-card"><div class="icon">🔒</div><h3>Firm quote</h3><p>The price shown is the price paid.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-prestations" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Services</span>
+      <h2 class="sc-title">Our roofing work</h2>
+      <p class="sc-sub">Pick a service, or simply describe your project in the “Get a quote” tab.</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">🔧</div><h3>Repairs and leaks</h3><p>Broken tiles, water ingress, storm damage.</p><span class="tag">from CHF 380</span></div>
+        <div class="sc-card"><div class="icon">🧽</div><h3>Cleaning and moss removal</h3><p>Low-pressure cleaning and anti-moss treatment.</p><span class="tag">from CHF 14/m²</span></div>
+        <div class="sc-card"><div class="icon">🏠</div><h3>Full re-roofing</h3><p>Stripping, new roof covering, waste removal.</p><span class="tag">from CHF 115/m²</span></div>
+        <div class="sc-card"><div class="icon">🌧️</div><h3>Gutters and metalwork</h3><p>Gutters, downpipes, zinc or copper flashing.</p><span class="tag">from CHF 68/m</span></div>
+        <div class="sc-card"><div class="icon">🪟</div><h3>Roof windows</h3><p>Fitting and replacement, watertight flashing.</p><span class="tag">from CHF 1,450</span></div>
+        <div class="sc-card"><div class="icon">🛰️</div><h3>Drone inspection</h3><p>Full photo report, without climbing on the roof.</p><span class="tag">CHF 190</span></div>
+      </div>
+      <div style="text-align:center; margin-top: 32px;">
+        <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Get an instant quote</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-apropos" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">About</span>
+      <h2 class="sc-title">Roofers who work cleanly</h2>
+      <p class="sc-sub" style="margin-bottom:0;">Sommet Toitures has been working for households, property managers and co-owned buildings across Vaud and Valais since 2008. In 2026, we added an instant quote assistant to our website — faster for you, less paperwork for us.</p>
+      <ul class="sc-about-list">
+        <li><span class="sc-check">✓</span><span><b>Safe site</b> — scaffolding, nets and protection to SUVA standards.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Durable materials</b> — Swiss-made tiles and metalwork.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Transparent pricing</b> — the quote you receive is the price you pay.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="sc-tab-contact" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Contact</span>
+      <h2 class="sc-title">Talk to a person, or get an instant quote</h2>
+      <p class="sc-sub">Would rather answer a few questions than call? Head to the <b>Get a quote</b> tab.</p>
+      <div class="sc-contact-grid">
+        <div class="sc-contact-card"><div class="lbl">Phone</div><div class="val">024 000 00 40</div></div>
+        <div class="sc-contact-card"><div class="lbl">E-mail</div><div class="val">hello@sommet-toitures.demo</div></div>
+        <div class="sc-contact-card"><div class="lbl">Service area</div><div class="val">Vaud, Valais, Fribourg</div></div>
+        <div class="sc-contact-card"><div class="lbl">Hours</div><div class="val">Mon–Fri, 7am–5pm · emergencies 7 days</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="sc-tab-devis" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">✨ Get a quote</span>
+      <h2 class="sc-title">Your price in under a minute</h2>
+      <p class="sc-devis-note">Answer a few questions about your roof — you'll get a real quote that you can accept or decline right here.</p>
+
+      <div class="devis-mode-tabs" id="devis-mode-tabs">
+        <button class="dmt-btn active" data-devis-mode="page">📄 Dedicated tab</button>
+        <button class="dmt-btn" data-devis-mode="popup">🪟 Pop-up</button>
+        <button class="dmt-btn" data-devis-mode="chat">💬 Chat widget</button>
+        <button class="dmt-btn" data-devis-mode="whatsapp" id="devis-whatsapp-tab" style="display: none">📱 WhatsApp Business</button>
+      </div>
+
+      <div class="devis-mode-panel active" data-devis-panel="page">
+        <p class="sc-devis-note">Dedicated tab — like the one you just clicked by going to "✨ Get a quote". The quote lives on a real page of your site, under your own header and navigation, without ever leaving it.</p>
+        <div class="quote-wrap" id="quote-wrap-anchor">
+          <div class="quote-side">
+            <h3>How it works</h3>
+            <div class="flow-steps">
+              <div class="flow-step"><div class="num">1</div><span class="label">You describe your need</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">2</div><span class="label">A few quick questions</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">3</div><span class="label">Calculated from our price list</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">4</div><span class="label">Firm quote displayed</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">5</div><span class="label">You accept or decline</span></div>
+            </div>
+          </div>
+
+          <div class="quote-panel-slot" id="quote-panel-slot">
+            <!-- .quote-panel is the single, real chat instance — JS moves this
+                 exact node between this slot and the floating bubble slot
+                 depending on the active tab, so there is only ever one
+                 conversation/state. -->
+            <div class="quote-panel" id="quote-panel">
+              <div class="quote-panel-head">
+                <div class="title">Sommet Toitures · Quote</div>
+                <div class="subtitle">Usually an instant reply</div>
+              </div>
+
+              <div class="dealz-lead-gate" id="dealz-lead-gate">
+                <p class="dlg-intro">To try the whole journey, enter <b>your</b> e-mail: you'll receive the e-mails the business receives (new booking, decline with a suggested reply…). At the end of the demo, you'll play the client with a <b>different</b> address.</p>
+                <input class="dcf-input" id="dlg-company" placeholder="Your company name (optional)" />
+                <input class="dcf-input" id="dlg-email" type="email" placeholder="Your e-mail (you'll receive the business's e-mails)" required />
+                <input class="dcf-input" id="dlg-phone" placeholder="Phone (optional)" />
+                <button class="dcf-submit" id="dlg-submit">Try the demo</button>
+                <p class="dlg-msg" id="dlg-msg"></p>
+              </div>
+
+              <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+                <div class="dealz-messages" id="dealz-messages"></div>
+                <div class="dealz-inputbar">
+                  <input id="dealz-input" type="text" placeholder="Describe your roofing work…" autocomplete="off" />
+                  <button id="dealz-send">Send</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="popup">
+        <p class="sc-devis-note">A "Quote" button in your menu opens the same quote full-screen, in its own window — more room than the bubble, without ever leaving your site.</p>
+        <div class="devis-mode-try">
+          <button class="sc-btn sc-btn-primary" id="try-popup-btn">Try the pop-up →</button>
+        </div>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="chat">
+        <p class="sc-devis-note">A floating bubble on your site, in a corner of the screen — the simplest integration: a single line of code, works on any platform (Wix, Shopify, WordPress, hand-built site…). Click the bubble in the bottom right to try it.</p>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="whatsapp">
+        <p class="sc-devis-note">Your clients write directly to your WhatsApp Business — nothing to install on their phone.</p>
+        <div class="devis-mode-try">
+          <a href="#" id="whatsapp-trial-link" class="sc-btn sc-btn-primary" target="_blank" rel="noopener">Try on WhatsApp →</a>
+        </div>
+      </div>
+
+      <!-- Real floating bubble, matching embed.js's bubble mode — shown only
+           while the "Widget de chat" tab is active; .quote-panel is moved in
+           here, so the bubble opens the exact same live conversation. -->
+      <button id="demo-widget-launcher" class="demo-widget-launcher" aria-label="Open the quote online">💬</button>
+      <div id="demo-widget-panel-slot" class="demo-widget-panel-slot"></div>
+
+      <!-- Pop-up: an in-page modal (backdrop + centered card) loading this
+           sector's quote-window.html in an iframe — what a real client site
+           gets via embed.js's data-dealz-mode="window". -->
+      <div id="demo-popup-overlay" class="demo-popup-overlay">
+        <div class="demo-popup-card">
+          <button id="demo-popup-close" class="demo-popup-close" aria-label="Close">✕</button>
+          <iframe id="demo-popup-iframe" title="Online quote"></iframe>
+        </div>
+      </div>
+
+      <div class="demo-followup" id="demo-followup">
+        <h2>Picture this on YOUR site.</h2>
+        <div class="imagine-lines">Your prices. Your services. Your brand. Your clients.<br />Your AI sales assistant, available 24 hours a day.</div>
+        <div class="demo-followup-ctas">
+          <a href="/en/secteurs/toiture/#contact" class="btn btn-primary">Request installation</a>
+          <a href="/en/secteurs/toiture/#tarifs" class="btn btn-secondary">See pricing</a>
+          <a href="mailto:dealz@dealz.website" class="btn btn-secondary">Contact Dealz</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sc-footer">
+    Sommet Toitures Sàrl — demonstration site, this business doesn't really exist.
+    Powered by <a href="/en/secteurs/toiture/">⚡ Dealz</a>.
+  </footer>
+
+  <script>window.DEALZ_LANG = "en"; window.DEALZ_SECTOR = "toiture";</script>
+  <script src="/demo-tabs.js"></script>
+  <script src="/secteurs/data/toiture.js"></script>
+  <script src="/sector-quote.js"></script>
+  <script src="/lead-gate.js"></script>
+  <script src="/whatsapp-trial-card.js"></script>
+  <script>
+    document.addEventListener("dealz:quote-delivered", function () {
+      var el = document.getElementById("demo-followup");
+      if (!el.classList.contains("show")) {
+        el.classList.add("show");
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+
+    // Switches between the four "how this looks on your site" panels (same
+    // behaviour as the SwissClean demo). The chat mode is the real
+    // floating-bubble behaviour: the single .quote-panel node is physically
+    // moved between the inline slot and the fixed-position bubble slot.
+    (function () {
+      var tabButtons = document.querySelectorAll("#devis-mode-tabs .dmt-btn");
+      var panels = document.querySelectorAll(".devis-mode-panel");
+      var quotePanel = document.getElementById("quote-panel");
+      var inlineSlot = document.getElementById("quote-panel-slot");
+      var bubbleSlot = document.getElementById("demo-widget-panel-slot");
+      var launcher = document.getElementById("demo-widget-launcher");
+
+      function setMode(mode) {
+        tabButtons.forEach(function (b) { b.classList.toggle("active", b.dataset.devisMode === mode); });
+        panels.forEach(function (p) { p.classList.toggle("active", p.dataset.devisPanel === mode); });
+        if (mode === "chat") {
+          bubbleSlot.appendChild(quotePanel);
+          launcher.classList.add("show");
+          bubbleSlot.classList.remove("open");
+        } else {
+          inlineSlot.appendChild(quotePanel);
+          launcher.classList.remove("show");
+          bubbleSlot.classList.remove("open");
+        }
+      }
+      tabButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () { setMode(btn.dataset.devisMode); });
+      });
+      launcher.addEventListener("click", function () { bubbleSlot.classList.toggle("open"); });
+    })();
+
+    // Pop-up mode: in-page modal (stays on this page), not a new window.
+    (function () {
+      var overlay = document.getElementById("demo-popup-overlay");
+      var iframe = document.getElementById("demo-popup-iframe");
+      function openPopup() {
+        if (!iframe.src) iframe.src = "/en/secteurs/toiture/quote-window.html?embedded=1";
+        overlay.classList.add("open");
+      }
+      function closePopup() { overlay.classList.remove("open"); }
+      document.getElementById("try-popup-btn").addEventListener("click", openPopup);
+      document.getElementById("demo-popup-close").addEventListener("click", closePopup);
+      overlay.addEventListener("click", function (e) { if (e.target === overlay) closePopup(); });
+    })();
+  </script>
+</body>
+</html>
