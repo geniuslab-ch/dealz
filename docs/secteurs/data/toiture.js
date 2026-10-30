@@ -16,8 +16,8 @@
           options: [{ id: "small", price: 380 }, { id: "leak", price: 950 }, { id: "storm", price: 2400 }],
         },
         {
+          // Asked for every job: the water-repellent option is priced by roof area.
           id: "surf", type: "single",
-          when: function (a) { return a.work.id === "cleaning" || a.work.id === "renovation"; },
           options: [{ id: "s1", m2: 60 }, { id: "s2", m2: 120 }, { id: "s3", m2: 200 }, { id: "s4", m2: 320 }],
         },
         {
@@ -42,16 +42,14 @@
       compute: function (a, L, H) {
         var items = [];
         var w = a.work.id;
-        var base = 60;
+        var base = a.surf.m2;
         var k = a.pitch ? a.pitch.k : 1;
         if (w === "repair") {
           items.push({ label: L("diagnostic"), amount: 150 });
           items.push({ label: L("repair_" + a.damage.id), amount: a.damage.price });
         } else if (w === "cleaning") {
-          base = a.surf.m2;
           items.push({ label: L("cleaning", { m2: base }), amount: H.round5(base * 14 * k) });
         } else if (w === "renovation") {
-          base = a.surf.m2;
           items.push({ label: L("strip", { m2: base }), amount: H.round5(base * 28) });
           items.push({ label: L("cover_" + a.material.id, { m2: base }), amount: H.round5(base * a.material.rate * k) });
           items.push({ label: L("scaffold"), amount: H.round5(base * a.height.scaf) });
