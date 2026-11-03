@@ -559,6 +559,7 @@ async function sendInstallRequestNotification({
   planChoice,
   billingChoice,
   whatsappAddon,
+  currency,
   teamSize,
   mainProblem,
   requestSources,
@@ -574,8 +575,8 @@ async function sendInstallRequestNotification({
        <b>Téléphone :</b> ${contactPhone || "(non fourni)"}<br/>
        <b>Site web :</b> ${websiteUrl || "(non fourni)"}</p>
     <p><b>Secteur :</b> ${sectorName || sector || "— (page générale)"}<br/>
-       <b>Formule :</b> ${planChoice === "WHATSAPP" ? "WHATSAPP seul — CHF 34.20/mois + CHF 190 d'installation (pas de site internet)" : `${planChoice || "—"} (${billingLabelFr(billingChoice)})`}<br/>
-       <b>Option WhatsApp Business :</b> ${planChoice === "WHATSAPP" ? "— (WhatsApp est la formule)" : whatsappAddon ? "Oui (+ CHF 25/mois)" : "Non"}<br/>
+       <b>Formule :</b> ${planChoice || "—"} (${billingLabelFr(billingChoice)})${currency ? " — prix en " + String(currency).toUpperCase() : ""}<br/>
+       <b>WhatsApp Business :</b> inclus dans la formule${websiteUrl ? "" : " (pas de site internet : bouton WhatsApp uniquement)"}<br/>
        <b>Taille de l'équipe :</b> ${teamSize || "—"}<br/>
        <b>Problème principal :</b> ${mainProblem || "—"}<br/>
        <b>Sources de demandes actuelles :</b> ${requestSources || "—"}</p>
