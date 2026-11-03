@@ -11,7 +11,9 @@
  * Preview another market from anywhere: ?currency=EUR (or GBP, USD, CHF)
  * or a country code (?currency=FR, ?currency=UK, ?currency=US) shows that
  * market's prices and keeps them for the rest of the visit (sessionStorage).
- * Stripe Checkout still bills in the visitor's real currency (server.js).
+ * A preview only changes what is shown: .billingCode, which the contact
+ * flow sends to checkout and to the install request, stays the visitor's
+ * own currency.
  *
  * Markup:
  *   <span data-price="CLOSE"></span>        a price from the list: a plan
@@ -64,13 +66,21 @@
     return v.length === 2 ? currencyFor(v) : null;
   }
 
-  var stored = fromUrl();
-  if (stored) {
-    try { sessionStorage.setItem("dealz-currency", stored); } catch (e) {}
-  } else {
-    try { stored = sessionStorage.getItem("dealz-currency"); } catch (e) {}
+  function load(key) {
+    try { var v = sessionStorage.getItem(key); return v && SYMBOL[v] ? v : null; } catch (e) { return null; }
   }
-  var code = (stored && SYMBOL[stored] && stored) || fromBrowser() || "CHF";
+
+  // "dealz-currency": the visitor's own currency (country, else browser).
+  // "dealz-currency-preview": a market picked with ?currency=, display only.
+  var preview = fromUrl();
+  if (preview) {
+    try { sessionStorage.setItem("dealz-currency-preview", preview); } catch (e) {}
+  } else {
+    preview = load("dealz-currency-preview");
+  }
+  var stored = load("dealz-currency");
+  var billing = stored || fromBrowser() || "CHF";
+  var code = preview || billing;
 
   function list() {
     return window.DealzPrices ? window.DealzPrices.list(code) : null;
@@ -131,9 +141,11 @@
   }
 
   function set(next) {
-    if (!next || !SYMBOL[next] || next === code) return;
+    if (!next || !SYMBOL[next]) return;
+    billing = next;
+    try { sessionStorage.setItem("dealz-currency", billing); } catch (e) {}
+    if (preview || next === code) return;
     code = next;
-    try { sessionStorage.setItem("dealz-currency", code); } catch (e) {}
     apply();
     window.dispatchEvent(new CustomEvent("dealz-currency", { detail: { code: code } }));
   }
@@ -143,6 +155,7 @@
     price: price,
     apply: apply,
     get code() { return code; },
+    get billingCode() { return billing; },
     get setup() { var L = list(); return L ? L.setup : 0; },
   };
 
