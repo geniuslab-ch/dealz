@@ -1110,7 +1110,7 @@
     } finally {
       sending = false;
       sendBtn.disabled = false;
-      input.focus();
+      input.focus({ preventScroll: true });
     }
   }
 
