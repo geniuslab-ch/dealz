@@ -198,6 +198,7 @@ app.post("/api/install-request", rateLimit("install-request", 5), async (req, re
     planChoice,
     billingChoice,
     whatsappAddon,
+    currency,
     teamSize,
     mainProblem,
     requestSources,
@@ -217,6 +218,7 @@ app.post("/api/install-request", rateLimit("install-request", 5), async (req, re
     planChoice,
     billingChoice,
     whatsappAddon: !!whatsappAddon,
+    currency: ["CHF", "EUR", "GBP", "USD"].includes(String(currency || "").toUpperCase()) ? String(currency).toUpperCase() : "",
     teamSize,
     mainProblem,
     requestSources,
@@ -992,7 +994,6 @@ app.post("/api/stripe/checkout", async (req, res) => {
     const session = await billing.createCheckout({
       plan: b.plan,
       billing: b.billing,
-      whatsapp: !!b.whatsapp,
       currency,
       lang: b.lang,
       baseUrl: process.env.APP_BASE_URL || `${req.protocol}://${req.get("host")}`,

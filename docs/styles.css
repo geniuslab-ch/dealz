@@ -1207,6 +1207,9 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 
 /* ---------- Pricing ---------- */
 .pricing-philosophy { font-size: 15px; color: var(--muted); max-width: 640px; margin: 0 0 32px; line-height: 1.6; }
+/* The tax note sits right under the philosophy line, which then needs less room below. */
+.pricing-philosophy:has(+ .pz-tax-note) { margin-bottom: 8px; }
+.pz-tax-note { font-size: 13px; font-weight: 700; color: var(--ink); margin: 0 0 28px; }
 .pricing-note { text-align: center; font-size: 13px; color: var(--muted); margin-top: 24px; }
 .pricing-roi-note {
   text-align: center;
@@ -1317,6 +1320,8 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
   transition: border-color 0.15s, background 0.15s;
 }
 .pz-addon.is-on { border-color: var(--blue); background: var(--blue-light); }
+.pz-addon-included { border-color: #bfe8d6; background: var(--green-light, #e4f7ef); }
+.pz-addon-included .pz-addon-price { color: var(--green, #17a672); }
 .pz-addon-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .pz-addon-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: 15px; font-weight: 800; }
 .pz-addon-price { font-size: 14px; font-weight: 800; color: var(--blue-dark); }

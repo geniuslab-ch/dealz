@@ -15,21 +15,23 @@ const { sendEmail } = require("./notifications");
  *                                 payments, plan changes, cancellations,
  *                                 disputes, refunds, fraud warnings.
  *
- * The catalog is created on demand: one Product per plan (plus setup and
- * the WhatsApp add-on), one Price per currency and billing period, found
- * again by lookup_key. Amounts are the same numbers in every currency.
+ * The catalog is created on demand: one Product per plan (plus setup), one
+ * Price per currency, amount and billing period, found again by lookup_key.
+ * Amounts come from docs/prices.js, the same list the website shows: each
+ * currency has its own numbers. WhatsApp is included in every plan.
  */
 
+const prices = require("../docs/prices");
+
 const PLANS = {
-  CAPTURE: { name: "Dealz CAPTURE", month: 48.3, once: 1420.3 },
-  CLOSE: { name: "Dealz CLOSE", month: 77.5, once: 1897.1 },
-  SCALE: { name: "Dealz SCALE", month: 145.2, once: 2158.8 },
+  CAPTURE: { name: "Dealz CAPTURE" },
+  CLOSE: { name: "Dealz CLOSE" },
+  SCALE: { name: "Dealz SCALE" },
 };
-const SETUP = { id: "dealz_setup", name: "Installation Dealz", amount: 390 };
-const WHATSAPP = { id: "dealz_whatsapp", name: "Option WhatsApp Dealz", month: 25 };
+const SETUP = { id: "dealz_setup", name: "Installation Dealz" };
 const CURRENCIES = ["chf", "eur", "gbp", "usd"];
 // The lifetime payment is a launch offer.
-const ONE_TIME_UNTIL = new Date("2027-01-01T00:00:00+01:00");
+const ONE_TIME_UNTIL = new Date(prices.ONCE_UNTIL);
 // Tags these sessions in the Stripe Dashboard (8 random letters suffix).
 const INTEGRATION_ID = "dealz_contact_flow_qvkrmtwa";
 
@@ -81,29 +83,29 @@ async function ensurePrice({ productId, productName, amount, currency, interval 
 
 /**
  * plan: CAPTURE | CLOSE | SCALE; billing: monthly | yearly | onetime.
- * Amounts always come from this file, never from the browser.
+ * Amounts always come from docs/prices.js on the server, never from the
+ * browser.
  */
-async function createCheckout({ plan, billing, whatsapp, currency, lang, lead, baseUrl }) {
+async function createCheckout({ plan, billing, currency, lang, lead, baseUrl }) {
   const P = PLANS[plan];
   if (!P) throw Object.assign(new Error("Formule inconnue"), { status: 400 });
   if (!["monthly", "yearly", "onetime"].includes(billing)) throw Object.assign(new Error("Facturation inconnue"), { status: 400 });
   if (billing === "onetime" && new Date() >= ONE_TIME_UNTIL) throw Object.assign(new Error("L'offre de paiement unique est terminée."), { status: 400 });
   const cur = CURRENCIES.includes(currency) ? currency : "chf";
   const productId = "dealz_" + plan.toLowerCase();
+  const list = prices.list(cur);
 
   const items = [];
   if (billing === "onetime") {
-    items.push({ price: await ensurePrice({ productId, productName: P.name, amount: P.once, currency: cur }), quantity: 1 });
+    items.push({ price: await ensurePrice({ productId, productName: P.name, amount: list.once[plan], currency: cur }), quantity: 1 });
   } else {
     const interval = billing === "yearly" ? "year" : "month";
-    const amount = billing === "yearly" ? Math.round(P.month * 1200) / 100 : P.month;
+    const month = list.plans[plan];
+    const amount = billing === "yearly" ? prices.yearly(month) : month;
     items.push({ price: await ensurePrice({ productId, productName: P.name, amount, currency: cur, interval }), quantity: 1 });
-    // Monthly: one-time setup fee on the first invoice (free on yearly).
-    if (billing === "monthly") items.push({ price: await ensurePrice({ productId: SETUP.id, productName: SETUP.name, amount: SETUP.amount, currency: cur }), quantity: 1 });
-    if (whatsapp) {
-      const wa = billing === "yearly" ? WHATSAPP.month * 12 : WHATSAPP.month;
-      items.push({ price: await ensurePrice({ productId: WHATSAPP.id, productName: WHATSAPP.name, amount: wa, currency: cur, interval }), quantity: 1 });
-    }
+    // Monthly: one-time setup fee on the first invoice (free on yearly, none
+    // in currencies without one).
+    if (billing === "monthly" && list.setup > 0) items.push({ price: await ensurePrice({ productId: SETUP.id, productName: SETUP.name, amount: list.setup, currency: cur }), quantity: 1 });
   }
 
   const l = ["en", "de"].includes(lang) ? lang : "fr";
@@ -111,7 +113,7 @@ async function createCheckout({ plan, billing, whatsapp, currency, lang, lead, b
   const metadata = {
     plan,
     billing,
-    whatsapp: whatsapp ? "yes" : "no",
+    whatsapp: "yes",
     company_name: String(lead.companyName || "").slice(0, 400),
     contact_name: String(lead.contactName || "").slice(0, 400),
     contact_phone: String(lead.contactPhone || "").slice(0, 100),

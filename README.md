@@ -552,6 +552,16 @@ with funnel position: "Voir comment ça marche" in the hero, "Découvrir l'expé
 Works, "Essayer la démo gratuite" at pricing and the final CTA, "Demander l'installation" as the
 closing ask.
 
+**Current prices (November 2026) live in `docs/prices.js`**, one list per currency, read by the
+pricing section (`docs/currency.js`, `docs/pricing.js`), the sign-up chat (`docs/contact-flow.js`) and
+Stripe Checkout (`src/billing.js`). Each market has its own deliberately precise numbers (CAPTURE /
+CLOSE / SCALE per month: CHF 58.40 / 108.70 / 218.60, €38.70 / 78.40 / 158.90 excl. VAT,
+£38.60 / 74.80 / 148.70 + VAT, $48.70 / 98.60 / 198.40), yearly = 10 × monthly (2 months free, setup
+waived), setup CHF 290 / €190 / £190 / none in the US. WhatsApp is included in every plan: the
+separate WhatsApp-only plan and the WhatsApp add-on are gone, and `embed.js` has a
+`data-dealz-mode="whatsapp"` button for clients who only want a WhatsApp button on their site. The
+history below describes how the plans were designed; its CHF amounts are older.
+
 **Pricing tells a progression, not a feature-count comparison** (rewritten from an earlier
 Capture/Convert/Automate version per an explicit product brief — plan names are deliberately short,
 untranslated, and stable across FR/DE/IT/EN). CAPTURE (CHF 49/mo, *"Ne manquez plus jamais une

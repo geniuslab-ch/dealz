@@ -14,18 +14,19 @@
  * (see src/notifications.js / dealz-crm's /api/inbound-leads).
  */
 (function () {
+  // WhatsApp is included in every plan. Amounts come from the visitor's
+  // currency price list (docs/prices.js through docs/currency.js).
   const PLANS = {
-    CAPTURE: { price: 48.3, tagline: "Ne manquez plus aucune demande." },
-    CLOSE: { price: 77.5, tagline: "Ne laissez plus un « non » devenir une vente perdue." },
-    SCALE: { price: 145.2, tagline: "Plus de demandes sans plus de gestion." },
-    // For businesses with no website: Dealz answers on WhatsApp only. Its own
-    // setup fee; no yearly or one-time option, no add-on, no website to give.
-    WHATSAPP: { price: 34.2, tagline: "Pas de site ? Vos clients vous écrivent, Dealz répond." },
+    CAPTURE: { tagline: "Ne manquez plus aucune demande." },
+    CLOSE: { tagline: "Ne laissez plus un « non » devenir une vente perdue." },
+    SCALE: { tagline: "Plus de demandes sans plus de gestion." },
   };
   const SITE_PLANS = ["CAPTURE", "CLOSE", "SCALE"];
-  const SETUP_FEE = 390;
-  const WHATSAPP_SETUP_FEE = 190;
-  const isWhatsappOnly = () => state.answers.plan_choice === "WHATSAPP";
+  const price = (key) => (window.DealzCurrency ? window.DealzCurrency.price(key) : NaN);
+  const setupFee = () => (window.DealzCurrency ? window.DealzCurrency.setup : 290);
+  const monthlyOf = (plan) => price(plan);
+  const yearlyOf = (plan) => price(plan + ".year");
+  const onceOf = (plan) => price(plan + ".once");
 
   // The price picker on the page (docs/pricing.js) stores the visitor's pick in
   // window.DEALZ_PICK = { plan, whatsapp, billing } and fires "dealz-pick". The
@@ -37,21 +38,20 @@
     if (!pick || pickUsed[kind]) return null;
     if (kind === "plan" && PLANS[pick.plan]) return pick;
     if (kind === "billing" && ["monthly", "yearly", "onetime"].includes(pick.billing) && (pick.billing !== "onetime" || oneTimeOpen())) return pick;
-    if (kind === "whatsapp" && typeof pick.whatsapp === "boolean") return pick;
     return null;
   }
 
   // Lifetime access, as a launch offer: offered until the end of 2026 only.
-  const ONE_TIME_PRICES = { CAPTURE: 1420.3, CLOSE: 1897.1, SCALE: 2158.8 };
   const ONE_TIME_UNTIL = new Date("2027-01-01T00:00:00+01:00");
   const oneTimeOpen = () => new Date() < ONE_TIME_UNTIL;
 
-  // Prices are shown in the visitor's currency (docs/currency.js): same
-  // amounts, the symbol changes. Texts keep "CHF n" as written and money()
-  // swaps it when displayed.
+  // Prices are shown in the visitor's currency (docs/currency.js), each
+  // with its own price list. Texts say "{setup}" / "{extra}" where an
+  // amount goes and money() fills it in when displayed.
   const fmt = (n) => (window.DealzCurrency ? window.DealzCurrency.format(n) : "CHF " + n);
   function money(s) {
-    return typeof s === "string" ? s.replace(/CHF (\d+(?:\.\d+)?)/g, (m, n) => fmt(n)) : s;
+    if (typeof s !== "string") return s;
+    return s.replace(/\{setup\}/g, () => fmt(setupFee())).replace(/\{extra\}/g, () => fmt(price("extra")));
   }
 
   const STEPS = [
@@ -94,16 +94,11 @@
     { id: "plan_choice", kind: "plan", question: "Quelle formule vous intéresse ?" },
     { id: "billing_choice", kind: "billing", question: "Comment souhaitez-vous commencer ?" },
     {
-      id: "whatsapp_addon",
-      kind: "single",
-      question: "💬 Envie d'ajouter WhatsApp Business ? Disponible en option sur toutes les formules : CHF 25 / mois pour 100 conversations, puis CHF 0.30 par conversation supplémentaire.",
-      options: ["Oui, ajouter WhatsApp (+ CHF 25/mois)", "Non merci"],
-    },
-    {
       id: "website_url",
       kind: "url",
-      question: "Sur quel site souhaitez-vous installer Dealz ?",
+      question: "Avez-vous un site internet ? Nous y ajoutons votre bouton WhatsApp Dealz.",
       placeholder: "https://www.votreentreprise.ch",
+      skipLabel: "Je n'ai pas de site internet",
     },
     {
       id: "contact_info",
@@ -112,19 +107,9 @@
     },
   ];
 
-  // Steps that don't apply to the chosen plan (WhatsApp only): answered by
-  // default, never shown.
-  function skipStep(step) {
-    return isWhatsappOnly() && ["billing_choice", "whatsapp_addon", "website_url"].includes(step.id);
-  }
-  function applySkipDefaults(step) {
-    if (step.id === "billing_choice") {
-      state.answers.billing_choice = "monthly";
-      state.answers.billing_monthly = PLANS.WHATSAPP.price;
-      state.answers.billing_yearly = null;
-      state.answers.billing_onetime = null;
-    }
-  }
+  // No website: the visitor said so on the website step.
+  const NO_WEBSITE = "—";
+  const hasWebsite = () => !!state.answers.website_url && state.answers.website_url !== NO_WEBSITE;
 
   function recommendPlan(answers) {
     const team = answers.team_size || "";
@@ -176,7 +161,11 @@
     "📅 La gestion des agendas est compliquée": { en: "📅 Managing calendars is complicated", de: "📅 Die Terminverwaltung ist kompliziert" },
     "Quelle formule vous intéresse ?": { en: "Which plan are you interested in?", de: "Welcher Plan interessiert Sie?" },
     "Comment souhaitez-vous commencer ?": { en: "How would you like to get started?", de: "Wie möchten Sie starten?" },
-    "Sur quel site souhaitez-vous installer Dealz ?": { en: "Which site would you like to install Dealz on?", de: "Auf welcher Website möchten Sie Dealz installieren?" },
+    "Avez-vous un site internet ? Nous y ajoutons votre bouton WhatsApp Dealz.": {
+      en: "Do you have a website? We'll add your Dealz WhatsApp button to it.",
+      de: "Haben Sie eine Website? Wir fügen dort Ihren Dealz-WhatsApp-Button hinzu.",
+    },
+    "Je n'ai pas de site internet": { en: "I don't have a website", de: "Ich habe keine Website" },
     "Et où pouvons-nous vous envoyer votre récapitulatif ?": { en: "And where can we send your summary?", de: "Und wohin dürfen wir Ihnen Ihre Zusammenfassung senden?" },
     "Quelques questions rapides": { en: "A few quick questions", de: "Ein paar kurze Fragen" },
     "C'est prêt": { en: "All set", de: "Bereit" },
@@ -197,9 +186,9 @@
     "Annuel": { en: "Yearly", de: "Jährlich" },
     "Choisir mensuel": { en: "Choose monthly", de: "Monatlich wählen" },
     "Choisir annuel": { en: "Choose yearly", de: "Jährlich wählen" },
-    "Pas besoin de changer votre site. Dealz s'intègre directement à celui que vous utilisez déjà.": {
-      en: "No need to change your site. Dealz integrates directly with the one you already use.",
-      de: "Sie müssen Ihre Website nicht ändern. Dealz wird direkt in die integriert, die Sie bereits nutzen.",
+    "WhatsApp est inclus : un bouton suffit, sur votre site, votre fiche Google ou un QR code. Rien à changer sur votre site.": {
+      en: "WhatsApp is included: a button is all it takes, on your site, your Google profile or a QR code. Nothing to change on your site.",
+      de: "WhatsApp ist inbegriffen: Ein Button genügt, auf Ihrer Website, Ihrem Google-Profil oder als QR-Code. An Ihrer Website ändert sich nichts.",
     },
     "Prénom / Nom": { en: "First / last name", de: "Vorname / Name" },
     "E-mail professionnel": { en: "Work email", de: "Geschäftliche E-Mail" },
@@ -233,7 +222,8 @@
       en: "Thank you! Your request has been recorded. We'll review your site and setup to prepare your Dealz installation. You'll receive your summary by email.",
       de: "Vielen Dank! Ihre Anfrage wurde erfasst. Wir prüfen Ihre Website und Konfiguration, um die Installation von Dealz vorzubereiten. Sie erhalten Ihre Zusammenfassung per E-Mail.",
     },
-    "+ CHF 390 d'installation unique": { en: "+ CHF 390 one-time setup fee", de: "+ CHF 390 einmalige Einrichtungsgebühr" },
+    "+ {setup} d'installation unique": { en: "+ {setup} one-time setup fee", de: "+ {setup} einmalige Einrichtungsgebühr" },
+    "Sans frais d'installation": { en: "No setup fee", de: "Keine Einrichtungsgebühr" },
     "← Modifier": { en: "← Edit", de: "← Ändern" },
     "💳 Payer et démarrer": { en: "💳 Pay and get started", de: "💳 Bezahlen und starten" },
     "Redirection vers le paiement sécurisé…": { en: "Redirecting to secure payment…", de: "Weiterleitung zur sicheren Zahlung…" },
@@ -251,7 +241,8 @@
     },
     "🚀 OFFRE DE LANCEMENT": { en: "🚀 LAUNCH OFFER", de: "🚀 EINFÜHRUNGSANGEBOT" },
     "Jusqu'au 31 décembre 2026.": { en: "Until 31 December 2026.", de: "Bis 31. Dezember 2026." },
-    "Vous économisez CHF 390 sur l'installation.": { en: "You save CHF 390 on setup.", de: "Sie sparen CHF 390 bei der Einrichtung." },
+    "2 mois offerts, et {setup} d'installation économisés.": { en: "2 months free, and you save {setup} on setup.", de: "2 Monate gratis, und Sie sparen {setup} bei der Einrichtung." },
+    "2 mois offerts.": { en: "2 months free.", de: "2 Monate gratis." },
     "Vous êtes plusieurs à gérer les réservations, ou la gestion des agendas devient compliquée — SCALE ajoute les collaborateurs, les agendas partagés et la répartition automatique dont vous avez besoin.": {
       en: "Several of you manage bookings, or calendar management is becoming complicated — SCALE adds the team members, shared calendars, and automatic assignment you need.",
       de: "Mehrere Personen verwalten bei Ihnen Buchungen, oder die Terminverwaltung wird kompliziert — SCALE bietet die Mitarbeiterkonten, geteilten Kalender und automatische Zuteilung, die Sie brauchen.",
@@ -275,26 +266,7 @@
     "Choisir paiement unique": { en: "Choose one-time payment", de: "Einmalzahlung wählen" },
     "Unique": { en: "One-time", de: "Einmalig" },
     "Paiement": { en: "Payment", de: "Zahlung" },
-    "💬 Envie d'ajouter WhatsApp Business ? Disponible en option sur toutes les formules : CHF 25 / mois pour 100 conversations, puis CHF 0.30 par conversation supplémentaire.": {
-      en: "💬 Want to add WhatsApp Business? Available as an add-on on any plan: CHF 25 / month for 100 conversations, then CHF 0.30 per extra conversation.",
-      de: "💬 Möchten Sie WhatsApp Business hinzufügen? Als Zusatzoption bei jedem Plan verfügbar: CHF 25 / Monat für 100 Konversationen, danach CHF 0.30 pro zusätzlicher Konversation.",
-    },
-    "Oui, ajouter WhatsApp (+ CHF 25/mois)": { en: "Yes, add WhatsApp (+ CHF 25/month)", de: "Ja, WhatsApp hinzufügen (+ CHF 25/Monat)" },
-    "Non merci": { en: "No thanks", de: "Nein danke" },
     "WhatsApp Business": { en: "WhatsApp Business", de: "WhatsApp Business" },
-    "WhatsApp seul": { en: "WhatsApp only", de: "Nur WhatsApp" },
-    "Pas de site internet ? WhatsApp seul : CHF 34.20 / mois →": {
-      en: "No website? WhatsApp only: CHF 34.20 / month →",
-      de: "Keine Website? Nur WhatsApp: CHF 34.20 / Monat →",
-    },
-    "Pas de site ? Vos clients vous écrivent, Dealz répond.": {
-      en: "No website? Your customers message you, Dealz replies.",
-      de: "Keine Website? Ihre Kunden schreiben, Dealz antwortet.",
-    },
-    "Pas besoin de site internet : Dealz répond à vos clients directement sur WhatsApp.": {
-      en: "No website needed: Dealz answers your customers directly on WhatsApp.",
-      de: "Keine Website nötig: Dealz antwortet Ihren Kunden direkt auf WhatsApp.",
-    },
     "Merci ! Votre demande est bien enregistrée. Nous allons préparer l'installation de Dealz sur WhatsApp et revenir vers vous pour connecter votre numéro WhatsApp Business. Vous recevrez votre récapitulatif par e-mail.": {
       en: "Thank you! Your request has been recorded. We'll prepare your Dealz installation on WhatsApp and come back to you to connect your WhatsApp Business number. You'll receive your summary by email.",
       de: "Vielen Dank! Ihre Anfrage wurde erfasst. Wir bereiten die Dealz-Einrichtung auf WhatsApp vor und melden uns, um Ihre WhatsApp-Business-Nummer anzubinden. Sie erhalten Ihre Zusammenfassung per E-Mail.",
@@ -332,7 +304,7 @@
     return `Choisir ${plan} →`;
   }
   function planLabel(key) {
-    return key === "WHATSAPP" ? T("WhatsApp seul") : key;
+    return key;
   }
   function recommendedSuffix(key) {
     const lang = window.DEALZ_LANG;
@@ -360,13 +332,14 @@
       return money(`Paiement unique — ${fmt(onetime)} (accès à vie, sans abonnement)`);
     }
     if (mode === "yearly") {
-      if (lang === "en") return money(`Yearly — ${fmt(yearly)}/year (setup free)`);
-      if (lang === "de") return money(`Jährlich — ${fmt(yearly)}/Jahr (Einrichtung gratis)`);
-      return money(`Annuel — ${fmt(yearly)}/an (installation offerte)`);
+      if (lang === "en") return money(`Yearly — ${fmt(yearly)}/year (2 months free)`);
+      if (lang === "de") return money(`Jährlich — ${fmt(yearly)}/Jahr (2 Monate gratis)`);
+      return money(`Annuel — ${fmt(yearly)}/an (2 mois offerts)`);
     }
-    if (lang === "en") return money(`Monthly — ${fmt(monthly)}/month + CHF 390 setup`);
-    if (lang === "de") return money(`Monatlich — ${fmt(monthly)}/Monat + CHF 390 Einrichtung`);
-    return money(`Mensuel — ${fmt(monthly)}/mois + CHF 390 installation`);
+    const noSetup = !setupFee();
+    if (lang === "en") return money(`Monthly — ${fmt(monthly)}/month` + (noSetup ? ", no setup fee" : " + {setup} setup"));
+    if (lang === "de") return money(`Monatlich — ${fmt(monthly)}/Monat` + (noSetup ? ", keine Einrichtungsgebühr" : " + {setup} Einrichtung"));
+    return money(`Mensuel — ${fmt(monthly)}/mois` + (noSetup ? ", sans frais d'installation" : " + {setup} installation"));
   }
   function oneTimeLabel(n) {
     const lang = window.DEALZ_LANG;
@@ -376,15 +349,15 @@
   }
   function installedLine() {
     const lang = window.DEALZ_LANG;
-    if (lang === "en") return money("<s>CHF 390 setup</s> — <b>FREE</b>");
-    if (lang === "de") return money("<s>CHF 390 Einrichtung</s> — <b>GRATIS</b>");
-    return money("<s>CHF 390 installation</s> — <b>OFFERTE</b>");
+    if (lang === "en") return money("<s>{setup} setup</s> — <b>FREE</b>");
+    if (lang === "de") return money("<s>{setup} Einrichtung</s> — <b>GRATIS</b>");
+    return money("<s>{setup} installation</s> — <b>OFFERTE</b>");
   }
-  function whatsappAddonValue() {
+  function whatsappIncludedValue() {
     const lang = window.DEALZ_LANG;
-    if (lang === "en") return money("+ CHF 25/month (100 conversations incl.)");
-    if (lang === "de") return money("+ CHF 25/Monat (100 Konversationen inkl.)");
-    return money("+ CHF 25/mois (100 conversations incl.)");
+    if (lang === "en") return money("Included (100 conversations / month, then {extra} each)");
+    if (lang === "de") return money("Inbegriffen (100 Gespräche / Monat, danach {extra} pro Gespräch)");
+    return money("Inclus (100 conversations / mois, puis {extra} l'une)");
   }
 
   function el(tag, cls, text) {
@@ -433,8 +406,7 @@
       progressEl.textContent = T("C'est prêt");
       return;
     }
-    const shown = STEPS.filter((st) => !skipStep(st));
-    progressEl.textContent = stepProgress(Math.max(1, shown.indexOf(STEPS[state.stepIndex]) + 1), shown.length);
+    progressEl.textContent = stepProgress(state.stepIndex + 1, STEPS.length);
   }
 
   function setInputMode(mode, placeholder) {
@@ -473,12 +445,7 @@
     if (currentBlock) currentBlock.remove();
     state.blocks[state.stepIndex] = null;
 
-    // Questions skipped for this plan have no block of their own: step over them.
-    let prevIndex = state.stepIndex - 1;
-    while (prevIndex > 0 && skipStep(STEPS[prevIndex])) {
-      if (STEPS[prevIndex]) delete state.answers[STEPS[prevIndex].id];
-      prevIndex--;
-    }
+    const prevIndex = state.stepIndex - 1;
     const prevBlock = state.blocks[prevIndex];
     if (prevBlock) prevBlock.remove();
     state.blocks[prevIndex] = null;
@@ -580,7 +547,7 @@
       const card = el("div", "flow-plan-card" + (key === "CLOSE" ? " featured" : ""));
       if (key === "CLOSE") card.appendChild(el("span", "flow-plan-badge", "RECOMMANDÉ"));
       card.appendChild(el("div", "flow-plan-name", key === "CLOSE" ? "CLOSE ⭐" : key));
-      card.appendChild(el("div", "flow-plan-price", perMonth(plan.price)));
+      card.appendChild(el("div", "flow-plan-price", perMonth(monthlyOf(key))));
       card.appendChild(el("div", "flow-plan-tagline", plan.tagline));
       const pick = el("button", "btn btn-secondary flow-plan-pick", key === "CLOSE" ? "Choisir CLOSE ⭐" : `Choisir ${key}`);
       pick.type = "button";
@@ -599,14 +566,6 @@
     });
     helper.appendChild(helperBtn);
     wrap.appendChild(helper);
-
-    // No website: WhatsApp only.
-    const waHelper = el("div", "flow-recommend-prompt");
-    const waBtn = el("button", "flow-recommend-btn", "Pas de site internet ? WhatsApp seul : CHF 34.20 / mois →");
-    waBtn.type = "button";
-    waBtn.addEventListener("click", () => choosePlan(wrap, "WHATSAPP", false));
-    waHelper.appendChild(waBtn);
-    wrap.appendChild(waHelper);
   }
 
   function showRecommendation(wrap) {
@@ -614,7 +573,7 @@
     const box = el("div", "flow-recommendation");
     box.appendChild(el("div", "flow-recommendation-label", recommendLabel(plan)));
     box.appendChild(el("p", "flow-recommendation-reason", recommendReason(plan)));
-    box.appendChild(el("div", "flow-recommendation-price", perMonth(PLANS[plan].price)));
+    box.appendChild(el("div", "flow-recommendation-price", perMonth(monthlyOf(plan))));
     const pick = el("button", "btn btn-primary", chooseLabel(plan));
     pick.type = "button";
     pick.addEventListener("click", () => choosePlan(wrap, plan, true));
@@ -633,19 +592,20 @@
   // ---- Billing choice ----
   function renderBillingChoice(wrap) {
     const plan = state.answers.plan_choice || "CAPTURE";
-    const monthly = PLANS[plan].price;
-    const yearly = Math.round(monthly * 1200) / 100;
-    const onetime = ONE_TIME_PRICES[plan] || ONE_TIME_PRICES.CAPTURE;
+    const monthly = monthlyOf(plan);
+    const yearly = yearlyOf(plan);
+    const onetime = onceOf(plan);
+    const noSetup = !setupFee();
 
     const grid = el("div", "flow-billing-grid");
 
     const monthlyCard = el("div", "flow-billing-card");
     monthlyCard.appendChild(el("div", "flow-billing-label", "Mensuel"));
     monthlyCard.appendChild(el("div", "flow-billing-price", perMonth(monthly)));
-    monthlyCard.appendChild(el("div", "flow-billing-line", "+ CHF 390 d'installation unique"));
+    monthlyCard.appendChild(el("div", "flow-billing-line", noSetup ? "Sans frais d'installation" : "+ {setup} d'installation unique"));
     const pickMonthly = el("button", "btn btn-secondary flow-billing-pick", "Choisir mensuel");
     pickMonthly.type = "button";
-    pickMonthly.addEventListener("click", () => chooseBilling(wrap, "monthly", monthly, yearly));
+    pickMonthly.addEventListener("click", () => chooseBilling(wrap, "monthly", monthly, yearly, onetime));
     monthlyCard.appendChild(pickMonthly);
     grid.appendChild(monthlyCard);
 
@@ -653,10 +613,12 @@
     yearlyCard.appendChild(el("span", "flow-plan-badge", "RECOMMANDÉ"));
     yearlyCard.appendChild(el("div", "flow-billing-label", "Annuel"));
     yearlyCard.appendChild(el("div", "flow-billing-price", perYear(yearly)));
-    const line = el("div", "flow-billing-line");
-    line.innerHTML = installedLine();
-    yearlyCard.appendChild(line);
-    yearlyCard.appendChild(el("div", "flow-billing-save", "Vous économisez CHF 390 sur l'installation."));
+    if (!noSetup) {
+      const line = el("div", "flow-billing-line");
+      line.innerHTML = installedLine();
+      yearlyCard.appendChild(line);
+    }
+    yearlyCard.appendChild(el("div", "flow-billing-save", noSetup ? "2 mois offerts." : "2 mois offerts, et {setup} d'installation économisés."));
     const pickYearly = el("button", "btn btn-primary flow-billing-pick", "Choisir annuel");
     pickYearly.type = "button";
     pickYearly.addEventListener("click", () => chooseBilling(wrap, "yearly", monthly, yearly, onetime));
@@ -699,9 +661,7 @@
       el(
         "p",
         "dcf-intro",
-        isWhatsappOnly()
-          ? "Pas besoin de site internet : Dealz répond à vos clients directement sur WhatsApp."
-          : "Pas besoin de changer votre site. Dealz s'intègre directement à celui que vous utilisez déjà."
+        "WhatsApp est inclus : un bouton suffit, sur votre site, votre fiche Google ou un QR code. Rien à changer sur votre site."
       )
     );
 
@@ -757,10 +717,12 @@
         contactName: a.contact_name || "",
         contactEmail: a.contact_email || "",
         contactPhone: a.contact_phone || "",
-        websiteUrl: a.website_url || "",
+        websiteUrl: hasWebsite() ? a.website_url : "",
         planChoice: a.plan_choice || "",
         billingChoice: a.billing_choice || "",
-        whatsappAddon: /Oui, ajouter WhatsApp/.test(a.whatsapp_addon || ""),
+        // WhatsApp is part of every plan now.
+        whatsappAddon: true,
+        currency: window.DealzCurrency ? window.DealzCurrency.code : "CHF",
         teamSize: a.team_size || "",
         mainProblem: a.main_problem || "",
         requestSources: a.request_sources || "",
@@ -791,10 +753,7 @@
         : a.billing_choice === "onetime"
         ? oneTimeLabel(a.billing_onetime)
         : perMonth(a.billing_monthly);
-    const waOnly = isWhatsappOnly();
-    const installationValue = waOnly ? fmt(WHATSAPP_SETUP_FEE) : a.billing_choice === "monthly" ? fmt(SETUP_FEE) : "OFFERTE";
-
-    const wantsWhatsapp = /Oui, ajouter WhatsApp/.test(a.whatsapp_addon || "");
+    const installationValue = a.billing_choice === "monthly" && setupFee() ? fmt(setupFee()) : "OFFERTE";
 
     const rows = [
       ["Entreprise", a.company_name || "—"],
@@ -803,8 +762,8 @@
       [amountRowLabel, amountRowValue],
       ["Installation", installationValue],
     ];
-    if (wantsWhatsapp) rows.push(["WhatsApp Business", whatsappAddonValue()]);
-    if (!waOnly) rows.push(["Site", a.website_url || "—"]);
+    rows.push(["WhatsApp Business", whatsappIncludedValue()]);
+    rows.push(["Site", hasWebsite() ? a.website_url : "—"]);
     rows.push(["Votre objectif", a.main_problem || "—"]);
     rows.forEach(([label, value]) => {
       const row = el("div", "flow-summary-row");
@@ -817,12 +776,11 @@
     const actions = el("div", "flow-summary-actions");
     // Pay now with Stripe Checkout (src/billing.js). The request is sent
     // first too, so the lead is never lost if the payment is abandoned.
-    // (Not offered for WhatsApp only: that plan is set up on request.)
     const payBtn = el("button", "btn btn-primary", "💳 Payer et démarrer");
     payBtn.type = "button";
     payBtn.addEventListener("click", () => startCheckout(a, actions, payBtn));
-    if (!waOnly) actions.appendChild(payBtn);
-    const submitBtn = el("button", waOnly ? "btn btn-primary" : "btn btn-secondary", "🚀 Demander mon installation Dealz");
+    actions.appendChild(payBtn);
+    const submitBtn = el("button", "btn btn-secondary", "🚀 Demander mon installation Dealz");
     submitBtn.type = "button";
     submitBtn.addEventListener("click", () => {
       actions.querySelectorAll("button").forEach((b) => (b.disabled = true));
@@ -850,14 +808,13 @@
         body: JSON.stringify({
           plan: a.plan_choice,
           billing: a.billing_choice,
-          whatsapp: /Oui, ajouter WhatsApp/.test(a.whatsapp_addon || ""),
           currency: window.DealzCurrency ? window.DealzCurrency.code.toLowerCase() : "chf",
           lang: window.DEALZ_LANG || "fr",
           companyName: a.company_name || "",
           contactName: a.contact_name || "",
           contactEmail: a.contact_email || "",
           contactPhone: a.contact_phone || "",
-          websiteUrl: a.website_url || "",
+          websiteUrl: hasWebsite() ? a.website_url : "",
         }),
       });
       const data = await res.json();
@@ -891,7 +848,7 @@
     const msg = el(
       "div",
       "dealz-msg system-success",
-      isWhatsappOnly()
+      !hasWebsite()
         ? "Merci ! Votre demande est bien enregistrée. Nous allons préparer l'installation de Dealz sur WhatsApp et revenir vers vous pour connecter votre numéro WhatsApp Business. Vous recevrez votre récapitulatif par e-mail."
         : "Merci ! Votre demande est bien enregistrée. Nous allons examiner votre site et votre configuration afin de préparer l'installation de Dealz. Vous recevrez votre récapitulatif par e-mail."
     );
@@ -924,6 +881,24 @@
       },
     };
     pendingText = handler;
+
+    // Optional step (website): a chip to answer "none" instead of typing.
+    if (step.skipLabel) {
+      const picker = el("div", "dop-chips flow-chips");
+      const skip = el("button", "dop-chip", step.skipLabel);
+      skip.type = "button";
+      skip.addEventListener("click", () => {
+        if (pendingText !== handler) return;
+        pendingText = null;
+        disableBlock(wrap);
+        wrap.appendChild(userBubble(step.skipLabel));
+        state.answers[step.id] = NO_WEBSITE;
+        setInputMode("off");
+        advanceTo(state.stepIndex + 1);
+      });
+      picker.appendChild(skip);
+      wrap.appendChild(picker);
+    }
   }
 
   // The price picker already told us the plan / billing / WhatsApp choice:
@@ -940,17 +915,7 @@
     if (step.kind === "billing" && pickFor("billing")) {
       pickUsed.billing = true;
       const plan = state.answers.plan_choice || "CAPTURE";
-      const monthly = PLANS[plan].price;
-      const yearly = Math.round(monthly * 1200) / 100;
-      chooseBilling(wrap, window.DEALZ_PICK.billing, monthly, yearly, ONE_TIME_PRICES[plan] || ONE_TIME_PRICES.CAPTURE);
-      return true;
-    }
-    if (step.id === "whatsapp_addon" && pickFor("whatsapp")) {
-      pickUsed.whatsapp = true;
-      const label = window.DEALZ_PICK.whatsapp ? step.options[0] : step.options[1];
-      wrap.appendChild(userBubble(label));
-      state.answers[step.id] = label;
-      advanceTo(state.stepIndex + 1);
+      chooseBilling(wrap, window.DEALZ_PICK.billing, monthlyOf(plan), yearlyOf(plan), onceOf(plan));
       return true;
     }
     return false;
@@ -961,11 +926,6 @@
     updateProgress();
     if (index >= STEPS.length) return renderSummary();
     const step = STEPS[index];
-
-    if (skipStep(step)) {
-      applySkipDefaults(step);
-      return advanceTo(index + 1);
-    }
 
     const wrap = el("div", "flow-block");
     container.appendChild(wrap);
@@ -996,7 +956,7 @@
     const pick = window.DEALZ_PICK;
     if (!pick || !PLANS[pick.plan]) return T("👋 Bonjour ! Je suis Dealz. Je peux vous aider à voir quelle formule correspond le mieux à votre entreprise. On commence ?");
     const lang = window.DEALZ_LANG;
-    const what = pick.plan === "WHATSAPP" ? (lang === "de" ? "nur WhatsApp" : planLabel("WHATSAPP")) : pick.plan + (pick.whatsapp ? " + WhatsApp" : "");
+    const what = pick.plan;
     if (lang === "en") return `👋 Hi! I'm Dealz. You picked ${what}: a few quick questions and your request is ready. Shall we get started?`;
     if (lang === "de") return `👋 Hallo! Ich bin Dealz. Sie haben ${what} gewählt: ein paar kurze Fragen, dann ist Ihre Anfrage bereit. Fangen wir an?`;
     return `👋 Bonjour ! Je suis Dealz. Vous avez choisi ${what} : quelques questions rapides et votre demande est prête. On commence ?`;

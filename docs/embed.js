@@ -28,6 +28,13 @@
  *                                   (mode "chat") or the modal (mode
  *                                   "window") from your own nav button
  *
+ *   data-dealz-mode="whatsapp"    — no chat panel: a floating WhatsApp
+ *                                   button to the company's Dealz number
+ *                                   (data-dealz-whatsapp="41791234567").
+ *                                   WhatsApp is included in every plan, so
+ *                                   this is the default for CAPTURE; the
+ *                                   panel and modal come with CLOSE/SCALE.
+ *
  * Example for a hand-built "Devis" nav tab, opened as an in-page modal:
  *   <script src="https://dealz.website/embed.js" data-dealz-company="acme"
  *           data-dealz-launcher="false" data-dealz-mode="window" async></script>
@@ -150,6 +157,56 @@
   // chat panel — any other value, or the attribute being absent, keeps the
   // default in-page "chat" panel.
   var mode = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-mode")) || "chat";
+
+  // "whatsapp": no chat panel at all, just a floating WhatsApp button that
+  // opens a chat with the company's Dealz-powered WhatsApp number, with a
+  // first message already typed. Dealz answers there with the same quote
+  // engine. The default setup for CAPTURE, and the lightest integration:
+  //   <script src="https://dealz.website/embed.js" data-dealz-mode="whatsapp"
+  //           data-dealz-whatsapp="41791234567" data-dealz-lang="fr" async></script>
+  // data-dealz-whatsapp: the number in international format (digits only;
+  // spaces, "+" and dashes are ignored). data-dealz-text overrides the
+  // pre-filled first message. The same link works on a Google profile or a
+  // QR code: https://wa.me/<number>?text=<message>
+  if (mode === "whatsapp") {
+    var waNumber = String((CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-whatsapp")) || "").replace(/\D/g, "");
+    var WA_TEXT = {
+      fr: "Bonjour, j'aimerais recevoir un devis.",
+      en: "Hello, I'd like to get a quote.",
+      de: "Guten Tag, ich h\u00e4tte gerne eine Offerte.",
+    };
+    var waText = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-text")) || WA_TEXT[window.DEALZ_LANG] || WA_TEXT.fr;
+    var waLink = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(waText);
+    var WA_LABEL = { fr: "Demander un devis sur WhatsApp", en: "Get a quote on WhatsApp", de: "Offerte auf WhatsApp anfragen" };
+    function openWhatsapp() {
+      if (!waNumber) return;
+      window.open(waLink, "_blank", "noopener");
+    }
+    if (!waNumber) {
+      if (window.console) console.warn("[Dealz] data-dealz-whatsapp is missing: the WhatsApp button is not shown.");
+    } else if ((CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-launcher")) !== "false") {
+      var WA_STYLE = document.createElement("style");
+      WA_STYLE.textContent =
+        "#dealz-wa-button{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;" +
+        "background:#25d366;display:flex;align-items:center;justify-content:center;" +
+        "box-shadow:0 6px 18px rgba(37,211,102,.45);z-index:999999;text-decoration:none;}" +
+        "#dealz-wa-button svg{width:32px;height:32px;fill:#fff;}" +
+        "@media (max-width:600px){#dealz-wa-button{bottom:16px;right:16px;}}";
+      document.head.appendChild(WA_STYLE);
+      var waBtn = document.createElement("a");
+      waBtn.id = "dealz-wa-button";
+      waBtn.href = waLink;
+      waBtn.target = "_blank";
+      waBtn.rel = "noopener";
+      waBtn.setAttribute("aria-label", WA_LABEL[window.DEALZ_LANG] || WA_LABEL.fr);
+      waBtn.title = WA_LABEL[window.DEALZ_LANG] || WA_LABEL.fr;
+      waBtn.innerHTML =
+        '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3C8.8 3 3 8.7 3 15.8c0 2.5.7 4.9 2 7L3 29l6.4-2c2 1.1 4.3 1.7 6.6 1.7 7.2 0 13-5.7 13-12.8S23.2 3 16 3zm0 23.4c-2.1 0-4.1-.6-5.9-1.7l-.4-.3-3.8 1.2 1.2-3.7-.3-.4c-1.2-1.8-1.8-3.8-1.8-5.9C5 9.9 9.9 5.1 16 5.1S27 9.9 27 15.8s-4.9 10.6-11 10.6zm6-7.9c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2-.2.3-.9 1.1-1.1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.7-1.7-1-.9-1.7-2-1.9-2.3-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.6.1-.2 0-.4 0-.6l-1.1-2.6c-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.6 5.8 5 .8.4 1.4.6 1.9.7.8.3 1.6.2 2.2.1.7-.1 2-.8 2.3-1.6.3-.8.3-1.5.2-1.6-.1-.1-.3-.2-.7-.4z"/></svg>';
+      document.body.appendChild(waBtn);
+    }
+    window.DealzWidget = { open: openWhatsapp, close: function () {}, toggle: openWhatsapp, whatsappLink: waNumber ? waLink : null };
+    return;
+  }
 
   // "false" suppresses the floating bubble for sites that drive the
   // panel/popup from their own nav tab instead (see window.DealzWidget
