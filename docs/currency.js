@@ -8,6 +8,13 @@
  * x-vercel-ip-country header); until it answers, or if it can't, the
  * browser language's region is used, then CHF.
  *
+ * Preview another market from anywhere: ?currency=EUR (or GBP, USD, CHF)
+ * or a country code (?currency=FR, ?currency=UK, ?currency=US) shows that
+ * market's prices and keeps them for the rest of the visit (sessionStorage).
+ * A preview only changes what is shown: .billingCode, which the contact
+ * flow sends to checkout and to the install request, stays the visitor's
+ * own currency.
+ *
  * Markup:
  *   <span data-price="CLOSE"></span>        a price from the list: a plan
  *                                            (CAPTURE, CLOSE, SCALE),
@@ -50,9 +57,30 @@
     return null;
   }
 
-  var stored = null;
-  try { stored = sessionStorage.getItem("dealz-currency"); } catch (e) {}
-  var code = (stored && SYMBOL[stored] && stored) || fromBrowser() || "CHF";
+  // ?currency=GBP or ?currency=UK: a currency code, else a country code.
+  function fromUrl() {
+    var m = /[?&]currency=([A-Za-z]{2,3})(?:[&#]|$)/.exec(location.search);
+    if (!m) return null;
+    var v = m[1].toUpperCase();
+    if (SYMBOL[v]) return v;
+    return v.length === 2 ? currencyFor(v) : null;
+  }
+
+  function load(key) {
+    try { var v = sessionStorage.getItem(key); return v && SYMBOL[v] ? v : null; } catch (e) { return null; }
+  }
+
+  // "dealz-currency": the visitor's own currency (country, else browser).
+  // "dealz-currency-preview": a market picked with ?currency=, display only.
+  var preview = fromUrl();
+  if (preview) {
+    try { sessionStorage.setItem("dealz-currency-preview", preview); } catch (e) {}
+  } else {
+    preview = load("dealz-currency-preview");
+  }
+  var stored = load("dealz-currency");
+  var billing = stored || fromBrowser() || "CHF";
+  var code = preview || billing;
 
   function list() {
     return window.DealzPrices ? window.DealzPrices.list(code) : null;
@@ -113,9 +141,11 @@
   }
 
   function set(next) {
-    if (!next || !SYMBOL[next] || next === code) return;
+    if (!next || !SYMBOL[next]) return;
+    billing = next;
+    try { sessionStorage.setItem("dealz-currency", billing); } catch (e) {}
+    if (preview || next === code) return;
     code = next;
-    try { sessionStorage.setItem("dealz-currency", code); } catch (e) {}
     apply();
     window.dispatchEvent(new CustomEvent("dealz-currency", { detail: { code: code } }));
   }
@@ -125,6 +155,7 @@
     price: price,
     apply: apply,
     get code() { return code; },
+    get billingCode() { return billing; },
     get setup() { var L = list(); return L ? L.setup : 0; },
   };
 

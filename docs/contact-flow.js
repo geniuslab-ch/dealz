@@ -722,7 +722,7 @@
         billingChoice: a.billing_choice || "",
         // WhatsApp is part of every plan now.
         whatsappAddon: true,
-        currency: window.DealzCurrency ? window.DealzCurrency.code : "CHF",
+        currency: window.DealzCurrency ? window.DealzCurrency.billingCode : "CHF",
         teamSize: a.team_size || "",
         mainProblem: a.main_problem || "",
         requestSources: a.request_sources || "",
@@ -808,7 +808,7 @@
         body: JSON.stringify({
           plan: a.plan_choice,
           billing: a.billing_choice,
-          currency: window.DealzCurrency ? window.DealzCurrency.code.toLowerCase() : "chf",
+          currency: window.DealzCurrency ? window.DealzCurrency.billingCode.toLowerCase() : "chf",
           lang: window.DEALZ_LANG || "fr",
           companyName: a.company_name || "",
           contactName: a.contact_name || "",
