@@ -385,6 +385,21 @@
     followChat(c);
   }
 
+  // Bring the whole form into the middle of the screen (below the sticky nav).
+  // If it is taller than the space left, line its top up under the nav instead.
+  function centerPanel() {
+    var panel = container && container.closest(".quote-panel");
+    if (!panel) return;
+    var nav = document.querySelector(".nav");
+    var navH = nav ? nav.getBoundingClientRect().bottom : 0;
+    if (navH < 0) navH = 0;
+    var r = panel.getBoundingClientRect();
+    var room = window.innerHeight - navH;
+    var target = r.height < room ? navH + (room - r.height) / 2 : navH + 12;
+    var delta = r.top - target;
+    if (Math.abs(delta) > 4) window.scrollBy({ top: delta, behavior: "smooth" });
+  }
+
   function assistantBubble(text) {
     return el("div", "dealz-msg assistant", text);
   }
@@ -415,7 +430,9 @@
       input.disabled = false;
       sendBtn.disabled = false;
       input.placeholder = T(placeholder) || T("Écrivez votre réponse…");
-      input.focus();
+      // preventScroll: a plain focus() makes the browser scroll the page so the
+      // input bar sits at the bottom edge, pushing the form's top off screen.
+      input.focus({ preventScroll: true });
     } else {
       input.disabled = true;
       sendBtn.disabled = true;
@@ -974,6 +991,7 @@
     startBtn.addEventListener("click", () => {
       startBtn.disabled = true;
       advanceTo(0);
+      centerPanel();
     });
     setInputMode("off");
     scrollToBottom(container);
