@@ -301,6 +301,10 @@
     "Nous contacter": { en: "Contact us", de: "Kontaktieren Sie uns" },
     "📧 Aperçu de l'e-mail (démo)": { en: "📧 Email preview (demo)", de: "📧 E-Mail-Vorschau (Demo)" },
     "📅 Ajouter à mon Google Agenda": { en: "📅 Add to my Google Calendar", de: "📅 Zu meinem Google Kalender hinzufügen" },
+    "Ce devis est ferme pour autant que les réponses fournies au questionnaire soient fidèles à la réalité. Si la situation constatée sur place diffère des informations données, l'entreprise se réserve le droit d'adapter le prix en conséquence.": {
+      en: "This quote is firm provided that the answers given to the questionnaire accurately reflect the actual situation. If the conditions found on site differ from the information provided, the company reserves the right to adjust the price accordingly.",
+      de: "Diese Offerte ist verbindlich, sofern die Antworten auf den Fragebogen der tatsächlichen Situation entsprechen. Weichen die Verhältnisse vor Ort von den gemachten Angaben ab, behält sich das Unternehmen vor, den Preis entsprechend anzupassen.",
+    },
     "Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.": {
       en: "Here is your firm, detailed quote for this service — you can accept or decline it below.",
       de: "Hier ist Ihre feste, detaillierte Offerte für diese Leistung — Sie können sie unten annehmen oder ablehnen.",
@@ -1011,6 +1015,7 @@
     total.appendChild(el("span", null, "TOTAL"));
     total.appendChild(el("span", null, `CHF ${quote.total.toFixed(2)}`));
     card.appendChild(total);
+    card.appendChild(el("div", "qc-note", T("Ce devis est ferme pour autant que les réponses fournies au questionnaire soient fidèles à la réalité. Si la situation constatée sur place diffère des informations données, l'entreprise se réserve le droit d'adapter le prix en conséquence.")));
 
     const actions = el("div", "qc-actions");
     const viewBtn = el("button", "qc-accept", "📄 Voir mon devis (PDF)");

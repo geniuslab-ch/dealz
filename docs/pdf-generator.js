@@ -155,9 +155,9 @@
   }
 
   const STRINGS = {
-    fr: { docTitle: "DEVIS", client: "CLIENT", details: "Détails complémentaires", service: "Prestation", amount: "Montant", total: "TOTAL", terms: "Devis ferme, valable 30 jours. TVA suisse incluse le cas échéant.", generated: "Document généré automatiquement — SwissClean Sàrl, site de démonstration." },
-    en: { docTitle: "QUOTE", client: "CUSTOMER", details: "Additional details", service: "Service", amount: "Amount", total: "TOTAL", terms: "Firm quote, valid for 30 days. Swiss VAT included where applicable.", generated: "Automatically generated document — SwissClean Sàrl, demo site." },
-    de: { docTitle: "OFFERTE", client: "KUNDE", details: "Weitere Details", service: "Leistung", amount: "Betrag", total: "TOTAL", terms: "Feste Offerte, gültig 30 Tage. Schweizer MWST wo anwendbar inbegriffen.", generated: "Automatisch erstelltes Dokument — SwissClean Sàrl, Demo-Website." },
+    fr: { accuracy: "Ce devis est ferme pour autant que les réponses fournies au questionnaire soient fidèles à la réalité. Si la situation constatée sur place diffère des informations données, l'entreprise se réserve le droit d'adapter le prix en conséquence.", docTitle: "DEVIS", client: "CLIENT", details: "Détails complémentaires", service: "Prestation", amount: "Montant", total: "TOTAL", terms: "Devis ferme, valable 30 jours. TVA suisse incluse le cas échéant.", generated: "Document généré automatiquement — SwissClean Sàrl, site de démonstration." },
+    en: { accuracy: "This quote is firm provided that the answers given to the questionnaire accurately reflect the actual situation. If the conditions found on site differ from the information provided, the company reserves the right to adjust the price accordingly.", docTitle: "QUOTE", client: "CUSTOMER", details: "Additional details", service: "Service", amount: "Amount", total: "TOTAL", terms: "Firm quote, valid for 30 days. Swiss VAT included where applicable.", generated: "Automatically generated document — SwissClean Sàrl, demo site." },
+    de: { accuracy: "Diese Offerte ist verbindlich, sofern die Antworten auf den Fragebogen der tatsächlichen Situation entsprechen. Weichen die Verhältnisse vor Ort von den gemachten Angaben ab, behält sich das Unternehmen vor, den Preis entsprechend anzupassen.", docTitle: "OFFERTE", client: "KUNDE", details: "Weitere Details", service: "Leistung", amount: "Betrag", total: "TOTAL", terms: "Feste Offerte, gültig 30 Tage. Schweizer MWST wo anwendbar inbegriffen.", generated: "Automatisch erstelltes Dokument — SwissClean Sàrl, Demo-Website." },
   };
 
   // Returns { doc, blobUrl } — doc is the jsPDF instance (for .save()),
@@ -166,7 +166,7 @@
   //   company     — { name, address, phone, email } replacing the SwissClean header,
   //                 plus optional logo { data (PNG data URL), w, h } drawn instead of the name
   //   detailLines — already-formatted "label : value" recap lines
-  //   terms / generated — footer sentences
+  //   terms / accuracy / generated — footer sentences
   function generate(quote, customer, lang, opts) {
     lang = lang || window.DEALZ_LANG || "fr";
     opts = opts || {};
@@ -307,8 +307,22 @@
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8.5);
     doc.setTextColor(91, 100, 114);
-    doc.text(opts.terms || s.terms, marginX, y);
-    doc.text(opts.generated || s.generated, marginX, y + 5);
+    // Footer sentences can be long (sector terms + the accuracy clause), so
+    // wrap them to the page width instead of letting them run off the edge.
+    const footerWidth = pageWidth - marginX * 2;
+    const footerLines = [opts.terms || s.terms, opts.accuracy || s.accuracy]
+      .filter(Boolean)
+      .reduce((acc, txt) => acc.concat(doc.splitTextToSize(txt, footerWidth)), []);
+    // Keep the whole footer (terms + accuracy clause + "generated" line) on
+    // one page: if it would run past the bottom margin, start a new page.
+    const footerHeight = footerLines.length * 4 + 6;
+    if (y + footerHeight > doc.internal.pageSize.getHeight() - 10) {
+      doc.addPage();
+      y = 20;
+    }
+    doc.text(footerLines, marginX, y);
+    y += footerLines.length * 4 + 1;
+    doc.text(opts.generated || s.generated, marginX, y);
 
     const blobUrl = doc.output("bloburl");
     return { doc, blobUrl };

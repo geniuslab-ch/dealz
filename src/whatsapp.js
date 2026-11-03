@@ -149,6 +149,7 @@ function formatQuoteText(quote) {
   return (
     `Voici votre devis, ferme et détaillé :\n\n${lines.join("\n")}\n\n` +
     `Total : ${quote.currency} ${quote.total.toFixed(2)}${warn}\n\n` +
+    `_Ce devis est ferme pour autant que les réponses fournies au questionnaire soient fidèles à la réalité. Si la situation constatée sur place diffère des informations données, l'entreprise se réserve le droit d'adapter le prix en conséquence._\n\n` +
     `Répondez *OUI* pour confirmer la réservation, ou *NON* pour la refuser.`
   );
 }

@@ -474,6 +474,13 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
   background: var(--blue-light);
   color: var(--blue-dark);
 }
+.dealz-quote-card .qc-note {
+  padding: 8px 14px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+  border-top: 1px solid #f0f2f6;
+}
 .dealz-quote-card .qc-actions {
   display: flex;
   gap: 10px;
