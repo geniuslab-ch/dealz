@@ -779,6 +779,13 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 
 /* ---------- Contact flow (index.html #contact — docs/contact-flow.js) ---------- */
 .contact-panel { height: 640px; max-width: 620px; margin: 0 auto; }
+/* Center the whole contact block (heading, form, contact cards) on one axis. */
+#contact .section-inner > .eyebrow,
+#contact .section-inner > .section-title,
+#contact .section-inner > .section-sub { text-align: center; }
+#contact .section-inner > .eyebrow { display: table; margin-left: auto; margin-right: auto; }
+#contact .section-inner > .section-sub { margin-left: auto; margin-right: auto; }
+#contact .contact-grid { max-width: 620px; margin-left: auto; margin-right: auto; }
 .flow-block { display: flex; flex-direction: column; gap: 10px; align-self: stretch; }
 .flow-back {
   align-self: flex-start;
