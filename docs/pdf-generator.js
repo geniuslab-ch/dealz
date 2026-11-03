@@ -313,6 +313,13 @@
     const footerLines = [opts.terms || s.terms, opts.accuracy || s.accuracy]
       .filter(Boolean)
       .reduce((acc, txt) => acc.concat(doc.splitTextToSize(txt, footerWidth)), []);
+    // Keep the whole footer (terms + accuracy clause + "generated" line) on
+    // one page: if it would run past the bottom margin, start a new page.
+    const footerHeight = footerLines.length * 4 + 6;
+    if (y + footerHeight > doc.internal.pageSize.getHeight() - 10) {
+      doc.addPage();
+      y = 20;
+    }
     doc.text(footerLines, marginX, y);
     y += footerLines.length * 4 + 1;
     doc.text(opts.generated || s.generated, marginX, y);
