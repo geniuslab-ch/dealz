@@ -8,6 +8,11 @@
  * x-vercel-ip-country header); until it answers, or if it can't, the
  * browser language's region is used, then CHF.
  *
+ * Preview another market from anywhere: ?currency=EUR (or GBP, USD, CHF)
+ * or a country code (?currency=FR, ?currency=UK, ?currency=US) shows that
+ * market's prices and keeps them for the rest of the visit (sessionStorage).
+ * Stripe Checkout still bills in the visitor's real currency (server.js).
+ *
  * Markup:
  *   <span data-price="CLOSE"></span>        a price from the list: a plan
  *                                            (CAPTURE, CLOSE, SCALE),
@@ -50,8 +55,21 @@
     return null;
   }
 
-  var stored = null;
-  try { stored = sessionStorage.getItem("dealz-currency"); } catch (e) {}
+  // ?currency=GBP or ?currency=UK: a currency code, else a country code.
+  function fromUrl() {
+    var m = /[?&]currency=([A-Za-z]{2,3})(?:[&#]|$)/.exec(location.search);
+    if (!m) return null;
+    var v = m[1].toUpperCase();
+    if (SYMBOL[v]) return v;
+    return v.length === 2 ? currencyFor(v) : null;
+  }
+
+  var stored = fromUrl();
+  if (stored) {
+    try { sessionStorage.setItem("dealz-currency", stored); } catch (e) {}
+  } else {
+    try { stored = sessionStorage.getItem("dealz-currency"); } catch (e) {}
+  }
   var code = (stored && SYMBOL[stored] && stored) || fromBrowser() || "CHF";
 
   function list() {
