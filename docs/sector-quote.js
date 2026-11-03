@@ -54,6 +54,7 @@
       confirmChoices: "Valider mes choix",
       noneOption: "Aucune de ces options",
       noneChosen: "Aucune option",
+      accuracy: "Ce devis est ferme pour autant que les réponses fournies au questionnaire soient fidèles à la réalité. Si la situation constatée sur place diffère des informations données, l'entreprise se réserve le droit d'adapter le prix en conséquence.",
       quoteHead: "DEVIS DÉTAILLÉ", total: "TOTAL", minimum: "Supplément au minimum de commande",
       viewPdf: "📄 Voir mon devis (PDF)", yourQuote: "📄 Votre devis", generating: "Génération du devis…",
       accept: "✓ Accepter le devis", decline: "Refuser", close: "Fermer", download: "⬇ Télécharger le PDF",
@@ -119,6 +120,7 @@
       confirmChoices: "Confirm my choices",
       noneOption: "None of these",
       noneChosen: "No option",
+      accuracy: "This quote is firm provided that the answers given to the questionnaire accurately reflect the actual situation. If the conditions found on site differ from the information provided, the company reserves the right to adjust the price accordingly.",
       quoteHead: "DETAILED QUOTE", total: "TOTAL", minimum: "Minimum order adjustment",
       viewPdf: "📄 View my quote (PDF)", yourQuote: "📄 Your quote", generating: "Generating your quote…",
       accept: "✓ Accept quote", decline: "Decline", close: "Close", download: "⬇ Download PDF",
@@ -184,6 +186,7 @@
       confirmChoices: "Auswahl bestätigen",
       noneOption: "Keine davon",
       noneChosen: "Keine Option",
+      accuracy: "Diese Offerte ist verbindlich, sofern die Antworten auf den Fragebogen der tatsächlichen Situation entsprechen. Weichen die Verhältnisse vor Ort von den gemachten Angaben ab, behält sich das Unternehmen vor, den Preis entsprechend anzupassen.",
       quoteHead: "DETAILLIERTE OFFERTE", total: "TOTAL", minimum: "Aufschlag auf Mindestbestellwert",
       viewPdf: "📄 Meine Offerte ansehen (PDF)", yourQuote: "📄 Ihre Offerte", generating: "Offerte wird erstellt…",
       accept: "✓ Offerte annehmen", decline: "Ablehnen", close: "Schliessen", download: "⬇ PDF herunterladen",
@@ -610,6 +613,7 @@
     tot.appendChild(el("span", null, UI.total));
     tot.appendChild(el("span", null, fmtCHF(quote.total)));
     card.appendChild(tot);
+    card.appendChild(el("div", "qc-note", UI.accuracy));
     var actions = el("div", "qc-actions");
     var view = el("button", "qc-accept", UI.viewPdf);
     view.style.flex = "1 1 100%";
@@ -702,6 +706,7 @@
         company: company,
         detailLines: quote.detailLines,
         terms: QT.terms || UI.terms,
+        accuracy: UI.accuracy,
         generated: UI.generated(DEMO.brand),
       });
       var body = overlay.querySelector(".dealz-pdf-body");

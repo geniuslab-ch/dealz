@@ -53,6 +53,7 @@ const UI = {
     quoteHead: (brand) => `🧾 *Devis ferme — ${brand}*`,
     total: "TOTAL",
     minimum: "Supplément au minimum de commande",
+    accuracy: "Ce devis est ferme pour autant que les réponses fournies au questionnaire soient fidèles à la réalité. Si la situation constatée sur place diffère des informations données, l'entreprise se réserve le droit d'adapter le prix en conséquence.",
     decide: "Répondez *1* pour accepter ✅ ou *2* pour refuser ❌.",
     decideAgain: "Répondez *1* pour accepter ce devis, ou *2* pour le refuser.",
     accepted: (brand, email) => `✅ Réservation confirmée ! *${brand}* vient d'être notifiée — l'e-mail de réservation est parti à ${email}.`,
@@ -88,6 +89,7 @@ const UI = {
     quoteHead: (brand) => `🧾 *Firm quote — ${brand}*`,
     total: "TOTAL",
     minimum: "Minimum order adjustment",
+    accuracy: "This quote is firm provided that the answers given to the questionnaire accurately reflect the actual situation. If the conditions found on site differ from the information provided, the company reserves the right to adjust the price accordingly.",
     decide: "Reply *1* to accept ✅ or *2* to decline ❌.",
     decideAgain: "Reply *1* to accept this quote, or *2* to decline it.",
     accepted: (brand, email) => `✅ Booking confirmed! *${brand}* has just been notified — the booking email went to ${email}.`,
@@ -123,6 +125,7 @@ const UI = {
     quoteHead: (brand) => `🧾 *Verbindliche Offerte — ${brand}*`,
     total: "TOTAL",
     minimum: "Aufschlag auf Mindestbestellwert",
+    accuracy: "Diese Offerte ist verbindlich, sofern die Antworten auf den Fragebogen der tatsächlichen Situation entsprechen. Weichen die Verhältnisse vor Ort von den gemachten Angaben ab, behält sich das Unternehmen vor, den Preis entsprechend anzupassen.",
     decide: "Antworten Sie *1* zum Annehmen ✅ oder *2* zum Ablehnen ❌.",
     decideAgain: "Antworten Sie *1*, um diese Offerte anzunehmen, oder *2*, um sie abzulehnen.",
     accepted: (brand, email) => `✅ Buchung bestätigt! *${brand}* wurde soeben benachrichtigt — die Buchungs-E-Mail ging an ${email}.`,
@@ -311,7 +314,7 @@ function quoteText(S, lang, quote) {
   const U = UI[lang];
   const lines = quote.items.map((i) => `• ${i.label} — ${fmtCHF(i.amount)}`);
   const details = quote.detailLines.length ? `\n\n_${quote.detailLines.join(" · ")}_` : "";
-  return `${U.quoteHead(S[lang].demo.brand)}\n\n${lines.join("\n")}\n\n*${U.total} : ${fmtCHF(quote.total)}*${details}\n\n${S[lang].quote.terms}\n\n${U.decide}`;
+  return `${U.quoteHead(S[lang].demo.brand)}\n\n${lines.join("\n")}\n\n*${U.total} : ${fmtCHF(quote.total)}*${details}\n\n${S[lang].quote.terms}\n_${U.accuracy}_\n\n${U.decide}`;
 }
 
 // Word-overlap match of a typed answer against the options, like the

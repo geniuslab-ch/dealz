@@ -72,7 +72,9 @@ de deux fois — appelle quand même calculate_quote avec les champs que tu as, 
 Une fois que tu as appelé calculate_quote et reçu un résultat, présente-le clairement comme un devis
 détaillé et chiffré. Précise explicitement qu'il s'agit d'un devis ferme et réel (pas juste une
 estimation indicative) et que le client peut l'accepter ou le refuser directement dans la
-conversation. Si l'outil renvoie des avertissements, mentionne-les brièvement et simplement, sans
+conversation. Ajoute toujours, en une phrase, que ce devis est ferme pour autant que les réponses
+fournies soient fidèles à la réalité, et que l'entreprise se réserve le droit d'adapter le prix si la
+situation constatée sur place diffère des informations données. Si l'outil renvoie des avertissements, mentionne-les brièvement et simplement, sans
 jargon technique.`;
 }
 
