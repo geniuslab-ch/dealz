@@ -60,6 +60,20 @@
   // Cantons, départements, counties or states (docs/regions.js).
   const REGIONS = window.DEALZ_REGIONS || {};
   const hasRegions = (a) => !!REGIONS[a.country];
+  // US: after the states, the main cities / metro areas of those states,
+  // plus "elsewhere in <state>" (docs/regions.js).
+  const US_CITIES = window.DEALZ_US_CITIES || {};
+  const STATE_NAME = {};
+  (REGIONS.US || []).forEach((r) => (STATE_NAME[r.id] = r.label.replace(/ \(..\)$/, "")));
+  const chosenStates = (a) => (a.country === "US" && Array.isArray(a.zone_regions) ? a.zone_regions : []);
+  const cityList = (a) =>
+    chosenStates(a).flatMap((st) =>
+      (US_CITIES[st] || [])
+        .map((c) => ({ id: st + ":" + c, label: c + " (" + st + ")" }))
+        .concat({ id: st + ":other", label: t("Ailleurs en " + STATE_NAME[st], "Elsewhere in " + STATE_NAME[st], "Anderswo in " + STATE_NAME[st]) }),
+    );
+  const usOther = (a) => (Array.isArray(a.zone_cities) ? a.zone_cities : []).some((x) => /:other$/.test(x));
+  const regionList = (f) => (f.source ? f.source(answers) : REGIONS[answers.country] || []);
   const REGION_NAME = {
     CH: t("canton", "canton", "Kanton"), FR: t("département", "département", "Departement"),
     UK: t("county", "county", "County"), US: t("State", "state", "Bundesstaat"),
@@ -160,14 +174,20 @@
       fields: [
         { id: "zone_regions", type: "regions", required: true, label: t("Où intervenez-vous ?", "Where do you work?", "Wo sind Sie tätig?"), hint: t("Cochez autant de régions que nécessaire.", "Tick as many as you need.", "Kreuzen Sie so viele an wie nötig."), show: (a) => hasRegions(a) },
         {
-          id: "zone", type: "textarea", required: (a) => !hasRegions(a) || a.country === "US", label: t("Précisions sur votre zone", "More about your area", "Details zu Ihrem Gebiet"),
+          id: "zone_cities", type: "regions", required: true, source: cityList, show: (a) => chosenStates(a).length > 0,
+          label: t("Quelles villes ou régions de ces États ?", "Which cities or areas in these states?", "Welche Städte oder Gebiete in diesen Bundesstaaten?"),
+          hint: t("Chaque ville comprend ses environs. Si vous travaillez ailleurs, cochez « Ailleurs en… » et précisez ci-dessous.", "Each city includes its surroundings. If you work elsewhere, tick \"Elsewhere in…\" and tell us below.", "Jede Stadt inklusive Umgebung. Wenn Sie anderswo arbeiten, kreuzen Sie «Anderswo in…» an und präzisieren Sie unten."),
+          search: t("Rechercher une ville…", "Search for a city…", "Stadt suchen…"),
+        },
+        {
+          id: "zone", type: "textarea", required: (a) => !hasRegions(a) || (a.country === "US" && (!chosenStates(a).length || usOther(a))), label: t("Précisions sur votre zone", "More about your area", "Details zu Ihrem Gebiet"),
           // A US state is far too big for a small business: ask for the real area.
           hint: (a) =>
             ({
               CH: t("Communes, NPA ou rayon en km autour de votre adresse, si vous ne couvrez qu'une partie d'un canton.", "Towns, postcodes (NPA) or a radius in km, if you only cover part of a canton.", "Gemeinden, PLZ oder ein Umkreis in km, falls Sie nur einen Teil eines Kantons abdecken."),
               FR: t("Communes, codes postaux ou rayon en km autour de votre adresse, si vous ne couvrez qu'une partie d'un département.", "Towns, postcodes or a radius in km, if you only cover part of a département.", "Gemeinden, Postleitzahlen oder ein Umkreis in km, falls Sie nur einen Teil eines Departements abdecken."),
               UK: t("Villes, codes postaux (ex. « LS, HG ») ou rayon en miles, si vous ne couvrez qu'une partie d'un county.", "Towns, postcode areas (e.g. \"LS, HG\") or a radius in miles, if you only cover part of a county.", "Städte, Postleitzahlbereiche (z. B. «LS, HG») oder ein Umkreis in Meilen, falls Sie nur einen Teil eines Countys abdecken."),
-              US: t("Villes, counties ou codes ZIP couverts, ou un rayon en miles autour de votre ville.", "Towns, counties or ZIP codes you cover, or a radius in miles around your town.", "Städte, Counties oder ZIP-Codes, oder ein Umkreis in Meilen um Ihre Stadt."),
+              US: t("Pour « Ailleurs en… » : villes, counties ou codes ZIP couverts, ou un rayon en miles autour de votre ville.", "For \"Elsewhere in…\": towns, counties or ZIP codes you cover, or a radius in miles around your town.", "Für «Anderswo in…»: Städte, Counties oder ZIP-Codes, oder ein Umkreis in Meilen um Ihre Stadt."),
             })[a.country] || t("Pays, villes, codes postaux ou rayon en km autour de votre adresse.", "Country, towns, postcodes or a radius around your address.", "Land, Orte, Postleitzahlen oder ein Umkreis um Ihre Adresse."),
         },
         { id: "free_km", type: "number", label: (a) => (usesMiles(a) ? t("Déplacement gratuit jusqu'à (miles)", "Free travel up to (miles)", "Anfahrt gratis bis (Meilen)") : t("Déplacement gratuit jusqu'à (km)", "Free travel up to (km)", "Anfahrt gratis bis (km)")) },
@@ -207,7 +227,12 @@
       fields: [
         {
           id: "confirmation", type: "single", required: true, label: t("Quand un client accepte le devis…", "When a customer accepts the quote…", "Wenn ein Kunde die Offerte annimmt…"),
-          hint: t("Dans les deux cas, nous ajoutons le rendez-vous directement dans votre agenda actuel.", "Either way, we add the appointment straight into your current calendar.", "In beiden Fällen tragen wir den Termin direkt in Ihren bestehenden Kalender ein."),
+          // What exists today: an "add to calendar" button in every booking e-mail;
+          // SCALE also gets a calendar feed (src/scale.js) that syncs by itself.
+          hint: (a) =>
+            isPlan(a, "SCALE")
+              ? t("Dans les deux cas, le rendez-vous s'ajoute tout seul à votre agenda actuel (Google, Outlook ou Apple), une fois votre agenda relié à Dealz.", "Either way, the appointment goes into your current calendar by itself (Google, Outlook or Apple), once your calendar is linked to Dealz.", "In beiden Fällen erscheint der Termin von selbst in Ihrem bestehenden Kalender (Google, Outlook oder Apple), sobald Ihr Kalender mit Dealz verbunden ist.")
+              : t("Dans les deux cas, vous recevez le rendez-vous par e-mail, avec un bouton pour l'ajouter à votre agenda en un clic.", "Either way, you get the appointment by e-mail, with a button to add it to your calendar in one click.", "In beiden Fällen erhalten Sie den Termin per E-Mail, mit einem Button, um ihn mit einem Klick in Ihren Kalender einzutragen."),
           options: [
             { id: "auto", label: t("La date est bloquée directement", "The date is booked right away", "Der Termin wird direkt gebucht") },
             { id: "call", label: t("Je rappelle le client avant de bloquer la date", "I call the customer before booking the date", "Ich rufe den Kunden an, bevor der Termin gebucht wird") },
@@ -339,7 +364,7 @@
     if (f.type === "check") return v ? pick(t("Oui", "Yes", "Ja")) : "";
     if (f.type === "file") return (files[f.id] || []).map((x) => x.name).join(", ");
     if (f.type === "regions") {
-      const list = REGIONS[answers.country] || [];
+      const list = regionList(f);
       return (Array.isArray(v) ? v : []).map((id) => { const r = list.find((x) => x.id === id); return r ? pick(r.label) : id; }).join(", ");
     }
     if (f.type === "single" || f.type === "multi" || f.type === "select") {
@@ -428,7 +453,7 @@
         b.dataset.id = o.id;
         b.addEventListener("click", () => {
           if (f.type === "single") {
-            if (f.id === "country" && answers.country !== o.id) answers.zone_regions = [];
+            if (f.id === "country" && answers.country !== o.id) answers.zone_regions = answers.zone_cities = [];
             answers[f.id] = o.id;
           } else {
             let v = Array.isArray(answers[f.id]) ? answers[f.id].slice() : [];
@@ -504,13 +529,13 @@
     // Cantons / départements / counties / states: a searchable list with
     // multiple choice, for the country picked on the second step.
     if (f.type === "regions") {
-      const list = REGIONS[answers.country] || [];
+      const list = regionList(f);
       const kind = L(REGION_NAME[answers.country] || t("région", "region", "Region"));
       const chosen = () => (Array.isArray(answers[f.id]) ? answers[f.id] : []);
       const search = el("input", "dcf-input onb-region-search");
       search.type = "search";
       search.id = inputId;
-      search.placeholder = L(t("Rechercher un {k}…", "Search for a {k}…", "{k} suchen…")).replace("{k}", kind);
+      search.placeholder = f.search ? L(f.search) : L(t("Rechercher un {k}…", "Search for a {k}…", "{k} suchen…")).replace("{k}", kind);
       const tools = el("div", "onb-region-tools");
       const count = el("span", "onb-region-count");
       const all = el("button", "onb-back", L(t("Tout cocher", "Select all", "Alle auswählen")));
@@ -534,6 +559,7 @@
           answers[f.id] = v;
           save();
           sync();
+          regionsChanged(f);
         });
         return { row, cb, text: L(r.label).toLowerCase() };
       });
@@ -549,8 +575,8 @@
         const q = norm(search.value.trim());
         rows.forEach((x) => { x.row.style.display = !q || norm(x.text).includes(q) ? "" : "none"; });
       });
-      all.addEventListener("click", () => { answers[f.id] = list.map((r) => r.id); save(); sync(); });
-      none.addEventListener("click", () => { answers[f.id] = []; save(); sync(); });
+      all.addEventListener("click", () => { answers[f.id] = list.map((r) => r.id); save(); sync(); regionsChanged(f); });
+      none.addEventListener("click", () => { answers[f.id] = []; save(); sync(); regionsChanged(f); });
       wrap.appendChild(search);
       wrap.appendChild(tools);
       wrap.appendChild(box);
@@ -607,6 +633,23 @@
   }
 
   let currentFields = null;
+  // The US city list depends on the states picked, and whether the zone
+  // details are required depends on both: rebuild those two in place.
+  function regionsChanged(f) {
+    if (!currentFields || (f.id !== "zone_regions" && f.id !== "zone_cities")) return;
+    if (f.id === "zone_regions" && Array.isArray(answers.zone_cities)) {
+      const states = chosenStates(answers);
+      answers.zone_cities = answers.zone_cities.filter((x) => states.includes(x.split(":")[0]));
+      save();
+    }
+    const ids = f.id === "zone_regions" ? ["zone_cities", "zone"] : ["zone"];
+    ids.forEach((id) => {
+      const node = currentFields.querySelector(`[data-field="${id}"]`);
+      const field = STEPS[stepIndex].fields.find((x) => x.id === id);
+      if (node && field) node.replaceWith(renderField(field));
+    });
+    refreshConditional();
+  }
   function refreshConditional() {
     if (!currentFields) return;
     STEPS[stepIndex].fields.forEach((f) => {
