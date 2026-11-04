@@ -235,10 +235,12 @@ async function submit({ body, session }) {
   return { ok: true };
 }
 
-// The Calendly page where clients book the 30-minute meeting (Vercel env
-// CALENDLY_URL). Empty: the form asks for their availability instead.
+// The Calendly page where clients book the 30-minute meeting. CALENDLY_URL
+// (Vercel env) overrides the default; an invalid one falls back to asking
+// for the client's availability.
+const DEFAULT_CALENDLY = "https://calendly.com/dealz-website/30min";
 function calendlyUrl() {
-  const u = String(process.env.CALENDLY_URL || "").trim();
+  const u = String(process.env.CALENDLY_URL || DEFAULT_CALENDLY).trim();
   return /^https:\/\/calendly\.com\/[\w\-/]+$/.test(u) ? u : "";
 }
 
