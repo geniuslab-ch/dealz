@@ -237,6 +237,7 @@
         },
         {
           id: "calendar", type: "single", label: t("Quel agenda utilisez-vous ?", "Which calendar do you use?", "Welchen Kalender verwenden Sie?"), withOther: true,
+          hint: t("Pas besoin de chercher de lien : nous vous envoyons celui à ajouter dans cet agenda, avec les étapes.", "No need to look for a link: we send you the one to add to this calendar, with the steps.", "Sie müssen keinen Link suchen: Wir senden Ihnen den Link für diesen Kalender, mit den Schritten."),
           options: [
             { id: "google", label: "Google Agenda" },
             { id: "outlook", label: "Outlook" },
@@ -704,12 +705,34 @@
       "7 short steps, about 10 minutes. With your answers, our onboarding meeting takes only 30 minutes and your Dealz is ready sooner.",
       "7 kurze Schritte, etwa 10 Minuten. Mit Ihren Antworten dauert unser Einführungsgespräch nur 30 Minuten und Ihr Dealz ist schneller bereit."
     ))));
+    const req = el("p", "onb-intro onb-req-note");
+    req.appendChild(el("span", "onb-req", "* "));
+    req.appendChild(document.createTextNode(L(t(
+      "Les champs marqués d'un astérisque rouge sont obligatoires. Tous les autres sont facultatifs : si vous n'êtes pas sûr, laissez vide, on en parlera en réunion.",
+      "Fields marked with a red asterisk are required. All the others are optional: if you're not sure, leave them blank and we'll cover them in the meeting.",
+      "Mit einem roten Sternchen markierte Felder sind Pflichtfelder. Alle anderen sind freiwillig: Wenn Sie unsicher sind, lassen Sie sie leer, wir besprechen es im Gespräch."
+    ))));
+    body.appendChild(req);
+    // What to have open before starting, so the client doesn't stop halfway.
+    body.appendChild(el("h3", "onb-subtitle", L(t("À préparer avant de commencer", "Have these ready before you start", "Bitte vorab bereithalten"))));
+    const prep = el("ul", "onb-list");
+    [
+      t("Votre grille de prix ou un ancien devis (Excel de préférence, mais PDF ou photo vont aussi) : vous l'importerez tel quel.", "Your price list or a past quote (Excel preferred, PDF or a photo work too): you'll upload it as it is.", "Ihre Preisliste oder eine frühere Offerte (am liebsten Excel, PDF oder Foto gehen auch): Sie laden sie einfach hoch."),
+      t("Votre logo, en fichier image (celui de votre site ou de vos devis).", "Your logo, as an image file (the one on your website or quotes).", "Ihr Logo als Bilddatei (wie auf Ihrer Website oder Ihren Offerten)."),
+      t("Le numéro WhatsApp que vos clients utilisent pour vous écrire.", "The WhatsApp number your customers use to message you.", "Die WhatsApp-Nummer, über die Ihre Kunden Ihnen schreiben."),
+      t("L'adresse de votre site, et le nom et l'e-mail de la personne ou de l'agence qui le gère.", "Your website address, and the name and email of the person or agency who manages it.", "Die Adresse Ihrer Website sowie Name und E-Mail der Person oder Agentur, die sie betreut."),
+    ].forEach((x) => prep.appendChild(el("li", null, L(x))));
+    body.appendChild(prep);
+    body.appendChild(el("p", "onb-intro", L(t(
+      "Rien d'autre à ouvrir : pour votre agenda, nous vous envoyons nous-mêmes le lien à ajouter, avec les étapes.",
+      "Nothing else to open: for your calendar, we send you the link to add, with the steps.",
+      "Sonst nichts zu öffnen: Für Ihren Kalender senden wir Ihnen den Link zum Hinzufügen, mit den Schritten."
+    ))));
+    body.appendChild(el("h3", "onb-subtitle", L(t("Bon à savoir", "Good to know", "Gut zu wissen"))));
     const list = el("ul", "onb-list");
     [
-      t("Gardez votre grille de prix ou un ancien devis sous la main : vous l'importerez tel quel.", "Keep your price list or a past quote at hand: you'll upload it as it is.", "Halten Sie Ihre Preisliste oder eine frühere Offerte bereit: Sie laden sie einfach hoch."),
       t("Vos fichiers ne sont pas gardés si vous rechargez la page : importez-les juste avant d'envoyer.", "Files are not kept if you reload the page: upload them just before sending.", "Dateien bleiben beim Neuladen der Seite nicht erhalten: Laden Sie sie kurz vor dem Senden hoch."),
       t("Vos réponses sont enregistrées sur cet appareil : vous pouvez reprendre plus tard.", "Your answers are saved on this device: you can come back later.", "Ihre Antworten werden auf diesem Gerät gespeichert: Sie können später weitermachen."),
-      t("Pas sûr d'une réponse ? Laissez vide, on en parlera en réunion.", "Not sure about an answer? Leave it blank, we'll cover it in the meeting.", "Unsicher bei einer Antwort? Leer lassen, wir besprechen es im Gespräch."),
     ].forEach((x) => list.appendChild(el("li", null, L(x))));
     body.appendChild(list);
     body.appendChild(navButtons(() => go(0), L(UI.start)));
