@@ -111,6 +111,7 @@ function prefillFrom(session) {
     contact_phone: m.contact_phone || "",
     plan: ["CAPTURE", "CLOSE", "SCALE"].includes(m.plan) ? m.plan : "",
     currency: session.currency ? String(session.currency).toUpperCase() : "",
+    country: { chf: "CH", eur: "FR", gbp: "UK", usd: "US" }[String(session.currency || "").toLowerCase()] || "",
   };
   if (m.website_url) {
     out.website = m.website_url;

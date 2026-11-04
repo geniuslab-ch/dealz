@@ -49,6 +49,13 @@
   const OTHER = { id: "other", label: t("Autre", "Other", "Andere"), other: true };
   const isPlan = (a, ...plans) => plans.includes(a.plan);
   const noSite = (a) => a.integration === "nosite";
+  // Cantons, départements, counties or states (docs/regions.js).
+  const REGIONS = window.DEALZ_REGIONS || {};
+  const hasRegions = (a) => !!REGIONS[a.country];
+  const REGION_NAME = {
+    CH: t("canton", "canton", "Kanton"), FR: t("département", "département", "Departement"),
+    UK: t("county", "county", "County"), US: t("State", "state", "Bundesstaat"),
+  };
 
   // ---- the questions ----
   const STEPS = [
@@ -78,6 +85,16 @@
       title: t("Votre activité et vos clients", "Your business and customers", "Ihre Tätigkeit und Ihre Kunden"),
       fields: [
         { id: "sector", type: "select", required: true, label: t("Votre secteur", "Your sector", "Ihre Branche"), optionsFrom: "sectors", withOther: true },
+        {
+          id: "country", type: "single", required: true, label: t("Pays où vous intervenez", "Country you work in", "Land, in dem Sie tätig sind"),
+          options: [
+            { id: "CH", label: t("Suisse", "Switzerland", "Schweiz") },
+            { id: "FR", label: t("France", "France", "Frankreich") },
+            { id: "UK", label: t("Royaume-Uni", "United Kingdom", "Vereinigtes Königreich") },
+            { id: "US", label: t("États-Unis", "United States", "USA") },
+            { id: "other", label: t("Autre pays", "Other country", "Anderes Land") },
+          ],
+        },
         {
           id: "currency", type: "single", required: true, label: t("Devise de vos prix", "Currency of your prices", "Währung Ihrer Preise"),
           options: ["CHF", "EUR", "GBP", "USD"].map((c) => ({ id: c, label: c })),
@@ -133,7 +150,8 @@
       id: "zone",
       title: t("Zone et disponibilités", "Area and availability", "Gebiet und Verfügbarkeit"),
       fields: [
-        { id: "zone", type: "textarea", required: true, label: t("Zone couverte", "Area covered", "Einsatzgebiet"), hint: t("Villes, codes postaux, ou un rayon en km autour de votre adresse.", "Towns, postcodes, or a radius in km/miles around your address.", "Orte, Postleitzahlen oder ein Umkreis in km um Ihre Adresse.") },
+        { id: "zone_regions", type: "regions", required: true, label: t("Où intervenez-vous ?", "Where do you work?", "Wo sind Sie tätig?"), hint: t("Cochez autant de régions que nécessaire.", "Tick as many as you need.", "Kreuzen Sie so viele an wie nötig."), show: (a) => hasRegions(a) },
+        { id: "zone", type: "textarea", required: (a) => !hasRegions(a), label: t("Précisions sur votre zone", "More about your area", "Details zu Ihrem Gebiet"), hint: t("Villes, codes postaux ou rayon en km autour de votre adresse.", "Towns, postcodes or a radius around your address.", "Orte, Postleitzahlen oder ein Umkreis in km um Ihre Adresse.") },
         { id: "free_km", type: "number", label: t("Déplacement gratuit jusqu'à (km)", "Free travel up to (km/miles)", "Anfahrt gratis bis (km)") },
         { id: "travel_fee", type: "text", label: t("Frais de déplacement au-delà", "Travel fee beyond that", "Anfahrtskosten darüber hinaus"), hint: t("Exemple : « 30 jusqu'à 40 km, puis 60 ».", "Example: \"30 up to 25 miles, then 60\".", "Beispiel: «30 bis 40 km, danach 60».") },
         {
@@ -278,6 +296,10 @@
     const pick = (o) => (o == null ? "" : typeof o === "string" ? o : o[lang] || o.fr);
     if (f.type === "check") return v ? pick(t("Oui", "Yes", "Ja")) : "";
     if (f.type === "file") return (files[f.id] || []).map((x) => x.name).join(", ");
+    if (f.type === "regions") {
+      const list = REGIONS[answers.country] || [];
+      return (Array.isArray(v) ? v : []).map((id) => { const r = list.find((x) => x.id === id); return r ? pick(r.label) : id; }).join(", ");
+    }
     if (f.type === "single" || f.type === "multi" || f.type === "select") {
       const ids = Array.isArray(v) ? v : v ? [v] : [];
       const opts = optionsOf(f);
@@ -364,6 +386,7 @@
         b.dataset.id = o.id;
         b.addEventListener("click", () => {
           if (f.type === "single") {
+            if (f.id === "country" && answers.country !== o.id) answers.zone_regions = [];
             answers[f.id] = o.id;
           } else {
             let v = Array.isArray(answers[f.id]) ? answers[f.id].slice() : [];
@@ -434,6 +457,64 @@
       wrap.appendChild(box);
       wrap.appendChild(err);
             return wrap;
+    }
+
+    // Cantons / départements / counties / states: a searchable list with
+    // multiple choice, for the country picked on the second step.
+    if (f.type === "regions") {
+      const list = REGIONS[answers.country] || [];
+      const kind = L(REGION_NAME[answers.country] || t("région", "region", "Region"));
+      const chosen = () => (Array.isArray(answers[f.id]) ? answers[f.id] : []);
+      const search = el("input", "dcf-input onb-region-search");
+      search.type = "search";
+      search.id = inputId;
+      search.placeholder = L(t("Rechercher un {k}…", "Search for a {k}…", "{k} suchen…")).replace("{k}", kind);
+      const tools = el("div", "onb-region-tools");
+      const count = el("span", "onb-region-count");
+      const all = el("button", "onb-back", L(t("Tout cocher", "Select all", "Alle auswählen")));
+      const none = el("button", "onb-back", L(t("Tout décocher", "Clear", "Alle abwählen")));
+      all.type = none.type = "button";
+      tools.appendChild(count);
+      tools.appendChild(all);
+      tools.appendChild(none);
+      const box = el("div", "onb-region-list");
+      const rows = list.map((r) => {
+        const row = el("label", "onb-region");
+        const cb = el("input");
+        cb.type = "checkbox";
+        cb.value = r.id;
+        row.appendChild(cb);
+        row.appendChild(el("span", null, L(r.label)));
+        box.appendChild(row);
+        cb.addEventListener("change", () => {
+          const v = chosen().filter((x) => x !== r.id);
+          if (cb.checked) v.push(r.id);
+          answers[f.id] = v;
+          save();
+          sync();
+        });
+        return { row, cb, text: L(r.label).toLowerCase() };
+      });
+      const picked = el("div", "onb-hint onb-region-picked");
+      const sync = () => {
+        const v = chosen();
+        rows.forEach((x) => { x.cb.checked = v.includes(x.cb.value); x.row.classList.toggle("selected", x.cb.checked); });
+        count.textContent = L(t("{n} sélectionné(s)", "{n} selected", "{n} ausgewählt")).replace("{n}", v.length);
+        picked.textContent = v.length ? display(f, LANG) : "";
+      };
+      const norm = (x) => x.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      search.addEventListener("input", () => {
+        const q = norm(search.value.trim());
+        rows.forEach((x) => { x.row.style.display = !q || norm(x.text).includes(q) ? "" : "none"; });
+      });
+      all.addEventListener("click", () => { answers[f.id] = list.map((r) => r.id); save(); sync(); });
+      none.addEventListener("click", () => { answers[f.id] = []; save(); sync(); });
+      wrap.appendChild(search);
+      wrap.appendChild(tools);
+      wrap.appendChild(box);
+      wrap.appendChild(picked);
+      sync();
+      return wrap;
     }
 
     // A long list (sectors): a dropdown instead of chips.
