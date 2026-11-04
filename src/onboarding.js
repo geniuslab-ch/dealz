@@ -1,6 +1,7 @@
 const { sendEmail, DEALZ_TEAM_EMAIL } = require("./notifications");
 const crm = require("./crm");
 const META = require("./sector-meta.json");
+const { buildProcuration } = require("./procuration");
 
 /**
  * The client onboarding form (docs/integration.html + docs/onboarding-form.js).
@@ -126,7 +127,7 @@ function prefillFrom(session) {
 // team e-mail only. Any office format is fine; nothing executable.
 const MAX_FILE_BYTES = 3 * 1024 * 1024 + 1024;
 const FILE_EXT = /\.(xlsx|xls|xlsm|csv|ods|numbers|pdf|doc|docx|odt|pages|txt|rtf|png|jpe?g|heic|webp)$/i;
-const FILE_FIELDS = { price_files: "Prestations et prix" };
+const FILE_FIELDS = { price_files: "Prestations et prix", logo_files: "Logo" };
 
 function cleanFiles(list) {
   if (!Array.isArray(list)) return [];
@@ -195,6 +196,22 @@ async function submit({ body, session }) {
   if (!team.length) throw Object.assign(new Error("Réponses manquantes"), { status: 400 });
 
   const attached = cleanFiles(body.files);
+
+  // Authorisation letter for the client's web agency, when they gave it.
+  const PROC_NAME = { fr: "Procuration-Dealz", en: "Authorisation-Dealz", de: "Vollmacht-Dealz" };
+  let procuration = null;
+  if (a.procuration === true && str(a.agency_name)) {
+    const date = new Date().toLocaleDateString({ fr: "fr-CH", en: "en-GB", de: "de-CH" }[lang], { year: "numeric", month: "long", day: "numeric" });
+    procuration = {
+      filename: `${PROC_NAME[lang]}-${company.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w\-]+/g, "-").slice(0, 60)}.pdf`,
+      content: buildProcuration({
+        lang, name: str(a.contact_name) || email, email, company,
+        agency: str(a.agency_name), agencyContact: str(a.agency_contact) || "—",
+        website: str(a.website) || "—", date,
+      }),
+    };
+    attached.push({ label: "Procuration (PDF généré)", filename: procuration.filename, content: procuration.content });
+  }
   const filesLine = attached.length
     ? `<p style="margin:10px 0 0;">📎 <b>Fichiers joints :</b> ${attached.map((f) => `${esc(f.label)} (${esc(f.filename)})`).join(" · ")}</p>`
     : "";
@@ -211,11 +228,18 @@ async function submit({ body, session }) {
   const results = await Promise.allSettled([
     sendEmail({ to: DEALZ_TEAM_EMAIL, subject: `📋 Intégration — ${company}`, html: teamHtml, replyTo: email, attachments: attached.map(({ filename, content }) => ({ filename, content })) }),
     crm.post("billingEvents", { type: "note", email, companyName: company, note: `📋 Formulaire d'intégration reçu${attached.length ? " (fichiers dans l'e-mail : " + attached.map((f) => f.filename).join(", ") + ")" : ""}\n\n${summaryText(team)}`.slice(0, 20000) }),
-    sendEmail({ to: email, subject: DONE[lang].subject, html: shell(`<p>${esc(DONE[lang].intro)}</p>${summaryHtml(mine)}`), replyTo: "info@dealz.website" }),
+    sendEmail({ to: email, subject: DONE[lang].subject, html: shell(`<p>${esc(DONE[lang].intro)}</p>${summaryHtml(mine)}`), replyTo: "info@dealz.website", attachments: procuration ? [procuration] : undefined }),
   ]);
   results.forEach((r, i) => r.status === "rejected" && console.error(`[onboarding] side effect ${i} failed:`, r.reason && r.reason.message));
   if (results[0].status === "rejected") throw Object.assign(new Error("Envoi impossible"), { status: 502 });
   return { ok: true };
 }
 
-module.exports = { link, sendWelcome, sectorList, prefillFrom, submit, SESSION_RE };
+// The Calendly page where clients book the 30-minute meeting (Vercel env
+// CALENDLY_URL). Empty: the form asks for their availability instead.
+function calendlyUrl() {
+  const u = String(process.env.CALENDLY_URL || "").trim();
+  return /^https:\/\/calendly\.com\/[\w\-/]+$/.test(u) ? u : "";
+}
+
+module.exports = { calendlyUrl, link, sendWelcome, sectorList, prefillFrom, submit, SESSION_RE };

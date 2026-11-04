@@ -39,6 +39,11 @@
       "Wir richten Ihr Dealz mit diesen Angaben ein und melden uns sehr bald für das 30-minütige Gespräch. Eine Kopie erhalten Sie per E-Mail."
     ),
     empty: "—",
+    doneTextBook: t(
+      "Nous préparons votre Dealz avec ces informations. Choisissez ci-dessous le moment de notre réunion de 30 minutes. Une copie de vos réponses vous est envoyée par e-mail.",
+      "We are preparing your Dealz with this information. Pick a time for our 30-minute meeting below. A copy of your answers is on its way to your inbox.",
+      "Wir richten Ihr Dealz mit diesen Angaben ein. Wählen Sie unten einen Termin für unser 30-minütiges Gespräch. Eine Kopie Ihrer Antworten erhalten Sie per E-Mail."
+    ),
     pickFile: t("Choisir un fichier", "Choose a file", "Datei wählen"),
     removeFile: t("Retirer", "Remove", "Entfernen"),
     addFile: t("Ajouter un autre fichier", "Add another file", "Weitere Datei hinzufügen"),
@@ -49,6 +54,7 @@
   const OTHER = { id: "other", label: t("Autre", "Other", "Andere"), other: true };
   const isPlan = (a, ...plans) => plans.includes(a.plan);
   const noSite = (a) => a.integration === "nosite";
+  const needsAgency = (a) => !noSite(a) && (a.site_manager === "agency" || a.site_manager === "other");
   // Cantons, départements, counties or states (docs/regions.js).
   const REGIONS = window.DEALZ_REGIONS || {};
   const hasRegions = (a) => !!REGIONS[a.country];
@@ -162,7 +168,7 @@
               : t("Villes, codes postaux ou rayon en km autour de votre adresse.", "Towns, postcodes or a radius around your address.", "Orte, Postleitzahlen oder ein Umkreis in km um Ihre Adresse."),
         },
         { id: "free_km", type: "number", label: t("Déplacement gratuit jusqu'à (km)", "Free travel up to (km/miles)", "Anfahrt gratis bis (km)") },
-        { id: "travel_fee", type: "text", label: t("Frais de déplacement au-delà", "Travel fee beyond that", "Anfahrtskosten darüber hinaus"), hint: t("Exemple : « 30 jusqu'à 40 km, puis 60 ».", "Example: \"30 up to 25 miles, then 60\".", "Beispiel: «30 bis 40 km, danach 60».") },
+        { id: "travel_fee", type: "text", label: t("Au-delà, combien facturez-vous le déplacement ?", "Beyond that, what do you charge for travel?", "Was verrechnen Sie darüber hinaus für die Anfahrt?"), hint: t("Exemple : « 1 par km » ou « 40 par intervention ».", "Example: \"1 per mile\" or \"40 per job\".", "Beispiel: «1 pro km» oder «40 pro Einsatz».") },
         {
           id: "lead_time", type: "single", required: true, label: t("Délai minimum entre la demande et l'intervention", "Minimum notice between request and job", "Mindestvorlauf zwischen Anfrage und Einsatz"),
           options: [
@@ -226,7 +232,7 @@
           id: "integration", type: "single", required: true, label: t("Sur votre site, vous voulez…", "On your website, you want…", "Auf Ihrer Website möchten Sie…"),
           options: [
             { id: "wa", label: t("Le bouton WhatsApp seul", "The WhatsApp button only", "Nur den WhatsApp-Button") },
-            { id: "wa_widget", label: t("Le bouton WhatsApp + un widget de devis pour les clients sans WhatsApp", "The WhatsApp button + a quote widget for customers without WhatsApp", "Den WhatsApp-Button + ein Offerten-Widget für Kunden ohne WhatsApp") },
+            { id: "wa_widget", label: t("Le bouton WhatsApp + un formulaire de devis sur votre site, pour les clients qui n'ont pas WhatsApp", "The WhatsApp button + a quote form on your website, for customers without WhatsApp", "Den WhatsApp-Button + ein Offertenformular auf Ihrer Website, für Kunden ohne WhatsApp") },
             { id: "nosite", label: t("Je n'ai pas de site", "I don't have a website", "Ich habe keine Website") },
           ],
         },
@@ -242,8 +248,11 @@
             { id: "squarespace", label: "Squarespace" },
           ],
         },
-        { id: "logo_link", type: "url", label: t("Lien vers votre logo (PNG)", "Link to your logo (PNG)", "Link zu Ihrem Logo (PNG)"), hint: t("Ou envoyez-le à info@dealz.website.", "Or send it to info@dealz.website.", "Oder senden Sie es an info@dealz.website.") },
-        { id: "brand_color", type: "color", label: t("Votre couleur principale", "Your main colour", "Ihre Hauptfarbe") },
+        { id: "agency_name", type: "text", required: true, label: t("Nom de l'agence ou de la personne qui gère votre site", "Name of the agency or person managing your website", "Name der Agentur oder Person, die Ihre Website betreut"), show: (a) => needsAgency(a) },
+        { id: "agency_contact", type: "text", required: true, label: t("Son e-mail ou son téléphone", "Their email or phone", "Deren E-Mail oder Telefon"), show: (a) => needsAgency(a) },
+        { id: "procuration", type: "check", label: t("Je donne procuration à Dealz pour contacter cette personne et obtenir l'accès à mon site, uniquement pour y installer Dealz. Une lettre de procuration est générée en PDF.", "I authorise Dealz to contact this person and get access to my website, only to install Dealz. An authorisation letter is generated as a PDF.", "Ich bevollmächtige Dealz, diese Person zu kontaktieren und Zugang zu meiner Website zu erhalten, nur um Dealz zu installieren. Ein Vollmachtsschreiben wird als PDF erstellt."), show: (a) => needsAgency(a) },
+        { id: "logo_files", type: "file", label: t("Votre logo", "Your logo", "Ihr Logo"), hint: t("PNG ou JPG de préférence.", "PNG or JPG preferred.", "Am liebsten PNG oder JPG.") },
+        { id: "brand_color", type: "color", label: t("La couleur de votre logo", "Your logo's colour", "Die Farbe Ihres Logos"), hint: t("Pour que Dealz respecte votre charte graphique.", "So that Dealz matches your brand.", "Damit Dealz zu Ihrem Erscheinungsbild passt.") },
         { id: "signature", type: "textarea", label: t("Signature en bas de vos devis", "Signature at the bottom of your quotes", "Signatur unter Ihren Offerten"), hint: t("Nom, adresse, téléphone, site…", "Name, address, phone, website…", "Name, Adresse, Telefon, Website…") },
       ],
     },
@@ -252,7 +261,7 @@
       title: t("Pour finir", "To finish", "Zum Schluss"),
       fields: [
         { id: "success", type: "textarea", label: t("Dans un mois, qu'est-ce qui vous ferait dire que Dealz vaut le coup ?", "In a month, what would make you say Dealz was worth it?", "Was müsste in einem Monat passiert sein, damit sich Dealz für Sie gelohnt hat?") },
-        { id: "availability", type: "textarea", required: true, label: t("Vos disponibilités pour la réunion de 30 minutes", "Your availability for the 30-minute meeting", "Ihre Verfügbarkeit für das 30-minütige Gespräch"), hint: t("Exemple : « mardi ou jeudi matin ».", "Example: \"Tuesday or Thursday morning\".", "Beispiel: «Dienstag oder Donnerstag Vormittag».") },
+        { id: "availability", type: "textarea", required: true, show: () => !calendlyUrl, label: t("Vos disponibilités pour la réunion de 30 minutes", "Your availability for the 30-minute meeting", "Ihre Verfügbarkeit für das 30-minütige Gespräch"), hint: t("Exemple : « mardi ou jeudi matin ».", "Example: \"Tuesday or Thursday morning\".", "Beispiel: «Dienstag oder Donnerstag Vormittag».") },
         { id: "notes", type: "textarea", label: t("Autre chose à nous dire ?", "Anything else we should know?", "Möchten Sie uns sonst noch etwas sagen?") },
       ],
     },
@@ -262,6 +271,7 @@
   let answers = {};
   let stepIndex = -1; // -1 = welcome, STEPS.length = recap
   let sectors = [];
+  let calendlyUrl = "";
   try {
     const saved = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null");
     if (saved && saved.answers) answers = saved.answers;
@@ -730,9 +740,25 @@
     const body = el("div", "onb-body onb-done");
     body.appendChild(el("div", "onb-done-icon", "✓"));
     body.appendChild(el("h2", "onb-title", L(UI.doneTitle)));
-    body.appendChild(el("p", "onb-intro", L(UI.doneText)));
+    body.appendChild(el("p", "onb-intro", L(calendlyUrl ? UI.doneTextBook : UI.doneText)));
     card.appendChild(body);
     root.appendChild(card);
+    if (calendlyUrl) renderCalendly(card);
+  }
+
+  // The 30-minute meeting, booked straight into the Dealz calendar.
+  function renderCalendly(card) {
+    const url = new URL(calendlyUrl);
+    if (answers.contact_name) url.searchParams.set("name", answers.contact_name);
+    if (answers.contact_email) url.searchParams.set("email", answers.contact_email);
+    url.searchParams.set("hide_gdpr_banner", "1");
+    const box = el("div", "calendly-inline-widget onb-calendly");
+    box.dataset.url = url.toString();
+    card.appendChild(box);
+    const script = el("script");
+    script.src = "https://assets.calendly.com/assets/external/widget.js";
+    script.async = true;
+    document.body.appendChild(script);
   }
 
   function render() {
@@ -760,6 +786,7 @@
       if (res.ok) {
         const data = await res.json();
         sectors = (data.sectors || []).map((s) => ({ id: s.slug, label: s.label }));
+        calendlyUrl = data.calendly || "";
         const known = data.prefill || {};
         Object.keys(known).forEach((k) => {
           if (isEmpty(answers[k]) && !isEmpty(known[k])) answers[k] = known[k];

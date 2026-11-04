@@ -1635,6 +1635,7 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 .onb-region.selected { background: var(--blue-light); color: var(--blue-dark); font-weight: 600; }
 .onb-region input { width: 16px; height: 16px; accent-color: var(--blue); flex-shrink: 0; margin: 0; }
 .onb-region-picked:empty { display: none; }
+.onb-calendly { min-width: 280px; height: 700px; border-top: 1px solid var(--line); }
 .onb-select { appearance: auto; background: white; padding: 9px 12px; cursor: pointer; }
 .onb-back { white-space: nowrap; }
 .onb-color { width: 64px; height: 38px; border: 1.5px solid var(--line); border-radius: 10px; padding: 3px; background: white; cursor: pointer; }

@@ -1033,7 +1033,7 @@ app.get("/api/onboarding/prefill", async (req, res) => {
   const session = await billing.retrieveSession(String(req.query.s || ""));
   if (session && (session.payment_status === "paid" || session.payment_status === "no_payment_required")) prefill = onboarding.prefillFrom(session);
   res.set("Cache-Control", "no-store");
-  res.json({ prefill, sectors: onboarding.sectorList(lang) });
+  res.json({ prefill, sectors: onboarding.sectorList(lang), calendly: onboarding.calendlyUrl() });
 });
 
 app.post("/api/onboarding", rateLimit("onboarding", 10), async (req, res) => {
