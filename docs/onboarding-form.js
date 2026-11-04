@@ -163,11 +163,12 @@
           id: "zone", type: "textarea", required: (a) => !hasRegions(a) || a.country === "US", label: t("Précisions sur votre zone", "More about your area", "Details zu Ihrem Gebiet"),
           // A US state is far too big for a small business: ask for the real area.
           hint: (a) =>
-            a.country === "US"
-              ? t("Villes, counties ou codes ZIP couverts, ou un rayon en miles autour de votre ville.", "Towns, counties or ZIP codes you cover, or a radius in miles around your town.", "Städte, Counties oder ZIP-Codes, oder ein Umkreis in Meilen um Ihre Stadt.")
-              : a.country === "UK"
-              ? t("Villes, codes postaux (ex. « LS, HG ») ou rayon en miles, si vous ne couvrez qu'une partie d'un county.", "Towns, postcode areas (e.g. \"LS, HG\") or a radius in miles, if you only cover part of a county.", "Städte, Postleitzahlbereiche (z. B. «LS, HG») oder ein Umkreis in Meilen, falls Sie nur einen Teil eines Countys abdecken.")
-              : t("Villes, codes postaux ou rayon en km autour de votre adresse.", "Towns, postcodes or a radius around your address.", "Orte, Postleitzahlen oder ein Umkreis in km um Ihre Adresse."),
+            ({
+              CH: t("Communes, NPA ou rayon en km autour de votre adresse, si vous ne couvrez qu'une partie d'un canton.", "Towns, postcodes (NPA) or a radius in km, if you only cover part of a canton.", "Gemeinden, PLZ oder ein Umkreis in km, falls Sie nur einen Teil eines Kantons abdecken."),
+              FR: t("Communes, codes postaux ou rayon en km autour de votre adresse, si vous ne couvrez qu'une partie d'un département.", "Towns, postcodes or a radius in km, if you only cover part of a département.", "Gemeinden, Postleitzahlen oder ein Umkreis in km, falls Sie nur einen Teil eines Departements abdecken."),
+              UK: t("Villes, codes postaux (ex. « LS, HG ») ou rayon en miles, si vous ne couvrez qu'une partie d'un county.", "Towns, postcode areas (e.g. \"LS, HG\") or a radius in miles, if you only cover part of a county.", "Städte, Postleitzahlbereiche (z. B. «LS, HG») oder ein Umkreis in Meilen, falls Sie nur einen Teil eines Countys abdecken."),
+              US: t("Villes, counties ou codes ZIP couverts, ou un rayon en miles autour de votre ville.", "Towns, counties or ZIP codes you cover, or a radius in miles around your town.", "Städte, Counties oder ZIP-Codes, oder ein Umkreis in Meilen um Ihre Stadt."),
+            })[a.country] || t("Pays, villes, codes postaux ou rayon en km autour de votre adresse.", "Country, towns, postcodes or a radius around your address.", "Land, Orte, Postleitzahlen oder ein Umkreis um Ihre Adresse."),
         },
         { id: "free_km", type: "number", label: (a) => (usesMiles(a) ? t("Déplacement gratuit jusqu'à (miles)", "Free travel up to (miles)", "Anfahrt gratis bis (Meilen)") : t("Déplacement gratuit jusqu'à (km)", "Free travel up to (km)", "Anfahrt gratis bis (km)")) },
         {
@@ -259,7 +260,7 @@
             { id: "squarespace", label: "Squarespace" },
           ],
         },
-        { id: "agency_name", type: "text", required: true, label: t("Nom de l'agence ou de la personne qui gère votre site", "Name of the agency or person managing your website", "Name der Agentur oder Person, die Ihre Website betreut"), show: (a) => needsAgency(a) },
+        { id: "agency_name", type: "text", required: true, label: t("Nom de l'agence ou de la personne qui gère votre site", "Name of the agency or person managing your website", "Name der Agentur oder Person, die Ihre Website betreut"), hint: t("Nous lui demandons uniquement un accès pour installer le bouton WhatsApp et le formulaire de devis Dealz. C'est sans frais pour vous.", "We only ask them for access to install the Dealz WhatsApp button and quote form. There is no cost to you.", "Wir bitten sie nur um Zugang, um den WhatsApp-Button und das Offertenformular von Dealz einzurichten. Für Sie entstehen keine Kosten."), show: (a) => needsAgency(a) },
         { id: "agency_contact", type: "text", required: true, label: t("Son e-mail ou son téléphone", "Their email or phone", "Deren E-Mail oder Telefon"), show: (a) => needsAgency(a) },
         { id: "procuration", type: "check", label: t("Je donne procuration à Dealz pour contacter cette personne et obtenir l'accès à mon site, uniquement pour y installer Dealz. Une lettre de procuration est générée en PDF.", "I authorise Dealz to contact this person and get access to my website, only to install Dealz. An authorisation letter is generated as a PDF.", "Ich bevollmächtige Dealz, diese Person zu kontaktieren und Zugang zu meiner Website zu erhalten, nur um Dealz zu installieren. Ein Vollmachtsschreiben wird als PDF erstellt."), show: (a) => needsAgency(a) },
         { id: "logo_files", type: "file", label: t("Votre logo", "Your logo", "Ihr Logo"), hint: t("PNG ou JPG de préférence.", "PNG or JPG preferred.", "Am liebsten PNG oder JPG.") },
