@@ -1662,3 +1662,5 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
   .onb-recap { grid-template-columns: 1fr; gap: 2px; }
   .onb-recap dd { margin-bottom: 8px; }
 }
+
+.onb-pay-cta { display: inline-block; text-decoration: none; margin-top: 2px; }

@@ -20,6 +20,8 @@ const ENDPOINTS = {
   demoTested: () => process.env.CRM_DEMO_TESTED_URL,
   demoActivity: () =>
     process.env.CRM_DEMO_ACTIVITY_URL || derive(process.env.CRM_DEMO_TESTED_URL, /demo-tested\/?$/, "demo-activity"),
+  onboardingCompany: () =>
+    process.env.CRM_ONBOARDING_URL || derive(process.env.CRM_INBOUND_URL, /inbound-leads\/?$/, "onboarding-company"),
   referral: () => process.env.CRM_REFERRAL_URL,
   referralIdentify: () => process.env.CRM_REFERRAL_IDENTIFY_URL,
 };

@@ -65,6 +65,9 @@ async function sendEmail({ to, subject, html, replyTo, icalEvent, attachments })
     to,
     subject,
     html,
+    // A plain-text part next to the HTML: HTML-only mail scores worse with
+    // spam filters, and some clients show only text.
+    text: htmlToText(html),
     ...(replyTo ? { replyTo } : {}),
     // A calendar invitation (.ics) mail clients turn into an "add to
     // calendar" event — used for staff assignments (src/scale.js).
@@ -73,6 +76,24 @@ async function sendEmail({ to, subject, html, replyTo, icalEvent, attachments })
     ...(attachments && attachments.length ? { attachments } : {}),
   });
   return { simulated: false, to, subject, html };
+}
+
+function htmlToText(html) {
+  return String(html)
+    .replace(/<(style|script)[\s\S]*?<\/\1>/gi, "")
+    .replace(/<a\s[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/gi, (m, href, label) => {
+      const l = label.replace(/<[^>]+>/g, "").trim();
+      return !l || l === href || href.startsWith("mailto:") ? l || href.replace(/^mailto:/, "") : `${l} (${href})`;
+    })
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/(p|div|h[1-6]|tr|li|table)>/gi, "\n")
+    .replace(/<li[^>]*>/gi, "• ")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+    .replace(/[ \t]+/g, " ")
+    .replace(/\n /g, "\n")
+    .replace(/\n\s*\n\s*\n+/g, "\n\n")
+    .trim();
 }
 
 // Short, credential-free description of a failed send (SMTP code + message).

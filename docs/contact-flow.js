@@ -231,10 +231,11 @@
       en: "The payment couldn't start — your request has been recorded, we'll get back to you.",
       de: "Die Zahlung konnte nicht gestartet werden — Ihre Anfrage ist erfasst, wir melden uns.",
     },
-    "✅ Paiement reçu, merci ! Bienvenue chez Dealz. Vous recevez la confirmation de Stripe par e-mail, et nous vous contactons très vite pour l'installation.": {
-      en: "✅ Payment received, thank you! Welcome to Dealz. You'll get Stripe's confirmation by email, and we'll contact you very soon about the setup.",
-      de: "✅ Zahlung erhalten, vielen Dank! Willkommen bei Dealz. Sie erhalten die Bestätigung von Stripe per E-Mail, und wir melden uns sehr bald für die Einrichtung.",
+    "✅ Paiement reçu, merci ! Bienvenue chez Dealz. Dernière étape : le formulaire d'intégration (environ 10 minutes). À la fin, vous réservez votre rendez-vous de 30 minutes avec nous. Le lien vous est aussi envoyé par e-mail.": {
+      en: "✅ Payment received, thank you! Welcome to Dealz. Last step: the onboarding form (about 10 minutes). At the end, you book your 30-minute meeting with us. The link is also sent to you by email.",
+      de: "✅ Zahlung erhalten, vielen Dank! Willkommen bei Dealz. Letzter Schritt: das Einrichtungsformular (etwa 10 Minuten). Am Ende buchen Sie Ihr 30-minütiges Gespräch mit uns. Den Link erhalten Sie auch per E-Mail.",
     },
+    "Remplir mon formulaire d'intégration →": { en: "Fill in my onboarding form →", de: "Mein Einrichtungsformular ausfüllen →" },
     "Paiement annulé — rien n'a été débité. Votre demande est enregistrée : vous pouvez reprendre quand vous voulez.": {
       en: "Payment cancelled — nothing was charged. Your request is recorded: you can pick it up whenever you like.",
       de: "Zahlung abgebrochen — es wurde nichts belastet. Ihre Anfrage ist erfasst: Sie können jederzeit fortfahren.",
@@ -854,10 +855,21 @@
         "div",
         ok ? "dealz-msg system-success" : "dealz-msg system-decline",
         ok
-          ? "✅ Paiement reçu, merci ! Bienvenue chez Dealz. Vous recevez la confirmation de Stripe par e-mail, et nous vous contactons très vite pour l'installation."
+          ? "✅ Paiement reçu, merci ! Bienvenue chez Dealz. Dernière étape : le formulaire d'intégration (environ 10 minutes). À la fin, vous réservez votre rendez-vous de 30 minutes avec nous. Le lien vous est aussi envoyé par e-mail."
           : "Paiement annulé — rien n'a été débité. Votre demande est enregistrée : vous pouvez reprendre quand vous voulez."
       )
     );
+    // The personal onboarding link (?s= = the Stripe Checkout session),
+    // as a backup to the welcome e-mail, which can land in spam.
+    if (ok) {
+      const s = new URLSearchParams(location.search).get("s") || "";
+      const lang = window.DEALZ_LANG && window.DEALZ_LANG !== "fr" ? "/" + window.DEALZ_LANG : "";
+      const a = el("a", "dcf-submit onb-pay-cta", "Remplir mon formulaire d'intégration →");
+      a.href = `${lang}/integration.html${/^cs_[A-Za-z0-9_]+$/.test(s) ? "?s=" + encodeURIComponent(s) : ""}`;
+      const wrap = el("div", "dealz-msg system-success");
+      wrap.appendChild(a);
+      container.appendChild(wrap);
+    }
     scrollToBottom(container);
   }
 
