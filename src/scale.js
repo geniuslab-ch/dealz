@@ -296,7 +296,8 @@ async function calendarFeed(token) {
     const { data: c2 } = await supabase.from("companies").select("*").eq("id", s.company_id).maybeSingle();
     company = c2;
   }
-  if (!company || !hasFeature({ plan: company.plan }, "team")) return null;
+  // The company's own agenda: every plan. Per-staff agendas: SCALE (team).
+  if (!company || (staff && !hasFeature({ plan: company.plan }, "team"))) return null;
 
   const since = new Date(Date.now() - 60 * 864e5);
   let q = supabase.from("bookings").select("*").eq("company_id", company.id).neq("status", "cancelled").gte("date", isoDay(since));

@@ -4,9 +4,10 @@
  * without a plan yet get everything, so nothing changes for them.
  *
  *   CAPTURE  quote, PDF, online accept/decline, confirmation, calendar
+ *              (one-click add + the company's own agenda feed)
  *   CLOSE    + decline recovery: reason detection, suggested reply,
  *              counter-offer / new date / follow-up from the e-mail
- *   SCALE    + team features (staff, calendars, assignment…)
+ *   SCALE    + team features (staff, per-staff calendars, assignment…)
  */
 const PLAN_FEATURES = {
   CAPTURE: [],

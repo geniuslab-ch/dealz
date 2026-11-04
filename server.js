@@ -909,9 +909,11 @@ app.post("/api/offer/:token/respond", async (req, res) => {
             total: entry.amount,
           };
 
+    const company = entry.companyId ? await getCompanyBySlug(entry.companyId) : null;
     const result = await sendBookingConfirmation({
       quote,
       customer,
+      calendarFeedUrl: company?.calendarFeedUrl || undefined,
       notifyEmail: entry.companyEmail || undefined,
       companyName: entry.companyName || undefined,
       signature: entry.signature || undefined,
@@ -921,8 +923,7 @@ app.post("/api/offer/:token/respond", async (req, res) => {
       serviceNoun: entry.serviceNoun || undefined,
     });
     await store.update(req.params.token, { status: "accepted" });
-    if (entry.companyId) {
-      const company = await getCompanyBySlug(entry.companyId);
+    if (company) {
       const date = scale.bookingDate(entry.originalQuote);
       if (company) await scale.createBooking({ company, quote: { ...quote, date }, customer, source: "offer", lang: entry.lang });
     }
@@ -959,6 +960,7 @@ async function processAccept(body) {
       signature: company?.signature || undefined,
       logoUrl: (sector ? publicUrl(sector.company.logo) : company?.logoUrl) || undefined,
       tagline: company?.tagline || undefined,
+      calendarFeedUrl: company?.calendarFeedUrl || undefined,
       lang,
     });
 
@@ -1046,7 +1048,7 @@ app.post("/api/onboarding", rateLimit("onboarding", 10), async (req, res) => {
   }
 });
 
-// Shared agenda (SCALE): an iCalendar feed per company or staff member,
+// Agenda feed: one per company (every plan) and per staff member (SCALE),
 // behind the secret token shown in the CRM. Subscribed to from Google
 // Calendar / Outlook / Apple Calendar.
 app.get("/api/calendar/:token.ics", async (req, res) => {

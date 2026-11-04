@@ -227,12 +227,9 @@
       fields: [
         {
           id: "confirmation", type: "single", required: true, label: t("Quand un client accepte le devis…", "When a customer accepts the quote…", "Wenn ein Kunde die Offerte annimmt…"),
-          // What exists today: an "add to calendar" button in every booking e-mail;
-          // SCALE also gets a calendar feed (src/scale.js) that syncs by itself.
-          hint: (a) =>
-            isPlan(a, "SCALE")
-              ? t("Dans les deux cas, le rendez-vous s'ajoute tout seul à votre agenda actuel (Google, Outlook ou Apple), une fois votre agenda relié à Dealz.", "Either way, the appointment goes into your current calendar by itself (Google, Outlook or Apple), once your calendar is linked to Dealz.", "In beiden Fällen erscheint der Termin von selbst in Ihrem bestehenden Kalender (Google, Outlook oder Apple), sobald Ihr Kalender mit Dealz verbunden ist.")
-              : t("Dans les deux cas, vous recevez le rendez-vous par e-mail, avec un bouton pour l'ajouter à votre agenda en un clic.", "Either way, you get the appointment by e-mail, with a button to add it to your calendar in one click.", "In beiden Fällen erhalten Sie den Termin per E-Mail, mit einem Button, um ihn mit einem Klick in Ihren Kalender einzutragen."),
+          // Every plan gets the company calendar feed (src/scale.js), which
+          // the client subscribes to once; then bookings sync by themselves.
+          hint: t("Dans les deux cas, le rendez-vous s'ajoute tout seul à votre agenda actuel (Google, Outlook ou Apple) : vous l'y reliez une seule fois, avec un lien que nous vous donnons.", "Either way, the appointment goes into your current calendar by itself (Google, Outlook or Apple): you link it once, with a link we give you.", "In beiden Fällen erscheint der Termin von selbst in Ihrem bestehenden Kalender (Google, Outlook oder Apple): Sie verbinden ihn einmal, mit einem Link, den wir Ihnen geben."),
           options: [
             { id: "auto", label: t("La date est bloquée directement", "The date is booked right away", "Der Termin wird direkt gebucht") },
             { id: "call", label: t("Je rappelle le client avant de bloquer la date", "I call the customer before booking the date", "Ich rufe den Kunden an, bevor der Termin gebucht wird") },

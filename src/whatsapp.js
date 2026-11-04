@@ -204,6 +204,7 @@ async function converse(company, session, phoneNumberId, from, rawText) {
           quote,
           customer: quote.customer || {},
           notifyEmail: company.notifyEmail,
+          calendarFeedUrl: company.calendarFeedUrl || undefined,
         });
         await reply(
           "Réservation confirmée ! 🎉\n\nNous revenons vers vous rapidement pour planifier l'intervention." +
