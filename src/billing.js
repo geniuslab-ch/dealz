@@ -179,6 +179,18 @@ async function fulfil(session) {
   const email = (session.customer_details && session.customer_details.email) || session.customer_email;
   const amount = fmt(session.amount_total, session.currency);
   const label = `${m.plan} ${BILLING_FR[m.billing] || ""}${m.whatsapp === "yes" ? " + WhatsApp" : ""}`;
+  // The onboarding form link, in the client's language (src/onboarding.js),
+  // sent first so the team e-mail can say whether it really left: if it
+  // failed, the team sends the link by hand (a webhook retry would repeat
+  // the team e-mail and the CRM entry too).
+  const formLink = onboarding.link(session.id, m.lang);
+  let welcomeSent = false;
+  try {
+    const r = await onboarding.sendWelcome({ to: email, name: m.contact_name, lang: m.lang, sessionId: session.id });
+    welcomeSent = !!r && !r.skipped && !r.failed;
+  } catch (err) {
+    console.error("[billing] onboarding welcome e-mail failed:", err.message);
+  }
   await tellTeam(`💳 Nouveau client Dealz — ${m.company_name || email} — ${label}`, [
     `<b>Entreprise :</b> ${m.company_name || "—"}`,
     `<b>Contact :</b> ${m.contact_name || "—"} · ${email || "—"} · ${m.contact_phone || "—"}`,
@@ -186,15 +198,12 @@ async function fulfil(session) {
     `<b>Formule :</b> ${label}`,
     `<b>Payé :</b> ${amount}`,
     `<b>Stripe :</b> client ${session.customer || "—"}${session.subscription ? " · abonnement " + session.subscription : ""}`,
-    `<b>Formulaire d'intégration :</b> envoyé automatiquement au client · <a href="${onboarding.link(session.id, m.lang)}">son lien</a>`,
+    welcomeSent
+      ? `<b>Formulaire d'intégration :</b> envoyé automatiquement au client · <a href="${formLink}">son lien</a>`
+      : `<b>⚠️ Formulaire d'intégration :</b> l'e-mail au client a échoué, envoyez-lui ce lien à la main : <a href="${formLink}">${formLink}</a>`,
     "→ Prochaine étape : créer l'entreprise dans le CRM (formule déjà indiquée) et attendre le formulaire d'intégration pour planifier la réunion.",
   ]);
-  // The onboarding form link, in the client's language (src/onboarding.js).
-  try {
-    await onboarding.sendWelcome({ to: email, name: m.contact_name, lang: m.lang, sessionId: session.id });
-  } catch (err) {
-    console.error("[billing] onboarding welcome e-mail failed:", err.message);
-  }
+
   await forwardToCrm({
     type: "paid",
     email,

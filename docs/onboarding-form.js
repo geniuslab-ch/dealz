@@ -213,16 +213,16 @@
       id: "channels",
       title: t("WhatsApp et votre site", "WhatsApp and your website", "WhatsApp und Ihre Website"),
       fields: [
-        { id: "wa_number", type: "tel", required: true, label: t("Numéro WhatsApp que vos clients doivent écrire", "WhatsApp number your customers should message", "WhatsApp-Nummer, an die Ihre Kunden schreiben sollen") },
         {
-          id: "wa_status", type: "single", required: true, label: t("Ce numéro est…", "This number is…", "Diese Nummer ist…"),
+          id: "wa_status", type: "single", required: true, label: t("Votre numéro WhatsApp professionnel", "Your business WhatsApp number", "Ihre geschäftliche WhatsApp-Nummer"),
           options: [
-            { id: "business", label: t("Déjà sur WhatsApp Business", "Already on WhatsApp Business", "Bereits auf WhatsApp Business") },
-            { id: "personal", label: t("Sur WhatsApp normal (téléphone perso)", "On regular WhatsApp (personal phone)", "Auf normalem WhatsApp (privates Handy)") },
-            { id: "none", label: t("Pas encore sur WhatsApp", "Not on WhatsApp yet", "Noch nicht auf WhatsApp") },
+            { id: "business", label: t("Il est déjà sur WhatsApp Business", "It is already on WhatsApp Business", "Sie ist bereits auf WhatsApp Business") },
+            { id: "personal", label: t("Il est sur WhatsApp normal (téléphone perso)", "It is on regular WhatsApp (personal phone)", "Sie ist auf normalem WhatsApp (privates Handy)") },
+            { id: "none", label: t("Je n'ai pas encore WhatsApp", "I'm not on WhatsApp yet", "Ich habe noch kein WhatsApp") },
             { id: "new", label: t("Je veux un nouveau numéro", "I want a new number", "Ich möchte eine neue Nummer") },
           ],
         },
+        { id: "wa_number", type: "tel", required: true, label: t("Numéro WhatsApp que vos clients doivent écrire", "WhatsApp number your customers should message", "WhatsApp-Nummer, an die Ihre Kunden schreiben sollen"), show: (a) => a.wa_status === "business" || a.wa_status === "personal" },
         {
           id: "integration", type: "single", required: true, label: t("Sur votre site, vous voulez…", "On your website, you want…", "Auf Ihrer Website möchten Sie…"),
           options: [
