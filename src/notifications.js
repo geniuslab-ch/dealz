@@ -40,7 +40,7 @@ if (process.env.SMTP_HOST) {
  * accept loop run and be verified end to end with zero email credentials,
  * and starts actually sending the moment SMTP_* is set in .env.
  */
-async function sendEmail({ to, subject, html, replyTo, icalEvent }) {
+async function sendEmail({ to, subject, html, replyTo, icalEvent, attachments }) {
   if (!transporter) {
     const links = [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
     console.log("\n===== [EMAIL SIMULÉ — configurez SMTP_HOST dans .env pour un envoi réel] =====");
@@ -51,6 +51,10 @@ async function sendEmail({ to, subject, html, replyTo, icalEvent }) {
     if (links.length) {
       console.log("---");
       console.log("Lien(s):", links.join(", "));
+    }
+    if (attachments && attachments.length) {
+      console.log("---");
+      console.log("Pièce(s) jointe(s):", attachments.map((x) => `${x.filename} (${x.content.length} octets)`).join(", "));
     }
     console.log("================================================================================\n");
     return { simulated: true, preview: { to, subject, html } };
@@ -65,6 +69,8 @@ async function sendEmail({ to, subject, html, replyTo, icalEvent }) {
     // A calendar invitation (.ics) mail clients turn into an "add to
     // calendar" event — used for staff assignments (src/scale.js).
     ...(icalEvent ? { icalEvent } : {}),
+    // Files the client uploaded in the onboarding form (src/onboarding.js).
+    ...(attachments && attachments.length ? { attachments } : {}),
   });
   return { simulated: false, to, subject, html };
 }

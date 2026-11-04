@@ -121,6 +121,28 @@ function prefillFrom(session) {
 
 // ---- submit ----
 
+// Files uploaded in the form (price list, services list): attached to the
+// team e-mail only. Any office format is fine; nothing executable.
+const MAX_FILE_BYTES = 3 * 1024 * 1024 + 1024;
+const FILE_EXT = /\.(xlsx|xls|xlsm|csv|ods|numbers|pdf|doc|docx|odt|pages|txt|rtf|png|jpe?g|heic|webp)$/i;
+const FILE_FIELDS = { price_files: "Prestations et prix" };
+
+function cleanFiles(list) {
+  if (!Array.isArray(list)) return [];
+  let total = 0;
+  const out = [];
+  for (const f of list.slice(0, 10)) {
+    if (!f || !FILE_FIELDS[f.field] || typeof f.data !== "string") continue;
+    const filename = String(f.name || "fichier").replace(/[\\/\r\n"<>]/g, "_").slice(0, 150);
+    if (!FILE_EXT.test(filename)) continue;
+    const content = Buffer.from(f.data, "base64");
+    total += content.length;
+    if (!content.length || content.length > MAX_FILE_BYTES || total > MAX_FILE_BYTES) continue;
+    out.push({ field: f.field, label: FILE_FIELDS[f.field], filename, content });
+  }
+  return out;
+}
+
 const MAX_FIELD = 4000;
 const MAX_ROWS = 80;
 
@@ -171,17 +193,23 @@ async function submit({ body, session }) {
   const mine = cleanSummary(body.clientSummary).length ? cleanSummary(body.clientSummary) : team;
   if (!team.length) throw Object.assign(new Error("Réponses manquantes"), { status: 400 });
 
+  const attached = cleanFiles(body.files);
+  const filesLine = attached.length
+    ? `<p style="margin:10px 0 0;">📎 <b>Fichiers joints :</b> ${attached.map((f) => `${esc(f.label)} (${esc(f.filename)})`).join(" · ")}</p>`
+    : "";
+
   const paid = session ? `Paiement Stripe lié : ${esc(session.id)}${session.customer ? " · client " + esc(session.customer) : ""}` : "Formulaire ouvert sans lien de paiement (lien envoyé à la main).";
   const teamHtml = shell(`
     <h2 style="margin:0 0 6px;font-size:19px;">📋 Formulaire d'intégration reçu</h2>
     <p style="margin:0 0 4px;"><b>${esc(company)}</b> · ${esc(str(a.contact_name))} · <a href="mailto:${esc(email)}">${esc(email)}</a> · ${esc(str(a.contact_phone))}</p>
     <p style="margin:0;font-size:13px;color:#5b6472;">${paid} · Langue : ${lang.toUpperCase()}</p>
+    ${filesLine}
     ${summaryHtml(team)}
     <p style="margin-top:22px;">→ Prochaine étape : proposer la réunion de 30 minutes (disponibilités ci-dessus) et configurer l'entreprise dans le CRM.</p>`);
 
   const results = await Promise.allSettled([
-    sendEmail({ to: DEALZ_TEAM_EMAIL, subject: `📋 Intégration — ${company}`, html: teamHtml, replyTo: email }),
-    crm.post("billingEvents", { type: "note", email, companyName: company, note: `📋 Formulaire d'intégration reçu\n\n${summaryText(team)}`.slice(0, 20000) }),
+    sendEmail({ to: DEALZ_TEAM_EMAIL, subject: `📋 Intégration — ${company}`, html: teamHtml, replyTo: email, attachments: attached.map(({ filename, content }) => ({ filename, content })) }),
+    crm.post("billingEvents", { type: "note", email, companyName: company, note: `📋 Formulaire d'intégration reçu${attached.length ? " (fichiers dans l'e-mail : " + attached.map((f) => f.filename).join(", ") + ")" : ""}\n\n${summaryText(team)}`.slice(0, 20000) }),
     sendEmail({ to: email, subject: DONE[lang].subject, html: shell(`<p>${esc(DONE[lang].intro)}</p>${summaryHtml(mine)}`), replyTo: "info@dealz.website" }),
   ]);
   results.forEach((r, i) => r.status === "rejected" && console.error(`[onboarding] side effect ${i} failed:`, r.reason && r.reason.message));

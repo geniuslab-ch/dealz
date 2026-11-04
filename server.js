@@ -43,7 +43,12 @@ app.set("trust proxy", 1);
 // `verify` stashes the raw request bytes on req.rawBody — needed to check
 // Meta's X-Hub-Signature-256 on the WhatsApp webhook (see src/whatsapp.js's
 // verifySignature). Harmless for every other route, which never reads it.
-app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf; } }));
+const keepRawBody = (req, res, buf) => { req.rawBody = buf; };
+const jsonBody = express.json({ verify: keepRawBody });
+// The onboarding form carries the client's files (price list…), up to ~4 MB
+// once base64-encoded; every other route keeps the 100 kB default.
+const onboardingJsonBody = express.json({ limit: "5mb", verify: keepRawBody });
+app.use((req, res, next) => (req.path === "/api/onboarding" ? onboardingJsonBody : jsonBody)(req, res, next));
 
 // Cache-busts every same-origin CSS/JS reference in served HTML with a
 // version tag (the deployed commit on Vercel, or this process's boot time

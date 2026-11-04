@@ -39,6 +39,11 @@
       "Wir richten Ihr Dealz mit diesen Angaben ein und melden uns sehr bald für das 30-minütige Gespräch. Eine Kopie erhalten Sie per E-Mail."
     ),
     empty: "—",
+    pickFile: t("Choisir un fichier", "Choose a file", "Datei wählen"),
+    removeFile: t("Retirer", "Remove", "Entfernen"),
+    addFile: t("Ajouter un autre fichier", "Add another file", "Weitere Datei hinzufügen"),
+    tooBig: t("Ce fichier dépasse 3 Mo : envoyez-le à info@dealz.website, ou importez une version plus légère.", "This file is over 3 MB: send it to info@dealz.website, or upload a smaller version.", "Diese Datei ist grösser als 3 MB: Senden Sie sie an info@dealz.website oder laden Sie eine kleinere Version hoch."),
+    tooBigTotal: t("Vos fichiers dépassent 3 Mo au total : envoyez le dernier à info@dealz.website.", "Your files are over 3 MB in total: send the last one to info@dealz.website.", "Ihre Dateien sind zusammen grösser als 3 MB: Senden Sie die letzte an info@dealz.website."),
   };
 
   const OTHER = { id: "other", label: t("Autre", "Other", "Andere"), other: true };
@@ -106,45 +111,12 @@
       ],
     },
     {
-      id: "services",
-      title: t("Vos prestations", "Your services", "Ihre Leistungen"),
-      intro: t("Commencez par les 2 ou 3 prestations les plus demandées : on pourra ajouter les autres après le lancement.", "Start with your 2 or 3 most requested services: the others can be added after launch.", "Beginnen Sie mit den 2 oder 3 meistgefragten Leistungen: Weitere können nach dem Start ergänzt werden."),
-      fields: [
-        { id: "services", type: "textarea", required: true, label: t("Prestations que Dealz doit chiffrer", "Services Dealz should quote", "Leistungen, die Dealz offerieren soll"), hint: t("Une par ligne, les plus demandées d'abord.", "One per line, most requested first.", "Eine pro Zeile, die gefragtesten zuerst.") },
-        { id: "excluded", type: "textarea", label: t("Prestations que Dealz ne doit jamais chiffrer", "Services Dealz should never quote", "Leistungen, die Dealz nie offerieren soll"), hint: t("Par exemple celles qui demandent toujours une visite.", "For example those that always need a site visit.", "Zum Beispiel solche, die immer eine Besichtigung brauchen.") },
-      ],
-    },
-    {
       id: "prices",
-      title: t("Vos prix", "Your prices", "Ihre Preise"),
+      title: t("Vos prestations et vos prix", "Your services and prices", "Ihre Leistungen und Preise"),
       intro: t("C'est l'étape la plus importante : c'est ce qui rend vos devis Dealz justes.", "This is the most important step: it is what makes your Dealz quotes accurate.", "Das ist der wichtigste Schritt: Er macht Ihre Dealz-Offerten genau."),
       fields: [
-        {
-          id: "pricing_method", type: "multi", required: true, label: t("Comment calculez-vous vos prix ?", "How do you calculate your prices?", "Wie berechnen Sie Ihre Preise?"),
-          options: [
-            { id: "m2", label: t("Au m²", "Per m² / sq ft", "Pro m²") },
-            { id: "hour", label: t("À l'heure", "Per hour", "Pro Stunde") },
-            { id: "unit", label: t("À la pièce ou à l'unité", "Per room or unit", "Pro Zimmer oder Einheit") },
-            { id: "flat", label: t("Au forfait", "Flat rate", "Pauschal") },
-            OTHER,
-          ],
-        },
-        { id: "price_list", type: "textarea", required: true, rows: 6, label: t("Vos tarifs", "Your rates", "Ihre Tarife"), hint: t("Collez votre grille ou décrivez vos prix. Exemple : « Nettoyage fin de bail 3,5 pièces : 430 ».", "Paste your price list or describe your prices. Example: \"End-of-tenancy cleaning, 2-bed flat: 380\".", "Fügen Sie Ihre Preisliste ein oder beschreiben Sie Ihre Preise. Beispiel: «Endreinigung 3,5 Zimmer: 430».") },
-        { id: "price_link", type: "url", label: t("Lien vers votre grille ou un ancien devis", "Link to your price list or a past quote", "Link zu Ihrer Preisliste oder einer früheren Offerte"), hint: t("Google Drive, Dropbox… ou envoyez-le à info@dealz.website.", "Google Drive, Dropbox… or send it to info@dealz.website.", "Google Drive, Dropbox… oder senden Sie es an info@dealz.website.") },
+        { id: "price_files", type: "file", required: true, label: t("Importez vos prestations et vos prix", "Upload your services and prices", "Laden Sie Ihre Leistungen und Preise hoch"), hint: t("Votre grille de prix, votre liste de prestations ou un ancien devis. Excel de préférence, mais tout format est accepté (PDF, Word, photo…).", "Your price list, your list of services or a past quote. Excel preferred, but any format works (PDF, Word, photo…).", "Ihre Preisliste, Ihre Leistungsliste oder eine frühere Offerte. Am liebsten Excel, aber jedes Format geht (PDF, Word, Foto…).") },
         { id: "minimum", type: "number", required: true, label: t("Prix minimum d'une intervention", "Minimum price for a job", "Mindestpreis pro Auftrag"), hint: t("En dessous, vous ne vous déplacez pas.", "Below this, you don't take the job.", "Darunter nehmen Sie den Auftrag nicht an.") },
-        { id: "options", type: "textarea", label: t("Options et suppléments, avec leur prix", "Add-ons and extras, with their price", "Optionen und Zuschläge, mit Preis"), hint: t("Exemple : « Four : 40 · Vitres : 60 ».", "Example: \"Oven: 40 · Windows: 60\".", "Beispiel: «Backofen: 40 · Fenster: 60».") },
-        {
-          id: "surcharges", type: "multi", label: t("Majorations que vous appliquez", "Surcharges you apply", "Zuschläge, die Sie verrechnen"),
-          options: [
-            { id: "condition", label: t("État (très sale, encombré…)", "Condition (very dirty, cluttered…)", "Zustand (sehr schmutzig, vollgestellt…)") },
-            { id: "access", label: t("Accès difficile", "Difficult access", "Schwieriger Zugang") },
-            { id: "floor", label: t("Étage sans ascenseur", "Floor without lift", "Stockwerk ohne Lift") },
-            { id: "urgent", label: t("Urgence", "Urgent job", "Dringend") },
-            { id: "evening", label: t("Soir ou week-end", "Evening or weekend", "Abend oder Wochenende") },
-            { id: "none", label: t("Aucune", "None", "Keine"), exclusive: true },
-          ],
-        },
-        { id: "surcharges_detail", type: "textarea", label: t("Montant de chaque majoration", "Amount of each surcharge", "Höhe jedes Zuschlags"), show: (a) => (a.surcharges || []).some((x) => x !== "none") },
         {
           id: "vat", type: "single", required: true, label: t("Vos prix sont…", "Your prices are…", "Ihre Preise sind…"),
           options: [
@@ -280,6 +252,13 @@
   };
 
   const visible = (f) => !f.show || f.show(answers);
+  const isReq = (f) => (typeof f.required === "function" ? f.required(answers) : !!f.required);
+
+  // Uploaded files stay in memory only (too big for the saved draft) and are
+  // sent with the answers, then attached to the Dealz team's e-mail.
+  const files = {};
+  const MAX_FILE = 3 * 1024 * 1024; // the whole request must stay under Vercel's 4.5 MB
+  const FILE_ACCEPT = ".xlsx,.xls,.xlsm,.csv,.ods,.numbers,.pdf,.doc,.docx,.odt,.pages,.txt,.rtf,.png,.jpg,.jpeg,.heic,.webp";
   function optionsOf(f) {
     let opts = f.optionsFrom === "sectors" ? sectors : f.options || [];
     if (f.withOther && !opts.some((o) => o.other)) opts = opts.concat([OTHER]);
@@ -298,6 +277,7 @@
     const v = answers[f.id];
     const pick = (o) => (o == null ? "" : typeof o === "string" ? o : o[lang] || o.fr);
     if (f.type === "check") return v ? pick(t("Oui", "Yes", "Ja")) : "";
+    if (f.type === "file") return (files[f.id] || []).map((x) => x.name).join(", ");
     if (f.type === "single" || f.type === "multi" || f.type === "select") {
       const ids = Array.isArray(v) ? v : v ? [v] : [];
       const opts = optionsOf(f);
@@ -334,7 +314,7 @@
   function fieldLabel(f) {
     const lab = el("label", "onb-label");
     lab.textContent = L(f.label);
-    if (f.required) lab.appendChild(el("span", "onb-req", " *"));
+    if (isReq(f)) lab.appendChild(el("span", "onb-req", " *"));
     return lab;
   }
 
@@ -351,7 +331,7 @@
       box.addEventListener("change", () => { answers[f.id] = box.checked; save(); });
       lab.appendChild(box);
       const span = el("span", null, L(f.label));
-      if (f.required) span.appendChild(el("span", "onb-req", " *"));
+      if (isReq(f)) span.appendChild(el("span", "onb-req", " *"));
       lab.appendChild(span);
       wrap.appendChild(lab);
       return wrap;
@@ -403,6 +383,57 @@
       wrap.appendChild(otherInput);
       sync();
       return wrap;
+    }
+
+    if (f.type === "file") {
+      const list = files[f.id] || (files[f.id] = []);
+      const box = el("div", "onb-file");
+      const input = el("input");
+      input.type = "file";
+      input.id = inputId;
+      input.multiple = true;
+      input.accept = FILE_ACCEPT;
+      input.className = "onb-file-input";
+      const pick = el("label", "onb-file-btn", "📎 " + L(list.length ? UI.addFile : UI.pickFile));
+      pick.htmlFor = inputId;
+      const names = el("ul", "onb-file-list");
+      list.forEach((file, i) => {
+        const li = el("li", "onb-file-name", file.name + " · " + Math.max(1, Math.round(file.size / 1024)) + " Ko ");
+        const remove = el("button", "onb-back", L(UI.removeFile));
+        remove.type = "button";
+        remove.addEventListener("click", () => { list.splice(i, 1); render(); });
+        li.appendChild(remove);
+        names.appendChild(li);
+      });
+      const err = el("div", "onb-file-err");
+      input.addEventListener("change", () => {
+        const picked = Array.from(input.files || []);
+        input.value = "";
+        err.textContent = "";
+        let total = Object.keys(files).reduce((n, k) => n + files[k].reduce((m, x) => m + x.size, 0), 0);
+        const ok = [];
+        for (const file of picked) {
+          if (total + file.size > MAX_FILE) { err.textContent = L(file.size > MAX_FILE ? UI.tooBig : UI.tooBigTotal); continue; }
+          total += file.size;
+          ok.push(file);
+        }
+        if (!ok.length) return;
+        let pending = ok.length;
+        ok.forEach((file) => {
+          const reader = new FileReader();
+          reader.onload = () => {
+            list.push({ name: file.name, type: file.type || "application/octet-stream", size: file.size, data: String(reader.result).split(",")[1] || "" });
+            if (--pending === 0) render();
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+      box.appendChild(input);
+      box.appendChild(pick);
+      wrap.appendChild(names);
+      wrap.appendChild(box);
+      wrap.appendChild(err);
+            return wrap;
     }
 
     // A long list (sectors): a dropdown instead of chips.
@@ -489,8 +520,8 @@
   function validate(step) {
     for (const f of step.fields) {
       if (!visible(f)) continue;
-      const v = answers[f.id];
-      if (f.required && (isEmpty(v) || (needsOther(f) && !String(answers[f.id + "_other"] || "").trim()))) return { field: f.id, msg: L(UI.required) };
+      const v = f.type === "file" ? files[f.id] : answers[f.id];
+      if (isReq(f) && (isEmpty(v) || (needsOther(f) && !String(answers[f.id + "_other"] || "").trim()))) return { field: f.id, msg: L(UI.required) };
       if (f.type === "email" && v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v).trim())) return { field: f.id, msg: L(UI.badEmail) };
     }
     return null;
@@ -506,13 +537,14 @@
   function renderWelcome(body) {
     body.appendChild(el("h2", "onb-title", L(t("Préparons votre Dealz", "Let's prepare your Dealz", "Bereiten wir Ihr Dealz vor"))));
     body.appendChild(el("p", "onb-intro", L(t(
-      "8 étapes courtes, environ 10 minutes. Avec vos réponses, notre réunion d'intégration tient en 30 minutes et votre Dealz est prêt plus vite.",
-      "8 short steps, about 10 minutes. With your answers, our onboarding meeting takes only 30 minutes and your Dealz is ready sooner.",
-      "8 kurze Schritte, etwa 10 Minuten. Mit Ihren Antworten dauert unser Einführungsgespräch nur 30 Minuten und Ihr Dealz ist schneller bereit."
+      "7 étapes courtes, environ 10 minutes. Avec vos réponses, notre réunion d'intégration tient en 30 minutes et votre Dealz est prêt plus vite.",
+      "7 short steps, about 10 minutes. With your answers, our onboarding meeting takes only 30 minutes and your Dealz is ready sooner.",
+      "7 kurze Schritte, etwa 10 Minuten. Mit Ihren Antworten dauert unser Einführungsgespräch nur 30 Minuten und Ihr Dealz ist schneller bereit."
     ))));
     const list = el("ul", "onb-list");
     [
-      t("Gardez vos prix sous la main (grille, ancien devis).", "Keep your prices at hand (price list, a past quote).", "Halten Sie Ihre Preise bereit (Preisliste, frühere Offerte)."),
+      t("Gardez votre grille de prix ou un ancien devis sous la main : vous l'importerez tel quel.", "Keep your price list or a past quote at hand: you'll upload it as it is.", "Halten Sie Ihre Preisliste oder eine frühere Offerte bereit: Sie laden sie einfach hoch."),
+      t("Vos fichiers ne sont pas gardés si vous rechargez la page : importez-les juste avant d'envoyer.", "Files are not kept if you reload the page: upload them just before sending.", "Dateien bleiben beim Neuladen der Seite nicht erhalten: Laden Sie sie kurz vor dem Senden hoch."),
       t("Vos réponses sont enregistrées sur cet appareil : vous pouvez reprendre plus tard.", "Your answers are saved on this device: you can come back later.", "Ihre Antworten werden auf diesem Gerät gespeichert: Sie können später weitermachen."),
       t("Pas sûr d'une réponse ? Laissez vide, on en parlera en réunion.", "Not sure about an answer? Leave it blank, we'll cover it in the meeting.", "Unsicher bei einer Antwort? Leer lassen, wir besprechen es im Gespräch."),
     ].forEach((x) => list.appendChild(el("li", null, L(x))));
@@ -587,7 +619,7 @@
         const res = await fetch("/api/onboarding", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ session: SESSION, lang: LANG, answers, summary: summary("fr"), clientSummary: summary(LANG) }),
+          body: JSON.stringify({ session: SESSION, lang: LANG, answers, files: Object.keys(files).flatMap((k) => files[k].map((x) => ({ field: k, ...x }))), summary: summary("fr"), clientSummary: summary(LANG) }),
         });
         if (!res.ok) throw new Error("HTTP " + res.status);
         try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
