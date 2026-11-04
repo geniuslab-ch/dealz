@@ -209,7 +209,9 @@ function companyPayload(a, attached, company, email) {
     brandColor: /^#[0-9a-f]{6}$/i.test(color) ? color : undefined,
     signature: String(a.signature || "").trim().slice(0, 1000) || undefined,
     plan: ["CAPTURE", "CLOSE", "SCALE"].includes(a.plan) ? a.plan : undefined,
-    whatsappNumber: String(a.wa_number || "").trim().slice(0, 40) || undefined,
+    // Only when the client said customers already write to that number
+    // (the form hides the field otherwise but keeps a value typed before).
+    whatsappNumber: ["business", "personal"].includes(a.wa_status) ? String(a.wa_number || "").trim().slice(0, 40) || undefined : undefined,
     logo: logo ? { name: logo.filename, type: MIME[logo.filename.split(".").pop().toLowerCase()], data: logo.content.toString("base64") } : undefined,
     priceFile: prices ? { name: prices.filename, data: prices.content.toString("base64") } : undefined,
     pricing: {
