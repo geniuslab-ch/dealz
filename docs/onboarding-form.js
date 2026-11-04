@@ -151,7 +151,16 @@
       title: t("Zone et disponibilités", "Area and availability", "Gebiet und Verfügbarkeit"),
       fields: [
         { id: "zone_regions", type: "regions", required: true, label: t("Où intervenez-vous ?", "Where do you work?", "Wo sind Sie tätig?"), hint: t("Cochez autant de régions que nécessaire.", "Tick as many as you need.", "Kreuzen Sie so viele an wie nötig."), show: (a) => hasRegions(a) },
-        { id: "zone", type: "textarea", required: (a) => !hasRegions(a), label: t("Précisions sur votre zone", "More about your area", "Details zu Ihrem Gebiet"), hint: t("Villes, codes postaux ou rayon en km autour de votre adresse.", "Towns, postcodes or a radius around your address.", "Orte, Postleitzahlen oder ein Umkreis in km um Ihre Adresse.") },
+        {
+          id: "zone", type: "textarea", required: (a) => !hasRegions(a) || a.country === "US", label: t("Précisions sur votre zone", "More about your area", "Details zu Ihrem Gebiet"),
+          // A US state is far too big for a small business: ask for the real area.
+          hint: (a) =>
+            a.country === "US"
+              ? t("Villes, counties ou codes ZIP couverts, ou un rayon en miles autour de votre ville.", "Towns, counties or ZIP codes you cover, or a radius in miles around your town.", "Städte, Counties oder ZIP-Codes, oder ein Umkreis in Meilen um Ihre Stadt.")
+              : a.country === "UK"
+              ? t("Villes, codes postaux (ex. « LS, HG ») ou rayon en miles, si vous ne couvrez qu'une partie d'un county.", "Towns, postcode areas (e.g. \"LS, HG\") or a radius in miles, if you only cover part of a county.", "Städte, Postleitzahlbereiche (z. B. «LS, HG») oder ein Umkreis in Meilen, falls Sie nur einen Teil eines Countys abdecken.")
+              : t("Villes, codes postaux ou rayon en km autour de votre adresse.", "Towns, postcodes or a radius around your address.", "Orte, Postleitzahlen oder ein Umkreis in km um Ihre Adresse."),
+        },
         { id: "free_km", type: "number", label: t("Déplacement gratuit jusqu'à (km)", "Free travel up to (km/miles)", "Anfahrt gratis bis (km)") },
         { id: "travel_fee", type: "text", label: t("Frais de déplacement au-delà", "Travel fee beyond that", "Anfahrtskosten darüber hinaus"), hint: t("Exemple : « 30 jusqu'à 40 km, puis 60 ».", "Example: \"30 up to 25 miles, then 60\".", "Beispiel: «30 bis 40 km, danach 60».") },
         {
@@ -362,7 +371,7 @@
     const lab = fieldLabel(f);
     lab.htmlFor = inputId;
     wrap.appendChild(lab);
-    if (f.hint) wrap.appendChild(el("div", "onb-hint", L(f.hint)));
+    if (f.hint) wrap.appendChild(el("div", "onb-hint", L(typeof f.hint === "function" ? f.hint(answers) : f.hint)));
 
     if (f.type === "single" || f.type === "multi") {
       const chips = el("div", "dop-chips onb-chips");
