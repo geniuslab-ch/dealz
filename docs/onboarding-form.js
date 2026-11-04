@@ -207,9 +207,19 @@
       fields: [
         {
           id: "confirmation", type: "single", required: true, label: t("Quand un client accepte le devis…", "When a customer accepts the quote…", "Wenn ein Kunde die Offerte annimmt…"),
+          hint: t("Dans les deux cas, nous ajoutons le rendez-vous directement dans votre agenda actuel.", "Either way, we add the appointment straight into your current calendar.", "In beiden Fällen tragen wir den Termin direkt in Ihren bestehenden Kalender ein."),
           options: [
             { id: "auto", label: t("La date est bloquée directement", "The date is booked right away", "Der Termin wird direkt gebucht") },
             { id: "call", label: t("Je rappelle le client avant de bloquer la date", "I call the customer before booking the date", "Ich rufe den Kunden an, bevor der Termin gebucht wird") },
+          ],
+        },
+        {
+          id: "calendar", type: "single", label: t("Quel agenda utilisez-vous ?", "Which calendar do you use?", "Welchen Kalender verwenden Sie?"), withOther: true,
+          options: [
+            { id: "google", label: "Google Agenda" },
+            { id: "outlook", label: "Outlook" },
+            { id: "apple", label: t("Calendrier Apple (iPhone)", "Apple Calendar (iPhone)", "Apple Kalender (iPhone)") },
+            { id: "none", label: t("Je n'ai pas d'agenda en ligne", "I don't use an online calendar", "Ich nutze keinen Online-Kalender") },
           ],
         },
         {
