@@ -209,6 +209,7 @@ function companyPayload(a, attached, company, email) {
     brandColor: /^#[0-9a-f]{6}$/i.test(color) ? color : undefined,
     signature: String(a.signature || "").trim().slice(0, 1000) || undefined,
     plan: ["CAPTURE", "CLOSE", "SCALE"].includes(a.plan) ? a.plan : undefined,
+    whatsappNumber: String(a.wa_number || "").trim().slice(0, 40) || undefined,
     logo: logo ? { name: logo.filename, type: MIME[logo.filename.split(".").pop().toLowerCase()], data: logo.content.toString("base64") } : undefined,
     priceFile: prices ? { name: prices.filename, data: prices.content.toString("base64") } : undefined,
     pricing: {
