@@ -251,9 +251,12 @@ async function submit({ body, session }) {
   // Pre-fill the client's company in the CRM (dealz-crm /api/onboarding-company):
   // created, or only its empty fields filled. Before the team e-mail, so
   // the e-mail can say what happened.
-  const crmCompany = await crm
-    .post("onboardingCompany", companyPayload(a, attached, company, email), { timeoutMs: 15000 })
-    .catch((err) => ({ error: err.message }));
+  // Only for a confirmed Stripe payment: the form page itself is public, and
+  // a delayed payment method can come back to the site before it is paid.
+  const isPaid = !!session && (session.payment_status === "paid" || session.payment_status === "no_payment_required");
+  const crmCompany = isPaid
+    ? await crm.post("onboardingCompany", companyPayload(a, attached, company, email), { timeoutMs: 15000 }).catch((err) => ({ error: err.message }))
+    : { skipped: session ? "paiement Stripe pas encore confirmé" : "formulaire sans lien de paiement" };
   const crmLine = crmCompany && crmCompany.id
     ? `<p style="margin:10px 0 0;">🏢 <b>CRM :</b> fiche entreprise <a href="${esc(CRM_COMPANIES_URL)}?id=${encodeURIComponent(crmCompany.id)}">${esc(crmCompany.id)}</a> ${crmCompany.created ? "créée" : "complétée"} (${esc((crmCompany.filled || []).join(", ") || "rien à compléter")}). ${crmCompany.pricingFromTemplate ? "Grille lue depuis notre modèle Excel." : "⚠️ Grille à vérifier à partir du fichier de prix joint avant de connecter WhatsApp."}</p>`
     : `<p style="margin:10px 0 0;">🏢 <b>CRM :</b> fiche entreprise non créée (${esc((crmCompany && (crmCompany.error || crmCompany.skipped)) || "inconnu")}), à créer à la main.</p>`;
@@ -261,7 +264,9 @@ async function submit({ body, session }) {
     ? `<p style="margin:10px 0 0;">📎 <b>Fichiers joints :</b> ${attached.map((f) => `${esc(f.label)} (${esc(f.filename)})`).join(" · ")}</p>`
     : "";
 
-  const paid = session ? `Paiement Stripe lié : ${esc(session.id)}${session.customer ? " · client " + esc(session.customer) : ""}` : "Formulaire ouvert sans lien de paiement (lien envoyé à la main).";
+  const paid = session
+    ? `Paiement Stripe lié : ${esc(session.id)}${session.customer ? " · client " + esc(session.customer) : ""}${isPaid ? "" : " · ⚠️ paiement pas encore confirmé"}`
+    : "Formulaire ouvert sans lien de paiement (lien envoyé à la main).";
   const teamHtml = shell(`
     <h2 style="margin:0 0 6px;font-size:19px;">📋 Formulaire d'intégration reçu</h2>
     <p style="margin:0 0 4px;"><b>${esc(company)}</b> · ${esc(str(a.contact_name))} · <a href="mailto:${esc(email)}">${esc(email)}</a> · ${esc(str(a.contact_phone))}</p>
