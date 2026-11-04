@@ -27,6 +27,7 @@ const { getCompanyBySlug } = require("./src/companies");
 const { hasFeature } = require("./src/plans");
 const scale = require("./src/scale");
 const billing = require("./src/billing");
+const onboarding = require("./src/onboarding");
 const crm = require("./src/crm");
 const { rateLimit } = require("./src/rateLimit");
 const defaultPricing = require("./docs/pricing.json");
@@ -1013,6 +1014,30 @@ app.post("/api/stripe/webhook", async (req, res) => {
   } catch (err) {
     console.error("[stripe webhook]", err.message);
     res.status(err.status || 500).json({ error: err.message });
+  }
+});
+
+// ---- Onboarding form (docs/integration.html, src/onboarding.js) ----
+
+// What the form can fill in already: the sector list, plus — with ?s=, the
+// Stripe Checkout Session id from the welcome e-mail — what the client gave
+// when paying. Only a paid session prefills anything.
+app.get("/api/onboarding/prefill", async (req, res) => {
+  const lang = String(req.query.lang || "fr");
+  let prefill = {};
+  const session = await billing.retrieveSession(String(req.query.s || ""));
+  if (session && (session.payment_status === "paid" || session.payment_status === "no_payment_required")) prefill = onboarding.prefillFrom(session);
+  res.set("Cache-Control", "no-store");
+  res.json({ prefill, sectors: onboarding.sectorList(lang) });
+});
+
+app.post("/api/onboarding", rateLimit("onboarding", 10), async (req, res) => {
+  try {
+    const session = await billing.retrieveSession(String((req.body && req.body.session) || ""));
+    res.json(await onboarding.submit({ body: req.body || {}, session }));
+  } catch (err) {
+    console.error("[onboarding]", err.message);
+    res.status(err.status || 500).json({ error: err.status ? err.message : "Envoi impossible pour le moment." });
   }
 });
 

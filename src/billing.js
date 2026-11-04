@@ -2,6 +2,7 @@ const Stripe = require("stripe");
 const store = require("./store");
 const crm = require("./crm");
 const { sendEmail } = require("./notifications");
+const onboarding = require("./onboarding");
 
 /**
  * Dealz's own subscriptions, paid with Stripe Checkout from the website's
@@ -185,8 +186,15 @@ async function fulfil(session) {
     `<b>Formule :</b> ${label}`,
     `<b>Payé :</b> ${amount}`,
     `<b>Stripe :</b> client ${session.customer || "—"}${session.subscription ? " · abonnement " + session.subscription : ""}`,
-    "→ Prochaine étape : créer l'entreprise dans le CRM (formule déjà indiquée) et planifier l'installation.",
+    `<b>Formulaire d'intégration :</b> envoyé automatiquement au client · <a href="${onboarding.link(session.id, m.lang)}">son lien</a>`,
+    "→ Prochaine étape : créer l'entreprise dans le CRM (formule déjà indiquée) et attendre le formulaire d'intégration pour planifier la réunion.",
   ]);
+  // The onboarding form link, in the client's language (src/onboarding.js).
+  try {
+    await onboarding.sendWelcome({ to: email, name: m.contact_name, lang: m.lang, sessionId: session.id });
+  } catch (err) {
+    console.error("[billing] onboarding welcome e-mail failed:", err.message);
+  }
   await forwardToCrm({
     type: "paid",
     email,
@@ -284,4 +292,15 @@ async function handleWebhook(rawBody, signature) {
   return { ok: true, type: event.type };
 }
 
-module.exports = { createCheckout, handleWebhook, currencyForCountry, PLANS };
+// The Checkout Session behind an onboarding link (?s=cs_…), to prefill the
+// form. null when Stripe is not configured or the id is unknown.
+async function retrieveSession(id) {
+  if (!id || !onboarding.SESSION_RE.test(id) || !process.env.STRIPE_SECRET_KEY) return null;
+  try {
+    return await stripe().checkout.sessions.retrieve(id);
+  } catch (err) {
+    return null;
+  }
+}
+
+module.exports = { createCheckout, handleWebhook, currencyForCountry, retrieveSession, PLANS };
