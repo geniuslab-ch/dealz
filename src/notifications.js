@@ -40,7 +40,7 @@ if (process.env.SMTP_HOST) {
  * accept loop run and be verified end to end with zero email credentials,
  * and starts actually sending the moment SMTP_* is set in .env.
  */
-async function sendEmail({ to, subject, html, replyTo, icalEvent }) {
+async function sendEmail({ to, subject, html, replyTo, icalEvent, attachments }) {
   if (!transporter) {
     const links = [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
     console.log("\n===== [EMAIL SIMULÉ — configurez SMTP_HOST dans .env pour un envoi réel] =====");
@@ -51,6 +51,10 @@ async function sendEmail({ to, subject, html, replyTo, icalEvent }) {
     if (links.length) {
       console.log("---");
       console.log("Lien(s):", links.join(", "));
+    }
+    if (attachments && attachments.length) {
+      console.log("---");
+      console.log("Pièce(s) jointe(s):", attachments.map((x) => `${x.filename} (${x.content.length} octets)`).join(", "));
     }
     console.log("================================================================================\n");
     return { simulated: true, preview: { to, subject, html } };
@@ -65,6 +69,8 @@ async function sendEmail({ to, subject, html, replyTo, icalEvent }) {
     // A calendar invitation (.ics) mail clients turn into an "add to
     // calendar" event — used for staff assignments (src/scale.js).
     ...(icalEvent ? { icalEvent } : {}),
+    // Files the client uploaded in the onboarding form (src/onboarding.js).
+    ...(attachments && attachments.length ? { attachments } : {}),
   });
   return { simulated: false, to, subject, html };
 }
@@ -453,7 +459,7 @@ async function sendFollowupToCustomer({
   return sendEmail({ to: customer.email, subject: t.subject, html, replyTo: companyEmail });
 }
 
-async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr", serviceNoun, date }) {
+async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr", serviceNoun, date, calendarFeedUrl }) {
   const now = new Date();
   // The service date the customer chose (YYYY-MM-DD, 9:00 Swiss time);
   // without one, a placeholder 3 days out.
@@ -492,9 +498,9 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
     ${signatureHtml(companyName, signature, logoUrl, tagline, lang)}
   `;
   const C = {
-    fr: { h2: "✓ Nouvelle réservation confirmée", amount: "Montant", cal: "Ajouter à l'agenda Google de l'entreprise" },
-    en: { h2: "✓ New booking confirmed", amount: "Amount", cal: "Add to the company's Google Calendar" },
-    de: { h2: "✓ Neue Buchung bestätigt", amount: "Betrag", cal: "Zum Google Kalender des Unternehmens hinzufügen" },
+    fr: { h2: "✓ Nouvelle réservation confirmée", amount: "Montant", cal: "Ajouter à l'agenda Google de l'entreprise", feed: "📅 Ce rendez-vous apparaît tout seul dans votre agenda si vous y êtes abonné. Pas encore fait ? Ajoutez une fois ce lien dans Google Agenda (« À partir de l'URL »), Outlook (« S'abonner à partir du web ») ou Apple Calendrier (« Nouvel abonnement ») :" },
+    en: { h2: "✓ New booking confirmed", amount: "Amount", cal: "Add to the company's Google Calendar", feed: "📅 This appointment shows up in your calendar by itself once you're subscribed. Not done yet? Add this link once in Google Calendar (\"From URL\"), Outlook (\"Subscribe from web\") or Apple Calendar (\"New Calendar Subscription\"):" },
+    de: { h2: "✓ Neue Buchung bestätigt", amount: "Betrag", cal: "Zum Google Kalender des Unternehmens hinzufügen", feed: "📅 Dieser Termin erscheint von selbst in Ihrem Kalender, sobald Sie ihn abonniert haben. Noch nicht? Fügen Sie diesen Link einmal in Google Kalender («Per URL»), Outlook («Aus dem Web abonnieren») oder Apple Kalender («Neues Kalenderabonnement») hinzu:" },
   }[lang] || {};
   const D = DECLINE_TEXT[lang] || DECLINE_TEXT.fr;
   const companyHtml = `
@@ -506,6 +512,7 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
     <p><b>${C.amount || "Montant"} :</b> ${fmtCHF(quote.total)}</p>
     <table>${quoteItemsHtml(quote)}</table>
     <p><a href="${calLink}">${C.cal || "Ajouter à l'agenda Google de l'entreprise"}</a></p>
+    ${calendarFeedUrl ? `<p style="font-size:13px;color:#5b6473;">${C.feed}<br/><a href="${calendarFeedUrl}">${calendarFeedUrl}</a></p>` : ""}
   `;
 
   // allSettled, not all: a failure notifying the company (e.g. an unreal

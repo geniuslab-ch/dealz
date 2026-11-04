@@ -52,6 +52,10 @@ function rowToCompany(row) {
     website: row.website || null,
     brandColor: row.brand_color || null,
     plan: row.plan || null,
+    // Agenda subscription link (src/scale.js calendarFeed), every plan.
+    calendarFeedUrl: row.calendar_token
+      ? (process.env.APP_BASE_URL || "https://dealz.website").replace(/\/$/, "") + `/api/calendar/${row.calendar_token}.ics`
+      : null,
   };
 }
 

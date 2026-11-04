@@ -27,6 +27,7 @@ const { getCompanyBySlug } = require("./src/companies");
 const { hasFeature } = require("./src/plans");
 const scale = require("./src/scale");
 const billing = require("./src/billing");
+const onboarding = require("./src/onboarding");
 const crm = require("./src/crm");
 const { rateLimit } = require("./src/rateLimit");
 const defaultPricing = require("./docs/pricing.json");
@@ -42,7 +43,12 @@ app.set("trust proxy", 1);
 // `verify` stashes the raw request bytes on req.rawBody — needed to check
 // Meta's X-Hub-Signature-256 on the WhatsApp webhook (see src/whatsapp.js's
 // verifySignature). Harmless for every other route, which never reads it.
-app.use(express.json({ verify: (req, res, buf) => { req.rawBody = buf; } }));
+const keepRawBody = (req, res, buf) => { req.rawBody = buf; };
+const jsonBody = express.json({ verify: keepRawBody });
+// The onboarding form carries the client's files (price list…), up to ~4 MB
+// once base64-encoded; every other route keeps the 100 kB default.
+const onboardingJsonBody = express.json({ limit: "5mb", verify: keepRawBody });
+app.use((req, res, next) => (req.path === "/api/onboarding" ? onboardingJsonBody : jsonBody)(req, res, next));
 
 // Cache-busts every same-origin CSS/JS reference in served HTML with a
 // version tag (the deployed commit on Vercel, or this process's boot time
@@ -903,9 +909,11 @@ app.post("/api/offer/:token/respond", async (req, res) => {
             total: entry.amount,
           };
 
+    const company = entry.companyId ? await getCompanyBySlug(entry.companyId) : null;
     const result = await sendBookingConfirmation({
       quote,
       customer,
+      calendarFeedUrl: company?.calendarFeedUrl || undefined,
       notifyEmail: entry.companyEmail || undefined,
       companyName: entry.companyName || undefined,
       signature: entry.signature || undefined,
@@ -915,8 +923,7 @@ app.post("/api/offer/:token/respond", async (req, res) => {
       serviceNoun: entry.serviceNoun || undefined,
     });
     await store.update(req.params.token, { status: "accepted" });
-    if (entry.companyId) {
-      const company = await getCompanyBySlug(entry.companyId);
+    if (company) {
       const date = scale.bookingDate(entry.originalQuote);
       if (company) await scale.createBooking({ company, quote: { ...quote, date }, customer, source: "offer", lang: entry.lang });
     }
@@ -953,6 +960,7 @@ async function processAccept(body) {
       signature: company?.signature || undefined,
       logoUrl: (sector ? publicUrl(sector.company.logo) : company?.logoUrl) || undefined,
       tagline: company?.tagline || undefined,
+      calendarFeedUrl: company?.calendarFeedUrl || undefined,
       lang,
     });
 
@@ -1016,7 +1024,31 @@ app.post("/api/stripe/webhook", async (req, res) => {
   }
 });
 
-// Shared agenda (SCALE): an iCalendar feed per company or staff member,
+// ---- Onboarding form (docs/integration.html, src/onboarding.js) ----
+
+// What the form can fill in already: the sector list, plus — with ?s=, the
+// Stripe Checkout Session id from the welcome e-mail — what the client gave
+// when paying. Only a paid session prefills anything.
+app.get("/api/onboarding/prefill", async (req, res) => {
+  const lang = String(req.query.lang || "fr");
+  let prefill = {};
+  const session = await billing.retrieveSession(String(req.query.s || ""));
+  if (session && (session.payment_status === "paid" || session.payment_status === "no_payment_required")) prefill = onboarding.prefillFrom(session);
+  res.set("Cache-Control", "no-store");
+  res.json({ prefill, sectors: onboarding.sectorList(lang), calendly: onboarding.calendlyUrl() });
+});
+
+app.post("/api/onboarding", rateLimit("onboarding", 10), async (req, res) => {
+  try {
+    const session = await billing.retrieveSession(String((req.body && req.body.session) || ""));
+    res.json(await onboarding.submit({ body: req.body || {}, session }));
+  } catch (err) {
+    console.error("[onboarding]", err.message);
+    res.status(err.status || 500).json({ error: err.status ? err.message : "Envoi impossible pour le moment." });
+  }
+});
+
+// Agenda feed: one per company (every plan) and per staff member (SCALE),
 // behind the secret token shown in the CRM. Subscribed to from Google
 // Calendar / Outlook / Apple Calendar.
 app.get("/api/calendar/:token.ics", async (req, res) => {

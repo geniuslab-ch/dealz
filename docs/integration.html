@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <script src="/consent.js" defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Votre intégration — Dealz</title>
+  <meta name="description" content="Préparez l'installation de votre Dealz en 10 minutes." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="/nav.js" defer></script>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <img src="/images/dealz-logo-sm.png" alt="Dealz" />
+      <span class="nav-slogan">Keep your website.<br>Keep your tools.<br>Add Dealz.</span>
+    </div>
+    <div class="nav-links">
+      <a href="/index.html">Accueil</a>
+      <span class="nav-lang">
+        <a href="/integration.html" data-keep-query class="active">FR</a>
+        <a href="/en/integration.html" data-keep-query>EN</a>
+        <a href="/de/integration.html" data-keep-query>DE</a>
+      </span>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Bienvenue chez Dealz</span>
+      <h1>PRÉPARONS<br>VOTRE INSTALLATION.</h1>
+      <p>Quelques questions sur vos prix, votre zone et votre WhatsApp. Avec vos réponses, Dealz envoie vos devis à votre place, sans erreur.</p>
+    </div>
+  </section>
+
+  <section id="onboarding-section">
+    <div class="section-inner">
+      <div id="onboarding"></div>
+      <noscript><p style="text-align:center;">Activez JavaScript pour remplir ce formulaire, ou écrivez-nous à info@dealz.website.</p></noscript>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div>Dealz — Devis automatiques et WhatsApp pour les entreprises de services.</div>
+    <div class="site-footer-slogan">Keep your website. Keep your tools. Add Dealz.</div>
+    <div class="site-footer-legal"><a href="/confidentialite.html">Confidentialité</a> · <a href="mailto:info@dealz.website">info@dealz.website</a></div>
+  </footer>
+
+  <script>window.DEALZ_LANG = "fr";
+    // Switching language keeps ?s= (the client's prefill link).
+    document.querySelectorAll("a[data-keep-query]").forEach(function (a) { a.href += location.search; });
+  </script>
+  <script src="/regions.js"></script>
+  <script src="/onboarding-form.js"></script>
+</body>
+</html>
