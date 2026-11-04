@@ -54,6 +54,8 @@
   const OTHER = { id: "other", label: t("Autre", "Other", "Andere"), other: true };
   const isPlan = (a, ...plans) => plans.includes(a.plan);
   const noSite = (a) => a.integration === "nosite";
+  const currencyOf = (a) => a.currency || { CH: "CHF", FR: "EUR", UK: "GBP", US: "USD" }[a.country] || "CHF";
+  const usesMiles = (a) => a.country === "UK" || a.country === "US";
   const needsAgency = (a) => !noSite(a) && (a.site_manager === "agency" || a.site_manager === "other");
   // Cantons, départements, counties or states (docs/regions.js).
   const REGIONS = window.DEALZ_REGIONS || {};
@@ -167,8 +169,17 @@
               ? t("Villes, codes postaux (ex. « LS, HG ») ou rayon en miles, si vous ne couvrez qu'une partie d'un county.", "Towns, postcode areas (e.g. \"LS, HG\") or a radius in miles, if you only cover part of a county.", "Städte, Postleitzahlbereiche (z. B. «LS, HG») oder ein Umkreis in Meilen, falls Sie nur einen Teil eines Countys abdecken.")
               : t("Villes, codes postaux ou rayon en km autour de votre adresse.", "Towns, postcodes or a radius around your address.", "Orte, Postleitzahlen oder ein Umkreis in km um Ihre Adresse."),
         },
-        { id: "free_km", type: "number", label: t("Déplacement gratuit jusqu'à (km)", "Free travel up to (km/miles)", "Anfahrt gratis bis (km)") },
-        { id: "travel_fee", type: "text", label: t("Au-delà, combien facturez-vous le déplacement ?", "Beyond that, what do you charge for travel?", "Was verrechnen Sie darüber hinaus für die Anfahrt?"), hint: t("Exemple : « 1 par km » ou « 40 par intervention ».", "Example: \"1 per mile\" or \"40 per job\".", "Beispiel: «1 pro km» oder «40 pro Einsatz».") },
+        { id: "free_km", type: "number", label: (a) => (usesMiles(a) ? t("Déplacement gratuit jusqu'à (miles)", "Free travel up to (miles)", "Anfahrt gratis bis (Meilen)") : t("Déplacement gratuit jusqu'à (km)", "Free travel up to (km)", "Anfahrt gratis bis (km)")) },
+        {
+          id: "travel_fee", type: "text", label: t("Au-delà, combien facturez-vous le déplacement ?", "Beyond that, what do you charge for travel?", "Was verrechnen Sie darüber hinaus für die Anfahrt?"),
+          // In the client's own currency and unit: "1 CHF par km", "1 GBP per mile"…
+          hint: (a) => {
+            const c = currencyOf(a);
+            return usesMiles(a)
+              ? t(`Exemple : « 1 ${c} par mile » ou « 40 ${c} par intervention ».`, `Example: "1 ${c} per mile" or "40 ${c} per job".`, `Beispiel: «1 ${c} pro Meile» oder «40 ${c} pro Einsatz».`)
+              : t(`Exemple : « 1 ${c} par km » ou « 40 ${c} par intervention ».`, `Example: "1 ${c} per km" or "40 ${c} per job".`, `Beispiel: «1 ${c} pro km» oder «40 ${c} pro Einsatz».`);
+          },
+        },
         {
           id: "lead_time", type: "single", required: true, label: t("Délai minimum entre la demande et l'intervention", "Minimum notice between request and job", "Mindestvorlauf zwischen Anfrage und Einsatz"),
           options: [
@@ -289,6 +300,7 @@
   };
 
   const visible = (f) => !f.show || f.show(answers);
+  const labelOf = (f) => (typeof f.label === "function" ? f.label(answers) : f.label);
   const isReq = (f) => (typeof f.required === "function" ? f.required(answers) : !!f.required);
 
   // Uploaded files stay in memory only (too big for the saved draft) and are
@@ -354,7 +366,7 @@
 
   function fieldLabel(f) {
     const lab = el("label", "onb-label");
-    lab.textContent = L(f.label);
+    lab.textContent = L(labelOf(f));
     if (isReq(f)) lab.appendChild(el("span", "onb-req", " *"));
     return lab;
   }
@@ -371,7 +383,7 @@
       box.checked = !!answers[f.id];
       box.addEventListener("change", () => { answers[f.id] = box.checked; save(); });
       lab.appendChild(box);
-      const span = el("span", null, L(f.label));
+      const span = el("span", null, L(labelOf(f)));
       if (isReq(f)) span.appendChild(el("span", "onb-req", " *"));
       lab.appendChild(span);
       wrap.appendChild(lab);
@@ -683,7 +695,7 @@
   function summary(lang) {
     return STEPS.map((s) => ({
       title: s.title[lang] || s.title.fr,
-      rows: s.fields.filter(visible).map((f) => [f.label[lang] || f.label.fr, display(f, lang)]),
+      rows: s.fields.filter(visible).map((f) => [labelOf(f)[lang] || labelOf(f).fr, display(f, lang)]),
     }));
   }
 
@@ -701,7 +713,7 @@
       sec.appendChild(h);
       const dl = el("dl", "onb-recap");
       s.fields.filter(visible).forEach((f) => {
-        dl.appendChild(el("dt", null, L(f.label)));
+        dl.appendChild(el("dt", null, L(labelOf(f))));
         dl.appendChild(el("dd", null, display(f, LANG) || UI.empty));
       });
       sec.appendChild(dl);
