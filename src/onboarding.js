@@ -35,30 +35,30 @@ const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":
 
 const WELCOME = {
   fr: {
-    subject: "Bienvenue chez Dealz : préparons votre installation",
+    subject: (c) => (c ? `Votre installation Dealz pour ${c}` : "Votre installation Dealz : dernière étape"),
     hello: (n) => `Bonjour${n ? " " + n : ""},`,
     body: "Merci pour votre confiance, votre paiement est bien reçu. Pour que votre Dealz envoie des devis justes dès le premier jour, nous avons besoin de quelques informations sur vos prix, votre zone et votre WhatsApp.",
     time: "Le formulaire prend environ 10 minutes. Vos réponses sont gardées si vous faites une pause.",
     cta: "Remplir mon formulaire d'intégration",
-    after: "Dès réception, nous vous proposons une réunion de 30 minutes pour tout valider ensemble.",
+    after: "À la fin du formulaire, un calendrier vous permet de réserver directement votre rendez-vous d'intégration de 30 minutes avec nous.",
     sign: "L'équipe Dealz",
   },
   en: {
-    subject: "Welcome to Dealz: let's prepare your setup",
+    subject: (c) => (c ? `Your Dealz setup for ${c}` : "Your Dealz setup: last step"),
     hello: (n) => `Hello${n ? " " + n : ""},`,
     body: "Thank you for your trust, your payment has been received. So that your Dealz sends accurate quotes from day one, we need a few details about your prices, your area and your WhatsApp.",
     time: "The form takes about 10 minutes. Your answers are kept if you take a break.",
     cta: "Fill in my onboarding form",
-    after: "As soon as we have it, we'll suggest a 30-minute meeting to confirm everything together.",
+    after: "At the end of the form, a calendar lets you book your 30-minute onboarding meeting with us straight away.",
     sign: "The Dealz team",
   },
   de: {
-    subject: "Willkommen bei Dealz: Bereiten wir Ihre Einrichtung vor",
+    subject: (c) => (c ? `Ihre Dealz-Einrichtung für ${c}` : "Ihre Dealz-Einrichtung: letzter Schritt"),
     hello: (n) => `Guten Tag${n ? " " + n : ""},`,
     body: "Vielen Dank für Ihr Vertrauen, Ihre Zahlung ist eingegangen. Damit Ihr Dealz vom ersten Tag an genaue Offerten verschickt, brauchen wir ein paar Angaben zu Ihren Preisen, Ihrem Gebiet und Ihrem WhatsApp.",
     time: "Das Formular dauert etwa 10 Minuten. Ihre Antworten bleiben gespeichert, wenn Sie eine Pause machen.",
     cta: "Mein Einrichtungsformular ausfüllen",
-    after: "Sobald wir es haben, schlagen wir Ihnen ein 30-minütiges Gespräch vor, um alles gemeinsam zu bestätigen.",
+    after: "Am Ende des Formulars können Sie Ihr 30-minütiges Einrichtungsgespräch mit uns direkt im Kalender buchen.",
     sign: "Ihr Dealz-Team",
   },
 };
@@ -76,7 +76,7 @@ function shell(inner) {
 </div>`;
 }
 
-async function sendWelcome({ to, name, lang, sessionId }) {
+async function sendWelcome({ to, name, company, lang, sessionId }) {
   if (!to) return { skipped: true };
   const w = WELCOME[langOf(lang)];
   const url = link(sessionId, lang);
@@ -88,7 +88,9 @@ async function sendWelcome({ to, name, lang, sessionId }) {
     <p style="font-size:13px;color:#5b6472;">${esc(url)}</p>
     <p>${esc(w.after)}</p>
     <p>${esc(w.sign)}<br/><a href="mailto:info@dealz.website" style="color:#0b5fff;">info@dealz.website</a></p>`);
-  return sendEmail({ to, subject: w.subject, html, replyTo: "info@dealz.website" });
+  // A plain, personal subject (no emoji, no capitals, no "free"/"urgent"),
+  // so spam filters read it as the transactional e-mail it is.
+  return sendEmail({ to, subject: w.subject(String(company || "").trim().slice(0, 80)), html, replyTo: "info@dealz.website" });
 }
 
 // ---- prefill ----
@@ -179,10 +181,44 @@ function summaryText(sections) {
 }
 
 const DONE = {
-  fr: { subject: "Vos réponses d'intégration Dealz", intro: "Merci ! Voici une copie de vos réponses. Nous revenons vers vous très vite pour la réunion de 30 minutes. Une correction ? Répondez simplement à cet e-mail." },
-  en: { subject: "Your Dealz onboarding answers", intro: "Thank you! Here is a copy of your answers. We'll come back to you very soon for the 30-minute meeting. Anything to correct? Just reply to this email." },
-  de: { subject: "Ihre Dealz-Einrichtungsantworten", intro: "Vielen Dank! Hier ist eine Kopie Ihrer Antworten. Wir melden uns sehr bald für das 30-minütige Gespräch. Etwas zu korrigieren? Antworten Sie einfach auf diese E-Mail." },
+  fr: { subject: "Vos réponses d'intégration Dealz", intro: "Merci ! Voici une copie de vos réponses. Une correction ? Répondez simplement à cet e-mail.", book: "Pas encore réservé votre rendez-vous d'intégration de 30 minutes ? Choisissez votre créneau ici :" },
+  en: { subject: "Your Dealz onboarding answers", intro: "Thank you! Here is a copy of your answers. Anything to correct? Just reply to this email.", book: "Not booked your 30-minute onboarding meeting yet? Pick your slot here:" },
+  de: { subject: "Ihre Dealz-Einrichtungsantworten", intro: "Vielen Dank! Hier ist eine Kopie Ihrer Antworten. Etwas zu korrigieren? Antworten Sie einfach auf diese E-Mail.", book: "Ihr 30-minütiges Einrichtungsgespräch noch nicht gebucht? Wählen Sie hier Ihren Termin:" },
 };
+
+const CRM_COMPANIES_URL = "https://dealz.website/crm/companies.html";
+const MIME = { png: "image/png", jpg: "image/jpeg", jpeg: "image/jpeg", webp: "image/webp", svg: "image/svg+xml" };
+
+// What the CRM company record can take from the form. Prices beyond the
+// minimum stay in the uploaded file until the team checks them.
+function companyPayload(a, attached, company, email) {
+  const num = (v) => {
+    const n = parseFloat(String(v == null ? "" : v).replace(",", ".").replace(/[^\d.]/g, ""));
+    return Number.isFinite(n) ? n : undefined;
+  };
+  const miles = a.country === "UK" || a.country === "US";
+  const free = num(a.free_km);
+  const firstEmail = String(a.alert_emails || "").split(/[\s,;]+/).find((x) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x));
+  const logo = attached.find((f) => f.field === "logo_files" && MIME[(f.filename.split(".").pop() || "").toLowerCase()]);
+  const prices = attached.find((f) => f.field === "price_files" && /\.xlsx$/i.test(f.filename));
+  const color = String(a.brand_color || "").trim();
+  return {
+    name: company,
+    notifyEmail: firstEmail || email,
+    website: String(a.website || "").trim().slice(0, 400) || undefined,
+    brandColor: /^#[0-9a-f]{6}$/i.test(color) ? color : undefined,
+    signature: String(a.signature || "").trim().slice(0, 1000) || undefined,
+    plan: ["CAPTURE", "CLOSE", "SCALE"].includes(a.plan) ? a.plan : undefined,
+    logo: logo ? { name: logo.filename, type: MIME[logo.filename.split(".").pop().toLowerCase()], data: logo.content.toString("base64") } : undefined,
+    priceFile: prices ? { name: prices.filename, data: prices.content.toString("base64") } : undefined,
+    pricing: {
+      currency: a.currency || { CH: "CHF", FR: "EUR", UK: "GBP", US: "USD" }[a.country] || undefined,
+      minimum_price: num(a.minimum),
+      free_within_km: free === undefined ? undefined : Math.round(miles ? free * 1.609 : free),
+      min_lead_time_hours: { "24h": 24, "48h": 48, "1w": 168 }[a.lead_time],
+    },
+  };
+}
 
 async function submit({ body, session }) {
   const a = (body && typeof body.answers === "object" && body.answers) || {};
@@ -212,23 +248,38 @@ async function submit({ body, session }) {
     };
     attached.push({ label: "Procuration (PDF généré)", filename: procuration.filename, content: procuration.content });
   }
+  // Pre-fill the client's company in the CRM (dealz-crm /api/onboarding-company):
+  // created, or only its empty fields filled. Before the team e-mail, so
+  // the e-mail can say what happened.
+  // Only for a confirmed Stripe payment: the form page itself is public, and
+  // a delayed payment method can come back to the site before it is paid.
+  const isPaid = !!session && (session.payment_status === "paid" || session.payment_status === "no_payment_required");
+  const crmCompany = isPaid
+    ? await crm.post("onboardingCompany", companyPayload(a, attached, company, email), { timeoutMs: 15000 }).catch((err) => ({ error: err.message }))
+    : { skipped: session ? "paiement Stripe pas encore confirmé" : "formulaire sans lien de paiement" };
+  const crmLine = crmCompany && crmCompany.id
+    ? `<p style="margin:10px 0 0;">🏢 <b>CRM :</b> fiche entreprise <a href="${esc(CRM_COMPANIES_URL)}?id=${encodeURIComponent(crmCompany.id)}">${esc(crmCompany.id)}</a> ${crmCompany.created ? "créée" : "complétée"} (${esc((crmCompany.filled || []).join(", ") || "rien à compléter")}). ${crmCompany.pricingFromTemplate ? "Grille lue depuis notre modèle Excel." : "⚠️ Grille à vérifier à partir du fichier de prix joint avant de connecter WhatsApp."}</p>`
+    : `<p style="margin:10px 0 0;">🏢 <b>CRM :</b> fiche entreprise non créée (${esc((crmCompany && (crmCompany.error || crmCompany.skipped)) || "inconnu")}), à créer à la main.</p>`;
   const filesLine = attached.length
     ? `<p style="margin:10px 0 0;">📎 <b>Fichiers joints :</b> ${attached.map((f) => `${esc(f.label)} (${esc(f.filename)})`).join(" · ")}</p>`
     : "";
 
-  const paid = session ? `Paiement Stripe lié : ${esc(session.id)}${session.customer ? " · client " + esc(session.customer) : ""}` : "Formulaire ouvert sans lien de paiement (lien envoyé à la main).";
+  const paid = session
+    ? `Paiement Stripe lié : ${esc(session.id)}${session.customer ? " · client " + esc(session.customer) : ""}${isPaid ? "" : " · ⚠️ paiement pas encore confirmé"}`
+    : "Formulaire ouvert sans lien de paiement (lien envoyé à la main).";
   const teamHtml = shell(`
     <h2 style="margin:0 0 6px;font-size:19px;">📋 Formulaire d'intégration reçu</h2>
     <p style="margin:0 0 4px;"><b>${esc(company)}</b> · ${esc(str(a.contact_name))} · <a href="mailto:${esc(email)}">${esc(email)}</a> · ${esc(str(a.contact_phone))}</p>
     <p style="margin:0;font-size:13px;color:#5b6472;">${paid} · Langue : ${lang.toUpperCase()}</p>
     ${filesLine}
+    ${crmLine}
     ${summaryHtml(team)}
-    <p style="margin-top:22px;">→ Prochaine étape : proposer la réunion de 30 minutes (disponibilités ci-dessus) et configurer l'entreprise dans le CRM.</p>`);
+    <p style="margin-top:22px;">→ Prochaine étape : le client réserve la réunion de 30 minutes sur Calendly (sinon, ses disponibilités sont ci-dessus), puis vérifier la fiche entreprise dans le CRM.</p>`);
 
   const results = await Promise.allSettled([
     sendEmail({ to: DEALZ_TEAM_EMAIL, subject: `📋 Intégration — ${company}`, html: teamHtml, replyTo: email, attachments: attached.map(({ filename, content }) => ({ filename, content })) }),
-    crm.post("billingEvents", { type: "note", email, companyName: company, note: `📋 Formulaire d'intégration reçu${attached.length ? " (fichiers dans l'e-mail : " + attached.map((f) => f.filename).join(", ") + ")" : ""}\n\n${summaryText(team)}`.slice(0, 20000) }),
-    sendEmail({ to: email, subject: DONE[lang].subject, html: shell(`<p>${esc(DONE[lang].intro)}</p>${summaryHtml(mine)}`), replyTo: "info@dealz.website", attachments: procuration ? [procuration] : undefined }),
+    crm.post("billingEvents", { type: "onboarding", email, companyName: company, note: `📋 Formulaire d'intégration reçu${attached.length ? " (fichiers dans l'e-mail : " + attached.map((f) => f.filename).join(", ") + ")" : ""}\n\n${summaryText(team)}`.slice(0, 20000) }),
+    sendEmail({ to: email, subject: DONE[lang].subject, html: shell(`<p>${esc(DONE[lang].intro)}</p>${calendlyUrl() ? `<p>${esc(DONE[lang].book)} <a href="${esc(calendlyUrl())}" style="color:#0b5fff;">${esc(calendlyUrl())}</a></p>` : ""}${summaryHtml(mine)}`), replyTo: "info@dealz.website", attachments: procuration ? [procuration] : undefined }),
   ]);
   results.forEach((r, i) => r.status === "rejected" && console.error(`[onboarding] side effect ${i} failed:`, r.reason && r.reason.message));
   if (results[0].status === "rejected") throw Object.assign(new Error("Envoi impossible"), { status: 502 });

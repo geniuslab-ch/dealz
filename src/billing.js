@@ -133,7 +133,7 @@ async function createCheckout({ plan, billing, currency, lang, lead, baseUrl }) 
     billing_address_collection: "required",
     tax_id_collection: { enabled: true },
     integration_identifier: INTEGRATION_ID,
-    success_url: `${page}?checkout=success#contact`,
+    success_url: `${page}?checkout=success&s={CHECKOUT_SESSION_ID}#contact`,
     cancel_url: `${page}?checkout=cancel#contact`,
   });
   return { url: session.url, id: session.id };
@@ -186,7 +186,7 @@ async function fulfil(session) {
   const formLink = onboarding.link(session.id, m.lang);
   let welcomeSent = false;
   try {
-    const r = await onboarding.sendWelcome({ to: email, name: m.contact_name, lang: m.lang, sessionId: session.id });
+    const r = await onboarding.sendWelcome({ to: email, name: m.contact_name, company: m.company_name, lang: m.lang, sessionId: session.id });
     welcomeSent = !!r && !r.skipped && !r.failed;
   } catch (err) {
     console.error("[billing] onboarding welcome e-mail failed:", err.message);
