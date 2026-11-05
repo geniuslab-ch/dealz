@@ -6,11 +6,17 @@
  *
  * The country comes from the server (GET /api/geo, which reads Vercel's
  * x-vercel-ip-country header); until it answers, or if it can't, the
- * browser language's region is used, then CHF.
+ * computer's time zone is used (Europe/Zurich = CHF), then the browser
+ * language's region, then CHF. The time zone comes first because an
+ * English or German browser in Switzerland ("en-GB", "de-DE") would
+ * otherwise show GBP or EUR.
  *
  * Preview another market from anywhere: ?currency=EUR (or GBP, USD, CHF)
  * or a country code (?currency=FR, ?currency=UK, ?currency=US) shows that
  * market's prices and keeps them for the rest of the visit (sessionStorage).
+ * While a preview is on, a small bar at the top of the page says so and
+ * links back to the visitor's own prices (?currency=auto, which also
+ * clears the preview).
  * A preview only changes what is shown: .billingCode, which the contact
  * flow sends to checkout and to the install request, stays the visitor's
  * own currency.
@@ -48,6 +54,24 @@
     return "USD";
   }
 
+  // The computer's time zone: Swiss, British and US zones, and the euro
+  // zone's capitals. Anything else gives no answer.
+  var ZONE = {
+    "Europe/Zurich": "CH", "Europe/Vaduz": "LI", "Europe/Busingen": "CH",
+    "Europe/London": "GB", "Europe/Guernsey": "GG", "Europe/Jersey": "JE", "Europe/Isle_of_Man": "IM", "Europe/Belfast": "GB",
+    "Europe/Paris": "FR", "Europe/Berlin": "DE", "Europe/Vienna": "AT", "Europe/Brussels": "BE", "Europe/Amsterdam": "NL",
+    "Europe/Luxembourg": "LU", "Europe/Madrid": "ES", "Europe/Rome": "IT", "Europe/Lisbon": "PT", "Europe/Dublin": "IE",
+    "Europe/Monaco": "MC", "Europe/Andorra": "AD",
+  };
+  function fromTimeZone() {
+    try {
+      var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+      if (ZONE[tz]) return currencyFor(ZONE[tz]);
+      if (/^America\/(New_York|Chicago|Denver|Phoenix|Los_Angeles|Anchorage|Detroit|Boise|Indiana|Kentucky|North_Dakota)/.test(tz) || tz === "Pacific/Honolulu") return "USD";
+    } catch (e) {}
+    return null;
+  }
+
   function fromBrowser() {
     var langs = navigator.languages || [navigator.language || ""];
     for (var i = 0; i < langs.length; i++) {
@@ -58,10 +82,12 @@
   }
 
   // ?currency=GBP or ?currency=UK: a currency code, else a country code.
+  // ?currency=auto (or reset) ends a preview: "auto" is returned.
   function fromUrl() {
-    var m = /[?&]currency=([A-Za-z]{2,3})(?:[&#]|$)/.exec(location.search);
+    var m = /[?&]currency=([A-Za-z]{2,5})(?:[&#]|$)/.exec(location.search);
     if (!m) return null;
     var v = m[1].toUpperCase();
+    if (v === "AUTO" || v === "RESET") return "AUTO";
     if (SYMBOL[v]) return v;
     return v.length === 2 ? currencyFor(v) : null;
   }
@@ -73,13 +99,16 @@
   // "dealz-currency": the visitor's own currency (country, else browser).
   // "dealz-currency-preview": a market picked with ?currency=, display only.
   var preview = fromUrl();
-  if (preview) {
+  if (preview === "AUTO") {
+    preview = null;
+    try { sessionStorage.removeItem("dealz-currency-preview"); } catch (e) {}
+  } else if (preview) {
     try { sessionStorage.setItem("dealz-currency-preview", preview); } catch (e) {}
   } else {
     preview = load("dealz-currency-preview");
   }
   var stored = load("dealz-currency");
-  var billing = stored || fromBrowser() || "CHF";
+  var billing = stored || fromTimeZone() || fromBrowser() || "CHF";
   var code = preview || billing;
 
   function list() {
@@ -150,6 +179,34 @@
     window.dispatchEvent(new CustomEvent("dealz-currency", { detail: { code: code } }));
   }
 
+  // The bar shown while a ?currency= preview is on, so a preview never
+  // looks like the visitor's real prices.
+  var BAR = {
+    fr: ["Aperçu des prix en ", "Revenir à mes prix"],
+    en: ["Previewing prices in ", "Back to my prices"],
+    de: ["Vorschau der Preise in ", "Zurück zu meinen Preisen"],
+  };
+  function previewBar() {
+    if (!preview || !document.body || document.getElementById("dealz-currency-preview")) return;
+    var t = BAR[(document.documentElement.lang || "fr").slice(0, 2)] || BAR.fr;
+    var url = location.pathname + "?currency=auto" + location.hash;
+    var bar = document.createElement("div");
+    bar.id = "dealz-currency-preview";
+    bar.setAttribute("role", "status");
+    bar.style.cssText = "position:fixed;left:50%;top:84px;transform:translateX(-50%);z-index:2147483001;" +
+      "max-width:calc(100% - 32px);box-sizing:border-box;padding:10px 16px;border-radius:999px;" +
+      "background:#111;color:#fff;font:14px/1.3 system-ui,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.25);text-align:center;";
+    var text = document.createElement("span");
+    text.textContent = t[0] + preview + " · ";
+    var link = document.createElement("a");
+    link.href = url;
+    link.textContent = t[1];
+    link.style.cssText = "color:#fff;text-decoration:underline;font-weight:600;";
+    bar.appendChild(text);
+    bar.appendChild(link);
+    document.body.appendChild(bar);
+  }
+
   window.DealzCurrency = {
     format: format,
     price: price,
@@ -159,8 +216,8 @@
     get setup() { var L = list(); return L ? L.setup : 0; },
   };
 
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { apply(); });
-  else apply();
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { apply(); previewBar(); });
+  else { apply(); previewBar(); }
 
   if (!stored) {
     fetch((window.DEALZ_API_BASE || "") + "/api/geo")
