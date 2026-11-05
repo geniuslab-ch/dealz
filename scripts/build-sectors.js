@@ -25,6 +25,7 @@ const ORDER = [
   "demenagement", "jardinage", "peinture", "nettoyage-textiles", "lavage-auto", "location-evenementiel",
   "desinfection", "photo-video", "transport-livraison", "pressing", "location-vehicules", "conciergerie",
   "piscines", "vitres", "montage-meubles", "impression", "traiteur", "location-materiel", "toiture",
+  "renovation", "platrerie", "sols", "carrelage", "facades", "isolation", "stores", "sanitaire", "electricien", "elagage", "debarras", "serrurerie",
 ];
 
 const STR = {
