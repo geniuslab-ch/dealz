@@ -1,0 +1,290 @@
+/* Sector definition — loaded by the browser (demo quote engine) and require()d by scripts/build-sectors.js. */
+(function () {
+  var S = {
+    slug: "serrurerie",
+    icon: "🔐",
+    needsAddress: true,
+    colors: { main: "#495057", dark: "#343a40", light: "#e9ecef", accent: "#fab005", accentDark: "#f08c00", bg: "#fafafa" },
+
+    quote: {
+      minimum: 180,
+      questions: [
+        { id: "work", type: "single", options: [{ id: "open" }, { id: "cylinder" }, { id: "lock" }, { id: "door" }] },
+        {
+          id: "locktype", type: "single",
+          when: function (a) { return a.work.id === "open"; },
+          options: [{ id: "slammed", price: 180 }, { id: "locked", price: 290 }, { id: "security", price: 420 }],
+        },
+        {
+          id: "level", type: "single",
+          when: function (a) { return a.work.id === "cylinder"; },
+          options: [{ id: "std", price: 220 }, { id: "secure", price: 380 }, { id: "high", price: 590 }],
+        },
+        {
+          id: "timing", type: "single",
+          when: function (a) { return a.work.id === "open" || a.work.id === "cylinder"; },
+          options: [{ id: "office", price: 0 }, { id: "evening", price: 120 }, { id: "night", price: 220 }],
+        },
+        { id: "extras", type: "multi", options: [{ id: "keys" }, { id: "viewer" }, { id: "rosette" }] },
+        { id: "date", type: "date", minDays: 0 },
+      ],
+      compute: function (a, L, H) {
+        var items = [];
+        var w = a.work.id;
+        items.push({ label: L("callout"), amount: 90 });
+        if (w === "open") items.push({ label: L("open_" + a.locktype.id), amount: a.locktype.price });
+        else if (w === "cylinder") items.push({ label: L("cyl_" + a.level.id), amount: a.level.price });
+        else if (w === "lock") items.push({ label: L("lock"), amount: 1150 });
+        else items.push({ label: L("door"), amount: 3900 });
+        if (a.timing && a.timing.price) items.push({ label: L("timing_" + a.timing.id), amount: a.timing.price });
+        (a.extras || []).forEach(function (e) {
+          if (e.id === "keys") items.push({ label: L("keys"), amount: 95 });
+          if (e.id === "viewer") items.push({ label: L("viewer"), amount: 160 });
+          if (e.id === "rosette") items.push({ label: L("rosette"), amount: 140 });
+        });
+        return items;
+      },
+    },
+
+    fr: {
+      label: "Serrurerie",
+      forWho: "serruriers et entreprises de serrurerie",
+      pitch: "Chiffrez ouvertures de porte, cylindres, serrures et portes de sécurité en une minute, même la nuit.",
+      emailNoun: "votre intervention de serrurerie",
+      landing: {
+        h1: ["VOUS OUVREZ.", "DEALZ CHIFFRE."],
+        question: "Combien de clients enfermés dehors appellent un concurrent parce que vous ne pouvez pas décrocher ?",
+        text: "Porte claquée, clé perdue, cambriolage : vos clients veulent un prix clair et un serrurier tout de suite. Dealz leur répond à toute heure, pose les bonnes questions (type d'intervention, serrure, horaire), calcule votre prix selon vos tarifs et prépare leur devis.",
+        clientQ: "Combien pour ouvrir ma porte claquée ce soir à 20 h ?",
+        values: [
+          { icon: "🌙", title: "Disponible à toute heure", text: "Le soir ou le week-end, le client reçoit un prix ferme en une minute, supplément horaire compris selon vos règles." },
+          { icon: "🔒", title: "Un prix clair qui rassure", text: "Plus de mauvaise surprise : le client sait à l'avance combien coûte l'ouverture ou le cylindre, il vous choisit." },
+          { icon: "🛡️", title: "La sécurité se vend toute seule", text: "Cylindre de sécurité, serrure multipoint, rosace anti-arrachement : proposés après chaque ouverture." },
+          { icon: "📍", title: "Adresse et horaire reçus", text: "Vous partez directement avec l'adresse, le type de serrure et l'heure souhaitée." },
+        ],
+        step1: "Importez vos tarifs : ouvertures par type de serrure, cylindres, serrures, portes, suppléments horaires. Votre Excel reste votre outil de travail.",
+        step2: "Le moteur comprend vos forfaits, vos suppléments de soir et de nuit, et vos options.",
+        excel: { file: "tarifs-serrurerie.xlsx", headers: ["Poste", "Condition", "Prix"], rows: [["Ouverture de porte claquée", "sans dégât", "CHF 180"], ["Supplément soirée", "18 h à 22 h", "CHF 120"], ["Déplacement", "zone urbaine", "CHF 90"]] },
+        chat: ["« J'ai claqué ma porte, mes clés sont à l'intérieur. »", "« La porte est-elle claquée ou fermée à clé ? »", "« Pour quand souhaitez-vous l'intervention ? »"],
+        offer: { company: "Clé d'Or Serrurerie Sàrl", rows: [["Ouverture de porte claquée", 180], ["Supplément soirée (18 h à 22 h)", 120], ["Déplacement", 90]] },
+        roi: "Quelques interventions supplémentaires par mois paient plusieurs années d'abonnement.",
+      },
+      demo: {
+        brand: "Clé d'Or Serrurerie",
+        eyebrow: "Lausanne & environs · Exemple fictif",
+        hero: { h1: "Bloqué dehors ? Votre prix en une minute, sans mauvaise surprise.", text: "Ouvertures de porte, cylindres, serrures et portes de sécurité à Lausanne et environs — obtenez un prix ferme en quelques secondes, directement sur ce site." },
+        stats: [{ num: "4.9★", lbl: "SATISFACTION CLIENT" }, { num: "30 min", lbl: "DÉLAI D'INTERVENTION" }, { num: "< 1 min", lbl: "POUR UN DEVIS" }],
+        servicesTitle: "Nos interventions",
+        servicesSub: "Choisissez une prestation, ou décrivez simplement votre besoin dans l'onglet « Obtenir un devis ».",
+        services: [
+          { icon: "🚪", title: "Ouverture de porte", text: "Porte claquée ou fermée à clé, sans dégât.", tag: "dès CHF 180" },
+          { icon: "🔑", title: "Changement de cylindre", text: "Après une perte de clés ou un déménagement.", tag: "dès CHF 220" },
+          { icon: "🔒", title: "Serrures multipoints", text: "Renforcez votre porte existante.", tag: "CHF 1 150" },
+          { icon: "🛡️", title: "Portes de sécurité", text: "Portes blindées certifiées.", tag: "dès CHF 3 900" },
+          { icon: "🗝️", title: "Clés supplémentaires", text: "Jeu de 3 clés pour cylindre standard.", tag: "CHF 95" },
+          { icon: "👁️", title: "Judas et rosaces", text: "Judas numérique, rosace anti-arrachement.", tag: "dès CHF 140" },
+        ],
+        about: {
+          title: "Des serruriers honnêtes et rapides",
+          text: "Clé d'Or Serrurerie intervient depuis 2007 chez les particuliers, régies et commerces de Lausanne et environs. En 2026, nous avons ajouté un assistant de devis instantané à notre site — plus rapide pour vous, moins d'administratif pour nous.",
+          bullets: [["Prix annoncé avant de partir", "pas de supplément caché sur place."], ["Ouverture sans dégât", "dans la grande majorité des cas."], ["Prix transparent", "le devis reçu est le prix payé."]],
+        },
+        contact: { phone: "021 000 01 12", email: "hello@cle-dor.demo", zone: "Lausanne, Ouest lausannois, Lavaux", hours: "7j/7, 24h/24" },
+        devisNote: "Répondez à quelques questions sur votre porte — vous recevrez un devis réel, que vous pourrez accepter ou refuser directement ici.",
+        inputPlaceholder: "Décrivez votre problème de porte ou de serrure…",
+        pdfCompany: { name: "Clé d'Or Serrurerie Sàrl", address: "Rue de Genève 52, 1004 Lausanne", phone: "021 000 01 12", email: "hello@cle-dor.demo" },
+      },
+      quote: {
+        greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre porte, puis je vous établis un devis ferme tout de suite après.",
+        addressPlaceholder: "Adresse de l'intervention (rue, NPA, ville)",
+        terms: "Devis ferme, valable 30 jours, déplacement, fourniture et main-d'œuvre compris. Pièce de rechange différente constatée sur place remplacée uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        q: {
+          work: { text: "De quoi avez-vous besoin ?", short: "Intervention", opts: { open: "Ouvrir une porte (clés perdues ou à l'intérieur)", cylinder: "Changer le cylindre", lock: "Installer une serrure multipoint", door: "Poser une porte de sécurité" } },
+          locktype: { text: "Comment la porte est-elle fermée ?", short: "Fermeture", opts: { slammed: "Porte claquée (pas fermée à clé)", locked: "Fermée à clé", security: "Serrure de sécurité ou multipoint" } },
+          level: { text: "Quel cylindre souhaitez-vous ?", short: "Cylindre", opts: { std: "Cylindre standard", secure: "Cylindre de sécurité avec carte de propriété", high: "Cylindre haute sécurité certifié" } },
+          timing: { text: "Quand faut-il intervenir ?", short: "Horaire", opts: { office: "Heures de bureau (8 h à 18 h)", evening: "En soirée (18 h à 22 h)", night: "La nuit ou le week-end" } },
+          extras: { text: "Souhaitez-vous des options ?", short: "Options", none: "Aucune option", opts: { keys: "3 clés supplémentaires", viewer: "Judas numérique", rosette: "Rosace anti-arrachement" } },
+          date: { text: "Pour quelle date souhaitez-vous l'intervention ?", short: "Date souhaitée" },
+        },
+        items: {
+          callout: "Déplacement",
+          open_slammed: "Ouverture de porte claquée",
+          open_locked: "Ouverture de porte fermée à clé",
+          open_security: "Ouverture de serrure de sécurité",
+          cyl_std: "Cylindre standard, fourniture et pose",
+          cyl_secure: "Cylindre de sécurité, fourniture et pose",
+          cyl_high: "Cylindre haute sécurité, fourniture et pose",
+          lock: "Serrure multipoint, fourniture et pose",
+          door: "Porte de sécurité, fourniture et pose",
+          timing_evening: "Supplément soirée (18 h à 22 h)",
+          timing_night: "Supplément nuit ou week-end",
+          keys: "3 clés supplémentaires",
+          viewer: "Judas numérique",
+          rosette: "Rosace anti-arrachement",
+        },
+      },
+    },
+    en: {
+      label: "Locksmith services",
+      forWho: "locksmiths and locksmith companies",
+      pitch: "Price lockouts, cylinders, locks and security doors in a minute, even at night.",
+      emailNoun: "your locksmith job",
+      landing: {
+        h1: ["YOU OPEN DOORS.", "DEALZ PRICES."],
+        question: "How many locked-out customers call a competitor because you can't pick up?",
+        text: "A slammed door, lost keys, a break-in: your customers want a clear price and a locksmith right now. Dealz answers them at any hour, asks the right questions (type of job, lock, time of day), calculates your price from your rates and prepares their quote.",
+        clientQ: "How much to open my slammed door tonight at 8 pm?",
+        values: [
+          { icon: "🌙", title: "Available at any hour", text: "In the evening or at the weekend, the customer gets a firm price in a minute, time surcharge included according to your rules." },
+          { icon: "🔒", title: "A clear price that reassures", text: "No nasty surprises: the customer knows in advance what the opening or cylinder costs, and chooses you." },
+          { icon: "🛡️", title: "Security sells itself", text: "Security cylinder, multipoint lock, anti-snap rosette: offered after every lockout." },
+          { icon: "📍", title: "Address and time received", text: "You leave straight away with the address, the lock type and the requested time." },
+        ],
+        step1: "Import your rates: openings by lock type, cylinders, locks, doors, time surcharges. Your Excel stays your working tool.",
+        step2: "The engine understands your packages, your evening and night surcharges, and your options.",
+        excel: { file: "locksmith-rates.xlsx", headers: ["Item", "Condition", "Price"], rows: [["Opening a slammed door", "no damage", "CHF 180"], ["Evening surcharge", "6 pm to 10 pm", "CHF 120"], ["Call-out", "urban area", "CHF 90"]] },
+        chat: ["“I've slammed my door, my keys are inside.”", "“Is the door slammed or locked with the key?”", "“When do you need us?”"],
+        offer: { company: "Clé d'Or Serrurerie Sàrl", rows: [["Opening a slammed door", 180], ["Evening surcharge (6 pm to 10 pm)", 120], ["Call-out", 90]] },
+        roi: "A few extra jobs a month pay for several years of subscription.",
+      },
+      demo: {
+        brand: "Clé d'Or Serrurerie",
+        eyebrow: "Lausanne area · Fictional example",
+        hero: { h1: "Locked out? Your price in a minute, with no nasty surprises.", text: "Lockouts, cylinders, locks and security doors in and around Lausanne — get a firm price in seconds, right here on this site." },
+        stats: [{ num: "4.9★", lbl: "CUSTOMER SATISFACTION" }, { num: "30 min", lbl: "RESPONSE TIME" }, { num: "< 1 min", lbl: "FOR A QUOTE" }],
+        servicesTitle: "Our services",
+        servicesSub: "Pick a service, or simply describe what you need in the “Get a quote” tab.",
+        services: [
+          { icon: "🚪", title: "Lockouts", text: "Slammed or locked doors, no damage.", tag: "from CHF 180" },
+          { icon: "🔑", title: "Cylinder replacement", text: "After lost keys or a move.", tag: "from CHF 220" },
+          { icon: "🔒", title: "Multipoint locks", text: "Strengthen your existing door.", tag: "CHF 1,150" },
+          { icon: "🛡️", title: "Security doors", text: "Certified reinforced doors.", tag: "from CHF 3,900" },
+          { icon: "🗝️", title: "Spare keys", text: "Set of 3 keys for a standard cylinder.", tag: "CHF 95" },
+          { icon: "👁️", title: "Door viewers and rosettes", text: "Digital viewer, anti-snap rosette.", tag: "from CHF 140" },
+        ],
+        about: {
+          title: "Honest, fast locksmiths",
+          text: "Since 2007, Clé d'Or Serrurerie has worked for households, property managers and shops in and around Lausanne. In 2026, we added an instant quote assistant to our website — faster for you, less paperwork for us.",
+          bullets: [["Price given before we leave", "no hidden extras on site."], ["Damage-free opening", "in the vast majority of cases."], ["Transparent pricing", "the quote you receive is the price you pay."]],
+        },
+        contact: { phone: "021 000 01 12", email: "hello@cle-dor.demo", zone: "Lausanne, West Lausanne, Lavaux", hours: "24/7" },
+        devisNote: "Answer a few questions about your door — you'll get a real quote that you can accept or decline right here.",
+        inputPlaceholder: "Describe your door or lock problem…",
+        pdfCompany: { name: "Clé d'Or Serrurerie Sàrl", address: "Rue de Genève 52, 1004 Lausanne", phone: "021 000 01 12", email: "hello@cle-dor.demo" },
+      },
+      quote: {
+        greeting: "Hello! I'll ask you a few quick questions about your door, then put together a firm quote right away.",
+        addressPlaceholder: "Job address (street, postcode, town)",
+        terms: "Firm quote, valid for 30 days, call-out, supply and labour included. A different replacement part found on site fitted only with prior agreement. Swiss VAT included where applicable.",
+        q: {
+          work: { text: "What do you need?", short: "Job", opts: { open: "Open a door (keys lost or inside)", cylinder: "Replace the cylinder", lock: "Fit a multipoint lock", door: "Install a security door" } },
+          locktype: { text: "How is the door shut?", short: "Lock", opts: { slammed: "Slammed (not locked with the key)", locked: "Locked with the key", security: "Security or multipoint lock" } },
+          level: { text: "Which cylinder would you like?", short: "Cylinder", opts: { std: "Standard cylinder", secure: "Security cylinder with key card", high: "Certified high-security cylinder" } },
+          timing: { text: "When do you need us?", short: "Time", opts: { office: "Office hours (8 am to 6 pm)", evening: "Evening (6 pm to 10 pm)", night: "Night or weekend" } },
+          extras: { text: "Would you like any options?", short: "Options", none: "No options", opts: { keys: "3 spare keys", viewer: "Digital door viewer", rosette: "Anti-snap rosette" } },
+          date: { text: "When would you like the job done?", short: "Preferred date" },
+        },
+        items: {
+          callout: "Call-out",
+          open_slammed: "Opening a slammed door",
+          open_locked: "Opening a locked door",
+          open_security: "Opening a security lock",
+          cyl_std: "Standard cylinder, supply and fitting",
+          cyl_secure: "Security cylinder, supply and fitting",
+          cyl_high: "High-security cylinder, supply and fitting",
+          lock: "Multipoint lock, supply and fitting",
+          door: "Security door, supply and fitting",
+          timing_evening: "Evening surcharge (6 pm to 10 pm)",
+          timing_night: "Night or weekend surcharge",
+          keys: "3 spare keys",
+          viewer: "Digital door viewer",
+          rosette: "Anti-snap rosette",
+        },
+      },
+    },
+    de: {
+      label: "Schlüsseldienst und Schlosserei",
+      forWho: "Schlüsseldienste und Schlossereien",
+      pitch: "Türöffnungen, Zylinder, Schlösser und Sicherheitstüren in einer Minute berechnen, auch nachts.",
+      emailNoun: "Ihren Schlüsseldienst-Einsatz",
+      landing: {
+        h1: ["SIE ÖFFNEN TÜREN.", "DEALZ RECHNET."],
+        question: "Wie viele ausgesperrte Kunden rufen die Konkurrenz an, weil Sie nicht abnehmen können?",
+        text: "Zugefallene Tür, verlorene Schlüssel, Einbruch: Ihre Kunden wollen sofort einen klaren Preis und einen Schlüsseldienst. Dealz antwortet ihnen rund um die Uhr, stellt die richtigen Fragen (Art des Einsatzes, Schloss, Uhrzeit), berechnet Ihren Preis nach Ihren Tarifen und erstellt die Offerte.",
+        clientQ: "Was kostet es, meine zugefallene Tür heute Abend um 20 Uhr zu öffnen?",
+        values: [
+          { icon: "🌙", title: "Rund um die Uhr erreichbar", text: "Am Abend oder am Wochenende erhält der Kunde in einer Minute einen verbindlichen Preis, Zeitzuschlag nach Ihren Regeln inbegriffen." },
+          { icon: "🔒", title: "Ein klarer Preis schafft Vertrauen", text: "Keine bösen Überraschungen: Der Kunde weiss im Voraus, was Öffnung oder Zylinder kosten, und wählt Sie." },
+          { icon: "🛡️", title: "Sicherheit verkauft sich von selbst", text: "Sicherheitszylinder, Mehrpunktschloss, Ziehschutz-Rosette: nach jeder Öffnung angeboten." },
+          { icon: "📍", title: "Adresse und Uhrzeit erhalten", text: "Sie fahren direkt los, mit Adresse, Schlosstyp und Wunschzeit." },
+        ],
+        step1: "Importieren Sie Ihre Tarife: Öffnungen nach Schlosstyp, Zylinder, Schlösser, Türen, Zeitzuschläge. Ihr Excel bleibt Ihr Arbeitswerkzeug.",
+        step2: "Die Engine versteht Ihre Pauschalen, Ihre Abend- und Nachtzuschläge sowie Ihre Optionen.",
+        excel: { file: "tarife-schluesseldienst.xlsx", headers: ["Position", "Bedingung", "Preis"], rows: [["Öffnung zugefallene Tür", "ohne Schaden", "CHF 180"], ["Abendzuschlag", "18 bis 22 Uhr", "CHF 120"], ["Anfahrt", "Stadtgebiet", "CHF 90"]] },
+        chat: ["«Meine Tür ist zugefallen, die Schlüssel sind drinnen.»", "«Ist die Tür nur zugefallen oder abgeschlossen?»", "«Wann sollen wir kommen?»"],
+        offer: { company: "Clé d'Or Serrurerie Sàrl", rows: [["Öffnung zugefallene Tür", 180], ["Abendzuschlag (18 bis 22 Uhr)", 120], ["Anfahrt", 90]] },
+        roi: "Einige zusätzliche Einsätze pro Monat bezahlen mehrere Jahre Abo.",
+      },
+      demo: {
+        brand: "Clé d'Or Serrurerie",
+        eyebrow: "Region Lausanne · Fiktives Beispiel",
+        hero: { h1: "Ausgesperrt? Ihr Preis in einer Minute, ohne böse Überraschung.", text: "Türöffnungen, Zylinder, Schlösser und Sicherheitstüren in Lausanne und Umgebung — erhalten Sie in Sekunden einen verbindlichen Preis, direkt auf dieser Website." },
+        stats: [{ num: "4.9★", lbl: "KUNDENZUFRIEDENHEIT" }, { num: "30 Min.", lbl: "EINSATZZEIT" }, { num: "< 1 Min.", lbl: "FÜR EINE OFFERTE" }],
+        servicesTitle: "Unsere Einsätze",
+        servicesSub: "Wählen Sie eine Leistung, oder beschreiben Sie Ihr Anliegen einfach im Tab «Offerte erhalten».",
+        services: [
+          { icon: "🚪", title: "Türöffnung", text: "Zugefallene oder abgeschlossene Tür, ohne Schaden.", tag: "ab CHF 180" },
+          { icon: "🔑", title: "Zylinderwechsel", text: "Nach Schlüsselverlust oder Umzug.", tag: "ab CHF 220" },
+          { icon: "🔒", title: "Mehrpunktschlösser", text: "Verstärken Sie Ihre bestehende Tür.", tag: "CHF 1'150" },
+          { icon: "🛡️", title: "Sicherheitstüren", text: "Zertifizierte Panzertüren.", tag: "ab CHF 3'900" },
+          { icon: "🗝️", title: "Zusätzliche Schlüssel", text: "3 Schlüssel für Standardzylinder.", tag: "CHF 95" },
+          { icon: "👁️", title: "Türspione und Rosetten", text: "Digitaler Türspion, Ziehschutz-Rosette.", tag: "ab CHF 140" },
+        ],
+        about: {
+          title: "Ehrliche, schnelle Schlüsseldienstleute",
+          text: "Clé d'Or Serrurerie arbeitet seit 2007 für Privatpersonen, Verwaltungen und Geschäfte in Lausanne und Umgebung. 2026 haben wir unserer Website einen Assistenten für Sofort-Offerten hinzugefügt — schneller für Sie, weniger Administration für uns.",
+          bullets: [["Preis vor der Abfahrt", "keine versteckten Zuschläge vor Ort."], ["Öffnung ohne Schaden", "in den allermeisten Fällen."], ["Transparenter Preis", "die erhaltene Offerte ist der Preis, den Sie bezahlen."]],
+        },
+        contact: { phone: "021 000 01 12", email: "hello@cle-dor.demo", zone: "Lausanne, Westlausanne, Lavaux", hours: "7 Tage, 24 Stunden" },
+        devisNote: "Beantworten Sie ein paar Fragen zu Ihrer Tür — Sie erhalten eine echte Offerte, die Sie direkt hier annehmen oder ablehnen können.",
+        inputPlaceholder: "Beschreiben Sie Ihr Tür- oder Schlossproblem…",
+        pdfCompany: { name: "Clé d'Or Serrurerie Sàrl", address: "Rue de Genève 52, 1004 Lausanne", phone: "021 000 01 12", email: "hello@cle-dor.demo" },
+      },
+      quote: {
+        greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Tür und erstelle Ihnen gleich danach eine verbindliche Offerte.",
+        addressPlaceholder: "Einsatzadresse (Strasse, PLZ, Ort)",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Anfahrt, Lieferung und Arbeit inbegriffen. Ein vor Ort festgestelltes anderes Ersatzteil nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        q: {
+          work: { text: "Was benötigen Sie?", short: "Einsatz", opts: { open: "Tür öffnen (Schlüssel verloren oder drinnen)", cylinder: "Zylinder wechseln", lock: "Mehrpunktschloss einbauen", door: "Sicherheitstür einbauen" } },
+          locktype: { text: "Wie ist die Tür verschlossen?", short: "Verschluss", opts: { slammed: "Zugefallen (nicht abgeschlossen)", locked: "Abgeschlossen", security: "Sicherheits- oder Mehrpunktschloss" } },
+          level: { text: "Welchen Zylinder wünschen Sie?", short: "Zylinder", opts: { std: "Standardzylinder", secure: "Sicherheitszylinder mit Sicherungskarte", high: "Zertifizierter Hochsicherheitszylinder" } },
+          timing: { text: "Wann sollen wir kommen?", short: "Uhrzeit", opts: { office: "Bürozeiten (8 bis 18 Uhr)", evening: "Am Abend (18 bis 22 Uhr)", night: "Nachts oder am Wochenende" } },
+          extras: { text: "Wünschen Sie Optionen?", short: "Optionen", none: "Keine Option", opts: { keys: "3 zusätzliche Schlüssel", viewer: "Digitaler Türspion", rosette: "Ziehschutz-Rosette" } },
+          date: { text: "Wann wünschen Sie den Einsatz?", short: "Wunschtermin" },
+        },
+        items: {
+          callout: "Anfahrt",
+          open_slammed: "Öffnung zugefallene Tür",
+          open_locked: "Öffnung abgeschlossene Tür",
+          open_security: "Öffnung Sicherheitsschloss",
+          cyl_std: "Standardzylinder, Lieferung und Montage",
+          cyl_secure: "Sicherheitszylinder, Lieferung und Montage",
+          cyl_high: "Hochsicherheitszylinder, Lieferung und Montage",
+          lock: "Mehrpunktschloss, Lieferung und Montage",
+          door: "Sicherheitstür, Lieferung und Montage",
+          timing_evening: "Abendzuschlag (18 bis 22 Uhr)",
+          timing_night: "Nacht- oder Wochenendzuschlag",
+          keys: "3 zusätzliche Schlüssel",
+          viewer: "Digitaler Türspion",
+          rosette: "Ziehschutz-Rosette",
+        },
+      },
+    },
+  };
+
+  if (typeof module !== "undefined" && module.exports) module.exports = S;
+  else {
+    window.DEALZ_SECTORS = window.DEALZ_SECTORS || {};
+    window.DEALZ_SECTORS[S.slug] = S;
+  }
+})();

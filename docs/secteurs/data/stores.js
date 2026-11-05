@@ -1,0 +1,269 @@
+/* Sector definition — loaded by the browser (demo quote engine) and require()d by scripts/build-sectors.js. */
+(function () {
+  var S = {
+    slug: "stores",
+    icon: "🌤️",
+    needsAddress: true,
+    colors: { main: "#e8590c", dark: "#c2410c", light: "#ffe8d9", accent: "#1971c2", accentDark: "#1864ab", bg: "#fffaf6" },
+
+    quote: {
+      minimum: 350,
+      questions: [
+        { id: "type", type: "single", options: [{ id: "slats", price: 690 }, { id: "awning", price: 1850 }, { id: "roller", price: 780 }, { id: "insect", price: 220 }] },
+        { id: "count", type: "single", options: [{ id: "c1", n: 1 }, { id: "c2", n: 3 }, { id: "c3", n: 6 }, { id: "c4", n: 10 }, { id: "c5", n: 15 }] },
+        { id: "size", type: "single", options: [{ id: "std", k: 1 }, { id: "large", k: 1.4 }] },
+        {
+          id: "drive", type: "single",
+          when: function (a) { return a.type.id !== "insect"; },
+          options: [{ id: "manual", unit: 0 }, { id: "motor", unit: 290 }, { id: "smart", unit: 420 }],
+        },
+        { id: "extras", type: "multi", options: [{ id: "removal" }, { id: "wind" }, { id: "service" }] },
+        { id: "date", type: "date", minDays: 10 },
+      ],
+      compute: function (a, L, H) {
+        var items = [];
+        var n = a.count.n;
+        items.push({ label: L("type_" + a.type.id, { n: n }), amount: H.round5(n * a.type.price * a.size.k) });
+        if (a.drive && a.drive.unit) {
+          items.push({ label: L("drive_" + a.drive.id, { n: n }), amount: H.round5(n * a.drive.unit) });
+          if (a.drive.id === "smart") items.push({ label: L("hub"), amount: 350 });
+        }
+        (a.extras || []).forEach(function (e) {
+          if (e.id === "removal") items.push({ label: L("removal", { n: n }), amount: H.round5(n * 85) });
+          if (e.id === "wind") items.push({ label: L("wind"), amount: 380 });
+          if (e.id === "service") items.push({ label: L("service"), amount: 160 });
+        });
+        return items;
+      },
+    },
+
+    fr: {
+      label: "Stores, volets et moustiquaires",
+      forWho: "storistes et entreprises de stores et volets",
+      pitch: "Chiffrez stores à lamelles, stores bannes, volets roulants et motorisations en quelques secondes.",
+      emailNoun: "vos stores",
+      landing: {
+        h1: ["VOUS POSEZ DES STORES.", "DEALZ CHIFFRE."],
+        question: "Combien de demandes de stores perdez-vous au printemps, quand tout le monde appelle en même temps ?",
+        text: "Dès les premières chaleurs, les demandes s'accumulent. Dealz répond à toute heure, pose les bonnes questions (type de store, nombre de fenêtres, dimensions, motorisation), calcule votre prix selon vos tarifs et prépare leur devis.",
+        clientQ: "Combien pour 6 stores à lamelles motorisés ?",
+        values: [
+          { icon: "☀️", title: "Prêt pour le pic de saison", text: "Au printemps, chaque demande reçoit un prix ferme en une minute, même quand votre téléphone sonne sans arrêt." },
+          { icon: "⚙️", title: "La motorisation se vend toute seule", text: "Manuel, moteur ou commande connectée : le client voit la différence de prix et choisit l'option directement." },
+          { icon: "🔢", title: "Prix à l'unité, calcul automatique", text: "Nombre de fenêtres, grandes baies, dépose des anciens stores : chaque poste suit vos propres tarifs." },
+          { icon: "🌬️", title: "Les options ne sont plus oubliées", text: "Capteur de vent, contrat d'entretien : ajoutés au devis d'un clic, ils augmentent votre panier moyen." },
+        ],
+        step1: "Importez vos tarifs : prix par type de store, majoration grandes dimensions, motorisation, dépose, options. Votre Excel reste votre outil de travail.",
+        step2: "Le moteur comprend vos quantités, vos dimensions et vos options de commande.",
+        excel: { file: "tarifs-stores.xlsx", headers: ["Poste", "Condition", "Prix"], rows: [["Stores à lamelles", "6 fenêtres · standard", "CHF 4 140"], ["Motorisation", "6 moteurs", "CHF 1 740"], ["Dépose des anciens stores", "6 fenêtres", "CHF 510"]] },
+        chat: ["« Nous voulons changer les stores de la maison. »", "« Combien de fenêtres faut-il équiper ? »", "« Souhaitez-vous des stores motorisés ? »"],
+        offer: { company: "Stores Léman Sàrl", rows: [["Stores à lamelles (6 fenêtres)", 4140], ["Motorisation (6 moteurs)", 1740], ["Dépose des anciens stores", 510]] },
+        roi: "Trois chantiers de stores supplémentaires par an paient plusieurs années d'abonnement.",
+      },
+      demo: {
+        brand: "Stores Léman",
+        eyebrow: "Genève & La Côte · Exemple fictif",
+        hero: { h1: "De l'ombre et de la fraîcheur, avec un prix clair en une minute.", text: "Stores à lamelles, stores bannes, volets roulants et moustiquaires à Genève et sur La Côte — obtenez un prix ferme en quelques secondes, directement sur ce site." },
+        stats: [{ num: "4.9★", lbl: "SATISFACTION CLIENT" }, { num: "8 000+", lbl: "STORES POSÉS" }, { num: "< 1 min", lbl: "POUR UN DEVIS" }],
+        servicesTitle: "Nos stores et volets",
+        servicesSub: "Choisissez une prestation, ou décrivez simplement votre projet dans l'onglet « Obtenir un devis ».",
+        services: [
+          { icon: "🪟", title: "Stores à lamelles", text: "Lamelles orientables en aluminium.", tag: "dès CHF 690" },
+          { icon: "⛱️", title: "Stores bannes", text: "Toile pour terrasses et balcons.", tag: "dès CHF 1 850" },
+          { icon: "🔲", title: "Volets roulants", text: "Isolation, sécurité et obscurité.", tag: "dès CHF 780" },
+          { icon: "🦟", title: "Moustiquaires", text: "Fenêtres et portes-fenêtres.", tag: "dès CHF 220" },
+          { icon: "⚙️", title: "Motorisation", text: "Moteurs et commandes connectées.", tag: "dès CHF 290" },
+          { icon: "🌬️", title: "Capteur de vent", text: "Remontée automatique des stores.", tag: "CHF 380" },
+        ],
+        about: {
+          title: "Des storistes rapides et fiables",
+          text: "Stores Léman pose et répare des stores depuis 2005 pour les particuliers, régies et commerces de Genève et de La Côte. En 2026, nous avons ajouté un assistant de devis instantané à notre site — plus rapide pour vous, moins d'administratif pour nous.",
+          bullets: [["Fabrication suisse", "stores fabriqués sur mesure en Suisse."], ["Pose en une journée", "pour la plupart des maisons."], ["Prix transparent", "le devis reçu est le prix payé."]],
+        },
+        contact: { phone: "022 000 01 07", email: "hello@stores-leman.demo", zone: "Genève, La Côte", hours: "Lun–Ven, 7h30–17h30" },
+        devisNote: "Répondez à quelques questions sur vos fenêtres — vous recevrez un devis réel, que vous pourrez accepter ou refuser directement ici.",
+        inputPlaceholder: "Décrivez votre projet de stores…",
+        pdfCompany: { name: "Stores Léman Sàrl", address: "Route de Chêne 87, 1224 Chêne-Bougeries", phone: "022 000 01 07", email: "hello@stores-leman.demo" },
+      },
+      quote: {
+        greeting: "Bonjour ! Je vous pose quelques questions rapides sur vos stores, puis je vous établis un devis ferme tout de suite après.",
+        addressPlaceholder: "Adresse de pose (rue, NPA, ville)",
+        terms: "Devis ferme, valable 30 jours, fourniture et pose comprises. Prise de mesures définitive sur place avant fabrication. TVA suisse incluse le cas échéant.",
+        q: {
+          type: { text: "Quel type de protection souhaitez-vous ?", short: "Type", opts: { slats: "Stores à lamelles", awning: "Store banne (terrasse, balcon)", roller: "Volets roulants", insect: "Moustiquaires" } },
+          count: { text: "Combien de fenêtres ou d'ouvertures faut-il équiper ?", short: "Quantité", opts: { c1: "1", c2: "2 à 4", c3: "5 à 8", c4: "9 à 12", c5: "Plus de 12" } },
+          size: { text: "Quelle est la taille des ouvertures ?", short: "Dimensions", opts: { std: "Fenêtres standard", large: "Grandes baies vitrées" } },
+          drive: { text: "Comment souhaitez-vous les commander ?", short: "Commande", opts: { manual: "Manivelle ou sangle (manuel)", motor: "Moteur avec interrupteur", smart: "Moteur connecté (télécommande, smartphone)" } },
+          extras: { text: "Souhaitez-vous des options ?", short: "Options", none: "Aucune option", opts: { removal: "Dépose des anciens stores", wind: "Capteur de vent", service: "Contrat d'entretien annuel" } },
+          date: { text: "Pour quelle date souhaitez-vous la pose ?", short: "Date souhaitée" },
+        },
+        items: {
+          type_slats: "Stores à lamelles (× {n})",
+          type_awning: "Stores bannes (× {n})",
+          type_roller: "Volets roulants (× {n})",
+          type_insect: "Moustiquaires (× {n})",
+          drive_motor: "Motorisation (× {n})",
+          drive_smart: "Motorisation connectée (× {n})",
+          hub: "Centrale de commande connectée",
+          removal: "Dépose des anciens stores (× {n})",
+          wind: "Capteur de vent",
+          service: "Contrat d'entretien annuel",
+        },
+      },
+    },
+    en: {
+      label: "Blinds, shutters and insect screens",
+      forWho: "blind fitters and shutter companies",
+      pitch: "Price external blinds, awnings, roller shutters and motors in seconds.",
+      emailNoun: "your blinds",
+      landing: {
+        h1: ["YOU FIT BLINDS.", "DEALZ PRICES."],
+        question: "How many blind requests do you lose in spring, when everyone calls at once?",
+        text: "As soon as it warms up, requests pile up. Dealz answers at any hour, asks the right questions (type of blind, number of windows, size, motorisation), calculates your price from your rates and prepares their quote.",
+        clientQ: "How much for 6 motorised external venetian blinds?",
+        values: [
+          { icon: "☀️", title: "Ready for the seasonal rush", text: "In spring, every request gets a firm price in a minute, even when your phone never stops ringing." },
+          { icon: "⚙️", title: "Motors sell themselves", text: "Manual, motor or smart control: the customer sees the price difference and picks the option directly." },
+          { icon: "🔢", title: "Unit prices, automatic totals", text: "Number of windows, large openings, removing old blinds: each item follows your own rates." },
+          { icon: "🌬️", title: "Options no longer forgotten", text: "Wind sensor, service contract: added to the quote in one click, they raise your average order." },
+        ],
+        step1: "Import your rates: price per blind type, large-size surcharge, motors, removal, options. Your Excel stays your working tool.",
+        step2: "The engine understands your quantities, your sizes and your control options.",
+        excel: { file: "blinds-rates.xlsx", headers: ["Item", "Condition", "Price"], rows: [["External venetian blinds", "6 windows · standard", "CHF 4,140"], ["Motorisation", "6 motors", "CHF 1,740"], ["Removing old blinds", "6 windows", "CHF 510"]] },
+        chat: ["“We'd like to replace the blinds in the house.”", "“How many windows need equipping?”", "“Would you like motorised blinds?”"],
+        offer: { company: "Stores Léman Sàrl", rows: [["External venetian blinds (6 windows)", 4140], ["Motorisation (6 motors)", 1740], ["Removing the old blinds", 510]] },
+        roi: "Three extra blind jobs a year pay for several years of subscription.",
+      },
+      demo: {
+        brand: "Stores Léman",
+        eyebrow: "Geneva & La Côte · Fictional example",
+        hero: { h1: "Shade and coolness, with a clear price in a minute.", text: "External blinds, awnings, roller shutters and insect screens in Geneva and La Côte — get a firm price in seconds, right here on this site." },
+        stats: [{ num: "4.9★", lbl: "CUSTOMER SATISFACTION" }, { num: "8,000+", lbl: "BLINDS FITTED" }, { num: "< 1 min", lbl: "FOR A QUOTE" }],
+        servicesTitle: "Our blinds and shutters",
+        servicesSub: "Pick a service, or simply describe your project in the “Get a quote” tab.",
+        services: [
+          { icon: "🪟", title: "External venetian blinds", text: "Tilting aluminium slats.", tag: "from CHF 690" },
+          { icon: "⛱️", title: "Awnings", text: "Fabric awnings for terraces and balconies.", tag: "from CHF 1,850" },
+          { icon: "🔲", title: "Roller shutters", text: "Insulation, security and darkness.", tag: "from CHF 780" },
+          { icon: "🦟", title: "Insect screens", text: "Windows and French doors.", tag: "from CHF 220" },
+          { icon: "⚙️", title: "Motorisation", text: "Motors and smart controls.", tag: "from CHF 290" },
+          { icon: "🌬️", title: "Wind sensor", text: "Blinds retract automatically.", tag: "CHF 380" },
+        ],
+        about: {
+          title: "Fast, reliable blind fitters",
+          text: "Since 2005, Stores Léman has fitted and repaired blinds for households, property managers and shops in Geneva and La Côte. In 2026, we added an instant quote assistant to our website — faster for you, less paperwork for us.",
+          bullets: [["Swiss-made", "blinds made to measure in Switzerland."], ["Fitted in one day", "for most houses."], ["Transparent pricing", "the quote you receive is the price you pay."]],
+        },
+        contact: { phone: "022 000 01 07", email: "hello@stores-leman.demo", zone: "Geneva, La Côte", hours: "Mon–Fri, 7:30am–5:30pm" },
+        devisNote: "Answer a few questions about your windows — you'll get a real quote that you can accept or decline right here.",
+        inputPlaceholder: "Describe your blinds project…",
+        pdfCompany: { name: "Stores Léman Sàrl", address: "Route de Chêne 87, 1224 Chêne-Bougeries", phone: "022 000 01 07", email: "hello@stores-leman.demo" },
+      },
+      quote: {
+        greeting: "Hello! I'll ask you a few quick questions about your blinds, then put together a firm quote right away.",
+        addressPlaceholder: "Installation address (street, postcode, town)",
+        terms: "Firm quote, valid for 30 days, supply and fitting included. Final measurements taken on site before manufacture. Swiss VAT included where applicable.",
+        q: {
+          type: { text: "Which kind of shading would you like?", short: "Type", opts: { slats: "External venetian blinds", awning: "Awning (terrace, balcony)", roller: "Roller shutters", insect: "Insect screens" } },
+          count: { text: "How many windows or openings need equipping?", short: "Quantity", opts: { c1: "1", c2: "2 to 4", c3: "5 to 8", c4: "9 to 12", c5: "More than 12" } },
+          size: { text: "How large are the openings?", short: "Size", opts: { std: "Standard windows", large: "Large glazed openings" } },
+          drive: { text: "How would you like to operate them?", short: "Control", opts: { manual: "Crank or strap (manual)", motor: "Motor with wall switch", smart: "Smart motor (remote, smartphone)" } },
+          extras: { text: "Would you like any options?", short: "Options", none: "No options", opts: { removal: "Removing the old blinds", wind: "Wind sensor", service: "Annual service contract" } },
+          date: { text: "When would you like them fitted?", short: "Preferred date" },
+        },
+        items: {
+          type_slats: "External venetian blinds (× {n})",
+          type_awning: "Awnings (× {n})",
+          type_roller: "Roller shutters (× {n})",
+          type_insect: "Insect screens (× {n})",
+          drive_motor: "Motorisation (× {n})",
+          drive_smart: "Smart motorisation (× {n})",
+          hub: "Smart control hub",
+          removal: "Removing the old blinds (× {n})",
+          wind: "Wind sensor",
+          service: "Annual service contract",
+        },
+      },
+    },
+    de: {
+      label: "Storen, Rollläden und Insektenschutz",
+      forWho: "Storenbauer und Storenfirmen",
+      pitch: "Lamellenstoren, Markisen, Rollläden und Motoren in Sekunden berechnen.",
+      emailNoun: "Ihre Storen",
+      landing: {
+        h1: ["SIE MONTIEREN STOREN.", "DEALZ RECHNET."],
+        question: "Wie viele Storen-Anfragen verlieren Sie im Frühling, wenn alle gleichzeitig anrufen?",
+        text: "Sobald es warm wird, häufen sich die Anfragen. Dealz antwortet rund um die Uhr, stellt die richtigen Fragen (Storentyp, Anzahl Fenster, Grösse, Antrieb), berechnet Ihren Preis nach Ihren Tarifen und erstellt die Offerte.",
+        clientQ: "Was kosten 6 motorisierte Lamellenstoren?",
+        values: [
+          { icon: "☀️", title: "Bereit für die Hochsaison", text: "Im Frühling erhält jede Anfrage in einer Minute einen verbindlichen Preis, auch wenn Ihr Telefon pausenlos klingelt." },
+          { icon: "⚙️", title: "Motoren verkaufen sich von selbst", text: "Manuell, Motor oder smarte Steuerung: Der Kunde sieht den Preisunterschied und wählt direkt." },
+          { icon: "🔢", title: "Stückpreise, automatische Summen", text: "Anzahl Fenster, grosse Öffnungen, Demontage alter Storen: Jede Position folgt Ihren eigenen Tarifen." },
+          { icon: "🌬️", title: "Keine vergessenen Optionen", text: "Windwächter, Wartungsvertrag: mit einem Klick in der Offerte, sie erhöhen Ihren Durchschnittsauftrag." },
+        ],
+        step1: "Importieren Sie Ihre Tarife: Preis pro Storentyp, Zuschlag für grosse Masse, Motoren, Demontage, Optionen. Ihr Excel bleibt Ihr Arbeitswerkzeug.",
+        step2: "Die Engine versteht Ihre Stückzahlen, Ihre Masse und Ihre Steuerungsoptionen.",
+        excel: { file: "tarife-storen.xlsx", headers: ["Position", "Bedingung", "Preis"], rows: [["Lamellenstoren", "6 Fenster · Standard", "CHF 4'140"], ["Motorisierung", "6 Motoren", "CHF 1'740"], ["Demontage alte Storen", "6 Fenster", "CHF 510"]] },
+        chat: ["«Wir möchten die Storen im Haus ersetzen.»", "«Wie viele Fenster sollen ausgerüstet werden?»", "«Wünschen Sie motorisierte Storen?»"],
+        offer: { company: "Stores Léman Sàrl", rows: [["Lamellenstoren (6 Fenster)", 4140], ["Motorisierung (6 Motoren)", 1740], ["Demontage der alten Storen", 510]] },
+        roi: "Drei zusätzliche Storenaufträge pro Jahr bezahlen mehrere Jahre Abo.",
+      },
+      demo: {
+        brand: "Stores Léman",
+        eyebrow: "Genf & La Côte · Fiktives Beispiel",
+        hero: { h1: "Schatten und Kühle, mit einem klaren Preis in einer Minute.", text: "Lamellenstoren, Markisen, Rollläden und Insektenschutz in Genf und an der Côte — erhalten Sie in Sekunden einen verbindlichen Preis, direkt auf dieser Website." },
+        stats: [{ num: "4.9★", lbl: "KUNDENZUFRIEDENHEIT" }, { num: "8'000+", lbl: "MONTIERTE STOREN" }, { num: "< 1 Min.", lbl: "FÜR EINE OFFERTE" }],
+        servicesTitle: "Unsere Storen und Rollläden",
+        servicesSub: "Wählen Sie eine Leistung, oder beschreiben Sie Ihr Projekt einfach im Tab «Offerte erhalten».",
+        services: [
+          { icon: "🪟", title: "Lamellenstoren", text: "Verstellbare Aluminiumlamellen.", tag: "ab CHF 690" },
+          { icon: "⛱️", title: "Markisen", text: "Stoffmarkisen für Terrassen und Balkone.", tag: "ab CHF 1'850" },
+          { icon: "🔲", title: "Rollläden", text: "Dämmung, Sicherheit und Verdunkelung.", tag: "ab CHF 780" },
+          { icon: "🦟", title: "Insektenschutz", text: "Fenster und Fenstertüren.", tag: "ab CHF 220" },
+          { icon: "⚙️", title: "Motorisierung", text: "Motoren und smarte Steuerungen.", tag: "ab CHF 290" },
+          { icon: "🌬️", title: "Windwächter", text: "Storen fahren automatisch hoch.", tag: "CHF 380" },
+        ],
+        about: {
+          title: "Schnelle und zuverlässige Storenbauer",
+          text: "Stores Léman montiert und repariert seit 2005 Storen für Privatpersonen, Verwaltungen und Geschäfte in Genf und an der Côte. 2026 haben wir unserer Website einen Assistenten für Sofort-Offerten hinzugefügt — schneller für Sie, weniger Administration für uns.",
+          bullets: [["Schweizer Fabrikation", "Storen nach Mass, in der Schweiz gefertigt."], ["Montage an einem Tag", "für die meisten Häuser."], ["Transparenter Preis", "die erhaltene Offerte ist der Preis, den Sie bezahlen."]],
+        },
+        contact: { phone: "022 000 01 07", email: "hello@stores-leman.demo", zone: "Genf, La Côte", hours: "Mo–Fr, 7.30–17.30 Uhr" },
+        devisNote: "Beantworten Sie ein paar Fragen zu Ihren Fenstern — Sie erhalten eine echte Offerte, die Sie direkt hier annehmen oder ablehnen können.",
+        inputPlaceholder: "Beschreiben Sie Ihr Storenprojekt…",
+        pdfCompany: { name: "Stores Léman Sàrl", address: "Route de Chêne 87, 1224 Chêne-Bougeries", phone: "022 000 01 07", email: "hello@stores-leman.demo" },
+      },
+      quote: {
+        greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihren Storen und erstelle Ihnen gleich danach eine verbindliche Offerte.",
+        addressPlaceholder: "Montageadresse (Strasse, PLZ, Ort)",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Lieferung und Montage inbegriffen. Definitive Masse werden vor der Fabrikation vor Ort aufgenommen. Schweizer MWST inbegriffen, sofern anwendbar.",
+        q: {
+          type: { text: "Welchen Sonnenschutz wünschen Sie?", short: "Typ", opts: { slats: "Lamellenstoren", awning: "Markise (Terrasse, Balkon)", roller: "Rollläden", insect: "Insektenschutz" } },
+          count: { text: "Wie viele Fenster oder Öffnungen sollen ausgerüstet werden?", short: "Anzahl", opts: { c1: "1", c2: "2 bis 4", c3: "5 bis 8", c4: "9 bis 12", c5: "Mehr als 12" } },
+          size: { text: "Wie gross sind die Öffnungen?", short: "Grösse", opts: { std: "Standardfenster", large: "Grosse Fensterfronten" } },
+          drive: { text: "Wie möchten Sie sie bedienen?", short: "Antrieb", opts: { manual: "Kurbel oder Gurt (manuell)", motor: "Motor mit Schalter", smart: "Smarter Motor (Fernbedienung, Smartphone)" } },
+          extras: { text: "Wünschen Sie Optionen?", short: "Optionen", none: "Keine Option", opts: { removal: "Demontage der alten Storen", wind: "Windwächter", service: "Jährlicher Wartungsvertrag" } },
+          date: { text: "Wann soll montiert werden?", short: "Wunschtermin" },
+        },
+        items: {
+          type_slats: "Lamellenstoren (× {n})",
+          type_awning: "Markisen (× {n})",
+          type_roller: "Rollläden (× {n})",
+          type_insect: "Insektenschutz (× {n})",
+          drive_motor: "Motorisierung (× {n})",
+          drive_smart: "Smarte Motorisierung (× {n})",
+          hub: "Smarte Steuerzentrale",
+          removal: "Demontage der alten Storen (× {n})",
+          wind: "Windwächter",
+          service: "Jährlicher Wartungsvertrag",
+        },
+      },
+    },
+  };
+
+  if (typeof module !== "undefined" && module.exports) module.exports = S;
+  else {
+    window.DEALZ_SECTORS = window.DEALZ_SECTORS || {};
+    window.DEALZ_SECTORS[S.slug] = S;
+  }
+})();

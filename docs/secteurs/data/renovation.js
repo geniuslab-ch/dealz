@@ -1,0 +1,275 @@
+/* Sector definition — loaded by the browser (demo quote engine) and require()d by scripts/build-sectors.js. */
+(function () {
+  var RATE = { kitchen: 2200, bathroom: 2600, flat: 650, room: 450 };
+  var S = {
+    slug: "renovation",
+    icon: "🔨",
+    needsAddress: true,
+    colors: { main: "#b35c1e", dark: "#8f4815", light: "#f8e4d3", accent: "#2b8a9e", accentDark: "#1f6d7d", bg: "#fdfaf7" },
+
+    quote: {
+      minimum: 1500,
+      questions: [
+        { id: "work", type: "single", options: [{ id: "kitchen" }, { id: "bathroom" }, { id: "flat" }, { id: "room" }] },
+        { id: "surf", type: "single", options: [{ id: "s1", m2: 8 }, { id: "s2", m2: 15 }, { id: "s3", m2: 35 }, { id: "s4", m2: 75 }, { id: "s5", m2: 130 }] },
+        { id: "level", type: "single", options: [{ id: "std", k: 1 }, { id: "premium", k: 1.3 }, { id: "luxe", k: 1.7 }] },
+        { id: "demo", type: "single", options: [{ id: "none", rate: 0 }, { id: "partial", rate: 45 }, { id: "full", rate: 95 }] },
+        { id: "extras", type: "multi", options: [{ id: "plans" }, { id: "elec" }, { id: "plumb" }, { id: "clean" }] },
+        { id: "date", type: "date", minDays: 14 },
+      ],
+      compute: function (a, L, H) {
+        var items = [];
+        var m2 = a.surf.m2;
+        items.push({ label: L("work_" + a.work.id, { m2: m2 }), amount: H.round5(m2 * RATE[a.work.id] * a.level.k) });
+        if (a.demo.rate) {
+          items.push({ label: L("demo_" + a.demo.id, { m2: m2 }), amount: H.round5(m2 * a.demo.rate) });
+          items.push({ label: L("waste"), amount: H.round5(m2 * 18 + 350) });
+        }
+        (a.extras || []).forEach(function (e) {
+          if (e.id === "plans") items.push({ label: L("plans"), amount: 1850 });
+          if (e.id === "elec") items.push({ label: L("elec", { m2: m2 }), amount: H.round5(m2 * 85 + 600) });
+          if (e.id === "plumb") items.push({ label: L("plumb"), amount: 2900 });
+          if (e.id === "clean") items.push({ label: L("clean", { m2: m2 }), amount: H.round5(m2 * 12 + 150) });
+        });
+        var sub = items.reduce(function (s, i) { return s + i.amount; }, 0);
+        items.push({ label: L("coord"), amount: H.round5(sub * 0.06) });
+        return items;
+      },
+    },
+
+    fr: {
+      label: "Rénovation et entreprise générale",
+      forWho: "entreprises de rénovation et entreprises générales",
+      pitch: "Chiffrez cuisines, salles de bain et rénovations complètes avant même la première visite.",
+      emailNoun: "vos travaux de rénovation",
+      landing: {
+        h1: ["VOUS RÉNOVEZ.", "DEALZ CHIFFRE."],
+        question: "Combien de projets de rénovation perdez-vous parce que le devis arrive deux semaines trop tard ?",
+        text: "Vos clients comparent trois entreprises et retiennent souvent la première qui donne un prix. Dealz leur répond à toute heure, pose les bonnes questions (type de pièce, surface, standing, démolition, options), calcule votre prix selon vos tarifs et prépare leur devis.",
+        clientQ: "Combien pour refaire entièrement une salle de bain d'environ 6 m² ?",
+        values: [
+          { icon: "⏱️", title: "Le premier prix gagne souvent", text: "Le client reçoit une estimation ferme en une minute, pendant qu'il compare. Vous passez devant ceux qui envoient leur offre dans dix jours." },
+          { icon: "📐", title: "Surface, standing, démolition", text: "Standard, premium ou haut de gamme, démolition partielle ou complète : chaque paramètre suit vos propres prix au m²." },
+          { icon: "🗂️", title: "Des demandes déjà qualifiées", text: "Vous savez avant la visite ce que le client veut, son budget et sa date. Vous ne vous déplacez que pour les projets sérieux." },
+          { icon: "🧩", title: "Tous les corps de métier", text: "Électricité, sanitaire, plans et nettoyage final : les postes annexes ne sont plus oubliés dans vos offres." },
+        ],
+        step1: "Importez vos tarifs : prix au m² par type de pièce et par standing, démolition, évacuation, corps de métier annexes. Votre Excel reste votre outil de travail.",
+        step2: "Le moteur comprend vos surfaces, vos coefficients de standing et votre forfait de coordination.",
+        excel: { file: "tarifs-renovation.xlsx", headers: ["Poste", "Condition", "Prix"], rows: [["Rénovation salle de bain", "8 m² · standard", "CHF 20 800"], ["Démolition complète", "8 m²", "CHF 760"], ["Coordination du chantier", "6 % du total", "CHF 1 325"]] },
+        chat: ["« Nous voulons refaire la salle de bain. »", "« Quelle est la surface de la pièce ? »", "« Quel standing souhaitez-vous : standard, premium ou haut de gamme ? »"],
+        offer: { company: "Rénova Habitat SA", rows: [["Rénovation de salle de bain (8 m²)", 20800], ["Démolition complète et évacuation", 1254], ["Coordination du chantier", 1325]] },
+        roi: "Un seul chantier de rénovation supplémentaire par an paie plusieurs années d'abonnement.",
+      },
+      demo: {
+        brand: "Rénova Habitat",
+        eyebrow: "Vaud & Genève · Exemple fictif",
+        hero: { h1: "Votre rénovation chiffrée en une minute, sans attendre la visite.", text: "Cuisines, salles de bain, appartements complets : obtenez un prix ferme en quelques secondes, directement sur ce site." },
+        stats: [{ num: "4.8★", lbl: "SATISFACTION CLIENT" }, { num: "600+", lbl: "CHANTIERS LIVRÉS" }, { num: "< 1 min", lbl: "POUR UN DEVIS" }],
+        servicesTitle: "Nos rénovations",
+        servicesSub: "Choisissez une prestation, ou décrivez simplement votre projet dans l'onglet « Obtenir un devis ».",
+        services: [
+          { icon: "🍳", title: "Cuisines", text: "Démontage, nouvelle cuisine, raccordements et finitions.", tag: "dès CHF 2 200/m²" },
+          { icon: "🛁", title: "Salles de bain", text: "Carrelage, sanitaires, douche à l'italienne.", tag: "dès CHF 2 600/m²" },
+          { icon: "🏢", title: "Appartements complets", text: "Sols, murs, plafonds et rafraîchissement général.", tag: "dès CHF 650/m²" },
+          { icon: "🚪", title: "Pièce par pièce", text: "Chambre, séjour ou bureau remis à neuf.", tag: "dès CHF 450/m²" },
+          { icon: "📝", title: "Plans et autorisations", text: "Relevés, plans et demande d'autorisation.", tag: "CHF 1 850" },
+          { icon: "🧹", title: "Nettoyage de fin de chantier", text: "Remise des locaux prêts à habiter.", tag: "dès CHF 12/m²" },
+        ],
+        about: {
+          title: "Une seule entreprise pour tout le chantier",
+          text: "Rénova Habitat coordonne depuis 2011 tous les corps de métier pour les particuliers, régies et PPE de Vaud et de Genève. En 2026, nous avons ajouté un assistant de devis instantané à notre site — plus rapide pour vous, moins d'administratif pour nous.",
+          bullets: [["Un seul interlocuteur", "un chef de projet du premier rendez-vous à la remise des clés."], ["Délais tenus", "planning écrit et suivi chaque semaine."], ["Prix transparent", "le devis reçu est le prix payé."]],
+        },
+        contact: { phone: "021 000 01 01", email: "hello@renova-habitat.demo", zone: "Vaud, Genève", hours: "Lun–Ven, 7h30–17h30" },
+        devisNote: "Répondez à quelques questions sur votre projet — vous recevrez un devis réel, que vous pourrez accepter ou refuser directement ici.",
+        inputPlaceholder: "Décrivez votre projet de rénovation…",
+        pdfCompany: { name: "Rénova Habitat SA", address: "Avenue de Morges 64, 1004 Lausanne", phone: "021 000 01 01", email: "hello@renova-habitat.demo" },
+      },
+      quote: {
+        greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre projet de rénovation, puis je vous établis un devis ferme tout de suite après.",
+        addressPlaceholder: "Adresse du chantier (rue, NPA, ville)",
+        terms: "Devis ferme, valable 30 jours, matériaux et main-d'œuvre compris. Travaux imprévus découverts pendant la démolition facturés uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        q: {
+          work: { text: "Que souhaitez-vous rénover ?", short: "Projet", opts: { kitchen: "La cuisine", bathroom: "La salle de bain", flat: "Un appartement ou une maison entière", room: "Une pièce (chambre, séjour, bureau)" } },
+          surf: { text: "Quelle est la surface concernée ?", short: "Surface", opts: { s1: "Moins de 10 m²", s2: "10 à 20 m²", s3: "20 à 50 m²", s4: "50 à 100 m²", s5: "Plus de 100 m²" } },
+          level: { text: "Quel standing souhaitez-vous ?", short: "Standing", opts: { std: "Standard", premium: "Premium", luxe: "Haut de gamme" } },
+          demo: { text: "Faut-il démolir l'existant ?", short: "Démolition", opts: { none: "Non, pièce déjà vide", partial: "Partiellement (revêtements, meubles)", full: "Entièrement (jusqu'au gros œuvre)" } },
+          extras: { text: "Souhaitez-vous des prestations complémentaires ?", short: "Options", none: "Aucune option", opts: { plans: "Plans et demande d'autorisation", elec: "Mise à jour de l'électricité", plumb: "Déplacement des conduites d'eau", clean: "Nettoyage de fin de chantier" } },
+          date: { text: "Quand souhaitez-vous commencer les travaux ?", short: "Date souhaitée" },
+        },
+        items: {
+          work_kitchen: "Rénovation de cuisine ({m2} m²)",
+          work_bathroom: "Rénovation de salle de bain ({m2} m²)",
+          work_flat: "Rénovation complète ({m2} m²)",
+          work_room: "Rénovation de pièce ({m2} m²)",
+          demo_partial: "Démolition partielle ({m2} m²)",
+          demo_full: "Démolition complète ({m2} m²)",
+          waste: "Évacuation et tri des gravats",
+          plans: "Plans et demande d'autorisation",
+          elec: "Mise à jour de l'électricité ({m2} m²)",
+          plumb: "Déplacement des conduites d'eau",
+          clean: "Nettoyage de fin de chantier ({m2} m²)",
+          coord: "Coordination du chantier",
+        },
+      },
+    },
+    en: {
+      label: "Renovation and general contracting",
+      forWho: "renovation firms and general contractors",
+      pitch: "Price kitchens, bathrooms and full renovations before the first site visit.",
+      emailNoun: "your renovation work",
+      landing: {
+        h1: ["YOU RENOVATE.", "DEALZ PRICES."],
+        question: "How many renovation projects do you lose because your quote arrives two weeks too late?",
+        text: "Your customers compare three firms and often pick the first one that gives a price. Dealz answers them at any hour, asks the right questions (type of room, area, finish level, demolition, options), calculates your price from your rates and prepares their quote.",
+        clientQ: "How much to fully redo a bathroom of about 6 m²?",
+        values: [
+          { icon: "⏱️", title: "The first price often wins", text: "The customer gets a firm estimate in a minute, while they're still comparing. You get ahead of firms that send their offer in ten days." },
+          { icon: "📐", title: "Area, finish level, demolition", text: "Standard, premium or high-end, partial or full demolition: every parameter follows your own price per m²." },
+          { icon: "🗂️", title: "Requests already qualified", text: "Before the visit you know what the customer wants, their budget and their date. You only travel for serious projects." },
+          { icon: "🧩", title: "Every trade included", text: "Electrics, plumbing, plans and final cleaning: the extra items are no longer forgotten in your offers." },
+        ],
+        step1: "Import your rates: price per m² by room type and finish level, demolition, waste removal, extra trades. Your Excel stays your working tool.",
+        step2: "The engine understands your areas, your finish-level factors and your coordination fee.",
+        excel: { file: "renovation-rates.xlsx", headers: ["Item", "Condition", "Price"], rows: [["Bathroom renovation", "8 m² · standard", "CHF 20,800"], ["Full demolition", "8 m²", "CHF 760"], ["Site coordination", "6% of total", "CHF 1,325"]] },
+        chat: ["“We'd like to redo the bathroom.”", "“How large is the room?”", "“Which finish level: standard, premium or high-end?”"],
+        offer: { company: "Rénova Habitat SA", rows: [["Bathroom renovation (8 m²)", 20800], ["Full demolition and waste removal", 1254], ["Site coordination", 1325]] },
+        roi: "A single extra renovation job per year pays for several years of subscription.",
+      },
+      demo: {
+        brand: "Rénova Habitat",
+        eyebrow: "Vaud & Geneva · Fictional example",
+        hero: { h1: "Your renovation priced in a minute, no need to wait for a visit.", text: "Kitchens, bathrooms, whole apartments: get a firm price in seconds, right here on this site." },
+        stats: [{ num: "4.8★", lbl: "CUSTOMER SATISFACTION" }, { num: "600+", lbl: "PROJECTS DELIVERED" }, { num: "< 1 min", lbl: "FOR A QUOTE" }],
+        servicesTitle: "Our renovations",
+        servicesSub: "Pick a service, or simply describe your project in the “Get a quote” tab.",
+        services: [
+          { icon: "🍳", title: "Kitchens", text: "Removal, new kitchen, connections and finishing.", tag: "from CHF 2,200/m²" },
+          { icon: "🛁", title: "Bathrooms", text: "Tiling, sanitary ware, walk-in showers.", tag: "from CHF 2,600/m²" },
+          { icon: "🏢", title: "Whole apartments", text: "Floors, walls, ceilings and a full refresh.", tag: "from CHF 650/m²" },
+          { icon: "🚪", title: "Room by room", text: "Bedroom, living room or office made like new.", tag: "from CHF 450/m²" },
+          { icon: "📝", title: "Plans and permits", text: "Surveys, plans and permit application.", tag: "CHF 1,850" },
+          { icon: "🧹", title: "End-of-works cleaning", text: "Handed back ready to live in.", tag: "from CHF 12/m²" },
+        ],
+        about: {
+          title: "One firm for the whole project",
+          text: "Since 2011, Rénova Habitat has coordinated every trade for households, property managers and co-owned buildings in Vaud and Geneva. In 2026, we added an instant quote assistant to our website — faster for you, less paperwork for us.",
+          bullets: [["One contact", "a project manager from the first meeting to handover."], ["Deadlines kept", "written schedule and weekly follow-up."], ["Transparent pricing", "the quote you receive is the price you pay."]],
+        },
+        contact: { phone: "021 000 01 01", email: "hello@renova-habitat.demo", zone: "Vaud, Geneva", hours: "Mon–Fri, 7:30am–5:30pm" },
+        devisNote: "Answer a few questions about your project — you'll get a real quote that you can accept or decline right here.",
+        inputPlaceholder: "Describe your renovation project…",
+        pdfCompany: { name: "Rénova Habitat SA", address: "Avenue de Morges 64, 1004 Lausanne", phone: "021 000 01 01", email: "hello@renova-habitat.demo" },
+      },
+      quote: {
+        greeting: "Hello! I'll ask you a few quick questions about your renovation project, then put together a firm quote right away.",
+        addressPlaceholder: "Site address (street, postcode, town)",
+        terms: "Firm quote, valid for 30 days, materials and labour included. Unforeseen work found during demolition charged only with prior agreement. Swiss VAT included where applicable.",
+        q: {
+          work: { text: "What would you like to renovate?", short: "Project", opts: { kitchen: "The kitchen", bathroom: "The bathroom", flat: "A whole apartment or house", room: "One room (bedroom, living room, office)" } },
+          surf: { text: "How large is the area?", short: "Area", opts: { s1: "Under 10 m²", s2: "10 to 20 m²", s3: "20 to 50 m²", s4: "50 to 100 m²", s5: "Over 100 m²" } },
+          level: { text: "Which finish level would you like?", short: "Finish", opts: { std: "Standard", premium: "Premium", luxe: "High-end" } },
+          demo: { text: "Does anything need to be demolished?", short: "Demolition", opts: { none: "No, the room is already empty", partial: "Partly (finishes, units)", full: "Fully (down to the shell)" } },
+          extras: { text: "Would you like any extra services?", short: "Options", none: "No options", opts: { plans: "Plans and permit application", elec: "Electrical upgrade", plumb: "Moving water pipes", clean: "End-of-works cleaning" } },
+          date: { text: "When would you like the work to start?", short: "Preferred date" },
+        },
+        items: {
+          work_kitchen: "Kitchen renovation ({m2} m²)",
+          work_bathroom: "Bathroom renovation ({m2} m²)",
+          work_flat: "Full renovation ({m2} m²)",
+          work_room: "Room renovation ({m2} m²)",
+          demo_partial: "Partial demolition ({m2} m²)",
+          demo_full: "Full demolition ({m2} m²)",
+          waste: "Rubble removal and sorting",
+          plans: "Plans and permit application",
+          elec: "Electrical upgrade ({m2} m²)",
+          plumb: "Moving water pipes",
+          clean: "End-of-works cleaning ({m2} m²)",
+          coord: "Site coordination",
+        },
+      },
+    },
+    de: {
+      label: "Renovation und Generalunternehmung",
+      forWho: "Renovationsfirmen und Generalunternehmer",
+      pitch: "Küchen, Bäder und Komplettrenovationen berechnen — noch vor der ersten Besichtigung.",
+      emailNoun: "Ihre Renovationsarbeiten",
+      landing: {
+        h1: ["SIE RENOVIEREN.", "DEALZ RECHNET."],
+        question: "Wie viele Renovationsprojekte verlieren Sie, weil Ihre Offerte zwei Wochen zu spät kommt?",
+        text: "Ihre Kunden vergleichen drei Firmen und wählen oft die erste, die einen Preis nennt. Dealz antwortet ihnen rund um die Uhr, stellt die richtigen Fragen (Raum, Fläche, Ausbaustandard, Rückbau, Optionen), berechnet Ihren Preis nach Ihren Tarifen und erstellt die Offerte.",
+        clientQ: "Was kostet es, ein Badezimmer von etwa 6 m² komplett zu erneuern?",
+        values: [
+          { icon: "⏱️", title: "Der erste Preis gewinnt oft", text: "Der Kunde erhält in einer Minute eine verbindliche Schätzung, während er noch vergleicht. Sie sind schneller als Firmen, die erst in zehn Tagen offerieren." },
+          { icon: "📐", title: "Fläche, Standard, Rückbau", text: "Standard, Premium oder gehoben, Teil- oder Komplettrückbau: Jeder Parameter folgt Ihren eigenen Preisen pro m²." },
+          { icon: "🗂️", title: "Bereits qualifizierte Anfragen", text: "Vor der Besichtigung wissen Sie, was der Kunde will, sein Budget und seinen Termin. Sie fahren nur noch für ernsthafte Projekte hin." },
+          { icon: "🧩", title: "Alle Gewerke inbegriffen", text: "Elektro, Sanitär, Pläne und Endreinigung: Nebenpositionen werden in Ihren Offerten nicht mehr vergessen." },
+        ],
+        step1: "Importieren Sie Ihre Tarife: Preis pro m² nach Raum und Ausbaustandard, Rückbau, Entsorgung, Nebengewerke. Ihr Excel bleibt Ihr Arbeitswerkzeug.",
+        step2: "Die Engine versteht Ihre Flächen, Ihre Standard-Faktoren und Ihre Koordinationspauschale.",
+        excel: { file: "tarife-renovation.xlsx", headers: ["Position", "Bedingung", "Preis"], rows: [["Badrenovation", "8 m² · Standard", "CHF 20'800"], ["Kompletter Rückbau", "8 m²", "CHF 760"], ["Bauleitung und Koordination", "6 % vom Total", "CHF 1'325"]] },
+        chat: ["«Wir möchten das Badezimmer erneuern.»", "«Wie gross ist der Raum?»", "«Welcher Standard: Standard, Premium oder gehoben?»"],
+        offer: { company: "Rénova Habitat SA", rows: [["Badrenovation (8 m²)", 20800], ["Kompletter Rückbau und Entsorgung", 1254], ["Bauleitung und Koordination", 1325]] },
+        roi: "Ein einziges zusätzliches Renovationsprojekt pro Jahr bezahlt mehrere Jahre Abo.",
+      },
+      demo: {
+        brand: "Rénova Habitat",
+        eyebrow: "Waadt & Genf · Fiktives Beispiel",
+        hero: { h1: "Ihre Renovation in einer Minute berechnet, ohne auf die Besichtigung zu warten.", text: "Küchen, Bäder, ganze Wohnungen: Erhalten Sie in Sekunden einen verbindlichen Preis, direkt auf dieser Website." },
+        stats: [{ num: "4.8★", lbl: "KUNDENZUFRIEDENHEIT" }, { num: "600+", lbl: "ABGESCHLOSSENE PROJEKTE" }, { num: "< 1 Min.", lbl: "FÜR EINE OFFERTE" }],
+        servicesTitle: "Unsere Renovationen",
+        servicesSub: "Wählen Sie eine Leistung, oder beschreiben Sie Ihr Projekt einfach im Tab «Offerte erhalten».",
+        services: [
+          { icon: "🍳", title: "Küchen", text: "Demontage, neue Küche, Anschlüsse und Abschluss.", tag: "ab CHF 2'200/m²" },
+          { icon: "🛁", title: "Badezimmer", text: "Plattenarbeiten, Sanitärapparate, bodenebene Dusche.", tag: "ab CHF 2'600/m²" },
+          { icon: "🏢", title: "Ganze Wohnungen", text: "Böden, Wände, Decken und Auffrischung.", tag: "ab CHF 650/m²" },
+          { icon: "🚪", title: "Raum für Raum", text: "Schlaf-, Wohnzimmer oder Büro wie neu.", tag: "ab CHF 450/m²" },
+          { icon: "📝", title: "Pläne und Bewilligungen", text: "Aufnahmen, Pläne und Baugesuch.", tag: "CHF 1'850" },
+          { icon: "🧹", title: "Bauendreinigung", text: "Übergabe bezugsbereit.", tag: "ab CHF 12/m²" },
+        ],
+        about: {
+          title: "Eine Firma für die ganze Baustelle",
+          text: "Rénova Habitat koordiniert seit 2011 alle Gewerke für Privatpersonen, Verwaltungen und Stockwerkeigentümer in der Waadt und in Genf. 2026 haben wir unserer Website einen Assistenten für Sofort-Offerten hinzugefügt — schneller für Sie, weniger Administration für uns.",
+          bullets: [["Ein Ansprechpartner", "ein Projektleiter vom ersten Termin bis zur Übergabe."], ["Termine eingehalten", "schriftlicher Bauplan und wöchentliche Kontrolle."], ["Transparenter Preis", "die erhaltene Offerte ist der Preis, den Sie bezahlen."]],
+        },
+        contact: { phone: "021 000 01 01", email: "hello@renova-habitat.demo", zone: "Waadt, Genf", hours: "Mo–Fr, 7.30–17.30 Uhr" },
+        devisNote: "Beantworten Sie ein paar Fragen zu Ihrem Projekt — Sie erhalten eine echte Offerte, die Sie direkt hier annehmen oder ablehnen können.",
+        inputPlaceholder: "Beschreiben Sie Ihr Renovationsprojekt…",
+        pdfCompany: { name: "Rénova Habitat SA", address: "Avenue de Morges 64, 1004 Lausanne", phone: "021 000 01 01", email: "hello@renova-habitat.demo" },
+      },
+      quote: {
+        greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Renovationsprojekt und erstelle Ihnen gleich danach eine verbindliche Offerte.",
+        addressPlaceholder: "Adresse der Baustelle (Strasse, PLZ, Ort)",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Material und Arbeit inbegriffen. Beim Rückbau entdeckte unvorhergesehene Arbeiten nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        q: {
+          work: { text: "Was möchten Sie renovieren?", short: "Projekt", opts: { kitchen: "Die Küche", bathroom: "Das Badezimmer", flat: "Eine ganze Wohnung oder ein Haus", room: "Einen Raum (Schlafzimmer, Wohnzimmer, Büro)" } },
+          surf: { text: "Wie gross ist die betroffene Fläche?", short: "Fläche", opts: { s1: "Unter 10 m²", s2: "10 bis 20 m²", s3: "20 bis 50 m²", s4: "50 bis 100 m²", s5: "Über 100 m²" } },
+          level: { text: "Welchen Ausbaustandard wünschen Sie?", short: "Standard", opts: { std: "Standard", premium: "Premium", luxe: "Gehoben" } },
+          demo: { text: "Muss Bestehendes zurückgebaut werden?", short: "Rückbau", opts: { none: "Nein, der Raum ist schon leer", partial: "Teilweise (Beläge, Möbel)", full: "Komplett (bis auf den Rohbau)" } },
+          extras: { text: "Wünschen Sie zusätzliche Leistungen?", short: "Optionen", none: "Keine Option", opts: { plans: "Pläne und Baugesuch", elec: "Erneuerung der Elektrik", plumb: "Verlegen von Wasserleitungen", clean: "Bauendreinigung" } },
+          date: { text: "Wann sollen die Arbeiten beginnen?", short: "Wunschtermin" },
+        },
+        items: {
+          work_kitchen: "Küchenrenovation ({m2} m²)",
+          work_bathroom: "Badrenovation ({m2} m²)",
+          work_flat: "Komplettrenovation ({m2} m²)",
+          work_room: "Raumrenovation ({m2} m²)",
+          demo_partial: "Teilrückbau ({m2} m²)",
+          demo_full: "Kompletter Rückbau ({m2} m²)",
+          waste: "Entsorgung und Trennung des Bauschutts",
+          plans: "Pläne und Baugesuch",
+          elec: "Erneuerung der Elektrik ({m2} m²)",
+          plumb: "Verlegen von Wasserleitungen",
+          clean: "Bauendreinigung ({m2} m²)",
+          coord: "Bauleitung und Koordination",
+        },
+      },
+    },
+  };
+
+  if (typeof module !== "undefined" && module.exports) module.exports = S;
+  else {
+    window.DEALZ_SECTORS = window.DEALZ_SECTORS || {};
+    window.DEALZ_SECTORS[S.slug] = S;
+  }
+})();

@@ -397,5 +397,257 @@
         "emailNoun": "Ihre Dacharbeiten"
       }
     }
+  },
+  "renovation": {
+    "label": "Rénovation et entreprise générale",
+    "emailNoun": "vos travaux de rénovation",
+    "company": {
+      "name": "Rénova Habitat SA",
+      "email": "hello@renova-habitat.demo",
+      "phone": "021 000 01 01",
+      "address": "Avenue de Morges 64, 1004 Lausanne",
+      "logo": "/images/demo-logos/renovation-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Renovation and general contracting",
+        "emailNoun": "your renovation work"
+      },
+      "de": {
+        "label": "Renovation und Generalunternehmung",
+        "emailNoun": "Ihre Renovationsarbeiten"
+      }
+    }
+  },
+  "platrerie": {
+    "label": "Plâtrerie et plafonds",
+    "emailNoun": "vos travaux de plâtrerie",
+    "company": {
+      "name": "Gypsa Plâtrerie Sàrl",
+      "email": "hello@gypsa-platrerie.demo",
+      "phone": "026 000 01 02",
+      "address": "Route de la Glâne 31, 1700 Fribourg",
+      "logo": "/images/demo-logos/platrerie-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Plastering and ceilings",
+        "emailNoun": "your plastering work"
+      },
+      "de": {
+        "label": "Gipserei und Decken",
+        "emailNoun": "Ihre Gipserarbeiten"
+      }
+    }
+  },
+  "sols": {
+    "label": "Revêtements de sols",
+    "emailNoun": "vos travaux de sols",
+    "company": {
+      "name": "Parquets du Jorat Sàrl",
+      "email": "hello@parquets-jorat.demo",
+      "phone": "021 000 01 03",
+      "address": "Route de Palézieux 8, 1610 Oron-la-Ville",
+      "logo": "/images/demo-logos/sols-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Flooring",
+        "emailNoun": "your flooring work"
+      },
+      "de": {
+        "label": "Bodenbeläge",
+        "emailNoun": "Ihre Bodenarbeiten"
+      }
+    }
+  },
+  "carrelage": {
+    "label": "Carrelage",
+    "emailNoun": "vos travaux de carrelage",
+    "company": {
+      "name": "Carrelages Riviera SA",
+      "email": "hello@carrelages-riviera.demo",
+      "phone": "021 000 01 04",
+      "address": "Rue du Simplon 9, 1800 Vevey",
+      "logo": "/images/demo-logos/carrelage-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Tiling",
+        "emailNoun": "your tiling work"
+      },
+      "de": {
+        "label": "Plattenarbeiten",
+        "emailNoun": "Ihre Plattenarbeiten"
+      }
+    }
+  },
+  "facades": {
+    "label": "Façades, crépis et revêtements",
+    "emailNoun": "vos travaux de façade",
+    "company": {
+      "name": "Façades Alpines Sàrl",
+      "email": "hello@facades-alpines.demo",
+      "phone": "027 000 01 05",
+      "address": "Rue de la Dixence 33, 1950 Sion",
+      "logo": "/images/demo-logos/facades-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Facades, render and coatings",
+        "emailNoun": "your facade work"
+      },
+      "de": {
+        "label": "Fassaden, Verputz und Beschichtungen",
+        "emailNoun": "Ihre Fassadenarbeiten"
+      }
+    }
+  },
+  "isolation": {
+    "label": "Isolation thermique",
+    "emailNoun": "vos travaux d'isolation",
+    "company": {
+      "name": "IsoConfort Sàrl",
+      "email": "hello@isoconfort.demo",
+      "phone": "032 000 01 06",
+      "address": "Rue des Fahys 51, 2000 Neuchâtel",
+      "logo": "/images/demo-logos/isolation-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Thermal insulation",
+        "emailNoun": "your insulation work"
+      },
+      "de": {
+        "label": "Wärmedämmung",
+        "emailNoun": "Ihre Dämmarbeiten"
+      }
+    }
+  },
+  "stores": {
+    "label": "Stores, volets et moustiquaires",
+    "emailNoun": "vos stores",
+    "company": {
+      "name": "Stores Léman Sàrl",
+      "email": "hello@stores-leman.demo",
+      "phone": "022 000 01 07",
+      "address": "Route de Chêne 87, 1224 Chêne-Bougeries",
+      "logo": "/images/demo-logos/stores-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Blinds, shutters and insect screens",
+        "emailNoun": "your blinds"
+      },
+      "de": {
+        "label": "Storen, Rollläden und Insektenschutz",
+        "emailNoun": "Ihre Storen"
+      }
+    }
+  },
+  "sanitaire": {
+    "label": "Sanitaire et chauffage",
+    "emailNoun": "vos travaux de sanitaire et de chauffage",
+    "company": {
+      "name": "Sanitherm Romandie SA",
+      "email": "hello@sanitherm.demo",
+      "phone": "021 000 01 08",
+      "address": "Chemin du Closel 5, 1020 Renens",
+      "logo": "/images/demo-logos/sanitaire-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Plumbing and heating",
+        "emailNoun": "your plumbing and heating work"
+      },
+      "de": {
+        "label": "Sanitär und Heizung",
+        "emailNoun": "Ihre Sanitär- und Heizungsarbeiten"
+      }
+    }
+  },
+  "electricien": {
+    "label": "Électricité",
+    "emailNoun": "vos travaux d'électricité",
+    "company": {
+      "name": "Volta Électricité Sàrl",
+      "email": "hello@volta-electricite.demo",
+      "phone": "022 000 01 09",
+      "address": "Rue de Lyon 77, 1203 Genève",
+      "logo": "/images/demo-logos/electricien-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Electrical work",
+        "emailNoun": "your electrical work"
+      },
+      "de": {
+        "label": "Elektroinstallationen",
+        "emailNoun": "Ihre Elektroarbeiten"
+      }
+    }
+  },
+  "elagage": {
+    "label": "Élagage et abattage",
+    "emailNoun": "vos travaux d'élagage",
+    "company": {
+      "name": "Cime Élagage Sàrl",
+      "email": "hello@cime-elagage.demo",
+      "phone": "026 000 01 10",
+      "address": "Rue de Vevey 112, 1630 Bulle",
+      "logo": "/images/demo-logos/elagage-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Tree surgery and felling",
+        "emailNoun": "your tree work"
+      },
+      "de": {
+        "label": "Baumpflege und Baumfällung",
+        "emailNoun": "Ihre Baumarbeiten"
+      }
+    }
+  },
+  "debarras": {
+    "label": "Débarras et évacuation",
+    "emailNoun": "votre débarras",
+    "company": {
+      "name": "Place Nette Débarras Sàrl",
+      "email": "hello@place-nette.demo",
+      "phone": "022 000 01 11",
+      "address": "Route des Jeunes 43, 1227 Carouge",
+      "logo": "/images/demo-logos/debarras-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "House clearance and junk removal",
+        "emailNoun": "your clearance"
+      },
+      "de": {
+        "label": "Räumung und Entsorgung",
+        "emailNoun": "Ihre Räumung"
+      }
+    }
+  },
+  "serrurerie": {
+    "label": "Serrurerie",
+    "emailNoun": "votre intervention de serrurerie",
+    "company": {
+      "name": "Clé d'Or Serrurerie Sàrl",
+      "email": "hello@cle-dor.demo",
+      "phone": "021 000 01 12",
+      "address": "Rue de Genève 52, 1004 Lausanne",
+      "logo": "/images/demo-logos/serrurerie-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Locksmith services",
+        "emailNoun": "your locksmith job"
+      },
+      "de": {
+        "label": "Schlüsseldienst und Schlosserei",
+        "emailNoun": "Ihren Schlüsseldienst-Einsatz"
+      }
+    }
   }
 }

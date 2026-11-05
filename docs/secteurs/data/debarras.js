@@ -1,0 +1,266 @@
+/* Sector definition — loaded by the browser (demo quote engine) and require()d by scripts/build-sectors.js. */
+(function () {
+  var S = {
+    slug: "debarras",
+    icon: "🗑️",
+    needsAddress: true,
+    colors: { main: "#5f3dc4", dark: "#4c2fa3", light: "#e5dbff", accent: "#f76707", accentDark: "#d9480f", bg: "#fbfaff" },
+
+    quote: {
+      minimum: 350,
+      questions: [
+        { id: "type", type: "single", options: [{ id: "flat", fee: 0 }, { id: "house", fee: 0 }, { id: "cellar", fee: 0 }, { id: "office", fee: 150 }, { id: "estate", fee: 350 }] },
+        { id: "volume", type: "single", options: [{ id: "v1", m3: 5 }, { id: "v2", m3: 15 }, { id: "v3", m3: 30 }, { id: "v4", m3: 60 }, { id: "v5", m3: 100 }] },
+        { id: "floor", type: "single", options: [{ id: "ground", k: 1 }, { id: "lift", k: 1.1 }, { id: "stairs", k: 1.3 }] },
+        { id: "extras", type: "multi", options: [{ id: "clean" }, { id: "dismantle" }, { id: "recycle" }, { id: "keys" }] },
+        { id: "date", type: "date", minDays: 3 },
+      ],
+      compute: function (a, L, H) {
+        var items = [];
+        var v = a.volume.m3;
+        items.push({ label: L("clear_" + a.type.id, { m3: v }), amount: H.round5(v * 75 * a.floor.k) });
+        items.push({ label: L("disposal"), amount: H.round5(v * 22) });
+        if (a.type.fee) items.push({ label: L("fee_" + a.type.id), amount: a.type.fee });
+        (a.extras || []).forEach(function (e) {
+          if (e.id === "clean") items.push({ label: L("clean"), amount: H.round5(v * 6 + 180) });
+          if (e.id === "dismantle") items.push({ label: L("dismantle"), amount: 250 });
+          if (e.id === "recycle") items.push({ label: L("recycle"), amount: H.round5(v * 4 + 60) });
+          if (e.id === "keys") items.push({ label: L("keys"), amount: 90 });
+        });
+        return items;
+      },
+    },
+
+    fr: {
+      label: "Débarras et évacuation",
+      forWho: "entreprises de débarras et d'évacuation",
+      pitch: "Chiffrez débarras d'appartements, de maisons, de caves et de successions au m³, en une minute.",
+      emailNoun: "votre débarras",
+      landing: {
+        h1: ["VOUS VIDEZ.", "DEALZ CHIFFRE."],
+        question: "Combien de débarras perdez-vous parce que le client veut un prix aujourd'hui, pas après votre visite ?",
+        text: "Fin de bail, succession, cave pleine : vos clients sont pressés et comparent. Dealz leur répond à toute heure, pose les bonnes questions (type de lieu, volume, étage, ascenseur, nettoyage), calcule votre prix selon vos tarifs et prépare leur devis.",
+        clientQ: "Combien pour vider un appartement de 4 pièces au 3e étage avec ascenseur ?",
+        values: [
+          { icon: "📦", title: "Prix au m³, tout de suite", text: "Le client choisit le volume estimé, Dealz applique votre prix au m³ et vos taxes de décharge." },
+          { icon: "🏢", title: "Étage et ascenseur inclus", text: "Rez, étage avec ascenseur ou escaliers : la majoration suit vos propres règles." },
+          { icon: "🧹", title: "Nettoyage et remise des clés vendus", text: "Nettoyage de fin de débarras, démontage, remise des clés à la régie : proposés dans chaque devis." },
+          { icon: "🤝", title: "Successions traitées avec soin", text: "Inventaire et tri ajoutés automatiquement pour les successions, avec un prix clair pour la famille." },
+        ],
+        step1: "Importez vos tarifs : prix au m³, taxes de décharge, majorations d'étage, inventaire, nettoyage. Votre Excel reste votre outil de travail.",
+        step2: "Le moteur comprend vos volumes, vos étages et vos options.",
+        excel: { file: "tarifs-debarras.xlsx", headers: ["Poste", "Condition", "Prix"], rows: [["Débarras d'appartement", "30 m³ · étage avec ascenseur", "CHF 2 475"], ["Taxes de décharge", "30 m³", "CHF 660"], ["Nettoyage de fin de débarras", "30 m³", "CHF 360"]] },
+        chat: ["« Nous devons vider l'appartement de ma mère. »", "« Combien de pièces compte l'appartement ? »", "« À quel étage, et y a-t-il un ascenseur ? »"],
+        offer: { company: "Place Nette Débarras Sàrl", rows: [["Débarras d'appartement (30 m³)", 2475], ["Taxes de décharge", 660], ["Nettoyage de fin de débarras", 360]] },
+        roi: "Deux débarras supplémentaires par an paient plusieurs années d'abonnement.",
+      },
+      demo: {
+        brand: "Place Nette",
+        eyebrow: "Genève & Nyon · Exemple fictif",
+        hero: { h1: "Un lieu vidé, propre, et un prix clair en une minute.", text: "Débarras d'appartements, maisons, caves, bureaux et successions à Genève et dans la région de Nyon — obtenez un prix ferme en quelques secondes, directement sur ce site." },
+        stats: [{ num: "4.9★", lbl: "SATISFACTION CLIENT" }, { num: "2 500+", lbl: "DÉBARRAS RÉALISÉS" }, { num: "< 1 min", lbl: "POUR UN DEVIS" }],
+        servicesTitle: "Nos débarras",
+        servicesSub: "Choisissez une prestation, ou décrivez simplement votre besoin dans l'onglet « Obtenir un devis ».",
+        services: [
+          { icon: "🏢", title: "Appartements", text: "Fin de bail, déménagement, rénovation.", tag: "dès CHF 75/m³" },
+          { icon: "🏡", title: "Maisons", text: "Du grenier à la cave, jardin compris.", tag: "dès CHF 75/m³" },
+          { icon: "📦", title: "Caves et greniers", text: "Petits volumes, intervention rapide.", tag: "dès CHF 350" },
+          { icon: "🏬", title: "Bureaux et commerces", text: "Mobilier, archives, matériel.", tag: "dès CHF 75/m³" },
+          { icon: "🕊️", title: "Successions", text: "Inventaire, tri et débarras avec discrétion.", tag: "inventaire CHF 350" },
+          { icon: "🧹", title: "Nettoyage de fin", text: "Remise des locaux prêts pour l'état des lieux.", tag: "dès CHF 210" },
+        ],
+        about: {
+          title: "Un débarras rapide, propre et respectueux",
+          text: "Place Nette vide et nettoie depuis 2014 appartements, maisons et locaux pour les particuliers, régies et notaires de Genève et de Nyon. En 2026, nous avons ajouté un assistant de devis instantané à notre site — plus rapide pour vous, moins d'administratif pour nous.",
+          bullets: [["Tri et recyclage", "objets réutilisables donnés aux associations."], ["Intervention rapide", "souvent dans la semaine."], ["Prix transparent", "le devis reçu est le prix payé."]],
+        },
+        contact: { phone: "022 000 01 11", email: "hello@place-nette.demo", zone: "Genève, district de Nyon", hours: "Lun–Sam, 7h–18h" },
+        devisNote: "Répondez à quelques questions sur votre débarras — vous recevrez un devis réel, que vous pourrez accepter ou refuser directement ici.",
+        inputPlaceholder: "Décrivez ce qu'il faut débarrasser…",
+        pdfCompany: { name: "Place Nette Débarras Sàrl", address: "Route des Jeunes 43, 1227 Carouge", phone: "022 000 01 11", email: "hello@place-nette.demo" },
+      },
+      quote: {
+        greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre débarras, puis je vous établis un devis ferme tout de suite après.",
+        addressPlaceholder: "Adresse du lieu à débarrasser (rue, NPA, ville)",
+        terms: "Devis ferme, valable 30 jours, main-d'œuvre, transport et taxes de décharge compris. Volume réel nettement supérieur à l'estimation facturé uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        q: {
+          type: { text: "Que faut-il débarrasser ?", short: "Lieu", opts: { flat: "Un appartement", house: "Une maison", cellar: "Une cave ou un grenier", office: "Un bureau ou un commerce", estate: "Une succession" } },
+          volume: { text: "Quel volume estimez-vous ?", short: "Volume", opts: { v1: "Petit (cave, environ 5 m³)", v2: "Studio ou 2 pièces (environ 15 m³)", v3: "3 à 4 pièces (environ 30 m³)", v4: "Maison (environ 60 m³)", v5: "Grande maison ou locaux (100 m³ et plus)" } },
+          floor: { text: "À quel étage se trouve le lieu ?", short: "Étage", opts: { ground: "Rez-de-chaussée ou accès direct", lift: "En étage avec ascenseur", stairs: "En étage sans ascenseur" } },
+          extras: { text: "Souhaitez-vous des options ?", short: "Options", none: "Aucune option", opts: { clean: "Nettoyage de fin de débarras", dismantle: "Démontage de meubles et de cuisine", recycle: "Tri et attestation de recyclage", keys: "Remise des clés à la régie" } },
+          date: { text: "Pour quelle date souhaitez-vous le débarras ?", short: "Date souhaitée" },
+        },
+        items: {
+          clear_flat: "Débarras d'appartement ({m3} m³)",
+          clear_house: "Débarras de maison ({m3} m³)",
+          clear_cellar: "Débarras de cave ou grenier ({m3} m³)",
+          clear_office: "Débarras de bureau ou commerce ({m3} m³)",
+          clear_estate: "Débarras de succession ({m3} m³)",
+          disposal: "Transport et taxes de décharge",
+          fee_office: "Évacuation des archives et du matériel",
+          fee_estate: "Inventaire et tri des objets",
+          clean: "Nettoyage de fin de débarras",
+          dismantle: "Démontage de meubles et de cuisine",
+          recycle: "Tri et attestation de recyclage",
+          keys: "Remise des clés à la régie",
+        },
+      },
+    },
+    en: {
+      label: "House clearance and junk removal",
+      forWho: "house clearance and junk removal companies",
+      pitch: "Price clearances of apartments, houses, cellars and estates per m³, in a minute.",
+      emailNoun: "your clearance",
+      landing: {
+        h1: ["YOU CLEAR IT.", "DEALZ PRICES."],
+        question: "How many clearances do you lose because the customer wants a price today, not after your visit?",
+        text: "End of lease, an estate, a full cellar: your customers are in a hurry and comparing. Dealz answers them at any hour, asks the right questions (type of place, volume, floor, lift, cleaning), calculates your price from your rates and prepares their quote.",
+        clientQ: "How much to clear a 4-room apartment on the 3rd floor with a lift?",
+        values: [
+          { icon: "📦", title: "Price per m³, straight away", text: "The customer picks the estimated volume, Dealz applies your price per m³ and your tip fees." },
+          { icon: "🏢", title: "Floor and lift included", text: "Ground floor, upper floor with a lift or stairs: the surcharge follows your own rules." },
+          { icon: "🧹", title: "Cleaning and key handover sold", text: "End-of-clearance cleaning, dismantling, returning keys to the agency: offered in every quote." },
+          { icon: "🤝", title: "Estates handled with care", text: "Inventory and sorting added automatically for estates, with a clear price for the family." },
+        ],
+        step1: "Import your rates: price per m³, tip fees, floor surcharges, inventory, cleaning. Your Excel stays your working tool.",
+        step2: "The engine understands your volumes, your floors and your options.",
+        excel: { file: "clearance-rates.xlsx", headers: ["Item", "Condition", "Price"], rows: [["Apartment clearance", "30 m³ · upper floor with lift", "CHF 2,475"], ["Tip fees", "30 m³", "CHF 660"], ["End-of-clearance cleaning", "30 m³", "CHF 360"]] },
+        chat: ["“We need to clear my mother's apartment.”", "“How many rooms does the apartment have?”", "“Which floor is it on, and is there a lift?”"],
+        offer: { company: "Place Nette Débarras Sàrl", rows: [["Apartment clearance (30 m³)", 2475], ["Tip fees", 660], ["End-of-clearance cleaning", 360]] },
+        roi: "Two extra clearances a year pay for several years of subscription.",
+      },
+      demo: {
+        brand: "Place Nette",
+        eyebrow: "Geneva & Nyon · Fictional example",
+        hero: { h1: "A space emptied, cleaned, and a clear price in a minute.", text: "Clearance of apartments, houses, cellars, offices and estates in Geneva and the Nyon area — get a firm price in seconds, right here on this site." },
+        stats: [{ num: "4.9★", lbl: "CUSTOMER SATISFACTION" }, { num: "2,500+", lbl: "CLEARANCES DONE" }, { num: "< 1 min", lbl: "FOR A QUOTE" }],
+        servicesTitle: "Our clearances",
+        servicesSub: "Pick a service, or simply describe what you need in the “Get a quote” tab.",
+        services: [
+          { icon: "🏢", title: "Apartments", text: "End of lease, moving, renovation.", tag: "from CHF 75/m³" },
+          { icon: "🏡", title: "Houses", text: "From attic to cellar, garden included.", tag: "from CHF 75/m³" },
+          { icon: "📦", title: "Cellars and attics", text: "Small volumes, quick service.", tag: "from CHF 350" },
+          { icon: "🏬", title: "Offices and shops", text: "Furniture, archives, equipment.", tag: "from CHF 75/m³" },
+          { icon: "🕊️", title: "Estates", text: "Inventory, sorting and clearance with discretion.", tag: "inventory CHF 350" },
+          { icon: "🧹", title: "Final cleaning", text: "Handed back ready for the check-out inspection.", tag: "from CHF 210" },
+        ],
+        about: {
+          title: "Fast, clean and respectful clearances",
+          text: "Since 2014, Place Nette has emptied and cleaned apartments, houses and premises for households, property managers and notaries in Geneva and Nyon. In 2026, we added an instant quote assistant to our website — faster for you, less paperwork for us.",
+          bullets: [["Sorting and recycling", "reusable items donated to charities."], ["Quick service", "often within the week."], ["Transparent pricing", "the quote you receive is the price you pay."]],
+        },
+        contact: { phone: "022 000 01 11", email: "hello@place-nette.demo", zone: "Geneva, Nyon district", hours: "Mon–Sat, 7am–6pm" },
+        devisNote: "Answer a few questions about your clearance — you'll get a real quote that you can accept or decline right here.",
+        inputPlaceholder: "Describe what needs clearing…",
+        pdfCompany: { name: "Place Nette Débarras Sàrl", address: "Route des Jeunes 43, 1227 Carouge", phone: "022 000 01 11", email: "hello@place-nette.demo" },
+      },
+      quote: {
+        greeting: "Hello! I'll ask you a few quick questions about your clearance, then put together a firm quote right away.",
+        addressPlaceholder: "Address of the place to clear (street, postcode, town)",
+        terms: "Firm quote, valid for 30 days, labour, transport and tip fees included. A real volume clearly above the estimate charged only with prior agreement. Swiss VAT included where applicable.",
+        q: {
+          type: { text: "What needs clearing?", short: "Place", opts: { flat: "An apartment", house: "A house", cellar: "A cellar or attic", office: "An office or shop", estate: "An estate" } },
+          volume: { text: "What volume do you estimate?", short: "Volume", opts: { v1: "Small (cellar, about 5 m³)", v2: "Studio or 2 rooms (about 15 m³)", v3: "3 to 4 rooms (about 30 m³)", v4: "House (about 60 m³)", v5: "Large house or premises (100 m³ or more)" } },
+          floor: { text: "Which floor is it on?", short: "Floor", opts: { ground: "Ground floor or direct access", lift: "Upper floor with a lift", stairs: "Upper floor without a lift" } },
+          extras: { text: "Would you like any options?", short: "Options", none: "No options", opts: { clean: "End-of-clearance cleaning", dismantle: "Dismantling furniture and kitchen", recycle: "Sorting and recycling certificate", keys: "Returning keys to the agency" } },
+          date: { text: "When would you like the clearance done?", short: "Preferred date" },
+        },
+        items: {
+          clear_flat: "Apartment clearance ({m3} m³)",
+          clear_house: "House clearance ({m3} m³)",
+          clear_cellar: "Cellar or attic clearance ({m3} m³)",
+          clear_office: "Office or shop clearance ({m3} m³)",
+          clear_estate: "Estate clearance ({m3} m³)",
+          disposal: "Transport and tip fees",
+          fee_office: "Removal of archives and equipment",
+          fee_estate: "Inventory and sorting of items",
+          clean: "End-of-clearance cleaning",
+          dismantle: "Dismantling furniture and kitchen",
+          recycle: "Sorting and recycling certificate",
+          keys: "Returning keys to the agency",
+        },
+      },
+    },
+    de: {
+      label: "Räumung und Entsorgung",
+      forWho: "Räumungs- und Entsorgungsfirmen",
+      pitch: "Räumungen von Wohnungen, Häusern, Kellern und Nachlässen pro m³ berechnen — in einer Minute.",
+      emailNoun: "Ihre Räumung",
+      landing: {
+        h1: ["SIE RÄUMEN.", "DEALZ RECHNET."],
+        question: "Wie viele Räumungen verlieren Sie, weil der Kunde heute einen Preis will, nicht erst nach Ihrer Besichtigung?",
+        text: "Mietende, Nachlass, voller Keller: Ihre Kunden haben es eilig und vergleichen. Dealz antwortet ihnen rund um die Uhr, stellt die richtigen Fragen (Objekt, Volumen, Stockwerk, Lift, Reinigung), berechnet Ihren Preis nach Ihren Tarifen und erstellt die Offerte.",
+        clientQ: "Was kostet die Räumung einer 4-Zimmer-Wohnung im 3. Stock mit Lift?",
+        values: [
+          { icon: "📦", title: "Preis pro m³, sofort", text: "Der Kunde wählt das geschätzte Volumen, Dealz wendet Ihren m³-Preis und Ihre Entsorgungsgebühren an." },
+          { icon: "🏢", title: "Stockwerk und Lift inbegriffen", text: "Erdgeschoss, Stockwerk mit Lift oder Treppe: Der Zuschlag folgt Ihren eigenen Regeln." },
+          { icon: "🧹", title: "Reinigung und Schlüsselübergabe verkauft", text: "Endreinigung, Demontage, Schlüsselabgabe bei der Verwaltung: in jeder Offerte angeboten." },
+          { icon: "🤝", title: "Nachlässe mit Sorgfalt", text: "Inventar und Sortierung automatisch für Nachlässe, mit einem klaren Preis für die Familie." },
+        ],
+        step1: "Importieren Sie Ihre Tarife: Preis pro m³, Entsorgungsgebühren, Stockwerkzuschläge, Inventar, Reinigung. Ihr Excel bleibt Ihr Arbeitswerkzeug.",
+        step2: "Die Engine versteht Ihre Volumen, Ihre Stockwerke und Ihre Optionen.",
+        excel: { file: "tarife-raeumung.xlsx", headers: ["Position", "Bedingung", "Preis"], rows: [["Wohnungsräumung", "30 m³ · Stockwerk mit Lift", "CHF 2'475"], ["Entsorgungsgebühren", "30 m³", "CHF 660"], ["Endreinigung", "30 m³", "CHF 360"]] },
+        chat: ["«Wir müssen die Wohnung meiner Mutter räumen.»", "«Wie viele Zimmer hat die Wohnung?»", "«In welchem Stock, und gibt es einen Lift?»"],
+        offer: { company: "Place Nette Débarras Sàrl", rows: [["Wohnungsräumung (30 m³)", 2475], ["Entsorgungsgebühren", 660], ["Endreinigung", 360]] },
+        roi: "Zwei zusätzliche Räumungen pro Jahr bezahlen mehrere Jahre Abo.",
+      },
+      demo: {
+        brand: "Place Nette",
+        eyebrow: "Genf & Nyon · Fiktives Beispiel",
+        hero: { h1: "Geräumt, gereinigt, und ein klarer Preis in einer Minute.", text: "Räumung von Wohnungen, Häusern, Kellern, Büros und Nachlässen in Genf und in der Region Nyon — erhalten Sie in Sekunden einen verbindlichen Preis, direkt auf dieser Website." },
+        stats: [{ num: "4.9★", lbl: "KUNDENZUFRIEDENHEIT" }, { num: "2'500+", lbl: "RÄUMUNGEN" }, { num: "< 1 Min.", lbl: "FÜR EINE OFFERTE" }],
+        servicesTitle: "Unsere Räumungen",
+        servicesSub: "Wählen Sie eine Leistung, oder beschreiben Sie Ihr Anliegen einfach im Tab «Offerte erhalten».",
+        services: [
+          { icon: "🏢", title: "Wohnungen", text: "Mietende, Umzug, Renovation.", tag: "ab CHF 75/m³" },
+          { icon: "🏡", title: "Häuser", text: "Vom Estrich bis zum Keller, Garten inbegriffen.", tag: "ab CHF 75/m³" },
+          { icon: "📦", title: "Keller und Estriche", text: "Kleine Volumen, schneller Einsatz.", tag: "ab CHF 350" },
+          { icon: "🏬", title: "Büros und Geschäfte", text: "Mobiliar, Archive, Material.", tag: "ab CHF 75/m³" },
+          { icon: "🕊️", title: "Nachlässe", text: "Inventar, Sortierung und Räumung mit Diskretion.", tag: "Inventar CHF 350" },
+          { icon: "🧹", title: "Endreinigung", text: "Übergabe bereit für die Wohnungsabnahme.", tag: "ab CHF 210" },
+        ],
+        about: {
+          title: "Schnell, sauber und respektvoll geräumt",
+          text: "Place Nette räumt und reinigt seit 2014 Wohnungen, Häuser und Räume für Privatpersonen, Verwaltungen und Notare in Genf und Nyon. 2026 haben wir unserer Website einen Assistenten für Sofort-Offerten hinzugefügt — schneller für Sie, weniger Administration für uns.",
+          bullets: [["Sortierung und Recycling", "Brauchbares geht an Hilfswerke."], ["Schneller Einsatz", "oft innerhalb der Woche."], ["Transparenter Preis", "die erhaltene Offerte ist der Preis, den Sie bezahlen."]],
+        },
+        contact: { phone: "022 000 01 11", email: "hello@place-nette.demo", zone: "Genf, Bezirk Nyon", hours: "Mo–Sa, 7–18 Uhr" },
+        devisNote: "Beantworten Sie ein paar Fragen zu Ihrer Räumung — Sie erhalten eine echte Offerte, die Sie direkt hier annehmen oder ablehnen können.",
+        inputPlaceholder: "Beschreiben Sie, was geräumt werden muss…",
+        pdfCompany: { name: "Place Nette Débarras Sàrl", address: "Route des Jeunes 43, 1227 Carouge", phone: "022 000 01 11", email: "hello@place-nette.demo" },
+      },
+      quote: {
+        greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Räumung und erstelle Ihnen gleich danach eine verbindliche Offerte.",
+        addressPlaceholder: "Adresse des Objekts (Strasse, PLZ, Ort)",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Arbeit, Transport und Entsorgungsgebühren inbegriffen. Ein deutlich grösseres Volumen als geschätzt nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        q: {
+          type: { text: "Was muss geräumt werden?", short: "Objekt", opts: { flat: "Eine Wohnung", house: "Ein Haus", cellar: "Ein Keller oder Estrich", office: "Ein Büro oder Geschäft", estate: "Ein Nachlass" } },
+          volume: { text: "Welches Volumen schätzen Sie?", short: "Volumen", opts: { v1: "Klein (Keller, etwa 5 m³)", v2: "Studio oder 2 Zimmer (etwa 15 m³)", v3: "3 bis 4 Zimmer (etwa 30 m³)", v4: "Haus (etwa 60 m³)", v5: "Grosses Haus oder Räume (100 m³ und mehr)" } },
+          floor: { text: "In welchem Stockwerk liegt das Objekt?", short: "Stockwerk", opts: { ground: "Erdgeschoss oder direkter Zugang", lift: "Stockwerk mit Lift", stairs: "Stockwerk ohne Lift" } },
+          extras: { text: "Wünschen Sie Optionen?", short: "Optionen", none: "Keine Option", opts: { clean: "Endreinigung", dismantle: "Demontage von Möbeln und Küche", recycle: "Sortierung und Recyclingnachweis", keys: "Schlüsselabgabe bei der Verwaltung" } },
+          date: { text: "Wann wünschen Sie die Räumung?", short: "Wunschtermin" },
+        },
+        items: {
+          clear_flat: "Wohnungsräumung ({m3} m³)",
+          clear_house: "Hausräumung ({m3} m³)",
+          clear_cellar: "Keller- oder Estrichräumung ({m3} m³)",
+          clear_office: "Büro- oder Geschäftsräumung ({m3} m³)",
+          clear_estate: "Nachlassräumung ({m3} m³)",
+          disposal: "Transport und Entsorgungsgebühren",
+          fee_office: "Entsorgung von Archiven und Material",
+          fee_estate: "Inventar und Sortierung",
+          clean: "Endreinigung",
+          dismantle: "Demontage von Möbeln und Küche",
+          recycle: "Sortierung und Recyclingnachweis",
+          keys: "Schlüsselabgabe bei der Verwaltung",
+        },
+      },
+    },
+  };
+
+  if (typeof module !== "undefined" && module.exports) module.exports = S;
+  else {
+    window.DEALZ_SECTORS = window.DEALZ_SECTORS || {};
+    window.DEALZ_SECTORS[S.slug] = S;
+  }
+})();
