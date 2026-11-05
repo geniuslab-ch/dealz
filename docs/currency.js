@@ -189,7 +189,10 @@
   function previewBar() {
     if (!preview || !document.body || document.getElementById("dealz-currency-preview")) return;
     var t = BAR[(document.documentElement.lang || "fr").slice(0, 2)] || BAR.fr;
-    var url = location.pathname + "?currency=auto" + location.hash;
+    // Keep the rest of the query (e.g. ?checkout=success&s=... after Stripe).
+    var q = location.search.replace(/^\?/, "").split("&").filter(function (p) { return p && !/^currency=/i.test(p); });
+    q.push("currency=auto");
+    var url = location.pathname + "?" + q.join("&") + location.hash;
     var bar = document.createElement("div");
     bar.id = "dealz-currency-preview";
     bar.setAttribute("role", "status");
