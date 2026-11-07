@@ -267,7 +267,7 @@ async function createBooking({ company, quote, customer, source, lang, gridSlug 
 // the booking — the CRM's bexio page can send it again later.
 async function sendToBexio(booking) {
   try {
-    const out = await crm.post("bexioBooking", { bookingId: booking.id }, { timeoutMs: 8000 });
+    const out = await crm.post("bexioBooking", { bookingId: booking.id }, { timeoutMs: 25000 });
     if (out && out.bexio) console.log("[scale] booking sent to bexio:", out.bexio.type, out.bexio.nr || out.bexio.id);
   } catch (err) {
     console.error("[scale] bexio send failed:", err.message);

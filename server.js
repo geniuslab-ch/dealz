@@ -433,7 +433,7 @@ async function bexioQuote(result, { company, history, lang, chatId }) {
     .digest("hex")
     .slice(0, 24);
   try {
-    await crm.post("bexioQuote", { event: "given", companyId: company.id, ref: quote.ref, quote, customer: c, lang }, { timeoutMs: 6000 });
+    await crm.post("bexioQuote", { event: "given", companyId: company.id, ref: quote.ref, quote, customer: c, lang }, { timeoutMs: 20000 });
   } catch (err) {
     console.error("[bexio quote] CRM forward failed:", err.message);
   }
@@ -568,11 +568,11 @@ async function processDecline(body, baseUrl) {
     if (company && quote && !quote.ref && (who.email || who.phone) && crm.isConfigured("bexioQuote")) {
       quote.ref = require("crypto").randomBytes(12).toString("hex");
       await crm
-        .post("bexioQuote", { event: "given", companyId: company.id, ref: quote.ref, quote, customer: who, lang }, { timeoutMs: 8000 })
+        .post("bexioQuote", { event: "given", companyId: company.id, ref: quote.ref, quote, customer: who, lang }, { timeoutMs: 20000 })
         .catch((err) => console.error("[bexio quote] CRM forward failed:", err.message));
     }
     if (company && quote && quote.ref) {
-      await crm.post("bexioQuote", { event: "declined", companyId: company.id, ref: quote.ref }, { timeoutMs: 6000 }).catch((err) => console.error("[bexio quote] decline forward failed:", err.message));
+      await crm.post("bexioQuote", { event: "declined", companyId: company.id, ref: quote.ref }, { timeoutMs: 15000 }).catch((err) => console.error("[bexio quote] decline forward failed:", err.message));
     }
 
     // CAPTURE plan: a plain "quote declined" e-mail, without the recovery
