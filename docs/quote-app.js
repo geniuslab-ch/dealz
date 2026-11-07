@@ -803,6 +803,7 @@
       renderPostBookingCTA(container);
     } catch (err) {
       if (err.isAppError) {
+        answeredQuotes.delete(quote); // not booked: the customer may retry
         renderSystemMessage(container, `Erreur : ${err.message}`, "system-decline");
       } else {
         renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
@@ -862,6 +863,7 @@
       );
       renderEmailPreview(container, data.emailPreview);
     } catch (err) {
+      answeredQuotes.delete(quote); // not recorded: the customer may retry
       renderSystemMessage(
         container,
         err.isAppError ? `Erreur : ${err.message}` : "Une erreur est survenue.",
