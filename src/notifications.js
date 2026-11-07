@@ -487,7 +487,7 @@ async function sendFollowupToCustomer({
   return sendEmail({ to: customer.email, subject: t.subject, html, replyTo: companyEmail });
 }
 
-async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr", serviceNoun, date, calendarFeedUrl }) {
+async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_NOTIFY_EMAIL, companyName = COMPANY_NAME, signature, logoUrl, tagline, lang = "fr", serviceNoun, date, calendarFeedUrl, pdfCompany }) {
   const now = new Date();
   // The service date the customer chose (YYYY-MM-DD, 9:00 Swiss time);
   // without one, a placeholder 3 days out.
@@ -549,7 +549,8 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
     quote,
     customer,
     lang,
-    company: { name: companyName, email: notifyEmail, logoUrl },
+    // pdfCompany: a sector demo's fictional company (address, phone, e-mail).
+    company: { name: companyName, email: notifyEmail, logoUrl, ...(pdfCompany || {}) },
   });
   const pdfAttachments = pdf ? [pdf] : undefined;
 

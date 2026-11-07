@@ -31,9 +31,23 @@ async function fetchImage(url) {
   try {
     const res = await fetch(url, { signal: AbortSignal.timeout(6000) });
     const type = (res.headers.get("content-type") || "").split(";")[0].trim().toLowerCase();
-    if (res.ok && type.startsWith("image/")) {
-      const buffer = Buffer.from(await res.arrayBuffer());
-      if (buffer.length && buffer.length <= MAX_IMAGE_BYTES) value = { buffer, type };
+    const declared = Number(res.headers.get("content-length") || 0);
+    if (res.ok && type.startsWith("image/") && declared <= MAX_IMAGE_BYTES) {
+      // Read at most MAX_IMAGE_BYTES, even when the server sends no (or a
+      // wrong) Content-Length: an oversized logo is never fully buffered
+      // (leaving the loop early cancels the download).
+      const chunks = [];
+      let size = 0;
+      for await (const chunk of res.body) {
+        size += chunk.length;
+        if (size > MAX_IMAGE_BYTES) break;
+        chunks.push(chunk);
+      }
+      if (size > MAX_IMAGE_BYTES) {
+        console.error(`[email image] ${url} is larger than ${MAX_IMAGE_BYTES} bytes`);
+      } else if (size) {
+        value = { buffer: Buffer.concat(chunks.map((c) => Buffer.from(c))), type };
+      }
     } else {
       console.error(`[email image] ${url} -> HTTP ${res.status} ${type}`);
     }
@@ -102,8 +116,12 @@ async function buildQuotePdf({ quote, customer, lang = "fr", company = {} }) {
     const img = company.logoUrl ? await fetchImage(company.logoUrl) : null;
     const size = img && img.type === "image/png" ? pngSize(img.buffer) : null;
     if (size) pdfCompany.logo = { data: `data:image/png;base64,${img.buffer.toString("base64")}`, w: size.w, h: size.h };
+    // Sector demo quotes carry their already-formatted recap lines
+    // (docs/sector-quote.js), the same ones the widget's PDF shows.
+    const detailLines = Array.isArray(quote.detailLines) ? quote.detailLines.filter((l) => typeof l === "string") : undefined;
     const { doc } = loadGenerator().generate(quote, customer || {}, lang, {
       company: pdfCompany,
+      detailLines: detailLines && detailLines.length ? detailLines : undefined,
       generated: (GENERATED[lang] || GENERATED.fr)(pdfCompany.name),
     });
     const content = Buffer.from(doc.output("arraybuffer"));
