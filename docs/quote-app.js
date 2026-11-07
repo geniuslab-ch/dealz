@@ -341,6 +341,9 @@
   }
 
   let messages = [];
+  // One id per conversation (this widget instance): the server uses it to
+  // tell two chats of the same customer apart (quote.ref, bexio offers).
+  const CHAT_ID = "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
   let sending = false;
   let greeted = false;
   let useStaticFallback = false;
@@ -423,6 +426,7 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         messages: payloadMessages,
+        chatId: CHAT_ID,
         company: window.DEALZ_COMPANY || undefined,
         grid: window.DEALZ_GRID || undefined,
         lang: window.DEALZ_LANG || undefined,

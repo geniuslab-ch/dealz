@@ -418,17 +418,18 @@ app.get("/api/company-info", async (req, res) => {
 
 // A quote given to a real company's customer (name/e-mail known) is sent
 // to the CRM, which creates it as an open offer in that company's bexio.
-// `quote.ref` names the conversation (company + customer + first message),
+// `quote.ref` names the conversation (company + customer + the widget's
+// chatId, or the first message for older widgets),
 // so a recalculated quote replaces the offer instead of adding one; it
 // travels back with the quote on accept/decline. Never blocks the chat.
-async function bexioQuote(result, { company, history, lang }) {
+async function bexioQuote(result, { company, history, lang, chatId }) {
   const quote = result && result.quote;
   const c = (quote && quote.customer) || {};
   if (!quote || !company || !company.id || !(c.email || c.phone) || !crm.isConfigured("bexioQuote")) return;
   const first = history.find((m) => m && m.role === "user");
   quote.ref = require("crypto")
     .createHash("sha256")
-    .update([company.id, String(c.email || c.phone).toLowerCase(), JSON.stringify(first ? first.content : "")].join("|"))
+    .update([company.id, String(c.email || c.phone).toLowerCase(), chatId || JSON.stringify(first ? first.content : "")].join("|"))
     .digest("hex")
     .slice(0, 24);
   try {
@@ -460,7 +461,8 @@ app.post("/api/chat", async (req, res) => {
     // A quote for a real company goes to its bexio as an open offer (when
     // it connected bexio in the CRM) — see bexioQuote below.
     const reply = async (result) => {
-      await bexioQuote(result, { company, history, lang });
+      const chatId = /^[A-Za-z0-9_-]{6,64}$/.test(String(req.body.chatId || "")) ? String(req.body.chatId) : null;
+      await bexioQuote(result, { company, history, lang, chatId });
       return res.json(result);
     };
 
