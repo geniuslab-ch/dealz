@@ -1,6 +1,7 @@
 const { supabase } = require("./companies");
 const { hasFeature } = require("./plans");
 const { sendEmail, googleCalendarLink, signatureHtml } = require("./notifications");
+const crm = require("./crm");
 
 /**
  * Bookings and the SCALE plan's team features.
@@ -253,10 +254,23 @@ async function createBooking({ company, quote, customer, source, lang, gridSlug 
       .single();
     if (error) throw error;
     if (staff) await notifyStaff(company, staff, booking);
+    await sendToBexio(booking);
     return { booking, staff, team };
   } catch (err) {
     console.error("[scale] booking not recorded:", err.message);
     return null;
+  }
+}
+
+// When the company has connected bexio (in the CRM), the CRM creates the
+// contact and the invoice there. Skipped quietly otherwise; never blocks
+// the booking — the CRM's bexio page can send it again later.
+async function sendToBexio(booking) {
+  try {
+    const out = await crm.post("bexioBooking", { bookingId: booking.id }, { timeoutMs: 8000 });
+    if (out && out.bexio) console.log("[scale] booking sent to bexio:", out.bexio.type, out.bexio.nr || out.bexio.id);
+  } catch (err) {
+    console.error("[scale] bexio send failed:", err.message);
   }
 }
 
