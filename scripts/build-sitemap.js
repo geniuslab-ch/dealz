@@ -8,7 +8,8 @@
  * Lists the indexable pages only (see site-pages.js): no widget, personal
  * quote, private or demo pages. Each page lists its French / German / English
  * versions as hreflang alternates; the French one is the x-default.
- * <lastmod> is the date of the page's last git commit, when there is one.
+ * <lastmod> is the page's last change: today if it has uncommitted edits,
+ * otherwise its last git commit.
  */
 const fs = require("fs");
 const path = require("path");
@@ -17,14 +18,21 @@ const { DOCS, walk, isIndexable, urlOf, groupsOf, alternatesOf } = require("./si
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 
-function lastCommitDate(file) {
+const git = (args) => execFileSync("git", args, {
+  cwd: path.join(__dirname, ".."),
+  encoding: "utf8",
+  stdio: ["ignore", "pipe", "ignore"],
+}).trim();
+const TODAY = new Date().toISOString().slice(0, 10);
+
+// Date of the page's last change: today when it has uncommitted edits (the
+// usual case right after `npm run build`), otherwise its last commit date.
+function lastModified(file) {
+  const rel = path.join("docs", file);
   try {
-    const out = execFileSync("git", ["log", "-1", "--format=%cs", "--", path.join("docs", file)], {
-      cwd: path.join(__dirname, ".."),
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
-    return /^\d{4}-\d{2}-\d{2}$/.test(out) ? out : "";
+    if (git(["status", "--porcelain", "--", rel])) return TODAY;
+    const out = git(["log", "-1", "--format=%cs", "--", rel]);
+    return /^\d{4}-\d{2}-\d{2}$/.test(out) ? out : TODAY;
   } catch (e) {
     return "";
   }
@@ -35,7 +43,7 @@ const groups = groupsOf(files);
 
 const entries = files.map((f) => {
   let xml = "  <url>\n    <loc>" + esc(urlOf(f)) + "</loc>\n";
-  const date = lastCommitDate(f);
+  const date = lastModified(f);
   if (date) xml += "    <lastmod>" + date + "</lastmod>\n";
   for (const a of alternatesOf(f, groups)) {
     xml += '    <xhtml:link rel="alternate" hreflang="' + a.lang + '" href="' + esc(a.href) + '" />\n';
