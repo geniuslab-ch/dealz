@@ -22,7 +22,7 @@ const PARTIAL = process.argv.includes("--partial"); // dev only: build whatever 
 
 // Display order on the hub (the order the sectors were requested in).
 const ORDER = [
-  "demenagement", "jardinage", "peinture", "nettoyage-textiles", "lavage-auto", "location-evenementiel",
+  "nettoyage", "demenagement", "jardinage", "peinture", "nettoyage-textiles", "lavage-auto", "location-evenementiel",
   "desinfection", "photo-video", "transport-livraison", "pressing", "location-vehicules", "conciergerie",
   "piscines", "vitres", "montage-meubles", "impression", "traiteur", "location-materiel", "toiture",
   "renovation", "platrerie", "sols", "carrelage", "facades", "isolation", "stores", "sanitaire", "electricien", "elagage", "debarras", "serrurerie",
@@ -33,10 +33,7 @@ const STR = {
     htmlLang: "fr",
     base: "/secteurs",
     home: "/index.html",
-    demoHome: "/demo.html",
     indexFile: "index.html",
-    cleaningLabel: "Nettoyage",
-    cleaningPitch: "Fin de bail, entretien régulier, bureaux : le devis instantané d'origine.",
     seeDemoNav: "✨ Essayer la démo",
     navHome: "Accueil", navProblem: "Le problème", navHow: "Comment ça marche", navPricing: "Tarifs", navContact: "Contact", navSectors: "Secteurs",
     forWho: function (s) { return "Pour les " + s.fr.forWho; },
@@ -142,10 +139,7 @@ const STR = {
     ogLocale: "en_CH",
     base: "/en/secteurs",
     home: "/en/index.html",
-    demoHome: "/en/demo.html",
     indexFile: "en/index.html",
-    cleaningLabel: "Cleaning",
-    cleaningPitch: "End-of-lease, regular upkeep, offices: the original instant quote.",
     seeDemoNav: "✨ Try the demo",
     navHome: "Home", navProblem: "The problem", navHow: "How it works", navPricing: "Pricing", navContact: "Contact", navSectors: "Sectors",
     forWho: function (s) { return "For " + s.en.forWho; },
@@ -251,10 +245,7 @@ const STR = {
     ogLocale: "de_CH",
     base: "/de/secteurs",
     home: "/de/index.html",
-    demoHome: "/de/demo.html",
     indexFile: "de/index.html",
-    cleaningLabel: "Reinigung",
-    cleaningPitch: "Endreinigung, regelmässiger Unterhalt, Büros: das ursprüngliche Sofort-Angebot.",
     seeDemoNav: "✨ Demo testen",
     navHome: "Startseite", navProblem: "Das Problem", navHow: "So funktioniert's", navPricing: "Preise", navContact: "Kontakt", navSectors: "Branchen",
     forWho: function (s) { return "Für " + s.de.forWho; },
@@ -730,7 +721,6 @@ ${cfg.addList.map((l) => "          <li>" + esc(l) + "</li>").join("\n")}
       <h2 class="section-title">${cfg.otherSectorsTitle}</h2>
       <div class="sector-chips">
           ${sectorsChips(lang, S.slug, all)}
-          <a class="sector-chip" href="${cfg.home}">🧽 ${cfg.cleaningLabel}</a>
       </div>
       <p class="pricing-note" style="text-align:center;"><a href="${cfg.base}/" style="color:var(--blue-dark); font-weight:700;">${cfg.allSectors} →</a></p>
     </div>
@@ -1136,8 +1126,7 @@ function buildHub(lang, all) {
   const cfg = STR[lang];
   const card = (icon, label, pitch, landing, demo) =>
     '      <div class="sector-card">\n        <div class="sector-icon">' + esc(icon) + "</div>\n        <h3>" + esc(label) + "</h3>\n        <p>" + esc(pitch) + '</p>\n        <div class="sector-links"><a class="btn btn-primary" href="' + landing + '">' + cfg.discover + '</a><a class="btn btn-secondary" href="' + demo + '">' + cfg.tryDemo + "</a></div>\n      </div>";
-  const cards = [card("🧽", cfg.cleaningLabel, cfg.cleaningPitch, cfg.home, cfg.demoHome)]
-    .concat(all.map((s) => card(s.icon, s[lang].label, s[lang].pitch, cfg.base + "/" + s.slug + "/", cfg.base + "/" + s.slug + "/demo.html")))
+  const cards = all.map((s) => card(s.icon, s[lang].label, s[lang].pitch, cfg.base + "/" + s.slug + "/", cfg.base + "/" + s.slug + "/demo.html"))
     .join("\n");
   const title = cfg.hubTitle;
   const desc = cfg.hubDesc;

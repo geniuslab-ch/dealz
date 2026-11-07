@@ -1,4 +1,25 @@
 {
+  "nettoyage": {
+    "label": "Nettoyage et fin de bail",
+    "emailNoun": "votre nettoyage",
+    "company": {
+      "name": "SwissClean Sàrl",
+      "email": "hello@swissclean.demo",
+      "phone": "022 000 00 00",
+      "address": "Rue de Lausanne 12, 1201 Genève",
+      "logo": "/images/demo-logos/nettoyage-mark.png"
+    },
+    "i18n": {
+      "en": {
+        "label": "Cleaning and move-out",
+        "emailNoun": "your cleaning"
+      },
+      "de": {
+        "label": "Reinigung und Endreinigung",
+        "emailNoun": "Ihre Reinigung"
+      }
+    }
+  },
   "demenagement": {
     "label": "Déménagement et débarras",
     "emailNoun": "votre déménagement",
