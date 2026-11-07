@@ -42,6 +42,17 @@
 
   var state = { plan: "CLOSE", bill: "yearly" };
 
+  // A link can preselect the choice, e.g. from the WhatsApp catalogue:
+  // ?plan=CAPTURE|CLOSE|SCALE and ?billing=monthly|yearly|onetime.
+  (function fromUrl() {
+    var q = location.search;
+    var p = /[?&]plan=([A-Za-z]+)/.exec(q);
+    var b = /[?&]billing=([A-Za-z]+)/.exec(q);
+    if (p && plans[p[1].toUpperCase()]) state.plan = p[1].toUpperCase();
+    if (b && bills[b[1].toLowerCase()]) state.bill = b[1].toLowerCase();
+    if (state.bill === "onetime" && !onceOpen) state.bill = "yearly";
+  })();
+
   function fill(tpl, vars) {
     return String(tpl || "").replace(/\{(\w+)\}/g, function (m, k) { return k in vars ? vars[k] : m; });
   }
