@@ -17,9 +17,9 @@ async function bexioQuoteEvent(event, company, quote) {
       const c = quote.customer || {};
       if (!(c.email || c.phone)) return;
       quote.ref = quote.ref || crypto.randomBytes(12).toString("hex");
-      await crm.post("bexioQuote", { event, companyId: company.id, ref: quote.ref, quote, customer: c, lang: "fr" }, { timeoutMs: 8000 });
+      await crm.post("bexioQuote", { event, companyId: company.id, ref: quote.ref, quote, customer: c, lang: "fr" }, { timeoutMs: 20000 });
     } else if (quote.ref) {
-      await crm.post("bexioQuote", { event, companyId: company.id, ref: quote.ref }, { timeoutMs: 6000 });
+      await crm.post("bexioQuote", { event, companyId: company.id, ref: quote.ref }, { timeoutMs: 15000 });
     }
   } catch (err) {
     console.error(`[whatsapp] bexio ${event} forward failed:`, err.message);
