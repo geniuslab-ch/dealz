@@ -24,6 +24,8 @@ const ENDPOINTS = {
     process.env.CRM_ONBOARDING_URL || derive(process.env.CRM_INBOUND_URL, /inbound-leads\/?$/, "onboarding-company"),
   referral: () => process.env.CRM_REFERRAL_URL,
   referralIdentify: () => process.env.CRM_REFERRAL_IDENTIFY_URL,
+  bexioBooking: () =>
+    process.env.CRM_BEXIO_BOOKING_URL || derive(process.env.CRM_INBOUND_URL, /inbound-leads\/?$/, "bexio/booking"),
 };
 
 // Only when the base really ends with the expected path — otherwise the old
