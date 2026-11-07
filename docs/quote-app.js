@@ -803,6 +803,7 @@
       renderPostBookingCTA(container);
     } catch (err) {
       if (err.isAppError) {
+        answeredQuotes.delete(quote); // not booked: the customer may retry
         renderSystemMessage(container, `Erreur : ${err.message}`, "system-decline");
       } else {
         renderSystemMessage(container, null, "system-success", simulatedAcceptHtml());
@@ -812,7 +813,17 @@
     }
   }
 
+  // A quote is answered once: reopening the PDF and clicking again must not
+  // book (and invoice) it twice.
+  const answeredQuotes = new WeakSet();
+  function markAnswered(quote) {
+    if (answeredQuotes.has(quote)) return false;
+    answeredQuotes.add(quote);
+    return true;
+  }
+
   function handleAccept(container, quote) {
+    if (!markAnswered(quote)) return;
     // Contact info is normally already captured earlier in the conversation
     // (the assistant asks for it before delivering the quote) — only fall
     // back to asking again here if that didn't happen for some reason.
@@ -852,6 +863,7 @@
       );
       renderEmailPreview(container, data.emailPreview);
     } catch (err) {
+      answeredQuotes.delete(quote); // not recorded: the customer may retry
       renderSystemMessage(
         container,
         err.isAppError ? `Erreur : ${err.message}` : "Une erreur est survenue.",
@@ -861,6 +873,7 @@
   }
 
   function handleDecline(container, quote) {
+    if (!markAnswered(quote)) return;
     renderAssistantText(
       container,
       "Bien sûr. Auriez-vous deux minutes pour me dire ce qui ne convenait pas dans notre offre ?"
@@ -967,6 +980,7 @@
 
     const acceptBtn = overlay.querySelector("#dealz-pdf-accept");
     const declineBtn = overlay.querySelector("#dealz-pdf-decline");
+    if (answeredQuotes.has(quote)) overlay.querySelector(".dealz-pdf-actions").style.display = "none";
     acceptBtn.addEventListener("click", () => {
       acceptBtn.disabled = true;
       declineBtn.disabled = true;
