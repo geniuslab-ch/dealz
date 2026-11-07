@@ -131,7 +131,7 @@ const STR = {
     footerDemo: function (d) { return d.pdfCompany.name + " — site de démonstration, cette entreprise n'existe pas réellement."; },
     poweredBy: "Propulsé par",
     sectorTitle: function (label) { return "Dealz pour " + label.toLowerCase() + " — devis instantané par IA"; },
-    sectorDesc: function (pitch) { return pitch + " Dealz répond à vos clients 24/7, calcule votre prix selon vos tarifs et prépare le devis. Dès CHF 58.40/mois."; },
+    sectorDesc: function (pitch) { return pitch + " Dealz répond à vos clients 24/7, calcule votre prix selon vos tarifs et prépare le devis."; },
     demoTitle: function (name) { return name + " — Site de démonstration (propulsé par Dealz)"; },
     hubTitle: "Dealz par secteur — devis instantané par IA pour votre métier",
     hubDesc: "Déménagement, jardinage, peinture, pressing, piscines, traiteurs… Découvrez Dealz pour votre secteur et essayez une démo adaptée à votre métier.",
@@ -240,7 +240,7 @@ const STR = {
     footerDemo: function (d) { return d.pdfCompany.name + " — demonstration site, this business doesn't really exist."; },
     poweredBy: "Powered by",
     sectorTitle: function (label) { return "Dealz for " + label.toLowerCase() + " — instant AI quotes"; },
-    sectorDesc: function (pitch) { return pitch + " Dealz replies to your clients 24/7, calculates your price from your rates and prepares the quote. From CHF 58.40/month."; },
+    sectorDesc: function (pitch) { return pitch + " Dealz replies to your clients 24/7, calculates your price from your rates and prepares the quote."; },
     demoTitle: function (name) { return name + " — Demo site (powered by Dealz)"; },
     hubTitle: "Dealz by sector — instant AI quotes for your trade",
     hubDesc: "Moving, gardening, painting, dry cleaning, pools, catering… Discover Dealz for your sector and try a demo tailored to your trade.",
@@ -349,7 +349,7 @@ const STR = {
     footerDemo: function (d) { return d.pdfCompany.name + " — Demo-Website, dieses Unternehmen existiert nicht wirklich."; },
     poweredBy: "Unterstützt von",
     sectorTitle: function (label) { return "Dealz für " + label + " — Sofort-Offerten per KI"; },
-    sectorDesc: function (pitch) { return pitch + " Dealz antwortet Ihren Kunden rund um die Uhr, berechnet Ihren Preis nach Ihren Tarifen und erstellt die Offerte. Ab CHF 58.40 pro Monat."; },
+    sectorDesc: function (pitch) { return pitch + " Dealz antwortet Ihren Kunden rund um die Uhr, berechnet Ihren Preis nach Ihren Tarifen und erstellt die Offerte."; },
     demoTitle: function (name) { return name + " — Demo-Website (unterstützt von Dealz)"; },
     hubTitle: "Dealz nach Branche — Sofort-Offerten per KI für Ihr Handwerk",
     hubDesc: "Umzug, Gartenbau, Malerarbeiten, Reinigung, Pools, Catering… Entdecken Sie Dealz für Ihre Branche und testen Sie eine Demo passend zu Ihrem Handwerk.",
@@ -525,7 +525,7 @@ function siteNav(lang, slug, withAnchors) {
     ? '      <a href="#probleme">' + cfg.navProblem + '</a>\n      <a href="#comment-ca-marche">' + cfg.navHow + '</a>\n      <a href="#tarifs">' + cfg.navPricing + '</a>\n      <a href="#contact">' + cfg.navContact + "</a>\n"
     : "";
   const demo = slug ? '      <a href="' + cfg.base + "/" + slug + '/demo.html" class="cta">' + cfg.seeDemoNav + "</a>\n" : "";
-  return '  <nav class="nav">\n    <div class="nav-logo">\n      <a href="' + cfg.home + '"><img src="/images/dealz-logo-sm.png" alt="Dealz" /></a>\n' +
+  return '  <nav class="nav">\n    <div class="nav-logo">\n      <a href="' + cfg.home + '"><img src="/images/dealz-logo-nav.png" alt="Dealz" /></a>\n' +
     '      <span class="nav-slogan">Keep your website.<br>Keep your tools.<br>Add Dealz.</span>\n    </div>\n    <div class="nav-links">\n' +
     (withAnchors ? "" : '      <a href="' + cfg.home + '">' + cfg.navHome + "</a>\n") + links + '      <a href="' + cfg.base + '/">' + cfg.navSectors + "</a>\n" + demo + "    </div>\n  </nav>\n  <script src=\"/nav.js\" defer></script>\n";
 }

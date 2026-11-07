@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://dealz.website/confidentialite.html</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/confidentialite.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/datenschutz.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/privacy.html" />
@@ -9,20 +10,15 @@
   </url>
   <url>
     <loc>https://dealz.website/de/datenschutz.html</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/confidentialite.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/datenschutz.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/privacy.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/confidentialite.html" />
   </url>
   <url>
-    <loc>https://dealz.website/de/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/" />
@@ -30,6 +26,7 @@
   </url>
   <url>
     <loc>https://dealz.website/de/integration.html</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/integration.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/integration.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/integration.html" />
@@ -37,132 +34,79 @@
   </url>
   <url>
     <loc>https://dealz.website/de/parrainage.html</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/parrainage.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/parrainage.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/parrainage.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/parrainage.html" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/carrelage/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/carrelage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/carrelage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/carrelage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/carrelage/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/carrelage/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/carrelage/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/carrelage/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/carrelage/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/carrelage/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/conciergerie/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/conciergerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/conciergerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/conciergerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/conciergerie/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/conciergerie/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/conciergerie/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/conciergerie/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/conciergerie/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/conciergerie/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/debarras/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/debarras/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/debarras/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/debarras/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/debarras/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/debarras/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/debarras/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/debarras/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/debarras/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/debarras/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/demenagement/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/demenagement/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/demenagement/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/demenagement/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/demenagement/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/demenagement/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/demenagement/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/demenagement/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/demenagement/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/demenagement/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/desinfection/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/desinfection/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/desinfection/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/desinfection/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/desinfection/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/desinfection/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/desinfection/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/desinfection/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/desinfection/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/desinfection/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/elagage/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/elagage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/elagage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/elagage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/elagage/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/elagage/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/elagage/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/elagage/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/elagage/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/elagage/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/electricien/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/electricien/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/electricien/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/electricien/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/electricien/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/electricien/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/electricien/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/electricien/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/electricien/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/electricien/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/facades/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/facades/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/facades/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/facades/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/facades/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/facades/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/facades/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/facades/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/facades/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/facades/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/impression/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/impression/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/impression/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/impression/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/impression/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/impression/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/impression/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/impression/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/impression/" />
@@ -170,335 +114,191 @@
   </url>
   <url>
     <loc>https://dealz.website/de/secteurs/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/isolation/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/isolation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/isolation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/isolation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/isolation/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/isolation/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/isolation/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/isolation/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/isolation/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/isolation/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/jardinage/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/jardinage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/jardinage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/jardinage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/jardinage/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/jardinage/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/jardinage/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/jardinage/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/jardinage/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/jardinage/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/lavage-auto/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/lavage-auto/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/lavage-auto/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/lavage-auto/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/lavage-auto/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/lavage-auto/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/lavage-auto/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/lavage-auto/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/lavage-auto/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/lavage-auto/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/location-evenementiel/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-evenementiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-evenementiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-evenementiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-evenementiel/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/location-evenementiel/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-evenementiel/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-evenementiel/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-evenementiel/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-evenementiel/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/location-materiel/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-materiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-materiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-materiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-materiel/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/location-materiel/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-materiel/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-materiel/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-materiel/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-materiel/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/location-vehicules/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-vehicules/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-vehicules/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-vehicules/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-vehicules/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/location-vehicules/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-vehicules/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-vehicules/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-vehicules/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-vehicules/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/montage-meubles/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/montage-meubles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/montage-meubles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/montage-meubles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/montage-meubles/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/montage-meubles/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/montage-meubles/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/montage-meubles/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/montage-meubles/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/montage-meubles/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/nettoyage-textiles/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/nettoyage-textiles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/nettoyage-textiles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/nettoyage-textiles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage-textiles/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/nettoyage-textiles/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/nettoyage-textiles/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/nettoyage-textiles/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/nettoyage-textiles/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage-textiles/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/peinture/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/peinture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/peinture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/peinture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/peinture/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/peinture/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/peinture/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/peinture/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/peinture/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/peinture/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/photo-video/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/photo-video/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/photo-video/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/photo-video/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/photo-video/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/photo-video/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/photo-video/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/photo-video/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/photo-video/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/photo-video/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/piscines/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/piscines/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/piscines/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/piscines/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/piscines/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/piscines/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/piscines/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/piscines/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/piscines/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/piscines/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/platrerie/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/platrerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/platrerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/platrerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/platrerie/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/platrerie/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/platrerie/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/platrerie/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/platrerie/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/platrerie/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/pressing/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/pressing/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/pressing/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/pressing/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/pressing/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/pressing/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/pressing/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/pressing/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/pressing/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/pressing/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/renovation/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/renovation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/renovation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/renovation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/renovation/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/renovation/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/renovation/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/renovation/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/renovation/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/renovation/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/sanitaire/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sanitaire/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sanitaire/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sanitaire/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sanitaire/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/sanitaire/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sanitaire/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sanitaire/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sanitaire/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sanitaire/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/serrurerie/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/serrurerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/serrurerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/serrurerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/serrurerie/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/serrurerie/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/serrurerie/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/serrurerie/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/serrurerie/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/serrurerie/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/sols/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sols/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sols/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sols/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sols/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/sols/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sols/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sols/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sols/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sols/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/stores/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/stores/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/stores/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/stores/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/stores/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/stores/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/stores/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/stores/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/stores/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/stores/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/toiture/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/toiture/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/traiteur/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/traiteur/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/traiteur/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/traiteur/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/traiteur/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/traiteur/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/traiteur/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/traiteur/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/traiteur/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/traiteur/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/transport-livraison/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/transport-livraison/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/transport-livraison/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/transport-livraison/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/transport-livraison/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/transport-livraison/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/transport-livraison/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/transport-livraison/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/transport-livraison/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/transport-livraison/" />
   </url>
   <url>
-    <loc>https://dealz.website/de/secteurs/vitres/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/vitres/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/vitres/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/vitres/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/vitres/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/de/secteurs/vitres/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/vitres/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/vitres/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/vitres/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/vitres/" />
   </url>
   <url>
-    <loc>https://dealz.website/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/demo.html" />
-  </url>
-  <url>
-    <loc>https://dealz.website/en/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/" />
@@ -506,6 +306,7 @@
   </url>
   <url>
     <loc>https://dealz.website/en/integration.html</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/integration.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/integration.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/integration.html" />
@@ -513,6 +314,7 @@
   </url>
   <url>
     <loc>https://dealz.website/en/parrainage.html</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/parrainage.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/parrainage.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/parrainage.html" />
@@ -520,132 +322,79 @@
   </url>
   <url>
     <loc>https://dealz.website/en/privacy.html</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/confidentialite.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/datenschutz.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/privacy.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/confidentialite.html" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/carrelage/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/carrelage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/carrelage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/carrelage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/carrelage/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/carrelage/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/carrelage/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/carrelage/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/carrelage/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/carrelage/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/conciergerie/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/conciergerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/conciergerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/conciergerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/conciergerie/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/conciergerie/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/conciergerie/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/conciergerie/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/conciergerie/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/conciergerie/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/debarras/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/debarras/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/debarras/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/debarras/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/debarras/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/debarras/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/debarras/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/debarras/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/debarras/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/debarras/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/demenagement/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/demenagement/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/demenagement/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/demenagement/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/demenagement/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/demenagement/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/demenagement/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/demenagement/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/demenagement/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/demenagement/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/desinfection/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/desinfection/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/desinfection/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/desinfection/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/desinfection/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/desinfection/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/desinfection/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/desinfection/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/desinfection/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/desinfection/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/elagage/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/elagage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/elagage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/elagage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/elagage/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/elagage/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/elagage/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/elagage/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/elagage/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/elagage/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/electricien/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/electricien/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/electricien/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/electricien/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/electricien/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/electricien/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/electricien/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/electricien/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/electricien/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/electricien/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/facades/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/facades/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/facades/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/facades/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/facades/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/facades/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/facades/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/facades/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/facades/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/facades/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/impression/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/impression/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/impression/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/impression/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/impression/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/impression/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/impression/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/impression/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/impression/" />
@@ -653,314 +402,183 @@
   </url>
   <url>
     <loc>https://dealz.website/en/secteurs/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/isolation/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/isolation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/isolation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/isolation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/isolation/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/isolation/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/isolation/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/isolation/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/isolation/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/isolation/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/jardinage/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/jardinage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/jardinage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/jardinage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/jardinage/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/jardinage/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/jardinage/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/jardinage/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/jardinage/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/jardinage/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/lavage-auto/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/lavage-auto/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/lavage-auto/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/lavage-auto/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/lavage-auto/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/lavage-auto/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/lavage-auto/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/lavage-auto/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/lavage-auto/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/lavage-auto/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/location-evenementiel/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-evenementiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-evenementiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-evenementiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-evenementiel/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/location-evenementiel/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-evenementiel/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-evenementiel/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-evenementiel/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-evenementiel/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/location-materiel/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-materiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-materiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-materiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-materiel/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/location-materiel/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-materiel/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-materiel/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-materiel/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-materiel/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/location-vehicules/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-vehicules/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-vehicules/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-vehicules/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-vehicules/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/location-vehicules/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-vehicules/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-vehicules/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-vehicules/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-vehicules/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/montage-meubles/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/montage-meubles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/montage-meubles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/montage-meubles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/montage-meubles/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/montage-meubles/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/montage-meubles/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/montage-meubles/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/montage-meubles/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/montage-meubles/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/nettoyage-textiles/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/nettoyage-textiles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/nettoyage-textiles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/nettoyage-textiles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage-textiles/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/nettoyage-textiles/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/nettoyage-textiles/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/nettoyage-textiles/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/nettoyage-textiles/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage-textiles/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/peinture/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/peinture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/peinture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/peinture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/peinture/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/peinture/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/peinture/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/peinture/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/peinture/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/peinture/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/photo-video/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/photo-video/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/photo-video/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/photo-video/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/photo-video/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/photo-video/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/photo-video/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/photo-video/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/photo-video/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/photo-video/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/piscines/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/piscines/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/piscines/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/piscines/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/piscines/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/piscines/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/piscines/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/piscines/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/piscines/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/piscines/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/platrerie/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/platrerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/platrerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/platrerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/platrerie/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/platrerie/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/platrerie/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/platrerie/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/platrerie/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/platrerie/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/pressing/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/pressing/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/pressing/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/pressing/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/pressing/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/pressing/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/pressing/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/pressing/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/pressing/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/pressing/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/renovation/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/renovation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/renovation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/renovation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/renovation/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/renovation/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/renovation/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/renovation/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/renovation/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/renovation/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/sanitaire/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sanitaire/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sanitaire/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sanitaire/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sanitaire/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/sanitaire/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sanitaire/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sanitaire/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sanitaire/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sanitaire/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/serrurerie/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/serrurerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/serrurerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/serrurerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/serrurerie/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/serrurerie/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/serrurerie/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/serrurerie/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/serrurerie/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/serrurerie/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/sols/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sols/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sols/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sols/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sols/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/sols/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sols/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sols/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sols/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sols/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/stores/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/stores/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/stores/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/stores/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/stores/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/stores/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/stores/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/stores/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/stores/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/stores/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/toiture/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/toiture/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/traiteur/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/traiteur/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/traiteur/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/traiteur/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/traiteur/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/traiteur/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/traiteur/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/traiteur/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/traiteur/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/traiteur/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/transport-livraison/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/transport-livraison/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/transport-livraison/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/transport-livraison/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/transport-livraison/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/transport-livraison/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/transport-livraison/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/transport-livraison/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/transport-livraison/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/transport-livraison/" />
   </url>
   <url>
-    <loc>https://dealz.website/en/secteurs/vitres/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/vitres/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/vitres/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/vitres/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/vitres/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/en/secteurs/vitres/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/vitres/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/vitres/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/vitres/" />
@@ -968,6 +586,7 @@
   </url>
   <url>
     <loc>https://dealz.website/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/" />
@@ -975,6 +594,7 @@
   </url>
   <url>
     <loc>https://dealz.website/integration.html</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/integration.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/integration.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/integration.html" />
@@ -982,132 +602,79 @@
   </url>
   <url>
     <loc>https://dealz.website/parrainage.html</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/parrainage.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/parrainage.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/parrainage.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/parrainage.html" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/carrelage/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/carrelage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/carrelage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/carrelage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/carrelage/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/carrelage/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/carrelage/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/carrelage/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/carrelage/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/carrelage/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/conciergerie/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/conciergerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/conciergerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/conciergerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/conciergerie/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/conciergerie/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/conciergerie/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/conciergerie/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/conciergerie/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/conciergerie/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/debarras/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/debarras/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/debarras/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/debarras/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/debarras/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/debarras/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/debarras/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/debarras/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/debarras/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/debarras/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/demenagement/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/demenagement/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/demenagement/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/demenagement/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/demenagement/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/demenagement/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/demenagement/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/demenagement/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/demenagement/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/demenagement/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/desinfection/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/desinfection/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/desinfection/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/desinfection/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/desinfection/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/desinfection/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/desinfection/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/desinfection/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/desinfection/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/desinfection/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/elagage/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/elagage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/elagage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/elagage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/elagage/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/elagage/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/elagage/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/elagage/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/elagage/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/elagage/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/electricien/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/electricien/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/electricien/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/electricien/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/electricien/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/electricien/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/electricien/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/electricien/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/electricien/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/electricien/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/facades/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/facades/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/facades/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/facades/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/facades/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/facades/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/facades/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/facades/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/facades/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/facades/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/impression/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/impression/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/impression/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/impression/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/impression/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/impression/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/impression/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/impression/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/impression/" />
@@ -1115,314 +682,183 @@
   </url>
   <url>
     <loc>https://dealz.website/secteurs/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/isolation/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/isolation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/isolation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/isolation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/isolation/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/isolation/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/isolation/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/isolation/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/isolation/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/isolation/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/jardinage/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/jardinage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/jardinage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/jardinage/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/jardinage/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/jardinage/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/jardinage/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/jardinage/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/jardinage/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/jardinage/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/lavage-auto/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/lavage-auto/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/lavage-auto/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/lavage-auto/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/lavage-auto/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/lavage-auto/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/lavage-auto/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/lavage-auto/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/lavage-auto/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/lavage-auto/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/location-evenementiel/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-evenementiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-evenementiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-evenementiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-evenementiel/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/location-evenementiel/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-evenementiel/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-evenementiel/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-evenementiel/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-evenementiel/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/location-materiel/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-materiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-materiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-materiel/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-materiel/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/location-materiel/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-materiel/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-materiel/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-materiel/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-materiel/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/location-vehicules/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-vehicules/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-vehicules/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-vehicules/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-vehicules/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/location-vehicules/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/location-vehicules/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/location-vehicules/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/location-vehicules/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/location-vehicules/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/montage-meubles/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/montage-meubles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/montage-meubles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/montage-meubles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/montage-meubles/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/montage-meubles/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/montage-meubles/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/montage-meubles/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/montage-meubles/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/montage-meubles/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/nettoyage-textiles/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/nettoyage-textiles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/nettoyage-textiles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/nettoyage-textiles/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage-textiles/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/nettoyage-textiles/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/nettoyage-textiles/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/nettoyage-textiles/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/nettoyage-textiles/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage-textiles/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/peinture/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/peinture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/peinture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/peinture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/peinture/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/peinture/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/peinture/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/peinture/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/peinture/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/peinture/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/photo-video/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/photo-video/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/photo-video/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/photo-video/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/photo-video/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/photo-video/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/photo-video/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/photo-video/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/photo-video/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/photo-video/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/piscines/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/piscines/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/piscines/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/piscines/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/piscines/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/piscines/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/piscines/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/piscines/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/piscines/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/piscines/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/platrerie/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/platrerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/platrerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/platrerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/platrerie/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/platrerie/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/platrerie/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/platrerie/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/platrerie/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/platrerie/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/pressing/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/pressing/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/pressing/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/pressing/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/pressing/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/pressing/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/pressing/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/pressing/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/pressing/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/pressing/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/renovation/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/renovation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/renovation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/renovation/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/renovation/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/renovation/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/renovation/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/renovation/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/renovation/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/renovation/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/sanitaire/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sanitaire/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sanitaire/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sanitaire/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sanitaire/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/sanitaire/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sanitaire/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sanitaire/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sanitaire/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sanitaire/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/serrurerie/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/serrurerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/serrurerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/serrurerie/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/serrurerie/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/serrurerie/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/serrurerie/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/serrurerie/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/serrurerie/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/serrurerie/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/sols/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sols/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sols/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sols/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sols/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/sols/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/sols/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/sols/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/sols/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/sols/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/stores/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/stores/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/stores/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/stores/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/stores/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/stores/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/stores/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/stores/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/stores/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/stores/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/toiture/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/toiture/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/toiture/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/toiture/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/toiture/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/toiture/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/traiteur/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/traiteur/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/traiteur/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/traiteur/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/traiteur/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/traiteur/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/traiteur/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/traiteur/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/traiteur/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/traiteur/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/transport-livraison/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/transport-livraison/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/transport-livraison/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/transport-livraison/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/transport-livraison/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/transport-livraison/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/transport-livraison/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/transport-livraison/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/transport-livraison/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/transport-livraison/" />
   </url>
   <url>
-    <loc>https://dealz.website/secteurs/vitres/demo.html</loc>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/vitres/demo.html" />
-    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/vitres/demo.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/vitres/demo.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/vitres/demo.html" />
-  </url>
-  <url>
     <loc>https://dealz.website/secteurs/vitres/</loc>
+    <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/vitres/" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/vitres/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/vitres/" />
