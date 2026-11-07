@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const { CATEGORIES, categoryView, categoryConfig } = require("./objections");
+const { inlineImages, buildQuotePdf } = require("./emailAssets");
 
 const COMPANY_NAME = "SwissClean Sàrl";
 // Falls back to Dealz's own real inbox, NOT a fictional address — this used
@@ -60,11 +61,16 @@ async function sendEmail({ to, subject, html, replyTo, icalEvent, attachments })
     return { simulated: true, preview: { to, subject, html } };
   }
 
+  // Logos are embedded in the message (cid) instead of linked: many mail
+  // clients (Infomaniak, Outlook, Apple Mail) block remote images and show
+  // a broken-image box with the alt text instead (src/emailAssets.js).
+  const inlined = await inlineImages(html);
+  const allAttachments = [...(attachments || []), ...inlined.attachments];
   await transporter.sendMail({
     from: process.env.SMTP_FROM || `Dealz <${COMPANY_NOTIFY_EMAIL}>`,
     to,
     subject,
-    html,
+    html: inlined.html,
     // A plain-text part next to the HTML: HTML-only mail scores worse with
     // spam filters, and some clients show only text.
     text: htmlToText(html),
@@ -72,8 +78,9 @@ async function sendEmail({ to, subject, html, replyTo, icalEvent, attachments })
     // A calendar invitation (.ics) mail clients turn into an "add to
     // calendar" event — used for staff assignments (src/scale.js).
     ...(icalEvent ? { icalEvent } : {}),
-    // Files the client uploaded in the onboarding form (src/onboarding.js).
-    ...(attachments && attachments.length ? { attachments } : {}),
+    // Files the client uploaded in the onboarding form (src/onboarding.js),
+    // the quote PDF of a booking, and the inline logo images.
+    ...(allAttachments.length ? { attachments: allAttachments } : {}),
   });
   return { simulated: false, to, subject, html };
 }
@@ -536,15 +543,25 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
     ${calendarFeedUrl ? `<p style="font-size:13px;color:#5b6473;">${C.feed}<br/><a href="${calendarFeedUrl}">${calendarFeedUrl}</a></p>` : ""}
   `;
 
+  // The devis as a PDF, attached to both e-mails: the same document the
+  // customer can download in the quote widget (docs/pdf-generator.js).
+  const pdf = await buildQuotePdf({
+    quote,
+    customer,
+    lang,
+    company: { name: companyName, email: notifyEmail, logoUrl },
+  });
+  const pdfAttachments = pdf ? [pdf] : undefined;
+
   // allSettled, not all: a failure notifying the company (e.g. an unreal
   // fallback address) must never break the confirmation for the customer,
   // who's watching this happen live and would otherwise see a raw SMTP
   // error instead of "your booking is confirmed".
   const [customerResult, companyResult] = await Promise.allSettled([
     customer.email
-      ? sendEmail({ to: customer.email, subject: t.subject, html: customerHtml, replyTo: notifyEmail })
+      ? sendEmail({ to: customer.email, subject: t.subject, html: customerHtml, replyTo: notifyEmail, attachments: pdfAttachments })
       : Promise.resolve({ simulated: true, skipped: "no customer email" }),
-    sendEmail({ to: notifyEmail, subject: C.h2 || "✓ Nouvelle réservation confirmée", html: companyHtml }),
+    sendEmail({ to: notifyEmail, subject: C.h2 || "✓ Nouvelle réservation confirmée", html: companyHtml, attachments: pdfAttachments }),
   ]);
 
   if (customerResult.status === "rejected") {
