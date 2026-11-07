@@ -185,6 +185,14 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage-textiles/" />
   </url>
   <url>
+    <loc>https://dealz.website/de/secteurs/nettoyage/</loc>
+    <lastmod>2026-11-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/nettoyage/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/nettoyage/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/nettoyage/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage/" />
+  </url>
+  <url>
     <loc>https://dealz.website/de/secteurs/peinture/</loc>
     <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/peinture/" />
@@ -473,6 +481,14 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage-textiles/" />
   </url>
   <url>
+    <loc>https://dealz.website/en/secteurs/nettoyage/</loc>
+    <lastmod>2026-11-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/nettoyage/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/nettoyage/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/nettoyage/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage/" />
+  </url>
+  <url>
     <loc>https://dealz.website/en/secteurs/peinture/</loc>
     <lastmod>2026-11-07</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/peinture/" />
@@ -751,6 +767,14 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/nettoyage-textiles/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/nettoyage-textiles/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage-textiles/" />
+  </url>
+  <url>
+    <loc>https://dealz.website/secteurs/nettoyage/</loc>
+    <lastmod>2026-11-07</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/secteurs/nettoyage/" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/nettoyage/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/nettoyage/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/nettoyage/" />
   </url>
   <url>
     <loc>https://dealz.website/secteurs/peinture/</loc>
