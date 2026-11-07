@@ -416,6 +416,29 @@ app.get("/api/company-info", async (req, res) => {
   }
 });
 
+// A quote given to a real company's customer (name/e-mail known) is sent
+// to the CRM, which creates it as an open offer in that company's bexio.
+// `quote.ref` names the conversation (company + customer + the widget's
+// chatId, or the first message for older widgets),
+// so a recalculated quote replaces the offer instead of adding one; it
+// travels back with the quote on accept/decline. Never blocks the chat.
+async function bexioQuote(result, { company, history, lang, chatId }) {
+  const quote = result && result.quote;
+  const c = (quote && quote.customer) || {};
+  if (!quote || !company || !company.id || !(c.email || c.phone) || !crm.isConfigured("bexioQuote")) return;
+  const first = history.find((m) => m && m.role === "user");
+  quote.ref = require("crypto")
+    .createHash("sha256")
+    .update([company.id, String(c.email || c.phone).toLowerCase(), chatId || JSON.stringify(first ? first.content : "")].join("|"))
+    .digest("hex")
+    .slice(0, 24);
+  try {
+    await crm.post("bexioQuote", { event: "given", companyId: company.id, ref: quote.ref, quote, customer: c, lang }, { timeoutMs: 6000 });
+  } catch (err) {
+    console.error("[bexio quote] CRM forward failed:", err.message);
+  }
+}
+
 app.post("/api/chat", async (req, res) => {
   try {
     const history = Array.isArray(req.body.messages) ? req.body.messages : [];
@@ -435,8 +458,16 @@ app.post("/api/chat", async (req, res) => {
     // is identical regardless of language.
     const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
 
+    // A quote for a real company goes to its bexio as an open offer (when
+    // it connected bexio in the CRM) — see bexioQuote below.
+    const reply = async (result) => {
+      const chatId = /^[A-Za-z0-9_-]{6,64}$/.test(String(req.body.chatId || "")) ? String(req.body.chatId) : null;
+      await bexioQuote(result, { company, history, lang, chatId });
+      return res.json(result);
+    };
+
     if (MOCK_MODE) {
-      return res.json(await runTurnMock(history, company, lang));
+      return reply(await runTurnMock(history, company, lang));
     }
 
     // A visitor on the live demo should never see a broken conversation just
@@ -444,16 +475,18 @@ app.post("/api/chat", async (req, res) => {
     // limit, or had a transient outage — fall back to the same scripted
     // engine MOCK_MODE uses, silently, and log it so the developer notices
     // and can fix the underlying account issue.
+    let result;
     try {
-      return res.json(await runTurn(history, company, lang));
+      result = await runTurn(history, company, lang);
     } catch (apiErr) {
       console.warn(
         "[/api/chat] Real Claude call failed — falling back to the scripted demo engine. " +
           "Fix the underlying issue (e.g. add Anthropic credit) to restore the real assistant. " +
           `Error: ${apiErr.message}`
       );
-      return res.json(await runTurnMock(history, company, lang));
+      result = await runTurnMock(history, company, lang);
     }
+    return reply(result);
   } catch (err) {
     console.error(err);
     const status = err.status || 500;
@@ -527,6 +560,11 @@ async function processDecline(body, baseUrl) {
     // decline → counteroffer → accept chain re-reads this off the stored
     // token, so it stays consistent through the whole flow.
     const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
+
+    // Its open offer in the company's bexio becomes "declined".
+    if (company && quote && quote.ref) {
+      await crm.post("bexioQuote", { event: "declined", companyId: company.id, ref: quote.ref }, { timeoutMs: 6000 }).catch((err) => console.error("[bexio quote] decline forward failed:", err.message));
+    }
 
     // CAPTURE plan: a plain "quote declined" e-mail, without the recovery
     // flow (reason analysis, suggested reply, counter-offer) that CLOSE adds.
