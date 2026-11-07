@@ -1,6 +1,17 @@
 {
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.dealz.website"
+        }
+      ],
+      "destination": "https://dealz.website/:path*",
+      "permanent": true
+    },
+    {
       "source": "/crm",
       "destination": "/crm/",
       "permanent": false

@@ -9,7 +9,9 @@
     "dev": "node --watch server.js",
     "build:sectors": "node scripts/build-sectors.js",
     "check:sectors": "node scripts/build-sectors.js --check",
-    "build:sitemap": "node scripts/build-sitemap.js"
+    "build:sitemap": "node scripts/build-sitemap.js",
+    "build:seo": "node scripts/build-seo.js",
+    "build": "node scripts/build-sectors.js && node scripts/build-seo.js && node scripts/build-sitemap.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",
