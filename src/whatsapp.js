@@ -6,6 +6,25 @@ const { sendBookingConfirmation, sendDeclineNotification } = require("./notifica
 const store = require("./store");
 const { getCompanyByPhoneNumberId } = require("./companies");
 const { hasFeature } = require("./plans");
+const crm = require("./crm");
+
+// Open offer in the company's bexio as soon as the quote is sent (when it
+// connected bexio in the CRM); "declined" when the customer says NON.
+async function bexioQuoteEvent(event, company, quote) {
+  if (!company || !company.id || !quote || !crm.isConfigured("bexioQuote")) return;
+  try {
+    if (event === "given") {
+      const c = quote.customer || {};
+      if (!(c.email || c.phone)) return;
+      quote.ref = quote.ref || crypto.randomBytes(12).toString("hex");
+      await crm.post("bexioQuote", { event, companyId: company.id, ref: quote.ref, quote, customer: c, lang: "fr" }, { timeoutMs: 8000 });
+    } else if (quote.ref) {
+      await crm.post("bexioQuote", { event, companyId: company.id, ref: quote.ref }, { timeoutMs: 6000 });
+    }
+  } catch (err) {
+    console.error(`[whatsapp] bexio ${event} forward failed:`, err.message);
+  }
+}
 
 /**
  * WhatsApp channel for the same quote engine the website chat widget uses
@@ -220,6 +239,7 @@ async function converse(company, session, phoneNumberId, from, rawText) {
 
     if (NO_RE.test(text)) {
       session.pendingQuote = null;
+      await bexioQuoteEvent("declined", company, quote);
       try {
         // CAPTURE plan: just tell the company, no recovery flow.
         if (!hasFeature(company, "recovery")) {
@@ -303,6 +323,7 @@ async function converse(company, session, phoneNumberId, from, rawText) {
   if (data.quote) {
     if (!data.quote.customer) data.quote.customer = {};
     if (!data.quote.customer.phone) data.quote.customer.phone = from;
+    await bexioQuoteEvent("given", company, data.quote);
     session.pendingQuote = data.quote;
     await reply(formatQuoteText(data.quote));
   } else if (data.question?.type === "single" || data.question?.type === "multi") {
