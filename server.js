@@ -562,6 +562,15 @@ async function processDecline(body, baseUrl) {
     const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
 
     // Its open offer in the company's bexio becomes "declined".
+    // When the customer only gave their name at the end (decline form), the
+    // offer did not exist yet: create it now, then mark it declined.
+    const who = customer || quote.customer || {};
+    if (company && quote && !quote.ref && (who.email || who.phone) && crm.isConfigured("bexioQuote")) {
+      quote.ref = require("crypto").randomBytes(12).toString("hex");
+      await crm
+        .post("bexioQuote", { event: "given", companyId: company.id, ref: quote.ref, quote, customer: who, lang }, { timeoutMs: 8000 })
+        .catch((err) => console.error("[bexio quote] CRM forward failed:", err.message));
+    }
     if (company && quote && quote.ref) {
       await crm.post("bexioQuote", { event: "declined", companyId: company.id, ref: quote.ref }, { timeoutMs: 6000 }).catch((err) => console.error("[bexio quote] decline forward failed:", err.message));
     }
