@@ -730,6 +730,8 @@ ${cfg.addList.map((l) => "          <li>" + esc(l) + "</li>").join("\n")}
     <div>${esc(cfg.footerLine(S))}</div>
     <div class="site-footer-slogan">${cfg.slogan}</div>
     <div class="site-footer-referral"><a href="/parrainage.html">${cfg.referral}</a></div>
+    <div class="site-footer-nap">Dealz · Rue des Cygnes 33b, CH-1400 Yverdon-les-Bains · <a href="tel:+41786372553">078 637 25 53</a></div>
+    <div class="site-footer-social"><a href="https://www.facebook.com/profile.php?id=61596199507869" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/dealz.website" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@dealz.website" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.linkedin.com/company/scharer/" target="_blank" rel="noopener">LinkedIn</a></div>
   </footer>
 
   <script>window.DEALZ_LANG = "${lang}"; window.DEALZ_SECTOR = "${S.slug}";</script>
@@ -1179,6 +1181,8 @@ ${cards}
     <div>${cfg.hubFooter}</div>
     <div class="site-footer-slogan">${cfg.slogan}</div>
     <div class="site-footer-referral"><a href="/parrainage.html">${cfg.referral}</a></div>
+    <div class="site-footer-nap">Dealz · Rue des Cygnes 33b, CH-1400 Yverdon-les-Bains · <a href="tel:+41786372553">078 637 25 53</a></div>
+    <div class="site-footer-social"><a href="https://www.facebook.com/profile.php?id=61596199507869" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/dealz.website" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@dealz.website" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.linkedin.com/company/scharer/" target="_blank" rel="noopener">LinkedIn</a></div>
   </footer>
 </body>
 </html>
