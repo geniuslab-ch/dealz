@@ -313,6 +313,16 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 .site-footer-nap a {
   color: var(--muted);
 }
+.site-footer-social {
+  margin-top: 6px;
+  font-size: 13px;
+}
+.site-footer-social a {
+  color: var(--muted);
+}
+.site-footer-social a:hover {
+  color: var(--blue-dark);
+}
 
 /* ---------- Quote tab ---------- */
 .quote-wrap {
