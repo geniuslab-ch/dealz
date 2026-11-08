@@ -15,8 +15,11 @@ const BASE = "https://dealz.website";
 const PRIVATE_NAMES = new Set(["quote-window.html", "offer.html", "counteroffer.html"]);
 const SKIP_DIRS = new Set(["p", "node_modules"]);
 const LANGS = ["fr", "de", "en"];
-// The privacy policy has a different file name in each language.
-const SAME_PAGE = { "confidentialite.html": "privacy", "datenschutz.html": "privacy", "privacy.html": "privacy" };
+// The privacy policy and the terms have a different file name in each language.
+const SAME_PAGE = {
+  "confidentialite.html": "privacy", "datenschutz.html": "privacy", "privacy.html": "privacy",
+  "conditions.html": "terms", "agb.html": "terms", "terms.html": "terms",
+};
 
 function walk(dir = DOCS, rel = "") {
   let out = [];
