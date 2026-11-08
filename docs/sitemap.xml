@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://dealz.website/conditions.html</loc>
+    <lastmod>2026-11-08</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/conditions.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/agb.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/terms.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/conditions.html" />
+  </url>
+  <url>
     <loc>https://dealz.website/confidentialite.html</loc>
     <lastmod>2026-11-08</lastmod>
     <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/confidentialite.html" />
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/datenschutz.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/privacy.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/confidentialite.html" />
+  </url>
+  <url>
+    <loc>https://dealz.website/de/agb.html</loc>
+    <lastmod>2026-11-08</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/conditions.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/agb.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/terms.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/conditions.html" />
   </url>
   <url>
     <loc>https://dealz.website/de/datenschutz.html</loc>
@@ -599,6 +615,14 @@
     <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/secteurs/vitres/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/secteurs/vitres/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/secteurs/vitres/" />
+  </url>
+  <url>
+    <loc>https://dealz.website/en/terms.html</loc>
+    <lastmod>2026-11-08</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://dealz.website/conditions.html" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://dealz.website/de/agb.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://dealz.website/en/terms.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://dealz.website/conditions.html" />
   </url>
   <url>
     <loc>https://dealz.website/</loc>
