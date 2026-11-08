@@ -169,6 +169,7 @@
   //   terms / accuracy / generated — footer sentences
   function generate(quote, customer, lang, opts) {
     lang = lang || window.DEALZ_LANG || "fr";
+    customer = customer || {};
     opts = opts || {};
     const s = STRINGS[lang] || STRINGS.fr;
     const company = opts.company || COMPANY;
@@ -197,8 +198,10 @@
     doc.setFont("helvetica", "normal");
     doc.setFontSize(9);
     doc.setTextColor(91, 100, 114); // muted
-    doc.text(company.address, marginX, contactY);
-    doc.text(`${company.phone} · ${company.email}`, marginX, contactY + 5);
+    // Real companies (server-side PDF, src/quotePdf.js) may have no address
+    // or phone on file: only print the parts that exist.
+    const contactLine = [company.phone, company.email].filter(Boolean).join(" · ");
+    [company.address, contactLine].filter(Boolean).forEach((line, i) => doc.text(line, marginX, contactY + i * 5));
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(20);
@@ -285,7 +288,7 @@
         doc.rect(marginX, y, pageWidth - marginX * 2, rowH, "F");
       }
       doc.setFontSize(10);
-      doc.text(item.label, marginX + 3, y + 6);
+      doc.text(String(item.label), marginX + 3, y + 6);
       doc.text(fmtCHF(item.amount), pageWidth - marginX - 3, y + 6, { align: "right" });
       y += rowH;
     });
@@ -324,7 +327,9 @@
     y += footerLines.length * 4 + 1;
     doc.text(opts.generated || s.generated, marginX, y);
 
-    const blobUrl = doc.output("bloburl");
+    // No blob URLs on the server (src/quotePdf.js runs this file in Node to
+    // attach the same PDF to the booking e-mail).
+    const blobUrl = typeof URL !== "undefined" && URL.createObjectURL ? doc.output("bloburl") : null;
     return { doc, blobUrl };
   }
 

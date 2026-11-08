@@ -1008,6 +1008,7 @@ async function processAccept(body) {
       logoUrl: (sector ? publicUrl(sector.company.logo) : company?.logoUrl) || undefined,
       tagline: company?.tagline || undefined,
       calendarFeedUrl: company?.calendarFeedUrl || undefined,
+      pdfCompany: sector ? { address: sector.company.address, phone: sector.company.phone, email: sector.company.email } : undefined,
       lang,
     });
 
