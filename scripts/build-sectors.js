@@ -730,6 +730,7 @@ ${cfg.addList.map((l) => "          <li>" + esc(l) + "</li>").join("\n")}
     <div>${esc(cfg.footerLine(S))}</div>
     <div class="site-footer-slogan">${cfg.slogan}</div>
     <div class="site-footer-referral"><a href="/parrainage.html">${cfg.referral}</a></div>
+    <div class="site-footer-nap">Dealz · Rue des Cygnes 33b, CH-1400 Yverdon-les-Bains · <a href="tel:+41786372553">078 637 25 53</a></div>
   </footer>
 
   <script>window.DEALZ_LANG = "${lang}"; window.DEALZ_SECTOR = "${S.slug}";</script>
