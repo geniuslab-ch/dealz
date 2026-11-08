@@ -554,7 +554,7 @@ ${ogTags({ url: cfg.base + "/" + S.slug + "/", title: L.question, desc: T.pitch,
 <body>
 <!-- Généré par scripts/build-sectors.js depuis docs/secteurs/data/${S.slug}.js — ne pas éditer à la main. -->
 
-${siteNav(lang, S.slug, true)}
+${siteNav(lang, S.slug, true)}  <main id="main">
   <section class="hero">
     <div class="hero-inner">
       <span class="eyebrow">${esc(cfg.forWho(S))}</span>
@@ -627,7 +627,7 @@ ${cards}
         <div class="real-excel">
           <div class="excel-titlebar">📗 ${esc(L.excel.file)}</div>
           <table class="excel-grid">
-            <thead><tr><th class="rn"></th><th>A</th><th>B</th><th>C</th></tr></thead>
+            <thead><tr><td class="rn"></td><th>A</th><th>B</th><th>C</th></tr></thead>
             <tbody>
               <tr><td class="rn">1</td>${L.excel.headers.map((h) => '<td class="hdr">' + esc(h) + "</td>").join("")}</tr>
 ${L.excel.rows.map((r, i) => '              <tr><td class="rn">' + (i + 2) + "</td>" + r.map((c) => "<td>" + esc(c) + "</td>").join("") + "</tr>").join("\n")}
@@ -726,6 +726,8 @@ ${cfg.addList.map((l) => "          <li>" + esc(l) + "</li>").join("\n")}
     </div>
   </section>
 
+  </main>
+
   <footer class="site-footer">
     <div>${esc(cfg.footerLine(S))}</div>
     <div class="site-footer-slogan">${cfg.slogan}</div>
@@ -788,7 +790,7 @@ ${fonts()}  <link rel="stylesheet" href="/styles.css" />
 <body class="swissclean">
 <!-- Généré par scripts/build-sectors.js depuis docs/secteurs/data/${S.slug}.js — ne pas éditer à la main. -->
 
-  <div class="sc-demo-banner">
+  <div class="sc-demo-banner" role="region" aria-label="Demo">
     <span class="tag">DÉMO</span>
     ${esc(cfg.demoBanner(S))}
     <a href="${landingUrl}">${cfg.discoverDealz}</a>
@@ -805,6 +807,7 @@ ${fonts()}  <link rel="stylesheet" href="/styles.css" />
     </div>
   </nav>
 
+  <main id="main">
   <section id="sc-tab-accueil" class="sc-tab active">
     <div class="sc-hero">
       <div class="sc-hero-inner">
@@ -969,6 +972,8 @@ ${cfg.flow.map((f, i) => '              <div class="flow-step"><div class="num">
       </div>
     </div>
   </section>
+
+  </main>
 
   <footer class="sc-footer">
     ${esc(cfg.footerDemo(D))}
@@ -1145,7 +1150,7 @@ ${ogTags({ url: cfg.base + "/", title, desc: cfg.sectorsQuestion, locale: cfg.og
 <body>
 <!-- Généré par scripts/build-sectors.js — ne pas éditer à la main. -->
 
-${siteNav(lang, null, false)}
+${siteNav(lang, null, false)}  <main id="main">
   <section class="hero">
     <div class="hero-inner">
       <span class="eyebrow">${cfg.sectorsHeroEyebrow}</span>
@@ -1176,6 +1181,8 @@ ${cards}
       </div>
     </div>
   </section>
+
+  </main>
 
   <footer class="site-footer">
     <div>${cfg.hubFooter}</div>

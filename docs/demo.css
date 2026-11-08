@@ -42,7 +42,7 @@ body.swissclean { background: var(--sc-bg); color: var(--sc-ink); }
 }
 .sc-demo-banner .tag {
   background: var(--sc-coral);
-  color: white;
+  color: #111827;
   font-size: 10.5px;
   font-weight: 800;
   letter-spacing: 0.06em;

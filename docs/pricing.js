@@ -72,7 +72,10 @@
       p.el.classList.toggle("is-selected", on);
       p.pick.classList.toggle("btn-primary", on);
       p.pick.classList.toggle("btn-secondary", !on);
-      p.pick.setAttribute("aria-pressed", on ? "true" : "false");
+      // The pick is a link (to #contact): aria-pressed is not allowed on links,
+      // aria-current marks the chosen plan instead.
+      if (on) p.pick.setAttribute("aria-current", "true");
+      else p.pick.removeAttribute("aria-current");
       p.pick.textContent = fill(on ? T.tPicked : T.tPick, { plan: key });
     });
 
