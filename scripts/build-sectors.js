@@ -1180,6 +1180,7 @@ ${cards}
     <div>${cfg.hubFooter}</div>
     <div class="site-footer-slogan">${cfg.slogan}</div>
     <div class="site-footer-referral"><a href="/parrainage.html">${cfg.referral}</a></div>
+    <div class="site-footer-nap">Dealz · Rue des Cygnes 33b, CH-1400 Yverdon-les-Bains · <a href="tel:+41786372553">078 637 25 53</a></div>
   </footer>
 </body>
 </html>
