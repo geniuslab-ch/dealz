@@ -11,7 +11,8 @@
     "check:sectors": "node scripts/build-sectors.js --check",
     "build:sitemap": "node scripts/build-sitemap.js",
     "build:seo": "node scripts/build-seo.js",
-    "build": "node scripts/build-sectors.js && node scripts/build-seo.js && node scripts/build-sitemap.js"
+    "build:redirects": "node scripts/build-redirects.js",
+    "build": "node scripts/build-sectors.js && node scripts/build-seo.js && node scripts/build-sitemap.js && node scripts/build-redirects.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.68.0",

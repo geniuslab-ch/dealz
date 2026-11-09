@@ -751,6 +751,7 @@
     var actions = el("div", "dpc-actions");
     var a = el("a", "dpc-btn dpc-btn-primary", UI.integrate);
     a.href = window.DEALZ_CTA_HREF || "/secteurs/" + SECTOR.slug + "/#contact";
+    if (window.top !== window) a.target = "_top"; // quote window in an iframe: open the page, not inside the frame
     var c = el("a", "dpc-btn dpc-btn-secondary", UI.contact);
     c.href = "mailto:dealz@dealz.website";
     actions.appendChild(a); actions.appendChild(c);

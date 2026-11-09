@@ -15,11 +15,9 @@ const BASE = "https://dealz.website";
 const PRIVATE_NAMES = new Set(["quote-window.html", "offer.html", "counteroffer.html"]);
 const SKIP_DIRS = new Set(["p", "node_modules"]);
 const LANGS = ["fr", "de", "en"];
-// The privacy policy and the terms have a different file name in each language.
-const SAME_PAGE = {
-  "confidentialite.html": "privacy", "datenschutz.html": "privacy", "privacy.html": "privacy",
-  "conditions.html": "terms", "agb.html": "terms", "terms.html": "terms",
-};
+// Pages whose path differs per language (sector folders, privacy policy,
+// terms, referral page) are matched to their French path: see sector-urls.js.
+const { frenchPathOf } = require("./sector-urls");
 
 function walk(dir = DOCS, rel = "") {
   let out = [];
@@ -40,7 +38,7 @@ const isIndexable = (file) => !isPrivate(file) && !isDemo(file);
 const urlOf = (file) => BASE + "/" + file.replace(/(^|\/)index\.html$/, "$1");
 const langOf = (file) => (/^(de|en)\//.test(file) ? file.slice(0, 2) : "fr");
 const bare = (file) => file.replace(/^(de|en)\//, "");
-const keyOf = (file) => SAME_PAGE[bare(file)] || bare(file);
+const keyOf = (file) => bare(frenchPathOf(file));
 
 // Map of page key -> { fr, de, en } file paths, for the given files.
 function groupsOf(files) {

@@ -17,6 +17,7 @@ const path = require("path");
 const ROOT = path.join(__dirname, "..");
 const DOCS = path.join(ROOT, "docs");
 const DATA_DIR = path.join(DOCS, "secteurs", "data");
+const { sectorDir, sectorUrl, SECTOR_BASE, PAGES } = require("./sector-urls");
 const CHECK_ONLY = process.argv.includes("--check");
 const PARTIAL = process.argv.includes("--partial"); // dev only: build whatever sector files exist
 
@@ -31,7 +32,7 @@ const ORDER = [
 const STR = {
   fr: {
     htmlLang: "fr",
-    base: "/secteurs",
+    base: SECTOR_BASE.fr,
     home: "/index.html",
     indexFile: "index.html",
     seeDemoNav: "✨ Essayer la démo",
@@ -137,7 +138,7 @@ const STR = {
   en: {
     htmlLang: "en",
     ogLocale: "en_CH",
-    base: "/en/secteurs",
+    base: SECTOR_BASE.en,
     home: "/en/index.html",
     indexFile: "en/index.html",
     seeDemoNav: "✨ Try the demo",
@@ -243,7 +244,7 @@ const STR = {
   de: {
     htmlLang: "de",
     ogLocale: "de_CH",
-    base: "/de/secteurs",
+    base: SECTOR_BASE.de,
     home: "/de/index.html",
     indexFile: "de/index.html",
     seeDemoNav: "✨ Demo testen",
@@ -506,7 +507,7 @@ function sectorsChips(lang, currentSlug, all) {
   const cfg = STR[lang];
   return all
     .filter((s) => s.slug !== currentSlug)
-    .map((s) => '<a class="sector-chip" href="' + cfg.base + "/" + s.slug + '/">' + esc(s.icon) + " " + esc(s[lang].label) + "</a>")
+    .map((s) => '<a class="sector-chip" href="' + sectorUrl(s.slug, lang) + '">' + esc(s.icon) + " " + esc(s[lang].label) + "</a>")
     .join("\n          ");
 }
 
@@ -515,7 +516,7 @@ function siteNav(lang, slug, withAnchors) {
   const links = withAnchors
     ? '      <a href="#probleme">' + cfg.navProblem + '</a>\n      <a href="#comment-ca-marche">' + cfg.navHow + '</a>\n      <a href="#tarifs">' + cfg.navPricing + '</a>\n      <a href="#contact">' + cfg.navContact + "</a>\n"
     : "";
-  const demo = slug ? '      <a href="' + cfg.base + "/" + slug + '/demo.html" class="cta">' + cfg.seeDemoNav + "</a>\n" : "";
+  const demo = slug ? '      <a href="' + sectorDir(slug, lang) + '/demo.html" class="cta">' + cfg.seeDemoNav + "</a>\n" : "";
   return '  <nav class="nav">\n    <div class="nav-logo">\n      <a href="' + cfg.home + '"><img src="/images/dealz-logo-nav.png" alt="Dealz" /></a>\n' +
     '      <span class="nav-slogan">Keep your website.<br>Keep your tools.<br>Add Dealz.</span>\n    </div>\n    <div class="nav-links">\n' +
     (withAnchors ? "" : '      <a href="' + cfg.home + '">' + cfg.navHome + "</a>\n") + links + '      <a href="' + cfg.base + '/">' + cfg.navSectors + "</a>\n" + demo + "    </div>\n  </nav>\n  <script src=\"/nav.js\" defer></script>\n";
@@ -526,7 +527,7 @@ function buildLanding(S, lang, all, tarifs) {
   const cfg = STR[lang];
   const T = S[lang];
   const L = T.landing;
-  const demoUrl = cfg.base + "/" + S.slug + "/demo.html";
+  const demoUrl = sectorDir(S.slug, lang) + "/demo.html";
   const colors = ["c-blue", "c-sky", "c-navy", "c-red"];
   const cards = L.values.concat(cfg.genericValues).map((v, i) =>
     '        <div class="svc-card ' + colors[i % 4] + '">\n          <div class="svc-icon">' + esc(v.icon) + "</div>\n          <h3>" + esc(v.title) + "</h3>\n          <p>" + esc(v.text) + "</p>\n        </div>"
@@ -549,7 +550,7 @@ function buildLanding(S, lang, all, tarifs) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(desc)}" />
-${ogTags({ url: cfg.base + "/" + S.slug + "/", title: L.question, desc: T.pitch, locale: cfg.ogLocale || "fr_CH" })}${fonts()}  <link rel="stylesheet" href="/styles.css" />
+${ogTags({ url: sectorUrl(S.slug, lang), title: L.question, desc: T.pitch, locale: cfg.ogLocale || "fr_CH" })}${fonts()}  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
 <!-- Généré par scripts/build-sectors.js depuis docs/secteurs/data/${S.slug}.js — ne pas éditer à la main. -->
@@ -731,7 +732,7 @@ ${cfg.addList.map((l) => "          <li>" + esc(l) + "</li>").join("\n")}
   <footer class="site-footer">
     <div>${esc(cfg.footerLine(S))}</div>
     <div class="site-footer-slogan">${cfg.slogan}</div>
-    <div class="site-footer-referral"><a href="/parrainage.html">${cfg.referral}</a></div>
+    <div class="site-footer-referral"><a href="${PAGES.referral[lang]}">${cfg.referral}</a></div>
     <div class="site-footer-nap">Dealz · Rue des Cygnes 33b, CH-1400 Yverdon-les-Bains · <a href="tel:+41786372553">078 637 25 53</a></div>
     <div class="site-footer-social"><a href="https://www.facebook.com/profile.php?id=61596199507869" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/dealz.website" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@dealz.website" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.linkedin.com/company/scharer/" target="_blank" rel="noopener">LinkedIn</a></div>
   </footer>
@@ -770,7 +771,7 @@ function buildDemo(S, lang) {
   const T = S[lang];
   const D = T.demo;
   const c = S.colors;
-  const landingUrl = cfg.base + "/" + S.slug + "/";
+  const landingUrl = sectorUrl(S.slug, lang);
   const cards = (list) => list.map((x) => '        <div class="sc-card"><div class="icon">' + esc(x.icon) + "</div><h3>" + esc(x.title) + "</h3><p>" + esc(x.text) + "</p>" + (x.tag ? '<span class="tag">' + esc(x.tag) + "</span>" : "") + "</div>").join("\n");
   const title = cfg.demoTitle(D.pdfCompany.name);
 
@@ -980,7 +981,7 @@ ${cfg.flow.map((f, i) => '              <div class="flow-step"><div class="num">
     ${cfg.poweredBy} <a href="${landingUrl}">⚡ Dealz</a>.
   </footer>
 
-  <script>window.DEALZ_LANG = "${lang}"; window.DEALZ_SECTOR = "${S.slug}";</script>
+  <script>window.DEALZ_LANG = "${lang}"; window.DEALZ_SECTOR = "${S.slug}"; window.DEALZ_CTA_HREF = "${landingUrl}#contact";</script>
   <script src="/demo-tabs.js"></script>
   <script src="/secteurs/data/${S.slug}.js"></script>
   <script src="/sector-quote.js"></script>
@@ -1031,7 +1032,7 @@ ${cfg.flow.map((f, i) => '              <div class="flow-step"><div class="num">
       var overlay = document.getElementById("demo-popup-overlay");
       var iframe = document.getElementById("demo-popup-iframe");
       function openPopup() {
-        if (!iframe.src) iframe.src = "${cfg.base}/${S.slug}/quote-window.html?embedded=1";
+        if (!iframe.src) iframe.src = "${sectorDir(S.slug, lang)}/quote-window.html?embedded=1";
         overlay.classList.add("open");
       }
       function closePopup() { overlay.classList.remove("open"); }
@@ -1113,6 +1114,7 @@ function buildQuoteWindow(S, lang) {
     window.DEALZ_API_BASE = params.get("api-base") || location.origin;
     window.DEALZ_LANG = "${lang}";
     window.DEALZ_SECTOR = "${S.slug}";
+    window.DEALZ_CTA_HREF = "${sectorUrl(S.slug, lang)}#contact";
     if (params.get("embedded") === "1") document.body.classList.add("dz-embedded");
     // Closing only works if this page was opened as a popup window; otherwise go back.
     document.getElementById("dealz-window-close").addEventListener("click", function () {
@@ -1133,7 +1135,7 @@ function buildHub(lang, all) {
   const cfg = STR[lang];
   const card = (icon, label, pitch, landing, demo) =>
     '      <div class="sector-card">\n        <div class="sector-icon">' + esc(icon) + "</div>\n        <h3>" + esc(label) + "</h3>\n        <p>" + esc(pitch) + '</p>\n        <div class="sector-links"><a class="btn btn-primary" href="' + landing + '">' + cfg.discover + '</a><a class="btn btn-secondary" href="' + demo + '">' + cfg.tryDemo + "</a></div>\n      </div>";
-  const cards = all.map((s) => card(s.icon, s[lang].label, s[lang].pitch, cfg.base + "/" + s.slug + "/", cfg.base + "/" + s.slug + "/demo.html"))
+  const cards = all.map((s) => card(s.icon, s[lang].label, s[lang].pitch, sectorUrl(s.slug, lang), sectorDir(s.slug, lang) + "/demo.html"))
     .join("\n");
   const title = cfg.hubTitle;
   const desc = cfg.hubDesc;
@@ -1187,7 +1189,7 @@ ${cards}
   <footer class="site-footer">
     <div>${cfg.hubFooter}</div>
     <div class="site-footer-slogan">${cfg.slogan}</div>
-    <div class="site-footer-referral"><a href="/parrainage.html">${cfg.referral}</a></div>
+    <div class="site-footer-referral"><a href="${PAGES.referral[lang]}">${cfg.referral}</a></div>
     <div class="site-footer-nap">Dealz · Rue des Cygnes 33b, CH-1400 Yverdon-les-Bains · <a href="tel:+41786372553">078 637 25 53</a></div>
     <div class="site-footer-social"><a href="https://www.facebook.com/profile.php?id=61596199507869" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/dealz.website" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@dealz.website" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.linkedin.com/company/scharer/" target="_blank" rel="noopener">LinkedIn</a></div>
   </footer>
@@ -1236,9 +1238,10 @@ function main() {
     write(path.join(baseDir, "index.html"), buildHub(lang, all));
     pages++;
     all.forEach((S) => {
-      write(path.join(baseDir, S.slug, "index.html"), buildLanding(S, lang, all, tarifs));
-      write(path.join(baseDir, S.slug, "demo.html"), buildDemo(S, lang));
-      write(path.join(baseDir, S.slug, "quote-window.html"), buildQuoteWindow(S, lang));
+      const dir = path.join(DOCS, sectorDir(S.slug, lang));
+      write(path.join(dir, "index.html"), buildLanding(S, lang, all, tarifs));
+      write(path.join(dir, "demo.html"), buildDemo(S, lang));
+      write(path.join(dir, "quote-window.html"), buildQuoteWindow(S, lang));
       pages += 3;
     });
   });
