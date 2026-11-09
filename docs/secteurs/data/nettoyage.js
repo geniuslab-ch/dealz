@@ -79,7 +79,7 @@
       },
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre nettoyage, puis je vous établis un devis ferme tout de suite après.",
-        terms: "Devis ferme, valable 30 jours, produits et matériel compris. Pour une fin de bail, garantie de remise en état jusqu'à l'état des lieux. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, produits et matériel compris. Pour une fin de bail, garantie de remise en état jusqu'à l'état des lieux.",
         q: {
           type: { text: "Quel type de nettoyage souhaitez-vous ?", short: "Nettoyage", opts: { eot: "Fin de bail (avec garantie état des lieux)", deep: "Grand nettoyage ponctuel", works: "Après travaux", regular: "Nettoyage régulier (chaque semaine)" } },
           rooms: { text: "Combien de pièces compte le logement ?", short: "Logement", opts: { r1: "1 – 1½ pièce", r2: "2 – 2½ pièces", r3: "3 – 3½ pièces", r4: "4 – 4½ pièces", r5: "5 pièces et plus" } },
@@ -153,7 +153,7 @@
       },
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your cleaning, then send you a firm quote right away.",
-        terms: "Firm quote, valid for 30 days, products and equipment included. For a move-out clean, guaranteed until the handover inspection. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, products and equipment included. For a move-out clean, guaranteed until the handover inspection.",
         q: {
           type: { text: "What type of cleaning do you need?", short: "Cleaning", opts: { eot: "Move-out clean (handover guarantee)", deep: "One-off deep clean", works: "After building work", regular: "Regular cleaning (every week)" } },
           rooms: { text: "How many rooms does the home have?", short: "Home", opts: { r1: "1 – 1.5 rooms", r2: "2 – 2.5 rooms", r3: "3 – 3.5 rooms", r4: "4 – 4.5 rooms", r5: "5 rooms or more" } },
@@ -227,7 +227,7 @@
       },
       quote: {
         greeting: "Hallo! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Reinigung und erstelle Ihnen gleich danach eine verbindliche Offerte.",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Reinigungsmittel und Material inbegriffen. Bei der Endreinigung mit Abnahmegarantie bis zur Wohnungsübergabe. Inkl. MWST, falls anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Reinigungsmittel und Material inbegriffen. Bei der Endreinigung mit Abnahmegarantie bis zur Wohnungsübergabe.",
         q: {
           type: { text: "Welche Reinigung wünschen Sie?", short: "Reinigung", opts: { eot: "Endreinigung (mit Abnahmegarantie)", deep: "Einmalige Grundreinigung", works: "Baureinigung", regular: "Unterhaltsreinigung (wöchentlich)" } },
           rooms: { text: "Wie viele Zimmer hat die Wohnung?", short: "Wohnung", opts: { r1: "1 – 1½ Zimmer", r2: "2 – 2½ Zimmer", r3: "3 – 3½ Zimmer", r4: "4 – 4½ Zimmer", r5: "5 Zimmer und mehr" } },

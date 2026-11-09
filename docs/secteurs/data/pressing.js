@@ -85,7 +85,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre linge, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse de collecte et de livraison (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, selon les quantités indiquées. Ajustement possible si les pièces déposées diffèrent. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, selon les quantités indiquées. Ajustement possible si les pièces déposées diffèrent.",
         q: {
           shirts: { text: "Combien de chemises ?", short: "Chemises", opts: { none: "Aucune", few: "1 à 5 chemises", mid: "6 à 10 chemises", many: "11 à 20 chemises", lots: "Plus de 20 chemises" } },
           suits: { text: "Combien de costumes ou tailleurs ?", short: "Costumes", opts: { none: "Aucun", one: "1 costume ou tailleur", two: "2 à 3 pièces", four: "4 pièces ou plus" } },
@@ -158,7 +158,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your laundry, then put together a firm quote right away.",
         addressPlaceholder: "Collection and delivery address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, based on the quantities given. May be adjusted if the items dropped off differ. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, based on the quantities given. May be adjusted if the items dropped off differ.",
         q: {
           shirts: { text: "How many shirts?", short: "Shirts", opts: { none: "None", few: "1 to 5 shirts", mid: "6 to 10 shirts", many: "11 to 20 shirts", lots: "Over 20 shirts" } },
           suits: { text: "How many suits or two-pieces?", short: "Suits", opts: { none: "None", one: "1 suit or two-piece", two: "2 to 3 items", four: "4 items or more" } },
@@ -231,7 +231,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Wäsche und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Abhol- und Lieferadresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, gemäss angegebenen Mengen. Anpassung möglich, falls die abgegebenen Stücke abweichen. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, gemäss angegebenen Mengen. Anpassung möglich, falls die abgegebenen Stücke abweichen.",
         q: {
           shirts: { text: "Wie viele Hemden?", short: "Hemden", opts: { none: "Keine", few: "1 bis 5 Hemden", mid: "6 bis 10 Hemden", many: "11 bis 20 Hemden", lots: "Über 20 Hemden" } },
           suits: { text: "Wie viele Anzüge oder Kostüme?", short: "Anzüge", opts: { none: "Keine", one: "1 Anzug oder Kostüm", two: "2 bis 3 Stück", four: "4 Stück oder mehr" } },

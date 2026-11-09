@@ -83,7 +83,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre événement, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Lieu de l'événement (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, sous réserve de disponibilité à la date indiquée. Nombre d'invités confirmé 7 jours avant l'événement. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, sous réserve de disponibilité à la date indiquée. Nombre d'invités confirmé 7 jours avant l'événement.",
         q: {
           event: { text: "Quelle formule souhaitez-vous ?", short: "Formule", opts: { aperitif: "Apéritif dînatoire", seated: "Repas assis (3 services)", buffet: "Buffet chaud et froid", brunch: "Brunch", cocktail: "Cocktail de réception" } },
           guests: { text: "Combien d'invités ?", short: "Invités", opts: { g1: "10 à 25", g2: "25 à 50", g3: "50 à 100", g4: "100 à 200", g5: "Plus de 200" } },
@@ -159,7 +159,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your event, then put together a firm quote right away.",
         addressPlaceholder: "Event venue (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, subject to availability on the stated date. Guest numbers to be confirmed 7 days before the event. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, subject to availability on the stated date. Guest numbers to be confirmed 7 days before the event.",
         q: {
           event: { text: "Which package would you like?", short: "Package", opts: { aperitif: "Standing dinner", seated: "Seated meal (3 courses)", buffet: "Hot and cold buffet", brunch: "Brunch", cocktail: "Reception cocktail" } },
           guests: { text: "How many guests?", short: "Guests", opts: { g1: "10 to 25", g2: "25 to 50", g3: "50 to 100", g4: "100 to 200", g5: "More than 200" } },
@@ -235,7 +235,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Anlass und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Ort des Anlasses (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich Verfügbarkeit am angegebenen Datum. Gästezahl 7 Tage vor dem Anlass zu bestätigen. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich Verfügbarkeit am angegebenen Datum. Gästezahl 7 Tage vor dem Anlass zu bestätigen.",
         q: {
           event: { text: "Welche Formel wünschen Sie?", short: "Formel", opts: { aperitif: "Apéro riche", seated: "Gesetztes Essen (3 Gänge)", buffet: "Warmes und kaltes Buffet", brunch: "Brunch", cocktail: "Empfangscocktail" } },
           guests: { text: "Wie viele Gäste?", short: "Gäste", opts: { g1: "10 bis 25", g2: "25 bis 50", g3: "50 bis 100", g4: "100 bis 200", g5: "Mehr als 200" } },

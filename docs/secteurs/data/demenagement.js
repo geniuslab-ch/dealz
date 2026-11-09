@@ -103,7 +103,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre déménagement, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse de départ (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, sous réserve d'un accès conforme aux indications. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, sous réserve d'un accès conforme aux indications.",
         q: {
           service: { text: "Quel service souhaitez-vous ?", short: "Service", opts: { move: "Déménagement", clear: "Débarras seul", both: "Déménagement + débarras" } },
           size: { text: "Quelle est la taille du logement concerné ?", short: "Logement", opts: { s1: "Studio / 1–2 pièces", s3: "3 pièces", s4: "4 pièces", s5: "5 pièces et plus / maison" } },
@@ -176,7 +176,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your move, then put together a firm quote right away.",
         addressPlaceholder: "Departure address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, provided access matches the details given. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, provided access matches the details given.",
         q: {
           service: { text: "Which service do you need?", short: "Service", opts: { move: "Move", clear: "Clearance only", both: "Move + clearance" } },
           size: { text: "How big is the home?", short: "Home", opts: { s1: "Studio / 1–2 rooms", s3: "3 rooms", s4: "4 rooms", s5: "5 rooms or more / house" } },
@@ -249,7 +249,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Umzug und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Abholadresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich eines Zugangs gemäss Angaben. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich eines Zugangs gemäss Angaben.",
         q: {
           service: { text: "Welche Leistung wünschen Sie?", short: "Leistung", opts: { move: "Umzug", clear: "Nur Räumung", both: "Umzug + Räumung" } },
           size: { text: "Wie gross ist die Wohnung?", short: "Wohnung", opts: { s1: "Studio / 1–2 Zimmer", s3: "3 Zimmer", s4: "4 Zimmer", s5: "5 Zimmer und mehr / Haus" } },

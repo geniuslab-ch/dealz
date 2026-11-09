@@ -113,7 +113,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre installation, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse de l'intervention (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, fourniture et main-d'œuvre comprises. Pièces supplémentaires nécessaires sur place facturées uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, fourniture et main-d'œuvre comprises. Pièces supplémentaires nécessaires sur place facturées uniquement sur accord préalable.",
         q: {
           work: { text: "De quoi avez-vous besoin ?", short: "Intervention", opts: { repair: "Un dépannage (fuite, WC, robinet, écoulement)", boiler: "Remplacer le chauffe-eau", fixtures: "Remplacer des appareils sanitaires", heating: "Remplacer le chauffage" } },
           issue: { text: "Quel est le problème ?", short: "Problème", opts: { leak: "Fuite d'eau", wc: "WC qui coule ou en panne", tap: "Robinet ou mitigeur à changer", drain: "Écoulement bouché" } },
@@ -199,7 +199,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your installation, then put together a firm quote right away.",
         addressPlaceholder: "Job address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, supply and labour included. Extra parts needed on site charged only with prior agreement. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, supply and labour included. Extra parts needed on site charged only with prior agreement.",
         q: {
           work: { text: "What do you need?", short: "Job", opts: { repair: "A repair (leak, toilet, tap, drain)", boiler: "Replace the water heater", fixtures: "Replace bathroom fixtures", heating: "Replace the heating" } },
           issue: { text: "What is the problem?", short: "Problem", opts: { leak: "Water leak", wc: "Running or broken toilet", tap: "Tap or mixer to replace", drain: "Blocked drain" } },
@@ -285,7 +285,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Installation und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Einsatzadresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Lieferung und Arbeit inbegriffen. Vor Ort zusätzlich benötigte Teile nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Lieferung und Arbeit inbegriffen. Vor Ort zusätzlich benötigte Teile nur nach vorheriger Absprache.",
         q: {
           work: { text: "Was benötigen Sie?", short: "Einsatz", opts: { repair: "Eine Reparatur (Leck, WC, Armatur, Abfluss)", boiler: "Boiler ersetzen", fixtures: "Sanitärapparate ersetzen", heating: "Heizung ersetzen" } },
           issue: { text: "Was ist das Problem?", short: "Problem", opts: { leak: "Wasserleck", wc: "WC läuft oder ist defekt", tap: "Armatur zu ersetzen", drain: "Verstopfter Abfluss" } },

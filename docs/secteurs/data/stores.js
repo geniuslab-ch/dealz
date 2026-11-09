@@ -88,7 +88,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur vos stores, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse de pose (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, fourniture et pose comprises. Prise de mesures définitive sur place avant fabrication. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, fourniture et pose comprises. Prise de mesures définitive sur place avant fabrication.",
         q: {
           type: { text: "Quel type de protection souhaitez-vous ?", short: "Type", opts: { slats: "Stores à lamelles", awning: "Store banne (terrasse, balcon)", roller: "Volets roulants", insect: "Moustiquaires" } },
           count: { text: "Combien de fenêtres ou d'ouvertures faut-il équiper ?", short: "Quantité", opts: { c1: "1", c2: "2 à 4", c3: "5 à 8", c4: "9 à 12", c5: "Plus de 12" } },
@@ -162,7 +162,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your blinds, then put together a firm quote right away.",
         addressPlaceholder: "Installation address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, supply and fitting included. Final measurements taken on site before manufacture. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, supply and fitting included. Final measurements taken on site before manufacture.",
         q: {
           type: { text: "Which kind of shading would you like?", short: "Type", opts: { slats: "External venetian blinds", awning: "Awning (terrace, balcony)", roller: "Roller shutters", insect: "Insect screens" } },
           count: { text: "How many windows or openings need equipping?", short: "Quantity", opts: { c1: "1", c2: "2 to 4", c3: "5 to 8", c4: "9 to 12", c5: "More than 12" } },
@@ -236,7 +236,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihren Storen und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Montageadresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Lieferung und Montage inbegriffen. Definitive Masse werden vor der Fabrikation vor Ort aufgenommen. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Lieferung und Montage inbegriffen. Definitive Masse werden vor der Fabrikation vor Ort aufgenommen.",
         q: {
           type: { text: "Welchen Sonnenschutz wünschen Sie?", short: "Typ", opts: { slats: "Lamellenstoren", awning: "Markise (Terrasse, Balkon)", roller: "Rollläden", insect: "Insektenschutz" } },
           count: { text: "Wie viele Fenster oder Öffnungen sollen ausgerüstet werden?", short: "Anzahl", opts: { c1: "1", c2: "2 bis 4", c3: "5 bis 8", c4: "9 bis 12", c5: "Mehr als 12" } },

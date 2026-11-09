@@ -83,7 +83,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre besoin, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du chantier ou de livraison (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, sous réserve de disponibilité. Caution et pièce d'identité exigées au retrait. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, sous réserve de disponibilité. Caution et pièce d'identité exigées au retrait.",
         q: {
           category: { text: "Quelle catégorie de matériel ?", short: "Catégorie", opts: { site: "Chantier (perforateur, bétonnière, échafaudage)", clean: "Nettoyage pro (autolaveuse, haute pression)", garden: "Jardin (broyeur, tronçonneuse, tondeuse pro)", lift: "Levage et accès (nacelle, mini-grue)", energy: "Énergie (groupe électrogène, compresseur)" } },
           duration: { text: "Pour quelle durée de location ?", short: "Durée", opts: { d1: "1 jour", d3: "3 jours", w1: "1 semaine", m1: "1 mois" } },
@@ -155,7 +155,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about what you need, then put together a firm quote right away.",
         addressPlaceholder: "Site or delivery address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, subject to availability. Deposit and ID required at pick-up. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, subject to availability. Deposit and ID required at pick-up.",
         q: {
           category: { text: "Which equipment category?", short: "Category", opts: { site: "Construction (rotary hammer, cement mixer, scaffolding)", clean: "Pro cleaning (scrubber dryer, pressure washer)", garden: "Garden (shredder, chainsaw, pro mower)", lift: "Lifting and access (aerial platform, mini crane)", energy: "Power (generator, compressor)" } },
           duration: { text: "For how long?", short: "Duration", opts: { d1: "1 day", d3: "3 days", w1: "1 week", m1: "1 month" } },
@@ -227,7 +227,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Bedarf und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Baustellen- oder Lieferadresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich Verfügbarkeit. Kaution und Ausweis bei Abholung erforderlich. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich Verfügbarkeit. Kaution und Ausweis bei Abholung erforderlich.",
         q: {
           category: { text: "Welche Gerätekategorie?", short: "Kategorie", opts: { site: "Bau (Bohrhammer, Betonmischer, Gerüst)", clean: "Profi-Reinigung (Scheuersaugmaschine, Hochdruck)", garden: "Garten (Häcksler, Motorsäge, Profi-Mäher)", lift: "Heben und Zugang (Hebebühne, Minikran)", energy: "Energie (Stromerzeuger, Kompressor)" } },
           duration: { text: "Für welche Mietdauer?", short: "Dauer", opts: { d1: "1 Tag", d3: "3 Tage", w1: "1 Woche", m1: "1 Monat" } },

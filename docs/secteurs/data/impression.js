@@ -101,7 +101,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre impression, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse de livraison (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, sous réserve de fichiers conformes aux consignes. Bon à tirer à valider avant impression. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, sous réserve de fichiers conformes aux consignes. Bon à tirer à valider avant impression.",
         q: {
           product: { text: "Que souhaitez-vous imprimer ?", short: "Produit", opts: { flyers: "Flyers / dépliants", cards: "Cartes de visite", posters: "Affiches / posters", banner: "Bâches et banderoles", sign: "Enseignes / signalétique", vinyl: "Adhésifs / vitrophanie", textile: "Textiles personnalisés" } },
           qty: { text: "Quelle quantité ?", short: "Quantité", opts: { q50: "50 exemplaires", q100: "100 exemplaires", q250: "250 exemplaires", q500: "500 exemplaires", q1000: "1000 exemplaires" } },
@@ -179,7 +179,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your print job, then put together a firm quote right away.",
         addressPlaceholder: "Delivery address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, subject to files meeting the specifications. Print proof to be approved before printing. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, subject to files meeting the specifications. Print proof to be approved before printing.",
         q: {
           product: { text: "What would you like to print?", short: "Product", opts: { flyers: "Flyers / leaflets", cards: "Business cards", posters: "Posters", banner: "Banners", sign: "Signs / signage", vinyl: "Stickers / window graphics", textile: "Custom textiles" } },
           qty: { text: "What quantity?", short: "Quantity", opts: { q50: "50 copies", q100: "100 copies", q250: "250 copies", q500: "500 copies", q1000: "1000 copies" } },
@@ -257,7 +257,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Druckauftrag und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Lieferadresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich vorgabekonformer Dateien. Gut zum Druck vor dem Druck freizugeben. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich vorgabekonformer Dateien. Gut zum Druck vor dem Druck freizugeben.",
         q: {
           product: { text: "Was möchten Sie drucken?", short: "Produkt", opts: { flyers: "Flyer / Faltblätter", cards: "Visitenkarten", posters: "Plakate / Poster", banner: "Banner und Blachen", sign: "Schilder / Beschriftung", vinyl: "Kleber / Fensterbeschriftung", textile: "Personalisierte Textilien" } },
           qty: { text: "Welche Menge?", short: "Menge", opts: { q50: "50 Exemplare", q100: "100 Exemplare", q250: "250 Exemplare", q500: "500 Exemplare", q1000: "1000 Exemplare" } },

@@ -83,7 +83,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur vos meubles, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse d'intervention (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, pour le nombre de pièces indiqué. Pièces manquantes ou défectueuses non comprises. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, pour le nombre de pièces indiqué. Pièces manquantes ou défectueuses non comprises.",
         q: {
           service: { text: "Quelle prestation souhaitez-vous ?", short: "Prestation", opts: { assemble: "Montage de meubles neufs", dismantle: "Démontage", move: "Démontage + remontage (déménagement)", haul: "Montage + évacuation des anciens meubles" } },
           pieces: { text: "Combien de meubles sont concernés ?", short: "Meubles", opts: { p1: "1 à 2 pièces", p2: "3 à 5 pièces", p3: "6 à 10 pièces", p4: "11 pièces ou plus" } },
@@ -157,7 +157,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your furniture, then put together a firm quote right away.",
         addressPlaceholder: "Job address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, for the number of pieces stated. Missing or defective parts not included. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, for the number of pieces stated. Missing or defective parts not included.",
         q: {
           service: { text: "Which service would you like?", short: "Service", opts: { assemble: "Assembly of new furniture", dismantle: "Disassembly", move: "Disassembly + reassembly (moving)", haul: "Assembly + removal of old furniture" } },
           pieces: { text: "How many pieces of furniture are involved?", short: "Furniture", opts: { p1: "1 to 2 pieces", p2: "3 to 5 pieces", p3: "6 to 10 pieces", p4: "11 pieces or more" } },
@@ -231,7 +231,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihren Möbeln und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Einsatzadresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, für die angegebene Anzahl Stücke. Fehlende oder defekte Teile nicht inbegriffen. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, für die angegebene Anzahl Stücke. Fehlende oder defekte Teile nicht inbegriffen.",
         q: {
           service: { text: "Welche Leistung wünschen Sie?", short: "Leistung", opts: { assemble: "Montage neuer Möbel", dismantle: "Demontage", move: "Demontage + Wiedermontage (Umzug)", haul: "Montage + Entsorgung alter Möbel" } },
           pieces: { text: "Wie viele Möbelstücke sind betroffen?", short: "Möbel", opts: { p1: "1 bis 2 Stück", p2: "3 bis 5 Stück", p3: "6 bis 10 Stück", p4: "11 Stück oder mehr" } },

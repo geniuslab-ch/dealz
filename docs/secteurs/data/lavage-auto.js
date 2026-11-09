@@ -84,7 +84,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre véhicule, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours. Résultat dépendant de l'état initial de la peinture. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours. Résultat dépendant de l'état initial de la peinture.",
         q: {
           vehicle: { text: "Quel type de véhicule ?", short: "Véhicule", opts: { city: "Citadine", sedan: "Berline / break", suv: "SUV / monospace", van: "Utilitaire / grand van", moto: "Moto" } },
           pack: { text: "Quel forfait vous intéresse ?", short: "Forfait", opts: { ext: "Lavage extérieur", full: "Lavage intérieur + extérieur", detail: "Detailing complet (décontamination + cire)", polish: "Polish + protection céramique" } },
@@ -158,7 +158,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your vehicle, then put together a firm quote right away.",
         addressPlaceholder: "Address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days. Results depend on the paintwork's initial condition. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days. Results depend on the paintwork's initial condition.",
         q: {
           vehicle: { text: "What type of vehicle?", short: "Vehicle", opts: { city: "City car", sedan: "Saloon / estate", suv: "SUV / MPV", van: "Van / large van", moto: "Motorbike" } },
           pack: { text: "Which package are you interested in?", short: "Package", opts: { ext: "Exterior wash", full: "Interior + exterior wash", detail: "Full detailing (decontamination + wax)", polish: "Polish + ceramic protection" } },
@@ -232,7 +232,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Fahrzeug und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig. Ergebnis abhängig vom Ausgangszustand des Lacks. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig. Ergebnis abhängig vom Ausgangszustand des Lacks.",
         q: {
           vehicle: { text: "Welcher Fahrzeugtyp?", short: "Fahrzeug", opts: { city: "Kleinwagen", sedan: "Limousine / Kombi", suv: "SUV / Van", van: "Lieferwagen / grosser Van", moto: "Motorrad" } },
           pack: { text: "Welches Paket interessiert Sie?", short: "Paket", opts: { ext: "Aussenwäsche", full: "Innen- + Aussenwäsche", detail: "Komplettaufbereitung (Dekontamination + Wachs)", polish: "Politur + Keramikversiegelung" } },

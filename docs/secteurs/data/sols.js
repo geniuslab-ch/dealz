@@ -98,7 +98,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre sol, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du chantier (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, matériaux et main-d'œuvre compris. Support humide ou endommagé découvert à la dépose traité uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, matériaux et main-d'œuvre compris. Support humide ou endommagé découvert à la dépose traité uniquement sur accord préalable.",
         q: {
           work: { text: "Quel type de travaux souhaitez-vous ?", short: "Travaux", opts: { install: "Pose d'un nouveau revêtement", sanding: "Ponçage et vitrification d'un parquet", repair: "Réparation localisée" } },
           material: { text: "Quel revêtement souhaitez-vous ?", short: "Revêtement", opts: { parquet: "Parquet", laminate: "Stratifié", vinyl: "Vinyle", carpet: "Moquette", resin: "Sol en résine (époxy)" } },
@@ -175,7 +175,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your floor, then put together a firm quote right away.",
         addressPlaceholder: "Site address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, materials and labour included. Damp or damaged subfloor found during removal treated only with prior agreement. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, materials and labour included. Damp or damaged subfloor found during removal treated only with prior agreement.",
         q: {
           work: { text: "What kind of work do you need?", short: "Work", opts: { install: "Laying a new floor", sanding: "Sanding and sealing a parquet", repair: "Local repair" } },
           material: { text: "Which floor covering would you like?", short: "Covering", opts: { parquet: "Parquet", laminate: "Laminate", vinyl: "Vinyl", carpet: "Carpet", resin: "Resin floor (epoxy)" } },
@@ -252,7 +252,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Boden und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse der Baustelle (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Material und Arbeit inbegriffen. Beim Rückbau entdeckter feuchter oder schadhafter Untergrund nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Material und Arbeit inbegriffen. Beim Rückbau entdeckter feuchter oder schadhafter Untergrund nur nach vorheriger Absprache.",
         q: {
           work: { text: "Welche Arbeiten wünschen Sie?", short: "Arbeiten", opts: { install: "Neuen Belag verlegen", sanding: "Parkett schleifen und versiegeln", repair: "Lokale Reparatur" } },
           material: { text: "Welchen Belag wünschen Sie?", short: "Belag", opts: { parquet: "Parkett", laminate: "Laminat", vinyl: "Vinyl", carpet: "Teppich", resin: "Kunstharzboden (Epoxid)" } },

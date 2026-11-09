@@ -104,7 +104,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre installation électrique, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse de l'intervention (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, fourniture et main-d'œuvre comprises. Non-conformités découvertes sur l'installation existante traitées uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, fourniture et main-d'œuvre comprises. Non-conformités découvertes sur l'installation existante traitées uniquement sur accord préalable.",
         q: {
           work: { text: "De quoi avez-vous besoin ?", short: "Travaux", opts: { repair: "Un dépannage (panne, disjoncteur)", outlets: "Ajouter des prises ou interrupteurs", lighting: "Installer de l'éclairage", panel: "Remplacer le tableau électrique", charger: "Installer une borne de recharge" } },
           points: { text: "Combien de points faut-il installer ?", short: "Points", opts: { p1: "1 ou 2", p2: "3 à 6", p3: "7 ou plus" } },
@@ -181,7 +181,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your electrical installation, then put together a firm quote right away.",
         addressPlaceholder: "Job address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, supply and labour included. Non-compliant existing wiring found on site dealt with only with prior agreement. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, supply and labour included. Non-compliant existing wiring found on site dealt with only with prior agreement.",
         q: {
           work: { text: "What do you need?", short: "Work", opts: { repair: "A call-out (fault, tripped breaker)", outlets: "Add sockets or switches", lighting: "Install lighting", panel: "Replace the fuse board", charger: "Install an EV charger" } },
           points: { text: "How many points need installing?", short: "Points", opts: { p1: "1 or 2", p2: "3 to 6", p3: "7 or more" } },
@@ -258,7 +258,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Elektroinstallation und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Einsatzadresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Lieferung und Arbeit inbegriffen. An der bestehenden Installation entdeckte Mängel nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Lieferung und Arbeit inbegriffen. An der bestehenden Installation entdeckte Mängel nur nach vorheriger Absprache.",
         q: {
           work: { text: "Was benötigen Sie?", short: "Arbeiten", opts: { repair: "Eine Reparatur (Störung, Sicherung)", outlets: "Steckdosen oder Schalter hinzufügen", lighting: "Beleuchtung installieren", panel: "Verteiler ersetzen", charger: "Ladestation installieren" } },
           points: { text: "Wie viele Punkte sollen installiert werden?", short: "Punkte", opts: { p1: "1 oder 2", p2: "3 bis 6", p3: "7 oder mehr" } },

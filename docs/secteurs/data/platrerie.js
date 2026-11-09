@@ -93,7 +93,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur vos travaux de plâtrerie, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du chantier (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, matériaux et main-d'œuvre compris. Supports en mauvais état découverts sur place traités uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, matériaux et main-d'œuvre compris. Supports en mauvais état découverts sur place traités uniquement sur accord préalable.",
         q: {
           work: { text: "Quel type de travaux souhaitez-vous ?", short: "Travaux", opts: { partition: "Nouvelle cloison en plaques de plâtre", ceiling: "Faux-plafond", plaster: "Enduit ou lissage de murs et plafonds", repair: "Réparation (fissures, trous, dégâts d'eau)" } },
           surf: { text: "Quelle est la surface concernée ?", short: "Surface", opts: { s1: "Environ 10 m²", s2: "Environ 25 m²", s3: "Environ 50 m²", s4: "Environ 100 m²", s5: "200 m² ou plus" } },
@@ -167,7 +167,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your plastering work, then put together a firm quote right away.",
         addressPlaceholder: "Site address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, materials and labour included. Damaged substrates found on site treated only with prior agreement. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, materials and labour included. Damaged substrates found on site treated only with prior agreement.",
         q: {
           work: { text: "What kind of work do you need?", short: "Work", opts: { partition: "New plasterboard partition", ceiling: "Suspended ceiling", plaster: "Plastering or skimming walls and ceilings", repair: "Repair (cracks, holes, water damage)" } },
           surf: { text: "How large is the area?", short: "Area", opts: { s1: "About 10 m²", s2: "About 25 m²", s3: "About 50 m²", s4: "About 100 m²", s5: "200 m² or more" } },
@@ -241,7 +241,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihren Gipserarbeiten und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse der Baustelle (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Material und Arbeit inbegriffen. Vor Ort entdeckte schadhafte Untergründe nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Material und Arbeit inbegriffen. Vor Ort entdeckte schadhafte Untergründe nur nach vorheriger Absprache.",
         q: {
           work: { text: "Welche Arbeiten wünschen Sie?", short: "Arbeiten", opts: { partition: "Neue Gipsständerwand", ceiling: "Abgehängte Decke", plaster: "Verputz oder Abrieb von Wänden und Decken", repair: "Reparatur (Risse, Löcher, Wasserschäden)" } },
           surf: { text: "Wie gross ist die betroffene Fläche?", short: "Fläche", opts: { s1: "Etwa 10 m²", s2: "Etwa 25 m²", s3: "Etwa 50 m²", s4: "Etwa 100 m²", s5: "200 m² oder mehr" } },

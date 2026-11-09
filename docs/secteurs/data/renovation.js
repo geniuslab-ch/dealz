@@ -88,7 +88,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre projet de rénovation, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du chantier (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, matériaux et main-d'œuvre compris. Travaux imprévus découverts pendant la démolition facturés uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, matériaux et main-d'œuvre compris. Travaux imprévus découverts pendant la démolition facturés uniquement sur accord préalable.",
         q: {
           work: { text: "Que souhaitez-vous rénover ?", short: "Projet", opts: { kitchen: "La cuisine", bathroom: "La salle de bain", flat: "Un appartement ou une maison entière", room: "Une pièce (chambre, séjour, bureau)" } },
           surf: { text: "Quelle est la surface concernée ?", short: "Surface", opts: { s1: "Moins de 10 m²", s2: "10 à 20 m²", s3: "20 à 50 m²", s4: "50 à 100 m²", s5: "Plus de 100 m²" } },
@@ -164,7 +164,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your renovation project, then put together a firm quote right away.",
         addressPlaceholder: "Site address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, materials and labour included. Unforeseen work found during demolition charged only with prior agreement. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, materials and labour included. Unforeseen work found during demolition charged only with prior agreement.",
         q: {
           work: { text: "What would you like to renovate?", short: "Project", opts: { kitchen: "The kitchen", bathroom: "The bathroom", flat: "A whole apartment or house", room: "One room (bedroom, living room, office)" } },
           surf: { text: "How large is the area?", short: "Area", opts: { s1: "Under 10 m²", s2: "10 to 20 m²", s3: "20 to 50 m²", s4: "50 to 100 m²", s5: "Over 100 m²" } },
@@ -240,7 +240,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Renovationsprojekt und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse der Baustelle (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Material und Arbeit inbegriffen. Beim Rückbau entdeckte unvorhergesehene Arbeiten nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Material und Arbeit inbegriffen. Beim Rückbau entdeckte unvorhergesehene Arbeiten nur nach vorheriger Absprache.",
         q: {
           work: { text: "Was möchten Sie renovieren?", short: "Projekt", opts: { kitchen: "Die Küche", bathroom: "Das Badezimmer", flat: "Eine ganze Wohnung oder ein Haus", room: "Einen Raum (Schlafzimmer, Wohnzimmer, Büro)" } },
           surf: { text: "Wie gross ist die betroffene Fläche?", short: "Fläche", opts: { s1: "Unter 10 m²", s2: "10 bis 20 m²", s3: "20 bis 50 m²", s4: "50 bis 100 m²", s5: "Über 100 m²" } },
