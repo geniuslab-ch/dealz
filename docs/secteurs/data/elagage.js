@@ -106,7 +106,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur vos arbres, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du terrain (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, main-d'œuvre et matériel compris. Autorisation communale d'abattage à la charge du propriétaire si nécessaire. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, main-d'œuvre et matériel compris. Autorisation communale d'abattage à la charge du propriétaire si nécessaire.",
         q: {
           work: { text: "Quel type de travaux souhaitez-vous ?", short: "Travaux", opts: { prune: "Élagage ou taille d'arbre", fell: "Abattage d'arbre", stump: "Dessouchage (retrait de souche)", hedge: "Taille de haie" } },
           count: { text: "Combien d'arbres ou de souches ?", short: "Nombre", opts: { t1: "1", t2: "2 ou 3", t3: "4 à 6" } },
@@ -179,7 +179,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your trees, then put together a firm quote right away.",
         addressPlaceholder: "Property address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, labour and equipment included. Any municipal felling permit is the owner's responsibility. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, labour and equipment included. Any municipal felling permit is the owner's responsibility.",
         q: {
           work: { text: "What kind of work do you need?", short: "Work", opts: { prune: "Tree pruning or trimming", fell: "Tree felling", stump: "Stump removal", hedge: "Hedge trimming" } },
           count: { text: "How many trees or stumps?", short: "Number", opts: { t1: "1", t2: "2 or 3", t3: "4 to 6" } },
@@ -252,7 +252,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihren Bäumen und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse des Grundstücks (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Arbeit und Material inbegriffen. Eine allfällige Fällbewilligung der Gemeinde ist Sache des Eigentümers. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Arbeit und Material inbegriffen. Eine allfällige Fällbewilligung der Gemeinde ist Sache des Eigentümers.",
         q: {
           work: { text: "Welche Arbeiten wünschen Sie?", short: "Arbeiten", opts: { prune: "Baumpflege oder Rückschnitt", fell: "Baumfällung", stump: "Wurzelstock entfernen", hedge: "Heckenschnitt" } },
           count: { text: "Wie viele Bäume oder Wurzelstöcke?", short: "Anzahl", opts: { t1: "1", t2: "2 oder 3", t3: "4 bis 6" } },

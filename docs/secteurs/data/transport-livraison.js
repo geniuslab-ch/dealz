@@ -85,7 +85,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre transport, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse de chargement (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, pour le volume et le trajet indiqués. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, pour le volume et le trajet indiqués.",
         q: {
           kind: { text: "Que souhaitez-vous faire transporter ?", short: "Marchandise", opts: { parcel: "Colis / palettes", furniture: "Meubles et électroménager", pro: "Marchandises professionnelles", urgent: "Transport urgent (véhicule dédié)" } },
           volume: { text: "Quel est le volume approximatif ?", short: "Volume", opts: { xs: "Moins de 1 m³", s: "1 à 3 m³", m: "3 à 10 m³", l: "Camion complet (10 à 20 m³)" } },
@@ -157,7 +157,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your transport, then put together a firm quote right away.",
         addressPlaceholder: "Loading address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, for the volume and route given. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, for the volume and route given.",
         q: {
           kind: { text: "What would you like transported?", short: "Goods", opts: { parcel: "Parcels / pallets", furniture: "Furniture and appliances", pro: "Business goods", urgent: "Urgent transport (dedicated vehicle)" } },
           volume: { text: "Roughly what volume?", short: "Volume", opts: { xs: "Under 1 m³", s: "1 to 3 m³", m: "3 to 10 m³", l: "Full truck (10 to 20 m³)" } },
@@ -229,7 +229,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Transport und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Ladeadresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, für das angegebene Volumen und die angegebene Strecke. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, für das angegebene Volumen und die angegebene Strecke.",
         q: {
           kind: { text: "Was möchten Sie transportieren lassen?", short: "Ware", opts: { parcel: "Pakete / Paletten", furniture: "Möbel und Haushaltgeräte", pro: "Geschäftsware", urgent: "Eiltransport (dediziertes Fahrzeug)" } },
           volume: { text: "Wie gross ist das Volumen ungefähr?", short: "Volumen", opts: { xs: "Unter 1 m³", s: "1 bis 3 m³", m: "3 bis 10 m³", l: "Ganzer Lastwagen (10 bis 20 m³)" } },

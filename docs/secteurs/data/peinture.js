@@ -125,7 +125,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre projet, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du chantier (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, fournitures comprises. Travaux supplémentaires éventuels facturés sur accord préalable. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, fournitures comprises. Travaux supplémentaires éventuels facturés sur accord préalable.",
         q: {
           work: { text: "Quel type de travaux souhaitez-vous ?", short: "Travaux", opts: { interior: "Peinture intérieure (murs et plafonds)", facade: "Peinture de façade", wood: "Boiseries, portes et fenêtres", reno: "Rénovation de pièces (préparation + peinture + finitions)" } },
           rooms: { text: "Combien de pièces sont concernées ?", short: "Pièces", opts: { r1: "1 pièce / studio", r2: "2 pièces", r3: "3 pièces", r4: "4 pièces", r5: "5 pièces et plus" } },
@@ -205,7 +205,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your project, then put together a firm quote right away.",
         addressPlaceholder: "Site address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, materials included. Any additional work charged only with prior agreement. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, materials included. Any additional work charged only with prior agreement.",
         q: {
           work: { text: "What kind of work do you need?", short: "Work", opts: { interior: "Interior painting (walls and ceilings)", facade: "Façade painting", wood: "Woodwork, doors and windows", reno: "Room renovation (preparation + painting + finishes)" } },
           rooms: { text: "How many rooms are involved?", short: "Rooms", opts: { r1: "1 room / studio", r2: "2 rooms", r3: "3 rooms", r4: "4 rooms", r5: "5 rooms or more" } },
@@ -285,7 +285,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Projekt und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse der Baustelle (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Material inbegriffen. Allfällige Zusatzarbeiten nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Material inbegriffen. Allfällige Zusatzarbeiten nur nach vorheriger Absprache.",
         q: {
           work: { text: "Welche Arbeiten wünschen Sie?", short: "Arbeiten", opts: { interior: "Innenanstrich (Wände und Decken)", facade: "Fassadenanstrich", wood: "Holzwerk, Türen und Fenster", reno: "Zimmerrenovation (Vorarbeiten + Anstrich + Finish)" } },
           rooms: { text: "Wie viele Zimmer sind betroffen?", short: "Zimmer", opts: { r1: "1 Zimmer / Studio", r2: "2 Zimmer", r3: "3 Zimmer", r4: "4 Zimmer", r5: "5 Zimmer und mehr" } },

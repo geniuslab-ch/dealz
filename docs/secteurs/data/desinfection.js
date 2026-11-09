@@ -99,7 +99,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre situation, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse à traiter (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours. Garantie de résultat selon conditions du traitement choisi. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours. Garantie de résultat selon conditions du traitement choisi.",
         q: {
           problem: { text: "Quel est le problème ?", short: "Problème", opts: { bedbugs: "Punaises de lit", roaches: "Cafards / blattes", rodents: "Rongeurs (souris, rats)", wasps: "Nid de guêpes ou de frelons", ants: "Fourmis", disinfect: "Désinfection (virus, bactéries, moisissures)" } },
           premises: { text: "De quels locaux s'agit-il ?", short: "Locaux", opts: { flat: "Appartement", house: "Maison", shop: "Commerce / restaurant", building: "Immeuble / parties communes" } },
@@ -175,7 +175,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your situation, then put together a firm quote right away.",
         addressPlaceholder: "Address to treat (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days. Results guaranteed under the conditions of the chosen treatment. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days. Results guaranteed under the conditions of the chosen treatment.",
         q: {
           problem: { text: "What is the problem?", short: "Problem", opts: { bedbugs: "Bed bugs", roaches: "Cockroaches", rodents: "Rodents (mice, rats)", wasps: "Wasp or hornet nest", ants: "Ants", disinfect: "Disinfection (viruses, bacteria, mould)" } },
           premises: { text: "What kind of premises?", short: "Premises", opts: { flat: "Flat", house: "House", shop: "Shop / restaurant", building: "Building / common areas" } },
@@ -251,7 +251,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Situation und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Zu behandelnde Adresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig. Erfolgsgarantie gemäss Bedingungen der gewählten Behandlung. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig. Erfolgsgarantie gemäss Bedingungen der gewählten Behandlung.",
         q: {
           problem: { text: "Was ist das Problem?", short: "Problem", opts: { bedbugs: "Bettwanzen", roaches: "Kakerlaken / Schaben", rodents: "Nager (Mäuse, Ratten)", wasps: "Wespen- oder Hornissennest", ants: "Ameisen", disinfect: "Desinfektion (Viren, Bakterien, Schimmel)" } },
           premises: { text: "Um welche Räumlichkeiten geht es?", short: "Räumlichkeiten", opts: { flat: "Wohnung", house: "Haus", shop: "Geschäft / Restaurant", building: "Mehrfamilienhaus / Allgemeinräume" } },

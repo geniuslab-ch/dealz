@@ -85,7 +85,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre événement, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Lieu de l'événement (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, sous réserve de disponibilité à la date indiquée. Caution restituée après contrôle du matériel. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, sous réserve de disponibilité à la date indiquée. Caution restituée après contrôle du matériel.",
         q: {
           event: { text: "Quel type d'événement organisez-vous ?", short: "Événement", opts: { wedding: "Mariage", corp: "Événement d'entreprise", party: "Anniversaire / fête privée", public: "Fête de village / association" } },
           guests: { text: "Combien d'invités attendez-vous ?", short: "Invités", opts: { g1: "Moins de 30", g2: "30 à 60", g3: "60 à 100", g4: "100 à 200", g5: "Plus de 200" } },
@@ -158,7 +158,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your event, then put together a firm quote right away.",
         addressPlaceholder: "Event location (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, subject to availability on the date given. Deposit returned after the equipment is checked. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, subject to availability on the date given. Deposit returned after the equipment is checked.",
         q: {
           event: { text: "What kind of event are you organising?", short: "Event", opts: { wedding: "Wedding", corp: "Corporate event", party: "Birthday / private party", public: "Village festival / association" } },
           guests: { text: "How many guests are you expecting?", short: "Guests", opts: { g1: "Under 30", g2: "30 to 60", g3: "60 to 100", g4: "100 to 200", g5: "Over 200" } },
@@ -231,7 +231,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Anlass und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Ort des Anlasses (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich Verfügbarkeit am angegebenen Datum. Kaution wird nach Kontrolle des Materials zurückerstattet. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich Verfügbarkeit am angegebenen Datum. Kaution wird nach Kontrolle des Materials zurückerstattet.",
         q: {
           event: { text: "Welche Art von Anlass organisieren Sie?", short: "Anlass", opts: { wedding: "Hochzeit", corp: "Firmenanlass", party: "Geburtstag / Privatfest", public: "Dorffest / Verein" } },
           guests: { text: "Wie viele Gäste erwarten Sie?", short: "Gäste", opts: { g1: "Unter 30", g2: "30 bis 60", g3: "60 bis 100", g4: "100 bis 200", g5: "Über 200" } },

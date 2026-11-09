@@ -97,7 +97,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre porte, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse de l'intervention (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, déplacement, fourniture et main-d'œuvre compris. Pièce de rechange différente constatée sur place remplacée uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, déplacement, fourniture et main-d'œuvre compris. Pièce de rechange différente constatée sur place remplacée uniquement sur accord préalable.",
         q: {
           work: { text: "De quoi avez-vous besoin ?", short: "Intervention", opts: { open: "Ouvrir une porte (clés perdues ou à l'intérieur)", cylinder: "Changer le cylindre", lock: "Installer une serrure multipoint", door: "Poser une porte de sécurité" } },
           locktype: { text: "Comment la porte est-elle fermée ?", short: "Fermeture", opts: { slammed: "Porte claquée (pas fermée à clé)", locked: "Fermée à clé", security: "Serrure de sécurité ou multipoint" } },
@@ -175,7 +175,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your door, then put together a firm quote right away.",
         addressPlaceholder: "Job address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, call-out, supply and labour included. A different replacement part found on site fitted only with prior agreement. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, call-out, supply and labour included. A different replacement part found on site fitted only with prior agreement.",
         q: {
           work: { text: "What do you need?", short: "Job", opts: { open: "Open a door (keys lost or inside)", cylinder: "Replace the cylinder", lock: "Fit a multipoint lock", door: "Install a security door" } },
           locktype: { text: "How is the door shut?", short: "Lock", opts: { slammed: "Slammed (not locked with the key)", locked: "Locked with the key", security: "Security or multipoint lock" } },
@@ -253,7 +253,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Tür und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Einsatzadresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Anfahrt, Lieferung und Arbeit inbegriffen. Ein vor Ort festgestelltes anderes Ersatzteil nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Anfahrt, Lieferung und Arbeit inbegriffen. Ein vor Ort festgestelltes anderes Ersatzteil nur nach vorheriger Absprache.",
         q: {
           work: { text: "Was benötigen Sie?", short: "Einsatz", opts: { open: "Tür öffnen (Schlüssel verloren oder drinnen)", cylinder: "Zylinder wechseln", lock: "Mehrpunktschloss einbauen", door: "Sicherheitstür einbauen" } },
           locktype: { text: "Wie ist die Tür verschlossen?", short: "Verschluss", opts: { slammed: "Zugefallen (nicht abgeschlossen)", locked: "Abgeschlossen", security: "Sicherheits- oder Mehrpunktschloss" } },

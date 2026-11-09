@@ -81,7 +81,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre bâtiment, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du bâtiment (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, matériaux et main-d'œuvre compris. Montant des subventions non déduit, versé directement au propriétaire. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, matériaux et main-d'œuvre compris. Montant des subventions non déduit, versé directement au propriétaire.",
         q: {
           where: { text: "Quelle partie du bâtiment souhaitez-vous isoler ?", short: "Partie", opts: { attic: "Combles perdus (grenier non habité)", roof: "Toiture et rampants (combles habités)", facade: "Façade (isolation extérieure)", cellar: "Plafond de cave ou de garage" } },
           surf: { text: "Quelle est la surface à isoler ?", short: "Surface", opts: { s1: "Environ 30 m²", s2: "Environ 60 m²", s3: "Environ 100 m²", s4: "Environ 160 m²", s5: "250 m² ou plus" } },
@@ -153,7 +153,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your building, then put together a firm quote right away.",
         addressPlaceholder: "Building address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, materials and labour included. Subsidies not deducted, paid directly to the owner. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, materials and labour included. Subsidies not deducted, paid directly to the owner.",
         q: {
           where: { text: "Which part of the building would you like to insulate?", short: "Part", opts: { attic: "Unused loft (attic not lived in)", roof: "Roof and sloped ceilings (lived-in attic)", facade: "Facade (external insulation)", cellar: "Cellar or garage ceiling" } },
           surf: { text: "How much area needs insulating?", short: "Area", opts: { s1: "About 30 m²", s2: "About 60 m²", s3: "About 100 m²", s4: "About 160 m²", s5: "250 m² or more" } },
@@ -225,7 +225,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Gebäude und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse des Gebäudes (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Material und Arbeit inbegriffen. Förderbeiträge nicht abgezogen, direkt an den Eigentümer ausbezahlt. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Material und Arbeit inbegriffen. Förderbeiträge nicht abgezogen, direkt an den Eigentümer ausbezahlt.",
         q: {
           where: { text: "Welchen Gebäudeteil möchten Sie dämmen?", short: "Gebäudeteil", opts: { attic: "Kaltestrich (unbewohnter Dachboden)", roof: "Dach und Dachschrägen (bewohntes Dachgeschoss)", facade: "Fassade (Aussendämmung)", cellar: "Keller- oder Garagendecke" } },
           surf: { text: "Wie gross ist die zu dämmende Fläche?", short: "Fläche", opts: { s1: "Etwa 30 m²", s2: "Etwa 60 m²", s3: "Etwa 100 m²", s4: "Etwa 160 m²", s5: "250 m² oder mehr" } },

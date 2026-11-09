@@ -86,7 +86,7 @@
       },
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre location, puis je vous établis un devis ferme tout de suite après.",
-        terms: "Devis ferme, valable 30 jours, sous réserve de disponibilité. Caution et permis de conduire valable exigés au retrait. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, sous réserve de disponibilité. Caution et permis de conduire valable exigés au retrait.",
         q: {
           vehicle: { text: "Quel type de véhicule souhaitez-vous ?", short: "Véhicule", opts: { city: "Citadine (5 portes)", compact: "Compacte / berline", suv: "SUV / monospace", van: "Fourgon 12 m³", minibus: "Minibus 9 places" } },
           duration: { text: "Pour quelle durée ?", short: "Durée", opts: { d1: "1 jour", d3: "2 à 3 jours", w1: "1 semaine", w2: "2 semaines ou plus" } },
@@ -159,7 +159,7 @@
       },
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your rental, then put together a firm quote right away.",
-        terms: "Firm quote, valid for 30 days, subject to availability. Deposit and a valid driving licence required at pick-up. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, subject to availability. Deposit and a valid driving licence required at pick-up.",
         q: {
           vehicle: { text: "Which type of vehicle would you like?", short: "Vehicle", opts: { city: "City car (5 doors)", compact: "Compact / saloon", suv: "SUV / MPV", van: "12 m³ van", minibus: "9-seat minibus" } },
           duration: { text: "For how long?", short: "Duration", opts: { d1: "1 day", d3: "2 to 3 days", w1: "1 week", w2: "2 weeks or more" } },
@@ -232,7 +232,7 @@
       },
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Miete und erstelle Ihnen gleich danach eine verbindliche Offerte.",
-        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich Verfügbarkeit. Kaution und gültiger Führerausweis bei Abholung erforderlich. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich Verfügbarkeit. Kaution und gültiger Führerausweis bei Abholung erforderlich.",
         q: {
           vehicle: { text: "Welchen Fahrzeugtyp wünschen Sie?", short: "Fahrzeug", opts: { city: "Kleinwagen (5 Türen)", compact: "Kompakt / Limousine", suv: "SUV / Van", van: "Lieferwagen 12 m³", minibus: "Minibus 9 Plätze" } },
           duration: { text: "Für wie lange?", short: "Dauer", opts: { d1: "1 Tag", d3: "2 bis 3 Tage", w1: "1 Woche", w2: "2 Wochen oder mehr" } },

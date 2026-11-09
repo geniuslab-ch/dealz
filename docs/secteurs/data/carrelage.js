@@ -82,7 +82,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre carrelage, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du chantier (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, main-d'œuvre et fournitures de pose comprises, carreaux selon le prix au m² indiqué. Support endommagé découvert à la dépose traité uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, main-d'œuvre et fournitures de pose comprises, carreaux selon le prix au m² indiqué. Support endommagé découvert à la dépose traité uniquement sur accord préalable.",
         q: {
           place: { text: "Où faut-il poser le carrelage ?", short: "Pièce", opts: { bathroom: "Salle de bain (murs et sol)", kitchen: "Cuisine (crédence et sol)", floor: "Sol intérieur (séjour, entrée)", terrace: "Terrasse ou balcon" } },
           surf: { text: "Quelle est la surface à carreler ?", short: "Surface", opts: { s1: "Environ 5 m²", s2: "Environ 10 m²", s3: "Environ 25 m²", s4: "Environ 50 m²", s5: "100 m² ou plus" } },
@@ -155,7 +155,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your tiling, then put together a firm quote right away.",
         addressPlaceholder: "Site address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, labour and fixing materials included, tiles at the price per m² shown. Damaged substrate found during removal treated only with prior agreement. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, labour and fixing materials included, tiles at the price per m² shown. Damaged substrate found during removal treated only with prior agreement.",
         q: {
           place: { text: "Where do the tiles go?", short: "Room", opts: { bathroom: "Bathroom (walls and floor)", kitchen: "Kitchen (splashback and floor)", floor: "Indoor floor (living room, entrance)", terrace: "Terrace or balcony" } },
           surf: { text: "How much area needs tiling?", short: "Area", opts: { s1: "About 5 m²", s2: "About 10 m²", s3: "About 25 m²", s4: "About 50 m²", s5: "100 m² or more" } },
@@ -228,7 +228,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihren Plattenarbeiten und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse der Baustelle (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Arbeit und Verlegematerial inbegriffen, Platten zum angegebenen m²-Preis. Beim Rückbau entdeckter schadhafter Untergrund nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Arbeit und Verlegematerial inbegriffen, Platten zum angegebenen m²-Preis. Beim Rückbau entdeckter schadhafter Untergrund nur nach vorheriger Absprache.",
         q: {
           place: { text: "Wo sollen die Platten verlegt werden?", short: "Raum", opts: { bathroom: "Badezimmer (Wände und Boden)", kitchen: "Küche (Rückwand und Boden)", floor: "Innenboden (Wohnzimmer, Eingang)", terrace: "Terrasse oder Balkon" } },
           surf: { text: "Wie gross ist die Fläche?", short: "Fläche", opts: { s1: "Etwa 5 m²", s2: "Etwa 10 m²", s3: "Etwa 25 m²", s4: "Etwa 50 m²", s5: "100 m² oder mehr" } },

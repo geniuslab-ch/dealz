@@ -71,7 +71,7 @@
       postCta: "Merci d'avoir testé l'assistant de devis Dealz !", integrate: "Intégrer Dealz", contact: "Nous contacter",
       misunderstood: "Je n'ai pas bien compris — choisissez l'une des options proposées ci-dessus.",
       afterQuote: "Votre devis est prêt ci-dessus. Pour en établir un nouveau, cliquez sur « Nouveau devis ».",
-      terms: "Devis ferme, valable 30 jours. TVA suisse incluse le cas échéant.",
+      terms: "Devis ferme, valable 30 jours.",
       generated: function (b) { return "Document généré automatiquement — " + b + ", site de démonstration."; },
       objections: [
         ["price", "💰 Le prix est trop élevé", "Prix trop élevé", "🔴", "Proposer une remise ciblée, ou retirer une option pour rentrer dans le budget du client."],
@@ -137,7 +137,7 @@
       postCta: "Thanks for trying the Dealz quote assistant!", integrate: "Add Dealz to my site", contact: "Contact us",
       misunderstood: "I didn't quite get that — please pick one of the options above.",
       afterQuote: "Your quote is ready above. To create a new one, click “New quote”.",
-      terms: "Firm quote, valid for 30 days. Swiss VAT included where applicable.",
+      terms: "Firm quote, valid for 30 days.",
       generated: function (b) { return "Automatically generated document — " + b + ", demo site."; },
       objections: [
         ["price", "💰 The price is too high", "Price too high", "🔴", "Offer a targeted discount, or drop an option to fit the customer's budget."],
@@ -203,7 +203,7 @@
       postCta: "Danke, dass Sie den Dealz-Offertassistenten ausprobiert haben!", integrate: "Dealz integrieren", contact: "Kontakt aufnehmen",
       misunderstood: "Das habe ich nicht ganz verstanden — bitte wählen Sie eine der oben angezeigten Optionen.",
       afterQuote: "Ihre Offerte steht oben bereit. Für eine neue klicken Sie auf «Neue Offerte».",
-      terms: "Feste Offerte, gültig 30 Tage. Schweizer MWST wo anwendbar inbegriffen.",
+      terms: "Feste Offerte, gültig 30 Tage.",
       generated: function (b) { return "Automatisch erstelltes Dokument — " + b + ", Demo-Website."; },
       objections: [
         ["price", "💰 Der Preis ist zu hoch", "Preis zu hoch", "🔴", "Gezielten Rabatt anbieten oder eine Option streichen, um ins Budget zu passen."],

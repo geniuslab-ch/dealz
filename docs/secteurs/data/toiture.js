@@ -119,7 +119,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre toiture, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du bâtiment (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, matériaux et main-d'œuvre compris. Dégâts cachés découverts à la dépose facturés sur accord préalable. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, matériaux et main-d'œuvre compris. Dégâts cachés découverts à la dépose facturés sur accord préalable.",
         q: {
           work: { text: "Quel type de travaux souhaitez-vous ?", short: "Travaux", opts: { repair: "Réparation (tuiles cassées, fuite, dégâts)", cleaning: "Nettoyage et démoussage", renovation: "Réfection complète de la toiture", gutters: "Gouttières et ferblanterie" } },
           damage: { text: "Quelle est l'ampleur des dégâts ?", short: "Dégâts", opts: { small: "Quelques tuiles à remplacer", leak: "Fuite ou infiltration à localiser", storm: "Dégâts importants (tempête, grêle)" } },
@@ -204,7 +204,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your roof, then put together a firm quote right away.",
         addressPlaceholder: "Building address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, materials and labour included. Hidden damage found during stripping charged only with prior agreement. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, materials and labour included. Hidden damage found during stripping charged only with prior agreement.",
         q: {
           work: { text: "What kind of work do you need?", short: "Work", opts: { repair: "Repair (broken tiles, leak, damage)", cleaning: "Cleaning and moss removal", renovation: "Full re-roofing", gutters: "Gutters and metalwork" } },
           damage: { text: "How extensive is the damage?", short: "Damage", opts: { small: "A few tiles to replace", leak: "A leak to locate and fix", storm: "Major damage (storm, hail)" } },
@@ -289,7 +289,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Dach und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse des Gebäudes (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Material und Arbeit inbegriffen. Beim Abdecken entdeckte versteckte Schäden nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Material und Arbeit inbegriffen. Beim Abdecken entdeckte versteckte Schäden nur nach vorheriger Absprache.",
         q: {
           work: { text: "Welche Arbeiten wünschen Sie?", short: "Arbeiten", opts: { repair: "Reparatur (kaputte Ziegel, Leck, Schäden)", cleaning: "Reinigung und Moosentfernung", renovation: "Komplette Neueindeckung", gutters: "Dachrinnen und Spenglerei" } },
           damage: { text: "Wie gross sind die Schäden?", short: "Schäden", opts: { small: "Einige Ziegel zu ersetzen", leak: "Leck suchen und beheben", storm: "Grössere Schäden (Sturm, Hagel)" } },

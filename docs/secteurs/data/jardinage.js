@@ -109,7 +109,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre jardin, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du jardin (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours. Évacuation des déchets verts uniquement si l'option est indiquée. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours. Évacuation des déchets verts uniquement si l'option est indiquée.",
         q: {
           service: { text: "Quelle prestation souhaitez-vous ?", short: "Prestation", opts: { lawn: "Tonte et entretien de pelouse", hedge: "Taille de haies et arbustes", prune: "Élagage d'arbres", design: "Création / rénovation de jardin", yearly: "Entretien annuel complet" } },
           surface: { text: "Quelle est la surface du jardin ?", short: "Surface", opts: { s1: "Moins de 200 m²", s2: "200 à 500 m²", s3: "500 à 1000 m²", s4: "1000 à 2000 m²", s5: "Plus de 2000 m²" } },
@@ -182,7 +182,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your garden, then put together a firm quote right away.",
         addressPlaceholder: "Garden address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days. Green waste removed only if the option is selected. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days. Green waste removed only if the option is selected.",
         q: {
           service: { text: "Which service would you like?", short: "Service", opts: { lawn: "Lawn mowing and care", hedge: "Hedge and shrub trimming", prune: "Tree pruning", design: "Garden design / renovation", yearly: "Full yearly maintenance" } },
           surface: { text: "How big is the garden?", short: "Size", opts: { s1: "Under 200 m²", s2: "200 to 500 m²", s3: "500 to 1,000 m²", s4: "1,000 to 2,000 m²", s5: "Over 2,000 m²" } },
@@ -255,7 +255,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Garten und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse des Gartens (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig. Grünabfuhr nur, wenn die Option gewählt ist. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig. Grünabfuhr nur, wenn die Option gewählt ist.",
         q: {
           service: { text: "Welche Leistung wünschen Sie?", short: "Leistung", opts: { lawn: "Rasenmähen und Rasenpflege", hedge: "Hecken- und Strauchschnitt", prune: "Baumpflege", design: "Gartengestaltung / -erneuerung", yearly: "Komplette Jahrespflege" } },
           surface: { text: "Wie gross ist der Garten?", short: "Fläche", opts: { s1: "Unter 200 m²", s2: "200 bis 500 m²", s3: "500 bis 1000 m²", s4: "1000 bis 2000 m²", s5: "Über 2000 m²" } },

@@ -100,7 +100,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur vos textiles, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse d'intervention (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours. Résultat dépendant de la nature des taches et des fibres. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours. Résultat dépendant de la nature des taches et des fibres.",
         q: {
           scope: { text: "Que souhaitez-vous faire nettoyer ?", short: "Textiles", none: "Je ne sais pas encore", opts: { sofa: "Canapé", rug: "Tapis", mattress: "Matelas" } },
           sofa: { text: "Quelle taille de canapé ?", short: "Canapé", opts: { s2: "2 places", s3: "3 places", corner: "Angle ou 5 places et plus" } },
@@ -182,7 +182,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your upholstery, then put together a firm quote right away.",
         addressPlaceholder: "Service address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days. Results depend on the type of stains and fibres. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days. Results depend on the type of stains and fibres.",
         q: {
           scope: { text: "What would you like cleaned?", short: "Items", none: "I don't know yet", opts: { sofa: "Sofa", rug: "Rug", mattress: "Mattress" } },
           sofa: { text: "What size is the sofa?", short: "Sofa", opts: { s2: "2-seater", s3: "3-seater", corner: "Corner or 5 seats or more" } },
@@ -264,7 +264,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihren Textilien und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Einsatzadresse (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig. Ergebnis abhängig von Art der Flecken und Fasern. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig. Ergebnis abhängig von Art der Flecken und Fasern.",
         q: {
           scope: { text: "Was möchten Sie reinigen lassen?", short: "Textilien", none: "Ich weiss es noch nicht", opts: { sofa: "Sofa", rug: "Teppich", mattress: "Matratze" } },
           sofa: { text: "Wie gross ist das Sofa?", short: "Sofa", opts: { s2: "2-Plätzer", s3: "3-Plätzer", corner: "Ecksofa oder 5 Plätze und mehr" } },

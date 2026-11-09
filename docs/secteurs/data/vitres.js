@@ -85,7 +85,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur vos vitres, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du bâtiment (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, par passage. Intervention sous réserve de conditions météo compatibles pour l'extérieur. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, par passage. Intervention sous réserve de conditions météo compatibles pour l'extérieur.",
         q: {
           building: { text: "De quel type de bâtiment s'agit-il ?", short: "Bâtiment", opts: { house: "Maison / villa", flat: "Appartement", building: "Immeuble (parties communes)", shop: "Commerce / vitrine", office: "Bureaux" } },
           count: { text: "Combien de vitres environ ?", short: "Vitres", opts: { n1: "Moins de 10 vitres", n2: "10 à 20 vitres", n3: "20 à 40 vitres", n4: "Plus de 40 vitres" } },
@@ -156,7 +156,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your windows, then put together a firm quote right away.",
         addressPlaceholder: "Building address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, per visit. Exterior work subject to suitable weather. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, per visit. Exterior work subject to suitable weather.",
         q: {
           building: { text: "What type of building is it?", short: "Building", opts: { house: "House / villa", flat: "Flat", building: "Apartment building (common areas)", shop: "Shop / shop front", office: "Offices" } },
           count: { text: "Roughly how many windows?", short: "Windows", opts: { n1: "Fewer than 10 windows", n2: "10 to 20 windows", n3: "20 to 40 windows", n4: "More than 40 windows" } },
@@ -227,7 +227,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihren Fenstern und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse des Gebäudes (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, pro Einsatz. Aussenarbeiten vorbehaltlich geeigneter Witterung. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, pro Einsatz. Aussenarbeiten vorbehaltlich geeigneter Witterung.",
         q: {
           building: { text: "Um welchen Gebäudetyp handelt es sich?", short: "Gebäude", opts: { house: "Haus / Villa", flat: "Wohnung", building: "Mehrfamilienhaus (Allgemeinflächen)", shop: "Geschäft / Schaufenster", office: "Büros" } },
           count: { text: "Wie viele Fenster ungefähr?", short: "Fenster", opts: { n1: "Weniger als 10 Fenster", n2: "10 bis 20 Fenster", n3: "20 bis 40 Fenster", n4: "Mehr als 40 Fenster" } },

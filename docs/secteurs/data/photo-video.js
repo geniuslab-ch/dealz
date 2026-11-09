@@ -86,7 +86,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre projet, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Lieu de la séance (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, sous réserve de disponibilité à la date indiquée. Acompte de 30 % à la réservation. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, sous réserve de disponibilité à la date indiquée. Acompte de 30 % à la réservation.",
         q: {
           shoot: { text: "Quel type de séance souhaitez-vous ?", short: "Séance", opts: { wedding: "Mariage", portrait: "Portraits / famille", corporate: "Événement ou reportage d'entreprise", realestate: "Immobilier", product: "Produits / e-commerce", video: "Vidéo promotionnelle" } },
           duration: { text: "Quelle durée de prestation prévoyez-vous ?", short: "Durée", opts: { h2: "2 heures", h4: "Demi-journée (4 heures)", h8: "Journée (8 heures)" } },
@@ -164,7 +164,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your project, then put together a firm quote right away.",
         addressPlaceholder: "Shoot location (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, subject to availability on the date given. 30% deposit on booking. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, subject to availability on the date given. 30% deposit on booking.",
         q: {
           shoot: { text: "What kind of shoot would you like?", short: "Shoot", opts: { wedding: "Wedding", portrait: "Portraits / family", corporate: "Corporate event or story", realestate: "Real estate", product: "Products / e-commerce", video: "Promotional video" } },
           duration: { text: "How long do you need us for?", short: "Duration", opts: { h2: "2 hours", h4: "Half day (4 hours)", h8: "Full day (8 hours)" } },
@@ -242,7 +242,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Projekt und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Ort des Shootings (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich Verfügbarkeit am angegebenen Datum. 30 % Anzahlung bei Buchung. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, vorbehaltlich Verfügbarkeit am angegebenen Datum. 30 % Anzahlung bei Buchung.",
         q: {
           shoot: { text: "Welche Art von Shooting wünschen Sie?", short: "Shooting", opts: { wedding: "Hochzeit", portrait: "Porträts / Familie", corporate: "Firmenanlass oder -reportage", realestate: "Immobilien", product: "Produkte / E-Commerce", video: "Werbevideo" } },
           duration: { text: "Wie lange soll der Einsatz dauern?", short: "Dauer", opts: { h2: "2 Stunden", h4: "Halber Tag (4 Stunden)", h8: "Ganzer Tag (8 Stunden)" } },

@@ -83,7 +83,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre façade, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du bâtiment (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, matériaux, échafaudage et main-d'œuvre compris. Dégâts cachés découverts sur le support traités uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, matériaux, échafaudage et main-d'œuvre compris. Dégâts cachés découverts sur le support traités uniquement sur accord préalable.",
         q: {
           work: { text: "Quel type de travaux souhaitez-vous ?", short: "Travaux", opts: { render: "Crépi neuf", paint: "Peinture de façade", coating: "Revêtement protecteur (hydrofuge, imperméabilisant)", clean: "Nettoyage de façade" } },
           surf: { text: "Quelle est la surface approximative de la façade ?", short: "Surface", opts: { s1: "Environ 60 m² (petite maison)", s2: "Environ 120 m² (maison)", s3: "Environ 200 m² (grande maison)", s4: "Environ 350 m² (petit immeuble)", s5: "600 m² ou plus (immeuble)" } },
@@ -158,7 +158,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your facade, then put together a firm quote right away.",
         addressPlaceholder: "Building address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, materials, scaffolding and labour included. Hidden damage found in the surface treated only with prior agreement. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, materials, scaffolding and labour included. Hidden damage found in the surface treated only with prior agreement.",
         q: {
           work: { text: "What kind of work do you need?", short: "Work", opts: { render: "New render", paint: "Facade painting", coating: "Protective coating (water-repellent, waterproofing)", clean: "Facade cleaning" } },
           surf: { text: "Roughly how large is the facade?", short: "Area", opts: { s1: "About 60 m² (small house)", s2: "About 120 m² (house)", s3: "About 200 m² (large house)", s4: "About 350 m² (small building)", s5: "600 m² or more (apartment building)" } },
@@ -233,7 +233,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Fassade und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse des Gebäudes (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Material, Gerüst und Arbeit inbegriffen. Im Untergrund entdeckte versteckte Schäden nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Material, Gerüst und Arbeit inbegriffen. Im Untergrund entdeckte versteckte Schäden nur nach vorheriger Absprache.",
         q: {
           work: { text: "Welche Arbeiten wünschen Sie?", short: "Arbeiten", opts: { render: "Neuer Verputz", paint: "Fassadenanstrich", coating: "Schutzbeschichtung (hydrophob, abdichtend)", clean: "Fassadenreinigung" } },
           surf: { text: "Wie gross ist die Fassade ungefähr?", short: "Fläche", opts: { s1: "Etwa 60 m² (kleines Haus)", s2: "Etwa 120 m² (Haus)", s3: "Etwa 200 m² (grosses Haus)", s4: "Etwa 350 m² (kleines Mehrfamilienhaus)", s5: "600 m² oder mehr (Mehrfamilienhaus)" } },

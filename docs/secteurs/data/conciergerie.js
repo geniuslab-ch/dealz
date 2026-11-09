@@ -84,7 +84,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre bien, puis je vous établis un devis mensuel ferme tout de suite après.",
         addressPlaceholder: "Adresse du bien (rue, NPA, ville)",
-        terms: "Prix mensuel ferme, valable 30 jours, hors prestations exceptionnelles. TVA suisse incluse le cas échéant.",
+        terms: "Prix mensuel ferme, valable 30 jours, hors prestations exceptionnelles.",
         q: {
           property: { text: "De quel type de bien s'agit-il ?", short: "Bien", opts: { flat: "Appartement", villa: "Villa", small: "Immeuble de 6 à 20 lots", large: "Immeuble de plus de 20 lots", office: "Bureaux / commerce" } },
           services: { text: "Quels services souhaitez-vous ?", short: "Services", none: "Je ne sais pas encore", opts: { clean: "Entretien courant (parties communes)", waste: "Gestion des déchets et rondes", keys: "Gestion des clés et des accès", repair: "Petite maintenance", garden: "Entretien extérieur / espaces verts", checkin: "Check-in / check-out (courte durée)" } },
@@ -155,7 +155,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your property, then put together a firm monthly quote right away.",
         addressPlaceholder: "Property address (street, postcode, town)",
-        terms: "Firm monthly price, valid for 30 days, excluding exceptional services. Swiss VAT included where applicable.",
+        terms: "Firm monthly price, valid for 30 days, excluding exceptional services.",
         q: {
           property: { text: "What type of property is it?", short: "Property", opts: { flat: "Flat", villa: "Villa", small: "Building with 6 to 20 units", large: "Building with more than 20 units", office: "Offices / shop" } },
           services: { text: "Which services would you like?", short: "Services", none: "I don't know yet", opts: { clean: "Routine cleaning (common areas)", waste: "Waste management and rounds", keys: "Key and access management", repair: "Minor maintenance", garden: "Outdoor / green space maintenance", checkin: "Check-in / check-out (short-term)" } },
@@ -226,7 +226,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Objekt und erstelle Ihnen gleich danach eine verbindliche Monatsofferte.",
         addressPlaceholder: "Adresse des Objekts (Strasse, PLZ, Ort)",
-        terms: "Verbindlicher Monatspreis, 30 Tage gültig, ohne ausserordentliche Leistungen. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindlicher Monatspreis, 30 Tage gültig, ohne ausserordentliche Leistungen.",
         q: {
           property: { text: "Um welche Art von Objekt handelt es sich?", short: "Objekt", opts: { flat: "Wohnung", villa: "Villa", small: "Mehrfamilienhaus mit 6 bis 20 Wohnungen", large: "Mehrfamilienhaus mit mehr als 20 Wohnungen", office: "Büros / Geschäft" } },
           services: { text: "Welche Leistungen wünschen Sie?", short: "Leistungen", none: "Ich weiss es noch nicht", opts: { clean: "Laufende Reinigung (Allgemeinflächen)", waste: "Abfallbewirtschaftung und Kontrollgänge", keys: "Schlüssel- und Zutrittsverwaltung", repair: "Kleinunterhalt", garden: "Aussen- / Grünflächenunterhalt", checkin: "Check-in / Check-out (Kurzzeit)" } },

@@ -88,7 +88,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre piscine, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse de la piscine (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours. Produits de traitement inclus dans les forfaits indiqués. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours. Produits de traitement inclus dans les forfaits indiqués.",
         q: {
           pool: { text: "Quel type de bassin ?", short: "Bassin", opts: { inground: "Piscine enterrée (béton / liner)", above: "Piscine hors-sol", natural: "Piscine naturelle / biotope", spa: "Spa / jacuzzi" } },
           size: { text: "Quel est le volume d'eau approximatif ?", short: "Volume", opts: { xs: "Moins de 30 m³", s: "30 à 60 m³", m: "60 à 100 m³", l: "Plus de 100 m³" } },
@@ -162,7 +162,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your pool, then put together a firm quote right away.",
         addressPlaceholder: "Pool address (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days. Treatment products included in the packages shown. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days. Treatment products included in the packages shown.",
         q: {
           pool: { text: "What type of pool?", short: "Pool", opts: { inground: "In-ground pool (concrete / liner)", above: "Above-ground pool", natural: "Natural pool / biotope", spa: "Spa / hot tub" } },
           size: { text: "What is the approximate water volume?", short: "Volume", opts: { xs: "Less than 30 m³", s: "30 to 60 m³", m: "60 to 100 m³", l: "More than 100 m³" } },
@@ -236,7 +236,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrem Pool und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse des Pools (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig. Pflegeprodukte in den angegebenen Pauschalen inbegriffen. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig. Pflegeprodukte in den angegebenen Pauschalen inbegriffen.",
         q: {
           pool: { text: "Welcher Beckentyp?", short: "Becken", opts: { inground: "Eingelassener Pool (Beton / Folie)", above: "Aufstellpool", natural: "Naturpool / Biotop", spa: "Spa / Whirlpool" } },
           size: { text: "Wie gross ist das ungefähre Wasservolumen?", short: "Volumen", opts: { xs: "Weniger als 30 m³", s: "30 bis 60 m³", m: "60 bis 100 m³", l: "Mehr als 100 m³" } },

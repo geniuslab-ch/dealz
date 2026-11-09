@@ -82,7 +82,7 @@
       quote: {
         greeting: "Bonjour ! Je vous pose quelques questions rapides sur votre débarras, puis je vous établis un devis ferme tout de suite après.",
         addressPlaceholder: "Adresse du lieu à débarrasser (rue, NPA, ville)",
-        terms: "Devis ferme, valable 30 jours, main-d'œuvre, transport et taxes de décharge compris. Volume réel nettement supérieur à l'estimation facturé uniquement sur accord préalable. TVA suisse incluse le cas échéant.",
+        terms: "Devis ferme, valable 30 jours, main-d'œuvre, transport et taxes de décharge compris. Volume réel nettement supérieur à l'estimation facturé uniquement sur accord préalable.",
         q: {
           type: { text: "Que faut-il débarrasser ?", short: "Lieu", opts: { flat: "Un appartement", house: "Une maison", cellar: "Une cave ou un grenier", office: "Un bureau ou un commerce", estate: "Une succession" } },
           volume: { text: "Quel volume estimez-vous ?", short: "Volume", opts: { v1: "Petit (cave, environ 5 m³)", v2: "Studio ou 2 pièces (environ 15 m³)", v3: "3 à 4 pièces (environ 30 m³)", v4: "Maison (environ 60 m³)", v5: "Grande maison ou locaux (100 m³ et plus)" } },
@@ -157,7 +157,7 @@
       quote: {
         greeting: "Hello! I'll ask you a few quick questions about your clearance, then put together a firm quote right away.",
         addressPlaceholder: "Address of the place to clear (street, postcode, town)",
-        terms: "Firm quote, valid for 30 days, labour, transport and tip fees included. A real volume clearly above the estimate charged only with prior agreement. Swiss VAT included where applicable.",
+        terms: "Firm quote, valid for 30 days, labour, transport and tip fees included. A real volume clearly above the estimate charged only with prior agreement.",
         q: {
           type: { text: "What needs clearing?", short: "Place", opts: { flat: "An apartment", house: "A house", cellar: "A cellar or attic", office: "An office or shop", estate: "An estate" } },
           volume: { text: "What volume do you estimate?", short: "Volume", opts: { v1: "Small (cellar, about 5 m³)", v2: "Studio or 2 rooms (about 15 m³)", v3: "3 to 4 rooms (about 30 m³)", v4: "House (about 60 m³)", v5: "Large house or premises (100 m³ or more)" } },
@@ -232,7 +232,7 @@
       quote: {
         greeting: "Guten Tag! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Räumung und erstelle Ihnen gleich danach eine verbindliche Offerte.",
         addressPlaceholder: "Adresse des Objekts (Strasse, PLZ, Ort)",
-        terms: "Verbindliche Offerte, 30 Tage gültig, Arbeit, Transport und Entsorgungsgebühren inbegriffen. Ein deutlich grösseres Volumen als geschätzt nur nach vorheriger Absprache. Schweizer MWST inbegriffen, sofern anwendbar.",
+        terms: "Verbindliche Offerte, 30 Tage gültig, Arbeit, Transport und Entsorgungsgebühren inbegriffen. Ein deutlich grösseres Volumen als geschätzt nur nach vorheriger Absprache.",
         q: {
           type: { text: "Was muss geräumt werden?", short: "Objekt", opts: { flat: "Eine Wohnung", house: "Ein Haus", cellar: "Ein Keller oder Estrich", office: "Ein Büro oder Geschäft", estate: "Ein Nachlass" } },
           volume: { text: "Welches Volumen schätzen Sie?", short: "Volumen", opts: { v1: "Klein (Keller, etwa 5 m³)", v2: "Studio oder 2 Zimmer (etwa 15 m³)", v3: "3 bis 4 Zimmer (etwa 30 m³)", v4: "Haus (etwa 60 m³)", v5: "Grosses Haus oder Räume (100 m³ und mehr)" } },
