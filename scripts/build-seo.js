@@ -109,8 +109,27 @@ function structuredData(file) {
   });
 }
 
-function block(file, groups) {
+// Demo pages: noindex, but crawlers (Bing) still report a missing description.
+// Written only when the page has none of its own.
+const DEMO_DESC = {
+  fr: (company, sector) => "Démo Dealz" + (sector ? " pour le secteur " + sector.toLowerCase() + "," : "") + " avec " + company + " (entreprise fictive) : demandez un devis sur le site ou sur WhatsApp, voyez le prix calculé et l'offre en PDF.",
+  en: (company, sector) => "Dealz demo" + (sector ? " for " + sector.toLowerCase() + "," : "") + " with " + company + " (a fictional company): request a quote on the website or on WhatsApp, see the calculated price and the PDF offer.",
+  de: (company, sector) => "Dealz-Demo" + (sector ? " für " + sector : "") + " mit " + company + " (fiktives Unternehmen): Offerte auf der Website oder per WhatsApp anfragen, berechneten Preis und PDF-Offerte ansehen.",
+};
+function demoDescription(file, html) {
+  const lang = langOf(file);
+  const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || "";
+  const company = title.split(" — ")[0].trim() || "SwissClean Sàrl";
+  const m = frenchPathOf(file).replace(/^(de|en)\//, "").match(/^secteurs\/([^/]+)\/demo\.html$/);
+  const S = m && sectors[m[1]];
+  return DEMO_DESC[lang](company, S && S[lang] ? S[lang].label : "");
+}
+
+function block(file, groups, html) {
+  // Quote window (iframe widget) and personal quote pages: keep them out of search results.
+  if (path.basename(file) === "quote-window.html") return "  " + START + '\n  <meta name="robots" content="noindex" />\n  ' + END + "\n";
   let out = icons();
+  if (isPrivate(file)) out += '  <meta name="robots" content="noindex" />\n';
   if (isIndexable(file)) {
     out += '  <link rel="canonical" href="' + attr(urlOf(file)) + '" />\n';
     for (const a of alternatesOf(file, groups)) {
@@ -119,6 +138,9 @@ function block(file, groups) {
     out += structuredData(file);
   } else if (isDemo(file)) {
     out += '  <meta name="robots" content="noindex, follow" />\n';
+    if (!/<meta name="description"/.test(html.replace(/<!-- SEO:START[\s\S]*?SEO:END -->/, ""))) {
+      out += '  <meta name="description" content="' + attr(demoDescription(file, html)) + '" />\n';
+    }
   }
   return "  " + START + "\n" + out + "  " + END + "\n";
 }
@@ -127,7 +149,6 @@ const all = walk();
 const groups = groupsOf(all.filter(isIndexable));
 let changed = 0;
 for (const file of all) {
-  if (path.basename(file) === "quote-window.html") continue; // iframe widget
   const full = path.join(DOCS, file);
   const html = fs.readFileSync(full, "utf8");
   let next = html;
@@ -139,7 +160,7 @@ for (const file of all) {
   }
   const head = next.indexOf("</head>");
   if (head < 0) { console.warn("no </head>: " + file); continue; }
-  next = next.slice(0, head) + block(file, groups) + next.slice(head);
+  next = next.slice(0, head) + block(file, groups, next) + next.slice(head);
   if (next !== html) { fs.writeFileSync(full, next); changed++; }
 }
 console.log("SEO block: " + changed + " of " + all.length + " pages updated");
