@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const { CATEGORIES, categoryView, categoryConfig } = require("./objections");
 const { inlineImages, buildQuotePdf } = require("./emailAssets");
+const { sectorDir } = require("../scripts/sector-urls");
 
 const COMPANY_NAME = "SwissClean Sàrl";
 // Falls back to Dealz's own real inbox, NOT a fictional address — this used
@@ -192,7 +193,7 @@ function signatureHtml(companyName = COMPANY_NAME, signature, logoUrl, tagline, 
   if (S) {
     const D = S[l].demo;
     const domain = D.contact.email.split("@")[1];
-    const site = `${SITE_URL}${l === "fr" ? "" : "/" + l}/secteurs/${S.slug}/demo.html`;
+    const site = `${SITE_URL}${sectorDir(S.slug, l)}/demo.html`;
     return opener + signatureCard({
       logoUrl: logoUrl || `${SITE_URL}/images/demo-logos/${S.slug}-mark.png`,
       team: TEAM[l](D.brand),

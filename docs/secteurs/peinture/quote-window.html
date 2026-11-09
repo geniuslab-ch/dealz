@@ -136,6 +136,7 @@
     window.DEALZ_API_BASE = params.get("api-base") || location.origin;
     window.DEALZ_LANG = "fr";
     window.DEALZ_SECTOR = "peinture";
+    window.DEALZ_CTA_HREF = "/secteurs/peinture/#contact";
     if (params.get("embedded") === "1") document.body.classList.add("dz-embedded");
     // Closing only works if this page was opened as a popup window; otherwise go back.
     document.getElementById("dealz-window-close").addEventListener("click", function () {

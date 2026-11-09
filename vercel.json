@@ -15,6 +15,346 @@
       "source": "/crm",
       "destination": "/crm/",
       "permanent": false
+    },
+    {
+      "source": "/en/secteurs/carrelage/:path*",
+      "destination": "/en/sectors/tiling/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/conciergerie/:path*",
+      "destination": "/en/sectors/property-maintenance/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/debarras/:path*",
+      "destination": "/en/sectors/house-clearance/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/demenagement/:path*",
+      "destination": "/en/sectors/moving/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/desinfection/:path*",
+      "destination": "/en/sectors/pest-control/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/elagage/:path*",
+      "destination": "/en/sectors/tree-surgery/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/electricien/:path*",
+      "destination": "/en/sectors/electrician/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/facades/:path*",
+      "destination": "/en/sectors/facades/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/impression/:path*",
+      "destination": "/en/sectors/printing-signage/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/isolation/:path*",
+      "destination": "/en/sectors/insulation/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/jardinage/:path*",
+      "destination": "/en/sectors/gardening/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/lavage-auto/:path*",
+      "destination": "/en/sectors/car-detailing/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/location-evenementiel/:path*",
+      "destination": "/en/sectors/event-rental/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/location-materiel/:path*",
+      "destination": "/en/sectors/equipment-rental/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/location-vehicules/:path*",
+      "destination": "/en/sectors/vehicle-rental/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/montage-meubles/:path*",
+      "destination": "/en/sectors/furniture-assembly/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/nettoyage-textiles/:path*",
+      "destination": "/en/sectors/upholstery-cleaning/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/nettoyage/:path*",
+      "destination": "/en/sectors/cleaning/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/peinture/:path*",
+      "destination": "/en/sectors/painting/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/photo-video/:path*",
+      "destination": "/en/sectors/photography-video/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/piscines/:path*",
+      "destination": "/en/sectors/pool-maintenance/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/platrerie/:path*",
+      "destination": "/en/sectors/plastering/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/pressing/:path*",
+      "destination": "/en/sectors/dry-cleaning/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/renovation/:path*",
+      "destination": "/en/sectors/renovation/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/sanitaire/:path*",
+      "destination": "/en/sectors/plumbing-heating/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/serrurerie/:path*",
+      "destination": "/en/sectors/locksmith/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/sols/:path*",
+      "destination": "/en/sectors/flooring/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/stores/:path*",
+      "destination": "/en/sectors/blinds-shutters/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/toiture/:path*",
+      "destination": "/en/sectors/roofing/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/traiteur/:path*",
+      "destination": "/en/sectors/catering/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/transport-livraison/:path*",
+      "destination": "/en/sectors/transport-delivery/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/vitres/:path*",
+      "destination": "/en/sectors/window-cleaning/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/en/secteurs/:path*",
+      "destination": "/en/sectors/",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/carrelage/:path*",
+      "destination": "/de/branchen/plattenleger/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/conciergerie/:path*",
+      "destination": "/de/branchen/hauswartung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/debarras/:path*",
+      "destination": "/de/branchen/raeumung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/demenagement/:path*",
+      "destination": "/de/branchen/umzug/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/desinfection/:path*",
+      "destination": "/de/branchen/schaedlingsbekaempfung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/elagage/:path*",
+      "destination": "/de/branchen/baumpflege/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/electricien/:path*",
+      "destination": "/de/branchen/elektriker/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/facades/:path*",
+      "destination": "/de/branchen/fassaden/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/impression/:path*",
+      "destination": "/de/branchen/druck-beschriftung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/isolation/:path*",
+      "destination": "/de/branchen/waermedaemmung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/jardinage/:path*",
+      "destination": "/de/branchen/gartenbau/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/lavage-auto/:path*",
+      "destination": "/de/branchen/autowaesche/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/location-evenementiel/:path*",
+      "destination": "/de/branchen/eventmaterial-vermietung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/location-materiel/:path*",
+      "destination": "/de/branchen/geraetevermietung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/location-vehicules/:path*",
+      "destination": "/de/branchen/fahrzeugvermietung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/montage-meubles/:path*",
+      "destination": "/de/branchen/moebelmontage/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/nettoyage-textiles/:path*",
+      "destination": "/de/branchen/polsterreinigung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/nettoyage/:path*",
+      "destination": "/de/branchen/reinigung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/peinture/:path*",
+      "destination": "/de/branchen/maler/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/photo-video/:path*",
+      "destination": "/de/branchen/fotografie-video/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/piscines/:path*",
+      "destination": "/de/branchen/poolunterhalt/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/platrerie/:path*",
+      "destination": "/de/branchen/gipser/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/pressing/:path*",
+      "destination": "/de/branchen/waescherei/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/renovation/:path*",
+      "destination": "/de/branchen/renovation/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/sanitaire/:path*",
+      "destination": "/de/branchen/sanitaer-heizung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/serrurerie/:path*",
+      "destination": "/de/branchen/schluesseldienst/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/sols/:path*",
+      "destination": "/de/branchen/bodenbelaege/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/stores/:path*",
+      "destination": "/de/branchen/storen/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/toiture/:path*",
+      "destination": "/de/branchen/dach/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/traiteur/:path*",
+      "destination": "/de/branchen/catering/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/transport-livraison/:path*",
+      "destination": "/de/branchen/transport-lieferung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/vitres/:path*",
+      "destination": "/de/branchen/fensterreinigung/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/de/secteurs/:path*",
+      "destination": "/de/branchen/",
+      "permanent": true
+    },
+    {
+      "source": "/en/parrainage.html",
+      "destination": "/en/referral.html",
+      "permanent": true
+    },
+    {
+      "source": "/de/parrainage.html",
+      "destination": "/de/empfehlung.html",
+      "permanent": true
     }
   ],
   "rewrites": [

@@ -28,7 +28,8 @@ const L = {
   de: { home: "Startseite", sectors: "Branchen", desc: "KI-Verkaufsassistent, der Kunden auf WhatsApp und auf der Website antwortet, den Preis nach den Tarifen des Betriebs berechnet und rund um die Uhr die Offerte erstellt." },
 };
 const HOME = { fr: "index.html", en: "en/index.html", de: "de/index.html" };
-const HUB = { fr: "secteurs/index.html", en: "en/secteurs/index.html", de: "de/secteurs/index.html" };
+const { frenchPathOf } = require("./sector-urls");
+const HUB = { fr: "secteurs/index.html", en: "en/sectors/index.html", de: "de/branchen/index.html" };
 
 // Sector labels per language, from the sector data files.
 const DATA_DIR = path.join(DOCS, "secteurs", "data");
@@ -93,7 +94,7 @@ function structuredData(file) {
     });
   }
   const crumbs = [{ name: t.home, url: urlOf(HOME[lang]) }];
-  const m = file.match(/^(?:(?:de|en)\/)?secteurs\/(?:([^/]+)\/)?index\.html$/);
+  const m = frenchPathOf(file).replace(/^(de|en)\//, "").match(/^secteurs\/(?:([^/]+)\/)?index\.html$/);
   if (!m) return "";
   crumbs.push({ name: t.sectors, url: urlOf(HUB[lang]) });
   if (m[1]) {
