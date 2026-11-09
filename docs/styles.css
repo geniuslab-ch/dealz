@@ -1346,7 +1346,7 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 }
 .pz-addon.is-on { border-color: var(--blue); background: var(--blue-light); }
 .pz-addon-included { border-color: #bfe8d6; background: var(--green-light, #e4f7ef); }
-.pz-addon-included .pz-addon-price { color: var(--green, #17a672); }
+.pz-addon-included .pz-addon-price { color: #0b7a52; }
 .pz-addon-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .pz-addon-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; font-size: 15px; font-weight: 800; }
 .pz-addon-price { font-size: 14px; font-weight: 800; color: var(--blue-dark); }
