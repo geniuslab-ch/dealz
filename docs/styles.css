@@ -1682,3 +1682,28 @@ h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; margin: 0 0 12px; }
 }
 
 .onb-pay-cta { display: inline-block; text-decoration: none; margin-top: 2px; }
+
+/* Proof cards under the price picker (docs/pricing-proof.js): the guarantee,
+   "1 extra job = X months paid" and an assistant's cost in the visitor's
+   market. */
+.pz-guarantee-line { order: 3; flex-basis: 100%; margin: 0; font-size: 13.5px; font-weight: 700; }
+.pz-guarantee-line a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+.pz-proof { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 28px; text-align: left; }
+.pz-proof-card { min-width: 0; overflow-wrap: anywhere; display: flex; flex-direction: column; gap: 10px; padding: 22px; background: #fff; border: 1px solid var(--line); border-radius: 20px; }
+.pz-proof-guarantee { background: var(--green-light); border-color: #bfe8d6; scroll-margin-top: 110px; }
+.pz-proof-icon { font-size: 26px; line-height: 1; }
+.pz-proof-card h3 { margin: 0; font-size: 18px; line-height: 1.3; letter-spacing: -0.01em; color: var(--ink); }
+.pz-proof-card p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--muted); }
+.pz-proof-card [data-proof-months], .pz-proof-card [data-proof-assistant] { color: var(--blue-dark); overflow-wrap: normal; white-space: nowrap; }
+.pz-proof-guarantee h3 { color: #0d6b49; }
+.pz-proof-link { margin-top: auto; font-size: 14px; font-weight: 700; color: #0d6b49; }
+.pz-proof-input { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 700; color: var(--ink); }
+.pz-proof-field { display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid var(--line); border-radius: 12px; background: #f7f9fc; }
+.pz-proof-field:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-light); }
+.pz-proof-field span { color: var(--muted); }
+.pz-proof-field input { flex: 1; min-width: 0; padding: 10px 0; border: 0; background: transparent; font: inherit; font-size: 15px; color: var(--ink); outline: none; }
+.pz-proof-card .pz-proof-src { margin-top: auto; font-size: 12px; line-height: 1.5; }
+.pz-proof-src a { color: var(--muted); text-decoration: underline; }
+@media (max-width: 900px) {
+  .pz-proof { grid-template-columns: minmax(0, 1fr); }
+}

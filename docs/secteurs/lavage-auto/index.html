@@ -378,6 +378,7 @@
           </div>
           <div class="pz-sum-foot">
             <p class="pz-note" data-pz-note aria-live="polite">2 mois offerts, installation offerte (CHF 290 économisés).</p>
+            <p class="pz-guarantee-line"><a href="#garantie">🛡️ Remboursé si aucun devis en 30 jours.</a></p>
             <a href="#contact" class="btn btn-primary pz-continue" data-pz-continue>Continuer avec CLOSE →</a>
           </div>
           <details class="pz-more">
@@ -401,6 +402,28 @@
       </div>
 
       <p class="pricing-roi-note">💡 Un seul detailing complet supplémentaire par mois peut déjà payer votre abonnement.</p>
+
+      <div class="pz-proof" data-pz-proof data-job-chf="710.00" data-t-months="{n} mois" data-t-years="{n} ans" role="group" aria-label="Pourquoi Dealz est rentable">
+        <div class="pz-proof-card pz-proof-guarantee" id="garantie">
+          <div class="pz-proof-icon" aria-hidden="true">🛡️</div>
+          <h3>Garantie premier devis</h3>
+          <p>Si Dealz n'a envoyé aucun devis à vos clients dans les 30 jours qui suivent la mise en ligne, nous vous remboursons votre premier paiement, installation comprise.</p>
+          <a class="pz-proof-link" href="/conditions.html#garantie">Conditions de la garantie →</a>
+        </div>
+        <div class="pz-proof-card">
+          <div class="pz-proof-icon" aria-hidden="true">🧮</div>
+          <h3>1 chantier de plus = <span data-proof-months>6.5 mois</span> payés</h3>
+          <p>Un chantier de <span data-proof-job>CHF 710.00</span> paie <span data-proof-months>6.5 mois</span> de CLOSE à <span data-price="CLOSE">CHF 108.70</span>.</p>
+          <label class="pz-proof-input"><span>Votre chantier moyen</span><span class="pz-proof-field"><span data-proof-currency>CHF</span><input type="number" min="0" step="0.05" inputmode="decimal" value="710.00" data-proof-input /></span></label>
+          <p class="pz-proof-src" data-proof-job-src>Valeur par défaut : le devis d'exemple de cette page<span data-currency-not="CHF" hidden>, adapté aux prix de votre marché</span>.</p>
+        </div>
+        <div class="pz-proof-card">
+          <div class="pz-proof-icon" aria-hidden="true">🧾</div>
+          <h3>Une assistante administrative : <span data-proof-assistant>CHF 6'586.43</span> / mois</h3>
+          <p>C'est ce que coûte au moins une assistante à plein temps <span data-proof-where>en Suisse</span>, charges patronales comprises. CLOSE répond, calcule et envoie vos devis pour <span data-price="CLOSE">CHF 108.70</span> : <span data-proof-times>60</span> fois moins.</p>
+          <p class="pz-proof-src">Sources : <span data-proof-sources><a href="https://kfmv.ch/fileadmin/products/Ratgeber/20250901_kfmv_ratgeber_lohnempfehlungen_2025.pdf" target="_blank" rel="noopener">kfmv, Lohnempfehlungen 2025 (OFS/BFS ESS)</a> · <a href="https://www.swissmem.ch/fr/competences/ressources-humaines/droit-du-travail/assurances-sociales-2026.html" target="_blank" rel="noopener">Swissmem, assurances sociales 2026</a></span></p>
+        </div>
+      </div>
 
       <div class="pricing-usp">
         <p class="pricing-usp-headline">Keep your website. Keep your tools. Add Dealz.</p>
@@ -504,6 +527,7 @@
   <script src="/prices.js"></script>
   <script src="/currency.js"></script>
   <script src="/pricing.js"></script>
+  <script src="/pricing-proof.js"></script>
   <script src="/contact-flow.js"></script>
   <script>
     (function () {

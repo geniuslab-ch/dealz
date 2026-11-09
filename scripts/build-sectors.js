@@ -18,6 +18,7 @@ const ROOT = path.join(__dirname, "..");
 const DOCS = path.join(ROOT, "docs");
 const DATA_DIR = path.join(DOCS, "secteurs", "data");
 const { sectorDir, sectorUrl, SECTOR_BASE, PAGES } = require("./sector-urls");
+const prices = require("../docs/prices.js");
 const CHECK_ONLY = process.argv.includes("--check");
 const PARTIAL = process.argv.includes("--partial"); // dev only: build whatever sector files exist
 
@@ -36,6 +37,7 @@ const STR = {
     home: "/index.html",
     indexFile: "index.html",
     seeDemoNav: "✨ Essayer la démo",
+    proofJobSrc: "Valeur par défaut : le devis d'exemple de cette page<span data-currency-not=\"CHF\" hidden>, adapté aux prix de votre marché</span>.",
     navHome: "Accueil", navProblem: "Le problème", navHow: "Comment ça marche", navPricing: "Tarifs", navContact: "Contact", navSectors: "Secteurs",
     forWho: function (s) { return "Pour les " + s.fr.forWho; },
     sectorsHeroEyebrow: "Dealz par secteur",
@@ -142,6 +144,7 @@ const STR = {
     home: "/en/index.html",
     indexFile: "en/index.html",
     seeDemoNav: "✨ Try the demo",
+    proofJobSrc: "Default value: the sample quote on this page<span data-currency-not=\"CHF\" hidden>, adjusted to your market's prices</span>.",
     navHome: "Home", navProblem: "The problem", navHow: "How it works", navPricing: "Pricing", navContact: "Contact", navSectors: "Sectors",
     forWho: function (s) { return "For " + s.en.forWho; },
     sectorsHeroEyebrow: "Dealz by sector",
@@ -248,6 +251,7 @@ const STR = {
     home: "/de/index.html",
     indexFile: "de/index.html",
     seeDemoNav: "✨ Demo testen",
+    proofJobSrc: "Standardwert: das Beispielangebot auf dieser Seite<span data-currency-not=\"CHF\" hidden>, an die Preise Ihres Marktes angepasst</span>.",
     navHome: "Startseite", navProblem: "Das Problem", navHow: "So funktioniert's", navPricing: "Preise", navContact: "Kontakt", navSectors: "Branchen",
     forWho: function (s) { return "Für " + s.de.forWho; },
     sectorsHeroEyebrow: "Dealz nach Branche",
@@ -522,6 +526,12 @@ function siteNav(lang, slug, withAnchors) {
     (withAnchors ? "" : '      <a href="' + cfg.home + '">' + cfg.navHome + "</a>\n") + links + '      <a href="' + cfg.base + '/">' + cfg.navSectors + "</a>\n" + demo + "    </div>\n  </nav>\n  <script src=\"/nav.js\" defer></script>\n";
 }
 
+// "17.0 mois" / "15.7 ans": the static text pricing-proof.js would show in CHF.
+function proofMonths(m, lang) {
+  const u = { fr: ["mois", "ans"], en: ["months", "years"], de: ["Monate", "Jahre"] }[lang];
+  return m >= 24 ? (m / 12).toFixed(1) + " " + u[1] : m.toFixed(1) + " " + u[0];
+}
+
 // ---------- landing ----------
 function buildLanding(S, lang, all, tarifs) {
   const cfg = STR[lang];
@@ -537,7 +547,13 @@ function buildLanding(S, lang, all, tarifs) {
 
   const tarifsHtml = tarifs
     .replace(/<p class="pricing-roi-note">[\s\S]*?<\/p>/, '<p class="pricing-roi-note">💡 ' + esc(L.roi) + "</p>")
-    .replace(/href="\/demo\.html"/g, 'href="' + demoUrl + '"');
+    .replace(/href="\/demo\.html"/g, 'href="' + demoUrl + '"')
+    // "1 extra job = X months paid" starts from this sector's sample quote.
+    .replace(/data-job-chf="[^"]*"/, 'data-job-chf="' + total.toFixed(2) + '"')
+    .replace(/(data-proof-input) value="[^"]*"|value="[^"]*"( data-proof-input)/, (m) => m.replace(/value="[^"]*"/, 'value="' + total.toFixed(2) + '"'))
+    .replace(/(<span data-proof-months>)[^<]*(<\/span>)/g, "$1" + proofMonths(total / prices.list("CHF").plans.CLOSE, lang) + "$2")
+    .replace(/(<span data-proof-job>)[^<]*(<\/span>)/g, "$1CHF " + total.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, "'") + "$2")
+    .replace(/(<p class="pz-proof-src" data-proof-job-src>)[\s\S]*?(<\/p>)/, "$1" + cfg.proofJobSrc + "$2");
 
   const title = cfg.sectorTitle(T.label);
   const desc = cfg.sectorDesc(T.pitch);
@@ -741,6 +757,7 @@ ${cfg.addList.map((l) => "          <li>" + esc(l) + "</li>").join("\n")}
   <script src="/prices.js"></script>
   <script src="/currency.js"></script>
   <script src="/pricing.js"></script>
+  <script src="/pricing-proof.js"></script>
   <script src="/contact-flow.js"></script>
   <script>
     (function () {
