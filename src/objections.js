@@ -100,9 +100,20 @@ const CATEGORY_I18N = {
     not_needed: { label: "Braucht die Leistung nicht mehr", primaryCta: "Anfrage abschliessen" },
     other: { label: "Anderer Grund", primaryCta: "Unterhaltung ansehen" },
   },
+  it: {
+    price: { label: "Prezzo troppo alto", primaryCta: "Fare una controproposta", secondaryCta: "Mantenere il prezzo" },
+    timing: { label: "Data non disponibile", primaryCta: "Proporre un'altra data" },
+    scope: { label: "Portata del servizio", primaryCta: "Inviare un'offerta rivista" },
+    conditions: { label: "Condizioni / dettagli del servizio", primaryCta: "Adattare l'offerta" },
+    competitor: { label: "Ha scelto un altro fornitore", primaryCta: "Fare una controproposta", secondaryCta: "Mantenere il prezzo" },
+    information: { label: "Ha bisogno di informazioni", primaryCta: "Rispondere al cliente" },
+    thinking: { label: "Ha bisogno di riflettere", primaryCta: "Ricontattare il cliente" },
+    not_needed: { label: "Non ha più bisogno del servizio", primaryCta: "Chiudere la richiesta" },
+    other: { label: "Altro motivo", primaryCta: "Vedere la conversazione" },
+  },
 };
 
-// CATEGORIES[category] with its texts in `lang` (French when not EN/DE).
+// CATEGORIES[category] with its texts in `lang` (French when not EN/DE/IT).
 function categoryConfig(category, lang) {
   const cfg = CATEGORIES[category] || CATEGORIES.other;
   const local = (CATEGORY_I18N[lang] || {})[CATEGORIES[category] ? category : "other"];
@@ -200,6 +211,17 @@ const FALLBACK_REPLIES_I18N = {
     not_needed: "Verstanden, danke für die Mitteilung — wir sind für Sie da, falls sich Ihr Bedarf ändert.",
     other: "Danke für Ihre Rückmeldung — sagen Sie mir gerne, was Sie zögern lässt, damit ich Sie besser unterstützen kann.",
   },
+  it: {
+    price: "Capisco che il prezzo sia un ostacolo. Sareste disposti a rivedere alcune voci del preventivo, perché rientri nel vostro budget?",
+    timing: "Grazie per il riscontro: se la data proposta non va bene, in quali giorni sareste disponibili prossimamente?",
+    scope: "Capito: volete che tolga alcune voci dal preventivo, perché corrisponda alle vostre reali esigenze?",
+    conditions: "Grazie per la precisazione, può effettivamente influire sul preventivo. Posso inviarvi un'offerta adattata a queste condizioni?",
+    competitor: "Capisco la vostra scelta. Se può essere utile, sono pronto a rivedere la nostra offerta: sareste disponibili a parlarne?",
+    information: "Certo, volentieri: precisate pure la vostra domanda e vi rispondo rapidamente.",
+    thinking: "Nessun problema, prendetevi il tempo che vi serve. Nel frattempo resto a disposizione per qualsiasi domanda.",
+    not_needed: "Capito, grazie per avercelo fatto sapere: siamo qui se le vostre esigenze dovessero cambiare.",
+    other: "Grazie per il riscontro: ditemi pure cosa vi fa esitare, così posso aiutarvi meglio.",
+  },
 };
 
 function fallbackReply(category, lang) {
@@ -230,7 +252,7 @@ const FALLBACK_REPLIES = {
 async function draftSuggestedReply({ category, summary, rawText, quote, customer, context, lang }) {
   const cfg = CATEGORIES[category] || CATEGORIES.other;
   if (!client) return fallbackReply(category, lang);
-  const language = lang === "en" ? "en anglais" : lang === "de" ? "en allemand (Suisse, sans ß)" : "en français";
+  const language = lang === "en" ? "en anglais" : lang === "de" ? "en allemand (Suisse, sans ß)" : lang === "it" ? "en italien (Suisse, vouvoiement « voi »)" : "en français";
 
   try {
     const response = await client.messages.create({

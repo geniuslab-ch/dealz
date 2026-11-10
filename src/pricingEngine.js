@@ -46,6 +46,21 @@ const ADDON_LABELS = {
     mattress: "Reinigung der Matratze",
     curtains: "Reinigung der Vorhänge",
   },
+  it: {
+    oven: "Pulizia del forno",
+    windows: "Pulizia delle finestre",
+    fridge: "Pulizia del frigorifero",
+    carpet_shampoo: "Shampoo per moquette",
+    hood: "Pulizia della cappa aspirante",
+    stovetop: "Pulizia del piano cottura",
+    microwave: "Pulizia del microonde",
+    dishwasher: "Pulizia della lavastoviglie",
+    freezer: "Pulizia del congelatore",
+    sofa: "Pulizia del divano",
+    armchair: "Pulizia della poltrona",
+    mattress: "Pulizia del materasso",
+    curtains: "Pulizia delle tende",
+  },
 };
 
 // item.label is a pure display string — never matched or looked up again
@@ -85,6 +100,8 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
           ? `No exact rate for "${input.rooms}" rooms — nearest tier used.`
           : lang === "de"
           ? `Kein exakter Tarif für "${input.rooms}" Zimmer — nächstgelegene Stufe verwendet.`
+          : lang === "it"
+          ? `Nessuna tariffa esatta per "${input.rooms}" locali: usata la fascia più vicina.`
           : `Aucun tarif exact pour "${input.rooms}" pièces — palier le plus proche utilisé.`
       );
       const keys = Object.keys(pricing.end_of_tenancy_by_rooms).map(Number);
@@ -98,6 +115,8 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
             ? `End-of-tenancy cleaning (${closest}-room apartment)`
             : lang === "de"
             ? `Endreinigung (Wohnung mit ${closest} Zimmern)`
+            : lang === "it"
+            ? `Pulizia di fine locazione (appartamento di ${closest} locali)`
             : `Nettoyage de fin de bail (appartement ${closest} pièces)`,
         amount: pricing.end_of_tenancy_by_rooms[String(closest)],
       });
@@ -108,6 +127,8 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
             ? `End-of-tenancy cleaning (${key}-room apartment)`
             : lang === "de"
             ? `Endreinigung (Wohnung mit ${key} Zimmern)`
+            : lang === "it"
+            ? `Pulizia di fine locazione (appartamento di ${key} locali)`
             : `Nettoyage de fin de bail (appartement ${key} pièces)`,
         amount: base,
       });
@@ -120,6 +141,8 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
           ? `Regular cleaning (${hours}h at CHF ${pricing.regular_cleaning_per_hour}/h)`
           : lang === "de"
           ? `Regelmässige Reinigung (${hours} Std. zu CHF ${pricing.regular_cleaning_per_hour}/Std.)`
+          : lang === "it"
+          ? `Pulizia regolare (${hours} h a CHF ${pricing.regular_cleaning_per_hour}/h)`
           : `Nettoyage régulier (${hours}h à CHF ${pricing.regular_cleaning_per_hour}/h)`,
       amount: round(hours * pricing.regular_cleaning_per_hour),
     });
@@ -129,6 +152,8 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
         ? `Unknown service type: "${input.service_type}".`
         : lang === "de"
         ? `Unbekannter Leistungstyp: "${input.service_type}".`
+        : lang === "it"
+        ? `Tipo di servizio sconosciuto: "${input.service_type}".`
         : `Type de prestation inconnu : "${input.service_type}".`
     );
   }
@@ -138,7 +163,7 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
     if (addon === "carpet_shampoo") {
       const rooms = Number(input.carpet_rooms) || 1;
       const roomsSuffix =
-        lang === "en" ? `${rooms} room${rooms > 1 ? "s" : ""}` : lang === "de" ? `${rooms} Zimmer` : `${rooms} pièce${rooms > 1 ? "s" : ""}`;
+        lang === "en" ? `${rooms} room${rooms > 1 ? "s" : ""}` : lang === "de" ? `${rooms} Zimmer` : lang === "it" ? `${rooms} local${rooms > 1 ? "i" : "e"}` : `${rooms} pièce${rooms > 1 ? "s" : ""}`;
       items.push({
         label: `${addonLabel.carpet_shampoo} (${roomsSuffix})`,
         amount: round(rooms * pricing.addons.carpet_shampoo_per_room),
@@ -154,6 +179,8 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
           ? `Unknown option "${addon}" — ignored.`
           : lang === "de"
           ? `Unbekannte Option "${addon}" — ignoriert.`
+          : lang === "it"
+          ? `Opzione sconosciuta "${addon}": ignorata.`
           : `Option inconnue "${addon}" — ignorée.`
       );
     }
@@ -164,7 +191,7 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
     const tier = pricing.travel_fee.tiers.find((t) => distanceKm <= t.max_km);
     if (tier) {
       items.push({
-        label: lang === "en" ? "Travel fee" : lang === "de" ? "Anfahrtskosten" : "Frais de déplacement",
+        label: lang === "en" ? "Travel fee" : lang === "de" ? "Anfahrtskosten" : lang === "it" ? "Spese di trasferta" : "Frais de déplacement",
         amount: tier.fee,
       });
     }
@@ -178,11 +205,15 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
           ? "Heavy-dirt surcharge"
           : lang === "de"
           ? "Zuschlag für starke Verschmutzung"
+          : lang === "it"
+          ? "Supplemento per sporco importante"
           : "Supplément saleté importante"
         : lang === "en"
         ? "Deep-cleaning surcharge"
         : lang === "de"
         ? "Zuschlag für Tiefenreinigung"
+        : lang === "it"
+        ? "Supplemento per pulizia a fondo"
         : "Supplément nettoyage en profondeur";
     items.push({ label: conditionLabel, amount: conditionFee });
   } else if (input.condition && pricing.condition_surcharge[input.condition] === undefined) {
@@ -191,6 +222,8 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
         ? `Unknown condition "${input.condition}" — ignored.`
         : lang === "de"
         ? `Unbekannter Zustand "${input.condition}" — ignoriert.`
+        : lang === "it"
+        ? `Stato sconosciuto "${input.condition}": ignorato.`
         : `État inconnu "${input.condition}" — ignoré.`
     );
   }
@@ -202,6 +235,8 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
           ? "Hard-to-access windows surcharge (bay windows, height…)"
           : lang === "de"
           ? "Zuschlag für schwer zugängliche Fenster (Fensterfronten, Höhe usw.)"
+          : lang === "it"
+          ? "Supplemento per finestre difficili da raggiungere (vetrate, altezza…)"
           : "Supplément vitres difficiles d'accès (baies vitrées, hauteur…)",
       amount: pricing.difficult_access_windows_fee,
     });
@@ -215,6 +250,8 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
           ? `No-lift floors surcharge (${floorsNoElevator})`
           : lang === "de"
           ? `Zuschlag für Stockwerke ohne Lift (${floorsNoElevator})`
+          : lang === "it"
+          ? `Supplemento piani senza ascensore (${floorsNoElevator})`
           : `Supplément étages sans ascenseur (${floorsNoElevator})`,
       amount: round(floorsNoElevator * pricing.floor_fee_per_floor_no_elevator),
     });
@@ -228,6 +265,8 @@ function calculateQuote(input, pricing = defaultPricing, lang = "fr") {
           ? "Adjustment to minimum order"
           : lang === "de"
           ? "Anpassung an den Mindestbestellwert"
+          : lang === "it"
+          ? "Adeguamento all'importo minimo d'ordine"
           : "Ajustement au minimum de commande",
       amount: round(pricing.minimum_price - total),
     });

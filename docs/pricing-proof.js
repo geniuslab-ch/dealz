@@ -89,6 +89,7 @@
     fr: { CHF: "en Suisse", EUR: "en France", GBP: "au Royaume-Uni", USD: "aux États-Unis" },
     en: { CHF: "in Switzerland", EUR: "in France", GBP: "in the UK", USD: "in the US" },
     de: { CHF: "in der Schweiz", EUR: "in Frankreich", GBP: "im Vereinigten Königreich", USD: "in den USA" },
+    it: { CHF: "in Svizzera", EUR: "in Francia", GBP: "nel Regno Unito", USD: "negli Stati Uniti" },
   };
 
   var input = root.querySelector("[data-proof-input]");

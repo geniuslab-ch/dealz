@@ -137,140 +137,140 @@
   // Zero risk to the plan-recommendation logic or the internal Dealz-team
   // notification email, which stays French either way.
   const I18N = {
-    "Quel est le nom de votre entreprise ?": { en: "What's the name of your company?", de: "Wie heisst Ihr Unternehmen?" },
-    "Nom de votre entreprise": { en: "Your company name", de: "Name Ihres Unternehmens" },
-    "Combien de personnes prennent actuellement les demandes ou réservations ?": { en: "How many people currently handle enquiries or bookings?", de: "Wie viele Personen bearbeiten derzeit Anfragen oder Buchungen?" },
-    "👤 Moi uniquement": { en: "👤 Just me", de: "👤 Nur ich" },
-    "👥 2–5 personnes": { en: "👥 2–5 people", de: "👥 2–5 Personen" },
-    "👥 6–15 personnes": { en: "👥 6–15 people", de: "👥 6–15 Personen" },
-    "🏢 Plus de 15": { en: "🏢 More than 15", de: "🏢 Mehr als 15" },
-    "Autre": { en: "Other", de: "Andere" },
-    "Comment recevez-vous actuellement vos demandes ?": { en: "How do you currently receive enquiries?", de: "Wie erhalten Sie derzeit Ihre Anfragen?" },
-    "🌐 Site web": { en: "🌐 Website", de: "🌐 Website" },
-    "📧 Email": { en: "📧 Email", de: "📧 E-Mail" },
-    "📞 Téléphone": { en: "📞 Phone", de: "📞 Telefon" },
-    "💬 WhatsApp": { en: "💬 WhatsApp", de: "💬 WhatsApp" },
-    "📱 Réseaux sociaux": { en: "📱 Social media", de: "📱 Soziale Medien" },
-    "Quel est votre principal problème aujourd'hui ?": { en: "What's your main problem today?", de: "Was ist heute Ihr grösstes Problem?" },
-    "❌ Je manque parfois des demandes": { en: "❌ I sometimes miss enquiries", de: "❌ Mir entgehen manchmal Anfragen" },
-    "⏰ Je réponds trop tard": { en: "⏰ I reply too late", de: "⏰ Ich antworte zu spät" },
-    "🧮 Les devis me prennent trop de temps": { en: "🧮 Quotes take too much of my time", de: "🧮 Offerten kosten mich zu viel Zeit" },
-    "💸 Des clients refusent mes devis": { en: "💸 Customers decline my quotes", de: "💸 Kunden lehnen meine Offerten ab" },
-    "🔄 Je dois gérer les contre-offres manuellement": { en: "🔄 I have to handle counter-offers manually", de: "🔄 Ich muss Gegenangebote manuell bearbeiten" },
-    "👥 Nous sommes plusieurs à gérer les réservations": { en: "👥 Several of us handle bookings", de: "👥 Mehrere von uns verwalten Buchungen" },
-    "📅 La gestion des agendas est compliquée": { en: "📅 Managing calendars is complicated", de: "📅 Die Terminverwaltung ist kompliziert" },
-    "Quelle formule vous intéresse ?": { en: "Which plan are you interested in?", de: "Welcher Plan interessiert Sie?" },
-    "Comment souhaitez-vous commencer ?": { en: "How would you like to get started?", de: "Wie möchten Sie starten?" },
+    "Quel est le nom de votre entreprise ?": { en: "What's the name of your company?", de: "Wie heisst Ihr Unternehmen?", it: "Come si chiama la vostra impresa?" },
+    "Nom de votre entreprise": { en: "Your company name", de: "Name Ihres Unternehmens", it: "Nome della vostra impresa" },
+    "Combien de personnes prennent actuellement les demandes ou réservations ?": { en: "How many people currently handle enquiries or bookings?", de: "Wie viele Personen bearbeiten derzeit Anfragen oder Buchungen?", it: "Quante persone gestiscono oggi le richieste o le prenotazioni?" },
+    "👤 Moi uniquement": { en: "👤 Just me", de: "👤 Nur ich", it: "👤 Solo io" },
+    "👥 2–5 personnes": { en: "👥 2–5 people", de: "👥 2–5 Personen", it: "👥 2–5 persone" },
+    "👥 6–15 personnes": { en: "👥 6–15 people", de: "👥 6–15 Personen", it: "👥 6–15 persone" },
+    "🏢 Plus de 15": { en: "🏢 More than 15", de: "🏢 Mehr als 15", it: "🏢 Più di 15" },
+    "Autre": { en: "Other", de: "Andere", it: "Altro" },
+    "Comment recevez-vous actuellement vos demandes ?": { en: "How do you currently receive enquiries?", de: "Wie erhalten Sie derzeit Ihre Anfragen?", it: "Come ricevete oggi le richieste?" },
+    "🌐 Site web": { en: "🌐 Website", de: "🌐 Website", it: "🌐 Sito web" },
+    "📧 Email": { en: "📧 Email", de: "📧 E-Mail", it: "📧 E-mail" },
+    "📞 Téléphone": { en: "📞 Phone", de: "📞 Telefon", it: "📞 Telefono" },
+    "💬 WhatsApp": { en: "💬 WhatsApp", de: "💬 WhatsApp", it: "💬 WhatsApp" },
+    "📱 Réseaux sociaux": { en: "📱 Social media", de: "📱 Soziale Medien", it: "📱 Social" },
+    "Quel est votre principal problème aujourd'hui ?": { en: "What's your main problem today?", de: "Was ist heute Ihr grösstes Problem?", it: "Qual è oggi il vostro problema principale?" },
+    "❌ Je manque parfois des demandes": { en: "❌ I sometimes miss enquiries", de: "❌ Mir entgehen manchmal Anfragen", it: "❌ A volte perdo delle richieste" },
+    "⏰ Je réponds trop tard": { en: "⏰ I reply too late", de: "⏰ Ich antworte zu spät", it: "⏰ Rispondo troppo tardi" },
+    "🧮 Les devis me prennent trop de temps": { en: "🧮 Quotes take too much of my time", de: "🧮 Offerten kosten mich zu viel Zeit", it: "🧮 I preventivi mi prendono troppo tempo" },
+    "💸 Des clients refusent mes devis": { en: "💸 Customers decline my quotes", de: "💸 Kunden lehnen meine Offerten ab", it: "💸 I clienti rifiutano i miei preventivi" },
+    "🔄 Je dois gérer les contre-offres manuellement": { en: "🔄 I have to handle counter-offers manually", de: "🔄 Ich muss Gegenangebote manuell bearbeiten", it: "🔄 Devo gestire le controproposte a mano" },
+    "👥 Nous sommes plusieurs à gérer les réservations": { en: "👥 Several of us handle bookings", de: "👥 Mehrere von uns verwalten Buchungen", it: "👥 Siamo in diversi a gestire le prenotazioni" },
+    "📅 La gestion des agendas est compliquée": { en: "📅 Managing calendars is complicated", de: "📅 Die Terminverwaltung ist kompliziert", it: "📅 Gestire le agende è complicato" },
+    "Quelle formule vous intéresse ?": { en: "Which plan are you interested in?", de: "Welcher Plan interessiert Sie?", it: "Quale piano vi interessa?" },
+    "Comment souhaitez-vous commencer ?": { en: "How would you like to get started?", de: "Wie möchten Sie starten?", it: "Come desiderate cominciare?" },
     "Avez-vous un site internet ? Nous y ajoutons votre bouton WhatsApp Dealz.": {
       en: "Do you have a website? We'll add your Dealz WhatsApp button to it.",
-      de: "Haben Sie eine Website? Wir fügen dort Ihren Dealz-WhatsApp-Button hinzu.",
+      de: "Haben Sie eine Website? Wir fügen dort Ihren Dealz-WhatsApp-Button hinzu.", it: "Avete un sito web? Vi aggiungeremo il vostro pulsante WhatsApp Dealz.",
     },
-    "Je n'ai pas de site internet": { en: "I don't have a website", de: "Ich habe keine Website" },
-    "Et où pouvons-nous vous envoyer votre récapitulatif ?": { en: "And where can we send your summary?", de: "Und wohin dürfen wir Ihnen Ihre Zusammenfassung senden?" },
-    "Quelques questions rapides": { en: "A few quick questions", de: "Ein paar kurze Fragen" },
-    "C'est prêt": { en: "All set", de: "Bereit" },
-    "Écrivez votre réponse…": { en: "Type your answer…", de: "Schreiben Sie Ihre Antwort…" },
-    "Répondez ci-dessus…": { en: "Answer above…", de: "Oben antworten…" },
-    "← Modifier la réponse précédente": { en: "← Edit the previous answer", de: "← Vorherige Antwort ändern" },
-    "Vous pouvez préciser :": { en: "Feel free to specify:", de: "Sie können es näher erläutern:" },
-    "Votre précision…": { en: "Your details…", de: "Ihre Angabe…" },
-    "Valider mes choix": { en: "Confirm my choices", de: "Auswahl bestätigen" },
-    "Aucune de ces réponses": { en: "None of these", de: "Keine dieser Antworten" },
-    "RECOMMANDÉ": { en: "RECOMMENDED", de: "EMPFOHLEN" },
-    "CLOSE ⭐": { en: "CLOSE ⭐", de: "CLOSE ⭐" },
-    "Choisir CLOSE ⭐": { en: "Choose CLOSE ⭐", de: "CLOSE ⭐ wählen" },
-    "Choisir CAPTURE": { en: "Choose CAPTURE", de: "CAPTURE wählen" },
-    "Choisir SCALE": { en: "Choose SCALE", de: "SCALE wählen" },
-    "💡 Pas sûr ? Laissez Dealz vous recommander une formule.": { en: "💡 Not sure? Let Dealz recommend a plan for you.", de: "💡 Unsicher? Lassen Sie sich von Dealz einen Plan empfehlen." },
-    "Mensuel": { en: "Monthly", de: "Monatlich" },
-    "Annuel": { en: "Yearly", de: "Jährlich" },
-    "Choisir mensuel": { en: "Choose monthly", de: "Monatlich wählen" },
-    "Choisir annuel": { en: "Choose yearly", de: "Jährlich wählen" },
+    "Je n'ai pas de site internet": { en: "I don't have a website", de: "Ich habe keine Website", it: "Non ho un sito web" },
+    "Et où pouvons-nous vous envoyer votre récapitulatif ?": { en: "And where can we send your summary?", de: "Und wohin dürfen wir Ihnen Ihre Zusammenfassung senden?", it: "E dove possiamo inviarvi il riepilogo?" },
+    "Quelques questions rapides": { en: "A few quick questions", de: "Ein paar kurze Fragen", it: "Qualche domanda rapida" },
+    "C'est prêt": { en: "All set", de: "Bereit", it: "Tutto pronto" },
+    "Écrivez votre réponse…": { en: "Type your answer…", de: "Schreiben Sie Ihre Antwort…", it: "Scrivete la vostra risposta…" },
+    "Répondez ci-dessus…": { en: "Answer above…", de: "Oben antworten…", it: "Rispondete qui sopra…" },
+    "← Modifier la réponse précédente": { en: "← Edit the previous answer", de: "← Vorherige Antwort ändern", it: "← Modificare la risposta precedente" },
+    "Vous pouvez préciser :": { en: "Feel free to specify:", de: "Sie können es näher erläutern:", it: "Potete precisare:" },
+    "Votre précision…": { en: "Your details…", de: "Ihre Angabe…", it: "I vostri dati…" },
+    "Valider mes choix": { en: "Confirm my choices", de: "Auswahl bestätigen", it: "Confermare le mie scelte" },
+    "Aucune de ces réponses": { en: "None of these", de: "Keine dieser Antworten", it: "Nessuna di queste" },
+    "RECOMMANDÉ": { en: "RECOMMENDED", de: "EMPFOHLEN", it: "CONSIGLIATO" },
+    "CLOSE ⭐": { en: "CLOSE ⭐", de: "CLOSE ⭐", it: "CLOSE ⭐" },
+    "Choisir CLOSE ⭐": { en: "Choose CLOSE ⭐", de: "CLOSE ⭐ wählen", it: "Scegliere CLOSE ⭐" },
+    "Choisir CAPTURE": { en: "Choose CAPTURE", de: "CAPTURE wählen", it: "Scegliere CAPTURE" },
+    "Choisir SCALE": { en: "Choose SCALE", de: "SCALE wählen", it: "Scegliere SCALE" },
+    "💡 Pas sûr ? Laissez Dealz vous recommander une formule.": { en: "💡 Not sure? Let Dealz recommend a plan for you.", de: "💡 Unsicher? Lassen Sie sich von Dealz einen Plan empfehlen.", it: "💡 Non siete sicuri? Lasciate che Dealz vi consigli un piano." },
+    "Mensuel": { en: "Monthly", de: "Monatlich", it: "Mensile" },
+    "Annuel": { en: "Yearly", de: "Jährlich", it: "Annuale" },
+    "Choisir mensuel": { en: "Choose monthly", de: "Monatlich wählen", it: "Scegliere mensile" },
+    "Choisir annuel": { en: "Choose yearly", de: "Jährlich wählen", it: "Scegliere annuale" },
     "WhatsApp est inclus : un bouton suffit, sur votre site, votre fiche Google ou un QR code. Rien à changer sur votre site.": {
       en: "WhatsApp is included: a button is all it takes, on your site, your Google profile or a QR code. Nothing to change on your site.",
-      de: "WhatsApp ist inbegriffen: Ein Button genügt, auf Ihrer Website, Ihrem Google-Profil oder als QR-Code. An Ihrer Website ändert sich nichts.",
+      de: "WhatsApp ist inbegriffen: Ein Button genügt, auf Ihrer Website, Ihrem Google-Profil oder als QR-Code. An Ihrer Website ändert sich nichts.", it: "WhatsApp è incluso: basta un pulsante, sul vostro sito, sul vostro profilo Google o un codice QR. Niente da cambiare sul vostro sito.",
     },
-    "Prénom / Nom": { en: "First / last name", de: "Vorname / Name" },
-    "E-mail professionnel": { en: "Work email", de: "Geschäftliche E-Mail" },
-    "Téléphone (optionnel)": { en: "Phone (optional)", de: "Telefon (optional)" },
-    "Continuer →": { en: "Continue →", de: "Weiter →" },
-    "Tout est bon ?": { en: "Everything look good?", de: "Passt alles?" },
-    "VOTRE DEMANDE DEALZ": { en: "YOUR DEALZ REQUEST", de: "IHRE DEALZ-ANFRAGE" },
-    "Entreprise": { en: "Company", de: "Unternehmen" },
-    "Formule": { en: "Plan", de: "Plan" },
-    "Facturation": { en: "Billing", de: "Abrechnung" },
-    "Annuelle": { en: "Yearly", de: "Jährlich" },
-    "Mensuelle": { en: "Monthly", de: "Monatlich" },
-    "Abonnement": { en: "Subscription", de: "Abonnement" },
-    "Installation": { en: "Setup", de: "Einrichtung" },
-    "OFFERTE": { en: "FREE", de: "GRATIS" },
-    "Site": { en: "Website", de: "Website" },
-    "Votre objectif": { en: "Your goal", de: "Ihr Ziel" },
-    "🚀 Demander mon installation Dealz": { en: "🚀 Request my Dealz setup", de: "🚀 Meine Dealz-Einrichtung anfragen" },
-    "Modifier mes réponses": { en: "Edit my answers", de: "Meine Antworten ändern" },
-    "Demande envoyée ✓": { en: "Request sent ✓", de: "Anfrage gesendet ✓" },
+    "Prénom / Nom": { en: "First / last name", de: "Vorname / Name", it: "Nome / cognome" },
+    "E-mail professionnel": { en: "Work email", de: "Geschäftliche E-Mail", it: "E-mail professionale" },
+    "Téléphone (optionnel)": { en: "Phone (optional)", de: "Telefon (optional)", it: "Telefono (facoltativo)" },
+    "Continuer →": { en: "Continue →", de: "Weiter →", it: "Continuare →" },
+    "Tout est bon ?": { en: "Everything look good?", de: "Passt alles?", it: "Va tutto bene?" },
+    "VOTRE DEMANDE DEALZ": { en: "YOUR DEALZ REQUEST", de: "IHRE DEALZ-ANFRAGE", it: "LA VOSTRA RICHIESTA DEALZ" },
+    "Entreprise": { en: "Company", de: "Unternehmen", it: "Impresa" },
+    "Formule": { en: "Plan", de: "Plan", it: "Piano" },
+    "Facturation": { en: "Billing", de: "Abrechnung", it: "Fatturazione" },
+    "Annuelle": { en: "Yearly", de: "Jährlich", it: "Annuale" },
+    "Mensuelle": { en: "Monthly", de: "Monatlich", it: "Mensile" },
+    "Abonnement": { en: "Subscription", de: "Abonnement", it: "Abbonamento" },
+    "Installation": { en: "Setup", de: "Einrichtung", it: "Messa in servizio" },
+    "OFFERTE": { en: "FREE", de: "GRATIS", it: "GRATUITA" },
+    "Site": { en: "Website", de: "Website", it: "Sito web" },
+    "Votre objectif": { en: "Your goal", de: "Ihr Ziel", it: "Il vostro obiettivo" },
+    "🚀 Demander mon installation Dealz": { en: "🚀 Request my Dealz setup", de: "🚀 Meine Dealz-Einrichtung anfragen", it: "🚀 Chiedere la mia messa in servizio Dealz" },
+    "Modifier mes réponses": { en: "Edit my answers", de: "Meine Antworten ändern", it: "Modificare le mie risposte" },
+    "Demande envoyée ✓": { en: "Request sent ✓", de: "Anfrage gesendet ✓", it: "Richiesta inviata ✓" },
     "👋 Bonjour ! Je suis Dealz. Je peux vous aider à voir quelle formule correspond le mieux à votre entreprise. On commence ?": {
       en: "👋 Hi! I'm Dealz. I can help you see which plan fits your business best. Shall we get started?",
-      de: "👋 Hallo! Ich bin Dealz. Ich helfe Ihnen gerne herauszufinden, welcher Plan am besten zu Ihrem Unternehmen passt. Fangen wir an?",
+      de: "👋 Hallo! Ich bin Dealz. Ich helfe Ihnen gerne herauszufinden, welcher Plan am besten zu Ihrem Unternehmen passt. Fangen wir an?", it: "👋 Ciao! Sono Dealz. Posso aiutarvi a capire quale piano è più adatto alla vostra impresa. Cominciamo?",
     },
-    "Oui, allons-y →": { en: "Yes, let's go →", de: "Ja, los geht's →" },
+    "Oui, allons-y →": { en: "Yes, let's go →", de: "Ja, los geht's →", it: "Sì, andiamo →" },
     "Hmm, cette adresse ne ressemble pas tout à fait à une URL — vous pouvez réessayer ?": {
       en: "Hmm, that doesn't quite look like a URL — could you try again?",
-      de: "Hmm, das sieht nicht ganz nach einer URL aus — können Sie es nochmals versuchen?",
+      de: "Hmm, das sieht nicht ganz nach einer URL aus — können Sie es nochmals versuchen?", it: "Mmm, non sembra proprio un URL: potete riprovare?",
     },
     "Merci ! Votre demande est bien enregistrée. Nous allons examiner votre site et votre configuration afin de préparer l'installation de Dealz. Vous recevrez votre récapitulatif par e-mail.": {
       en: "Thank you! Your request has been recorded. We'll review your site and setup to prepare your Dealz installation. You'll receive your summary by email.",
-      de: "Vielen Dank! Ihre Anfrage wurde erfasst. Wir prüfen Ihre Website und Konfiguration, um die Installation von Dealz vorzubereiten. Sie erhalten Ihre Zusammenfassung per E-Mail.",
+      de: "Vielen Dank! Ihre Anfrage wurde erfasst. Wir prüfen Ihre Website und Konfiguration, um die Installation von Dealz vorzubereiten. Sie erhalten Ihre Zusammenfassung per E-Mail.", it: "Grazie! La vostra richiesta è stata registrata. Esamineremo il vostro sito e la vostra configurazione per preparare la vostra installazione Dealz. Riceverete il riepilogo via e-mail.",
     },
-    "+ {setup} d'installation unique": { en: "+ {setup} one-time setup fee", de: "+ {setup} einmalige Einrichtungsgebühr" },
-    "Sans frais d'installation": { en: "No setup fee", de: "Keine Einrichtungsgebühr" },
-    "← Modifier": { en: "← Edit", de: "← Ändern" },
-    "💳 Payer et démarrer": { en: "💳 Pay and get started", de: "💳 Bezahlen und starten" },
-    "Redirection vers le paiement sécurisé…": { en: "Redirecting to secure payment…", de: "Weiterleitung zur sicheren Zahlung…" },
+    "+ {setup} d'installation unique": { en: "+ {setup} one-time setup fee", de: "+ {setup} einmalige Einrichtungsgebühr", it: "+ {setup} di messa in servizio, una sola volta" },
+    "Sans frais d'installation": { en: "No setup fee", de: "Keine Einrichtungsgebühr", it: "Nessun costo di messa in servizio" },
+    "← Modifier": { en: "← Edit", de: "← Ändern", it: "← Modificare" },
+    "💳 Payer et démarrer": { en: "💳 Pay and get started", de: "💳 Bezahlen und starten", it: "💳 Pagare e cominciare" },
+    "Redirection vers le paiement sécurisé…": { en: "Redirecting to secure payment…", de: "Weiterleitung zur sicheren Zahlung…", it: "Reindirizzamento al pagamento sicuro…" },
     "Le paiement n'a pas pu démarrer — votre demande est bien enregistrée, nous vous recontactons.": {
       en: "The payment couldn't start — your request has been recorded, we'll get back to you.",
-      de: "Die Zahlung konnte nicht gestartet werden — Ihre Anfrage ist erfasst, wir melden uns.",
+      de: "Die Zahlung konnte nicht gestartet werden — Ihre Anfrage ist erfasst, wir melden uns.", it: "Il pagamento non è potuto partire: la vostra richiesta è registrata, vi ricontatteremo.",
     },
     "✅ Paiement reçu, merci ! Bienvenue chez Dealz. Dernière étape : le formulaire d'intégration (environ 10 minutes). À la fin, vous réservez votre rendez-vous de 30 minutes avec nous. Le lien vous est aussi envoyé par e-mail.": {
       en: "✅ Payment received, thank you! Welcome to Dealz. Last step: the onboarding form (about 10 minutes). At the end, you book your 30-minute meeting with us. The link is also sent to you by email.",
-      de: "✅ Zahlung erhalten, vielen Dank! Willkommen bei Dealz. Letzter Schritt: das Einrichtungsformular (etwa 10 Minuten). Am Ende buchen Sie Ihr 30-minütiges Gespräch mit uns. Den Link erhalten Sie auch per E-Mail.",
+      de: "✅ Zahlung erhalten, vielen Dank! Willkommen bei Dealz. Letzter Schritt: das Einrichtungsformular (etwa 10 Minuten). Am Ende buchen Sie Ihr 30-minütiges Gespräch mit uns. Den Link erhalten Sie auch per E-Mail.", it: "✅ Pagamento ricevuto, grazie! Benvenuti in Dealz. Ultimo passo: il modulo di messa in servizio (circa 10 minuti). Alla fine, prenotate il vostro incontro di 30 minuti con noi. Il link vi viene inviato anche via e-mail.",
     },
-    "Remplir mon formulaire d'intégration →": { en: "Fill in my onboarding form →", de: "Mein Einrichtungsformular ausfüllen →" },
+    "Remplir mon formulaire d'intégration →": { en: "Fill in my onboarding form →", de: "Mein Einrichtungsformular ausfüllen →", it: "Compilare il mio modulo di messa in servizio →" },
     "Paiement annulé — rien n'a été débité. Votre demande est enregistrée : vous pouvez reprendre quand vous voulez.": {
       en: "Payment cancelled — nothing was charged. Your request is recorded: you can pick it up whenever you like.",
-      de: "Zahlung abgebrochen — es wurde nichts belastet. Ihre Anfrage ist erfasst: Sie können jederzeit fortfahren.",
+      de: "Zahlung abgebrochen — es wurde nichts belastet. Ihre Anfrage ist erfasst: Sie können jederzeit fortfahren.", it: "Pagamento annullato: non è stato addebitato nulla. La vostra richiesta è registrata: potete riprenderla quando volete.",
     },
-    "🚀 OFFRE DE LANCEMENT": { en: "🚀 LAUNCH OFFER", de: "🚀 EINFÜHRUNGSANGEBOT" },
-    "Jusqu'au 31 décembre 2026.": { en: "Until 31 December 2026.", de: "Bis 31. Dezember 2026." },
-    "2 mois offerts, et {setup} d'installation économisés.": { en: "2 months free, and you save {setup} on setup.", de: "2 Monate gratis, und Sie sparen {setup} bei der Einrichtung." },
-    "2 mois offerts.": { en: "2 months free.", de: "2 Monate gratis." },
+    "🚀 OFFRE DE LANCEMENT": { en: "🚀 LAUNCH OFFER", de: "🚀 EINFÜHRUNGSANGEBOT", it: "🚀 OFFERTA DI LANCIO" },
+    "Jusqu'au 31 décembre 2026.": { en: "Until 31 December 2026.", de: "Bis 31. Dezember 2026.", it: "Fino al 31 dicembre 2026." },
+    "2 mois offerts, et {setup} d'installation économisés.": { en: "2 months free, and you save {setup} on setup.", de: "2 Monate gratis, und Sie sparen {setup} bei der Einrichtung.", it: "2 mesi offerti, e risparmiate {setup} sulla messa in servizio." },
+    "2 mois offerts.": { en: "2 months free.", de: "2 Monate gratis.", it: "2 mesi offerti." },
     "Vous êtes plusieurs à gérer les réservations, ou la gestion des agendas devient compliquée — SCALE ajoute les collaborateurs, les agendas partagés et la répartition automatique dont vous avez besoin.": {
       en: "Several of you manage bookings, or calendar management is becoming complicated — SCALE adds the team members, shared calendars, and automatic assignment you need.",
-      de: "Mehrere Personen verwalten bei Ihnen Buchungen, oder die Terminverwaltung wird kompliziert — SCALE bietet die Mitarbeiterkonten, geteilten Kalender und automatische Zuteilung, die Sie brauchen.",
+      de: "Mehrere Personen verwalten bei Ihnen Buchungen, oder die Terminverwaltung wird kompliziert — SCALE bietet die Mitarbeiterkonten, geteilten Kalender und automatische Zuteilung, die Sie brauchen.", it: "Siete in diversi a gestire le prenotazioni, o la gestione delle agende diventa complicata: SCALE aggiunge i collaboratori, le agende condivise e l'assegnazione automatica di cui avete bisogno.",
     },
     "Vous recevez déjà des demandes, mais votre principal problème semble être la récupération des devis refusés ou des contre-offres. CLOSE est donc probablement la formule la plus adaptée.": {
       en: "You're already receiving enquiries, but your main issue seems to be recovering declined quotes or counter-offers. CLOSE is likely the best fit for you.",
-      de: "Sie erhalten bereits Anfragen, aber Ihr Hauptproblem scheint die Nachverfolgung abgelehnter Offerten oder Gegenangebote zu sein. CLOSE ist daher wahrscheinlich der passende Plan.",
+      de: "Sie erhalten bereits Anfragen, aber Ihr Hauptproblem scheint die Nachverfolgung abgelehnter Offerten oder Gegenangebote zu sein. CLOSE ist daher wahrscheinlich der passende Plan.", it: "Ricevete già delle richieste, ma il vostro problema principale sembra essere il recupero dei preventivi rifiutati o delle controproposte. CLOSE è probabilmente il più adatto a voi.",
     },
     "Votre priorité aujourd'hui est de ne manquer aucune demande — CAPTURE couvre exactement ce besoin, sans rien de superflu.": {
       en: "Your priority today is not missing a single enquiry — CAPTURE covers exactly that, without anything extra.",
-      de: "Ihre Priorität ist es, keine Anfrage mehr zu verpassen — CAPTURE deckt genau das ab, ohne unnötigen Schnickschnack.",
+      de: "Ihre Priorität ist es, keine Anfrage mehr zu verpassen — CAPTURE deckt genau das ab, ohne unnötigen Schnickschnack.", it: "La vostra priorità oggi è non perdere nemmeno una richiesta: CAPTURE copre esattamente questo, senza nulla di superfluo.",
     },
-    "Ne manquez plus aucune demande.": { en: "Never miss another enquiry.", de: "Verpassen Sie keine Anfrage mehr." },
+    "Ne manquez plus aucune demande.": { en: "Never miss another enquiry.", de: "Verpassen Sie keine Anfrage mehr.", it: "Non perdete mai più una richiesta." },
     "Ne laissez plus un « non » devenir une vente perdue.": {
       en: "Stop letting a \"no\" become a lost sale.",
-      de: "Lassen Sie ein „Nein“ nicht mehr zu einem verlorenen Verkauf werden.",
+      de: "Lassen Sie ein „Nein“ nicht mehr zu einem verlorenen Verkauf werden.", it: "Non lasciate che un «no» diventi una vendita persa.",
     },
-    "Plus de demandes sans plus de gestion.": { en: "More enquiries without more admin.", de: "Mehr Anfragen ohne mehr Verwaltungsaufwand." },
-    "Paiement unique": { en: "One-time payment", de: "Einmalzahlung" },
-    "Accès à vie, sans abonnement.": { en: "Lifetime access, no subscription.", de: "Lebenslanger Zugang, kein Abo." },
-    "Choisir paiement unique": { en: "Choose one-time payment", de: "Einmalzahlung wählen" },
-    "Unique": { en: "One-time", de: "Einmalig" },
-    "Paiement": { en: "Payment", de: "Zahlung" },
-    "WhatsApp Business": { en: "WhatsApp Business", de: "WhatsApp Business" },
+    "Plus de demandes sans plus de gestion.": { en: "More enquiries without more admin.", de: "Mehr Anfragen ohne mehr Verwaltungsaufwand.", it: "Più richieste senza più burocrazia." },
+    "Paiement unique": { en: "One-time payment", de: "Einmalzahlung", it: "Pagamento unico" },
+    "Accès à vie, sans abonnement.": { en: "Lifetime access, no subscription.", de: "Lebenslanger Zugang, kein Abo.", it: "Accesso a vita, senza abbonamento." },
+    "Choisir paiement unique": { en: "Choose one-time payment", de: "Einmalzahlung wählen", it: "Scegliere il pagamento unico" },
+    "Unique": { en: "One-time", de: "Einmalig", it: "Unico" },
+    "Paiement": { en: "Payment", de: "Zahlung", it: "Pagamento" },
+    "WhatsApp Business": { en: "WhatsApp Business", de: "WhatsApp Business", it: "WhatsApp Business" },
     "Merci ! Votre demande est bien enregistrée. Nous allons préparer l'installation de Dealz sur WhatsApp et revenir vers vous pour connecter votre numéro WhatsApp Business. Vous recevrez votre récapitulatif par e-mail.": {
       en: "Thank you! Your request has been recorded. We'll prepare your Dealz installation on WhatsApp and come back to you to connect your WhatsApp Business number. You'll receive your summary by email.",
-      de: "Vielen Dank! Ihre Anfrage wurde erfasst. Wir bereiten die Dealz-Einrichtung auf WhatsApp vor und melden uns, um Ihre WhatsApp-Business-Nummer anzubinden. Sie erhalten Ihre Zusammenfassung per E-Mail.",
+      de: "Vielen Dank! Ihre Anfrage wurde erfasst. Wir bereiten die Dealz-Einrichtung auf WhatsApp vor und melden uns, um Ihre WhatsApp-Business-Nummer anzubinden. Sie erhalten Ihre Zusammenfassung per E-Mail.", it: "Grazie! La vostra richiesta è stata registrata. Prepareremo la vostra installazione Dealz su WhatsApp e vi ricontatteremo per collegare il vostro numero WhatsApp Business. Riceverete il riepilogo via e-mail.",
     },
   };
 
@@ -290,18 +290,21 @@
     const lang = window.DEALZ_LANG;
     if (lang === "en") return `${fmt(n)} / month`;
     if (lang === "de") return `${fmt(n)} / Monat`;
+    if (lang === "it") return `${fmt(n)} / mese`;
     return `${fmt(n)} / mois`;
   }
   function perYear(n) {
     const lang = window.DEALZ_LANG;
     if (lang === "en") return `${fmt(n)} / year`;
     if (lang === "de") return `${fmt(n)} / Jahr`;
+    if (lang === "it") return `${fmt(n)} / anno`;
     return `${fmt(n)} / an`;
   }
   function chooseLabel(plan) {
     const lang = window.DEALZ_LANG;
     if (lang === "en") return `Choose ${plan} →`;
     if (lang === "de") return `${plan} wählen →`;
+    if (lang === "it") return `Scegliere ${plan} →`;
     return `Choisir ${plan} →`;
   }
   function planLabel(key) {
@@ -311,18 +314,21 @@
     const lang = window.DEALZ_LANG;
     if (lang === "en") return `${key} (recommended by Dealz)`;
     if (lang === "de") return `${key} (von Dealz empfohlen)`;
+    if (lang === "it") return `${key} (consigliato da Dealz)`;
     return `${key} (recommandé par Dealz)`;
   }
   function recommendLabel(plan) {
     const lang = window.DEALZ_LANG;
     if (lang === "en") return `🤖 Dealz recommends: ${plan}`;
     if (lang === "de") return `🤖 Dealz empfiehlt: ${plan}`;
+    if (lang === "it") return `🤖 Dealz vi consiglia: ${plan}`;
     return `🤖 Dealz vous recommande : ${plan}`;
   }
   function stepProgress(i, total) {
     const lang = window.DEALZ_LANG;
     if (lang === "en") return `Step ${i} of ${total}`;
     if (lang === "de") return `Schritt ${i} von ${total}`;
+    if (lang === "it") return `Passo ${i} di ${total}`;
     return `Étape ${i} sur ${total}`;
   }
   function billingLine(mode, monthly, yearly, onetime) {
@@ -330,34 +336,40 @@
     if (mode === "onetime") {
       if (lang === "en") return money(`One-time — ${fmt(onetime)} (lifetime access, no subscription)`);
       if (lang === "de") return money(`Einmalig — ${fmt(onetime)} (lebenslanger Zugang, kein Abo)`);
+      if (lang === "it") return money(`Pagamento unico — ${fmt(onetime)} (accesso a vita, senza abbonamento)`);
       return money(`Paiement unique — ${fmt(onetime)} (accès à vie, sans abonnement)`);
     }
     if (mode === "yearly") {
       if (lang === "en") return money(`Yearly — ${fmt(yearly)}/year (2 months free)`);
       if (lang === "de") return money(`Jährlich — ${fmt(yearly)}/Jahr (2 Monate gratis)`);
+      if (lang === "it") return money(`Annuale — ${fmt(yearly)}/anno (2 mesi offerti)`);
       return money(`Annuel — ${fmt(yearly)}/an (2 mois offerts)`);
     }
     const noSetup = !setupFee();
     if (lang === "en") return money(`Monthly — ${fmt(monthly)}/month` + (noSetup ? ", no setup fee" : " + {setup} setup"));
     if (lang === "de") return money(`Monatlich — ${fmt(monthly)}/Monat` + (noSetup ? ", keine Einrichtungsgebühr" : " + {setup} Einrichtung"));
+    if (lang === "it") return money(`Mensile — ${fmt(monthly)}/mese` + (noSetup ? ", senza costi di messa in servizio" : " + {setup} messa in servizio"));
     return money(`Mensuel — ${fmt(monthly)}/mois` + (noSetup ? ", sans frais d'installation" : " + {setup} installation"));
   }
   function oneTimeLabel(n) {
     const lang = window.DEALZ_LANG;
     if (lang === "en") return `${fmt(n)} (one-time)`;
     if (lang === "de") return `${fmt(n)} (einmalig)`;
+    if (lang === "it") return `${fmt(n)} (pagamento unico)`;
     return `${fmt(n)} (paiement unique)`;
   }
   function installedLine() {
     const lang = window.DEALZ_LANG;
     if (lang === "en") return money("<s>{setup} setup</s> — <b>FREE</b>");
     if (lang === "de") return money("<s>{setup} Einrichtung</s> — <b>GRATIS</b>");
+    if (lang === "it") return money("<s>{setup} messa in servizio</s> — <b>OFFERTA</b>");
     return money("<s>{setup} installation</s> — <b>OFFERTE</b>");
   }
   function whatsappIncludedValue() {
     const lang = window.DEALZ_LANG;
     if (lang === "en") return money("Included (100 conversations / month, then {extra} each)");
     if (lang === "de") return money("Inbegriffen (100 Gespräche / Monat, danach {extra} pro Gespräch)");
+    if (lang === "it") return money("Incluso (100 conversazioni / mese, poi {extra} l'una)");
     return money("Inclus (100 conversations / mois, puis {extra} l'une)");
   }
 
@@ -988,6 +1000,7 @@
     const what = pick.plan;
     if (lang === "en") return `👋 Hi! I'm Dealz. You picked ${what}: a few quick questions and your request is ready. Shall we get started?`;
     if (lang === "de") return `👋 Hallo! Ich bin Dealz. Sie haben ${what} gewählt: ein paar kurze Fragen, dann ist Ihre Anfrage bereit. Fangen wir an?`;
+    if (lang === "it") return `👋 Ciao! Sono Dealz. Avete scelto ${what}: qualche domanda rapida e la vostra richiesta è pronta. Cominciamo?`;
     return `👋 Bonjour ! Je suis Dealz. Vous avez choisi ${what} : quelques questions rapides et votre demande est prête. On commence ?`;
   }
   let introBubble = null;

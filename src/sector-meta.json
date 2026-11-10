@@ -17,6 +17,10 @@
       "de": {
         "label": "Reinigung und Endreinigung",
         "emailNoun": "Ihre Reinigung"
+      },
+      "it": {
+        "label": "Pulizie e fine locazione",
+        "emailNoun": "le vostre pulizie"
       }
     }
   },
@@ -38,6 +42,10 @@
       "de": {
         "label": "Umzug und Räumung",
         "emailNoun": "Ihren Umzug"
+      },
+      "it": {
+        "label": "Traslochi e sgomberi",
+        "emailNoun": "il vostro trasloco"
       }
     }
   },
@@ -59,6 +67,10 @@
       "de": {
         "label": "Gartenbau und Gartenpflege",
         "emailNoun": "die Pflege Ihres Gartens"
+      },
+      "it": {
+        "label": "Giardinaggio e paesaggistica",
+        "emailNoun": "la manutenzione del vostro giardino"
       }
     }
   },
@@ -80,6 +92,10 @@
       "de": {
         "label": "Maler- und Renovationsarbeiten",
         "emailNoun": "Ihre Malerarbeiten"
+      },
+      "it": {
+        "label": "Pittura e ristrutturazione",
+        "emailNoun": "i vostri lavori di pittura"
       }
     }
   },
@@ -101,6 +117,10 @@
       "de": {
         "label": "Reinigung von Sofas, Teppichen und Matratzen",
         "emailNoun": "die Reinigung Ihrer Textilien"
+      },
+      "it": {
+        "label": "Pulizia di divani, tappeti e materassi",
+        "emailNoun": "la pulizia dei vostri tessuti"
       }
     }
   },
@@ -122,6 +142,10 @@
       "de": {
         "label": "Autowäsche und Fahrzeugaufbereitung",
         "emailNoun": "die Pflege Ihres Fahrzeugs"
+      },
+      "it": {
+        "label": "Lavaggio e detailing auto",
+        "emailNoun": "la cura del vostro veicolo"
       }
     }
   },
@@ -143,6 +167,10 @@
       "de": {
         "label": "Vermietung von Eventmaterial",
         "emailNoun": "Ihren Anlass"
+      },
+      "it": {
+        "label": "Noleggio di materiale per eventi",
+        "emailNoun": "il vostro evento"
       }
     }
   },
@@ -164,6 +192,10 @@
       "de": {
         "label": "Desinfektion und Schädlingsbekämpfung",
         "emailNoun": "Ihre Schädlingsbekämpfung"
+      },
+      "it": {
+        "label": "Disinfezione e disinfestazione",
+        "emailNoun": "il vostro trattamento antiparassitario"
       }
     }
   },
@@ -185,6 +217,10 @@
       "de": {
         "label": "Fotografie und Videografie",
         "emailNoun": "Ihr Shooting"
+      },
+      "it": {
+        "label": "Fotografia e video",
+        "emailNoun": "il vostro servizio fotografico"
       }
     }
   },
@@ -206,6 +242,10 @@
       "de": {
         "label": "Transport und Lieferung",
         "emailNoun": "Ihren Transport"
+      },
+      "it": {
+        "label": "Trasporti e consegne",
+        "emailNoun": "il vostro trasporto"
       }
     }
   },
@@ -227,6 +267,10 @@
       "de": {
         "label": "Wäscherei und chemische Reinigung",
         "emailNoun": "die Reinigung Ihrer Wäsche"
+      },
+      "it": {
+        "label": "Lavanderia e tintoria",
+        "emailNoun": "la pulizia dei vostri capi"
       }
     }
   },
@@ -248,6 +292,10 @@
       "de": {
         "label": "Fahrzeugvermietung",
         "emailNoun": "Ihre Fahrzeugmiete"
+      },
+      "it": {
+        "label": "Noleggio di veicoli",
+        "emailNoun": "il vostro noleggio di veicolo"
       }
     }
   },
@@ -269,6 +317,10 @@
       "de": {
         "label": "Hauswartung und Liegenschaftsunterhalt",
         "emailNoun": "Ihren Unterhaltsvertrag"
+      },
+      "it": {
+        "label": "Custodia e manutenzione immobili",
+        "emailNoun": "il vostro contratto di manutenzione"
       }
     }
   },
@@ -290,6 +342,10 @@
       "de": {
         "label": "Poolunterhalt",
         "emailNoun": "den Unterhalt Ihres Pools"
+      },
+      "it": {
+        "label": "Manutenzione piscine",
+        "emailNoun": "la manutenzione della vostra piscina"
       }
     }
   },
@@ -311,6 +367,10 @@
       "de": {
         "label": "Fensterreinigung",
         "emailNoun": "Ihre Fensterreinigung"
+      },
+      "it": {
+        "label": "Pulizia vetri",
+        "emailNoun": "la pulizia dei vostri vetri"
       }
     }
   },
@@ -332,6 +392,10 @@
       "de": {
         "label": "Möbelmontage und -demontage",
         "emailNoun": "die Montage Ihrer Möbel"
+      },
+      "it": {
+        "label": "Montaggio e smontaggio mobili",
+        "emailNoun": "il montaggio dei vostri mobili"
       }
     }
   },
@@ -353,6 +417,10 @@
       "de": {
         "label": "Druck und Beschriftung",
         "emailNoun": "Ihren Druckauftrag"
+      },
+      "it": {
+        "label": "Stampa e insegne",
+        "emailNoun": "il vostro ordine di stampa"
       }
     }
   },
@@ -374,6 +442,10 @@
       "de": {
         "label": "Caterer und Eventservices",
         "emailNoun": "Ihren Anlass"
+      },
+      "it": {
+        "label": "Catering e servizi per eventi",
+        "emailNoun": "il vostro evento"
       }
     }
   },
@@ -395,6 +467,10 @@
       "de": {
         "label": "Vermietung von Profi-Geräten",
         "emailNoun": "Ihre Gerätemiete"
+      },
+      "it": {
+        "label": "Noleggio di attrezzature professionali",
+        "emailNoun": "il vostro noleggio di attrezzatura"
       }
     }
   },
@@ -416,6 +492,10 @@
       "de": {
         "label": "Dach und Bedachung",
         "emailNoun": "Ihre Dacharbeiten"
+      },
+      "it": {
+        "label": "Tetti e coperture",
+        "emailNoun": "i vostri lavori sul tetto"
       }
     }
   },
@@ -437,6 +517,10 @@
       "de": {
         "label": "Renovation und Generalunternehmung",
         "emailNoun": "Ihre Renovationsarbeiten"
+      },
+      "it": {
+        "label": "Ristrutturazione e impresa generale",
+        "emailNoun": "i vostri lavori di ristrutturazione"
       }
     }
   },
@@ -458,6 +542,10 @@
       "de": {
         "label": "Gipserei und Decken",
         "emailNoun": "Ihre Gipserarbeiten"
+      },
+      "it": {
+        "label": "Gessatura e controsoffitti",
+        "emailNoun": "i vostri lavori di gessatura"
       }
     }
   },
@@ -479,6 +567,10 @@
       "de": {
         "label": "Bodenbeläge",
         "emailNoun": "Ihre Bodenarbeiten"
+      },
+      "it": {
+        "label": "Pavimenti",
+        "emailNoun": "i vostri lavori di pavimentazione"
       }
     }
   },
@@ -500,6 +592,10 @@
       "de": {
         "label": "Plattenarbeiten",
         "emailNoun": "Ihre Plattenarbeiten"
+      },
+      "it": {
+        "label": "Piastrelle",
+        "emailNoun": "i vostri lavori di piastrellatura"
       }
     }
   },
@@ -521,6 +617,10 @@
       "de": {
         "label": "Fassaden, Verputz und Beschichtungen",
         "emailNoun": "Ihre Fassadenarbeiten"
+      },
+      "it": {
+        "label": "Facciate, intonaci e rivestimenti",
+        "emailNoun": "i vostri lavori di facciata"
       }
     }
   },
@@ -542,6 +642,10 @@
       "de": {
         "label": "Wärmedämmung",
         "emailNoun": "Ihre Dämmarbeiten"
+      },
+      "it": {
+        "label": "Isolamento termico",
+        "emailNoun": "i vostri lavori di isolamento"
       }
     }
   },
@@ -563,6 +667,10 @@
       "de": {
         "label": "Storen, Rollläden und Insektenschutz",
         "emailNoun": "Ihre Storen"
+      },
+      "it": {
+        "label": "Tende, tapparelle e zanzariere",
+        "emailNoun": "le vostre tende e tapparelle"
       }
     }
   },
@@ -584,6 +692,10 @@
       "de": {
         "label": "Sanitär und Heizung",
         "emailNoun": "Ihre Sanitär- und Heizungsarbeiten"
+      },
+      "it": {
+        "label": "Idraulica e riscaldamento",
+        "emailNoun": "i vostri lavori di idraulica e riscaldamento"
       }
     }
   },
@@ -605,6 +717,10 @@
       "de": {
         "label": "Elektroinstallationen",
         "emailNoun": "Ihre Elektroarbeiten"
+      },
+      "it": {
+        "label": "Elettricità",
+        "emailNoun": "i vostri lavori elettrici"
       }
     }
   },
@@ -626,6 +742,10 @@
       "de": {
         "label": "Baumpflege und Baumfällung",
         "emailNoun": "Ihre Baumarbeiten"
+      },
+      "it": {
+        "label": "Potatura e abbattimento alberi",
+        "emailNoun": "i vostri lavori sugli alberi"
       }
     }
   },
@@ -647,6 +767,10 @@
       "de": {
         "label": "Räumung und Entsorgung",
         "emailNoun": "Ihre Räumung"
+      },
+      "it": {
+        "label": "Sgomberi",
+        "emailNoun": "il vostro sgombero"
       }
     }
   },
@@ -668,6 +792,10 @@
       "de": {
         "label": "Schlüsseldienst und Schlosserei",
         "emailNoun": "Ihren Schlüsseldienst-Einsatz"
+      },
+      "it": {
+        "label": "Fabbro e serrature",
+        "emailNoun": "il vostro intervento di fabbro"
       }
     }
   }

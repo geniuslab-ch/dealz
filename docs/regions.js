@@ -1,34 +1,34 @@
 /* Regions a client can cover, by country, for the onboarding form (docs/onboarding-form.js):
  * Swiss cantons, French départements, UK counties, US states. */
 (function () {
-  // Cantons: code, French, German, English names.
+  // Cantons: code, French, German, English, Italian names.
   var CH = [
-    ["AG", "Argovie", "Aargau", "Aargau"],
-    ["AI", "Appenzell Rhodes-Intérieures", "Appenzell Innerrhoden", "Appenzell Innerrhoden"],
-    ["AR", "Appenzell Rhodes-Extérieures", "Appenzell Ausserrhoden", "Appenzell Ausserrhoden"],
-    ["BE", "Berne", "Bern", "Bern"],
-    ["BL", "Bâle-Campagne", "Basel-Landschaft", "Basel-Landschaft"],
-    ["BS", "Bâle-Ville", "Basel-Stadt", "Basel-Stadt"],
-    ["FR", "Fribourg", "Freiburg", "Fribourg"],
-    ["GE", "Genève", "Genf", "Geneva"],
-    ["GL", "Glaris", "Glarus", "Glarus"],
-    ["GR", "Grisons", "Graubünden", "Graubünden"],
-    ["JU", "Jura", "Jura", "Jura"],
-    ["LU", "Lucerne", "Luzern", "Lucerne"],
-    ["NE", "Neuchâtel", "Neuenburg", "Neuchâtel"],
-    ["NW", "Nidwald", "Nidwalden", "Nidwalden"],
-    ["OW", "Obwald", "Obwalden", "Obwalden"],
-    ["SG", "Saint-Gall", "St. Gallen", "St. Gallen"],
-    ["SH", "Schaffhouse", "Schaffhausen", "Schaffhausen"],
-    ["SO", "Soleure", "Solothurn", "Solothurn"],
-    ["SZ", "Schwytz", "Schwyz", "Schwyz"],
-    ["TG", "Thurgovie", "Thurgau", "Thurgau"],
-    ["TI", "Tessin", "Tessin", "Ticino"],
-    ["UR", "Uri", "Uri", "Uri"],
-    ["VD", "Vaud", "Waadt", "Vaud"],
-    ["VS", "Valais", "Wallis", "Valais"],
-    ["ZG", "Zoug", "Zug", "Zug"],
-    ["ZH", "Zurich", "Zürich", "Zurich"],
+    ["AG", "Argovie", "Aargau", "Aargau", "Argovia"],
+    ["AI", "Appenzell Rhodes-Intérieures", "Appenzell Innerrhoden", "Appenzell Innerrhoden", "Appenzello Interno"],
+    ["AR", "Appenzell Rhodes-Extérieures", "Appenzell Ausserrhoden", "Appenzell Ausserrhoden", "Appenzello Esterno"],
+    ["BE", "Berne", "Bern", "Bern", "Berna"],
+    ["BL", "Bâle-Campagne", "Basel-Landschaft", "Basel-Landschaft", "Basilea Campagna"],
+    ["BS", "Bâle-Ville", "Basel-Stadt", "Basel-Stadt", "Basilea Città"],
+    ["FR", "Fribourg", "Freiburg", "Fribourg", "Friburgo"],
+    ["GE", "Genève", "Genf", "Geneva", "Ginevra"],
+    ["GL", "Glaris", "Glarus", "Glarus", "Glarona"],
+    ["GR", "Grisons", "Graubünden", "Graubünden", "Grigioni"],
+    ["JU", "Jura", "Jura", "Jura", "Giura"],
+    ["LU", "Lucerne", "Luzern", "Lucerne", "Lucerna"],
+    ["NE", "Neuchâtel", "Neuenburg", "Neuchâtel", "Neuchâtel"],
+    ["NW", "Nidwald", "Nidwalden", "Nidwalden", "Nidvaldo"],
+    ["OW", "Obwald", "Obwalden", "Obwalden", "Obvaldo"],
+    ["SG", "Saint-Gall", "St. Gallen", "St. Gallen", "San Gallo"],
+    ["SH", "Schaffhouse", "Schaffhausen", "Schaffhausen", "Sciaffusa"],
+    ["SO", "Soleure", "Solothurn", "Solothurn", "Soletta"],
+    ["SZ", "Schwytz", "Schwyz", "Schwyz", "Svitto"],
+    ["TG", "Thurgovie", "Thurgau", "Thurgau", "Turgovia"],
+    ["TI", "Tessin", "Tessin", "Ticino", "Ticino"],
+    ["UR", "Uri", "Uri", "Uri", "Uri"],
+    ["VD", "Vaud", "Waadt", "Vaud", "Vaud"],
+    ["VS", "Valais", "Wallis", "Valais", "Vallese"],
+    ["ZG", "Zoug", "Zug", "Zug", "Zugo"],
+    ["ZH", "Zurich", "Zürich", "Zurich", "Zurigo"],
   ];
 
   var FR = [
@@ -142,7 +142,7 @@
 
   window.DEALZ_US_CITIES = US_CITIES;
   window.DEALZ_REGIONS = {
-    CH: CH.map(function (c) { return { id: c[0], label: { fr: c[1] + " (" + c[0] + ")", de: c[2] + " (" + c[0] + ")", en: c[3] + " (" + c[0] + ")" } }; }),
+    CH: CH.map(function (c) { return { id: c[0], label: { fr: c[1] + " (" + c[0] + ")", de: c[2] + " (" + c[0] + ")", en: c[3] + " (" + c[0] + ")", it: c[4] + " (" + c[0] + ")" } }; }),
     FR: FR.map(function (d) { return { id: d[0], label: d[0] + " – " + d[1] }; }),
     UK: UK.map(function (n) { return { id: n, label: n }; }),
     US: US.map(function (s) { return { id: s[0], label: s[1] + " (" + s[0] + ")" }; }),

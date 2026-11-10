@@ -17,7 +17,7 @@
   }
 
   function fmtDate(d, lang) {
-    const locale = lang === "en" ? "en-CH" : lang === "de" ? "de-CH" : "fr-CH";
+    const locale = lang === "en" ? "en-CH" : lang === "de" ? "de-CH" : lang === "it" ? "it-CH" : "fr-CH";
     return d.toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" });
   }
 
@@ -51,6 +51,15 @@
       demenagement: "Reinigung nach Umzug",
       apres_travaux: "Reinigung nach Bauarbeiten",
       bureau: "Büroreinigung",
+    },
+    it: {
+      regular: "Pulizia regolare",
+      ponctuel: "Pulizia occasionale",
+      profondeur: "Pulizia a fondo",
+      fin_de_bail: "Pulizia di fine locazione / riconsegna",
+      demenagement: "Pulizia dopo il trasloco",
+      apres_travaux: "Pulizia dopo i lavori",
+      bureau: "Pulizia professionale / uffici",
     },
   };
   const DETAIL_LABELS = {
@@ -138,6 +147,34 @@
       animaux: "Haustiere",
       situations_particulieres: "Besondere Umstände",
     },
+    it: {
+      type_nettoyage: "Tipo di pulizia",
+      type_bien: "Tipo di immobile",
+      surface: "Superficie",
+      etages_niveaux: "Livelli dell'abitazione",
+      etages_nombre: "Piani da pulire",
+      salles_bain: "Bagni / WC",
+      cuisine: "Cucina",
+      logement_vide: "Abitazione vuota?",
+      fenetres_type: "Tipo di pulizia delle finestre",
+      fenetres_nombre: "Numero di finestre",
+      four_etat: "Stato del forno",
+      frigo: "Frigorifero",
+      acces_logement: "Accesso all'abitazione",
+      stationnement: "Parcheggio",
+      date_nettoyage: "Data desiderata",
+      date_imperative: "Data fissa?",
+      travaux_type: "Lavori eseguiti",
+      niveau_poussiere: "Livello di polvere dopo i lavori",
+      frequence: "Frequenza desiderata",
+      jour_semaine: "Giorno preferito",
+      heure_passage: "Orario preferito",
+      vide_avant: "Sgomberata prima della pulizia?",
+      date_etat_des_lieux: "Data della riconsegna",
+      garantie_remise_etat: "Garanzia di riconsegna",
+      animaux: "Animali",
+      situations_particulieres: "Situazioni particolari",
+    },
   };
 
   function detailLines(details, lang) {
@@ -158,6 +195,7 @@
     fr: { accuracy: "Ce devis est ferme pour autant que les réponses fournies au questionnaire soient fidèles à la réalité. Si la situation constatée sur place diffère des informations données, l'entreprise se réserve le droit d'adapter le prix en conséquence.", docTitle: "DEVIS", client: "CLIENT", details: "Détails complémentaires", service: "Prestation", amount: "Montant", total: "TOTAL", terms: "Devis ferme, valable 30 jours.", generated: "Document généré automatiquement — SwissClean Sàrl, site de démonstration." },
     en: { accuracy: "This quote is firm provided that the answers given to the questionnaire accurately reflect the actual situation. If the conditions found on site differ from the information provided, the company reserves the right to adjust the price accordingly.", docTitle: "QUOTE", client: "CUSTOMER", details: "Additional details", service: "Service", amount: "Amount", total: "TOTAL", terms: "Firm quote, valid for 30 days.", generated: "Automatically generated document — SwissClean Sàrl, demo site." },
     de: { accuracy: "Diese Offerte ist verbindlich, sofern die Antworten auf den Fragebogen der tatsächlichen Situation entsprechen. Weichen die Verhältnisse vor Ort von den gemachten Angaben ab, behält sich das Unternehmen vor, den Preis entsprechend anzupassen.", docTitle: "OFFERTE", client: "KUNDE", details: "Weitere Details", service: "Leistung", amount: "Betrag", total: "TOTAL", terms: "Feste Offerte, gültig 30 Tage.", generated: "Automatisch erstelltes Dokument — SwissClean Sàrl, Demo-Website." },
+    it: { accuracy: "Questo preventivo è fisso a condizione che le risposte date al questionario riflettano fedelmente la situazione reale. Se le condizioni constatate sul posto differiscono dalle informazioni fornite, l'impresa si riserva il diritto di adeguare il prezzo di conseguenza.", docTitle: "PREVENTIVO", client: "CLIENTE", details: "Dettagli aggiuntivi", service: "Servizio", amount: "Importo", total: "TOTALE", terms: "Preventivo fisso, valido 30 giorni.", generated: "Documento generato automaticamente — SwissClean Sàrl, sito demo." },
   };
 
   // Returns { doc, blobUrl } — doc is the jsPDF instance (for .save()),

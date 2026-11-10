@@ -452,11 +452,11 @@ app.post("/api/chat", async (req, res) => {
     // single-tenant demo (SwissClean Sàrl + docs/pricing.json), same as
     // every caller that predates multi-tenant support.
     const company = (await companyWithGrid(req.body.company, req.body.grid)) || undefined;
-    // "fr" (default), "en" or "de" — set by the page/widget the visitor is
+    // "fr" (default), "en", "de" or "it" — set by the page/widget the visitor is
     // on (window.DEALZ_LANG in quote-app.js). Only affects item.label text
     // in the returned quote and the assistant's own copy; the pricing math
     // is identical regardless of language.
-    const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
+    const lang = ["en", "de", "it"].includes(req.body.lang) ? req.body.lang : "fr";
 
     // A quote for a real company goes to its bexio as an open offer (when
     // it connected bexio in the CRM) — see bexioQuote below.
@@ -559,7 +559,7 @@ async function processDecline(body, baseUrl) {
     // (window.DEALZ_LANG on the page) — every customer-facing email in this
     // decline → counteroffer → accept chain re-reads this off the stored
     // token, so it stays consistent through the whole flow.
-    const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
+    const lang = ["en", "de", "it"].includes(req.body.lang) ? req.body.lang : "fr";
 
     // Its open offer in the company's bexio becomes "declined".
     // When the customer only gave their name at the end (decline form), the
@@ -952,7 +952,7 @@ app.post("/api/offer/:token/respond", async (req, res) => {
         ? entry.revisedQuote
         : {
             currency: entry.originalQuote.currency,
-            items: [{ label: { en: "Service", de: "Leistung" }[entry.lang] || "Prestation", amount: entry.amount }],
+            items: [{ label: { en: "Service", de: "Leistung", it: "Servizio" }[entry.lang] || "Prestation", amount: entry.amount }],
             total: entry.amount,
           };
 
@@ -995,7 +995,7 @@ async function processAccept(body) {
 
     const company = await getCompanyBySlug(req.body.company);
     const sector = getSector(req.body.sector, req.body.lang);
-    const lang = ["en", "de"].includes(req.body.lang) ? req.body.lang : "fr";
+    const lang = ["en", "de", "it"].includes(req.body.lang) ? req.body.lang : "fr";
 
     const result = await sendBookingConfirmation({
       quote,

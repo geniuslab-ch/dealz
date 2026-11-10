@@ -145,7 +145,7 @@ const DEMO_COMPANIES = (() => {
   return map;
 })();
 const SITE_URL = (process.env.APP_BASE_URL && !/localhost/.test(process.env.APP_BASE_URL) ? process.env.APP_BASE_URL : "https://dealz.website").replace(/\/$/, "");
-const TEAM = { fr: (n) => `Équipe ${n}`, en: (n) => `The ${n} team`, de: (n) => `Team ${n}` };
+const TEAM = { fr: (n) => `Équipe ${n}`, en: (n) => `The ${n} team`, de: (n) => `Team ${n}`, it: (n) => `Il team ${n}` };
 
 // Same layout as the Dealz team's own signature: logo on the left, a
 // coloured bar, then "Team <brand>", the company name in its colour, an
@@ -185,8 +185,8 @@ function signatureHtml(companyName = COMPANY_NAME, signature, logoUrl, tagline, 
   // A stored token can carry null (no company on the cleaning demo); a
   // default parameter only covers undefined, so it would print "null".
   companyName = companyName || COMPANY_NAME;
-  const l = ["en", "de"].includes(lang) ? lang : "fr";
-  const closing = l === "en" ? "Best regards" : l === "de" ? "Freundliche Grüsse" : "Cordialement";
+  const l = ["en", "de", "it"].includes(lang) ? lang : "fr";
+  const closing = l === "en" ? "Best regards" : l === "de" ? "Freundliche Grüsse" : l === "it" ? "Cordiali saluti" : "Cordialement";
   const opener = `<p style="margin:20px 0 0;">${closing},</p>`;
 
   const S = DEMO_COMPANIES[companyName];
@@ -252,6 +252,9 @@ const DECLINE_TEXT = {
   de: { basicNote: "Der Kunde hat diese Offerte online abgelehnt. Kontaktieren Sie ihn, wenn Sie darüber sprechen möchten.", refused: "Offerte abgelehnt", actionTitle: "Offerte abgelehnt — Aktion möglich", aClient: "ein Kunde", client: "Kunde", email: "E-Mail", phone: "Telefon", address: "Adresse",
         none: "(nicht angegeben)", noneF: "(nicht angegeben)", original: "Ursprüngliche Offerte", reason: "Ablehnungsgrund", message: "Nachricht des Kunden", suggested: "💬 Antwortvorschlag (vor dem Senden prüfen und anpassen)",
         banner: (p, c, s) => `Dealz-Demo${p} · <b>${c}</b> — Branche ${s}`, q: (t) => `«${t}»` },
+  it: { basicNote: "Il cliente ha rifiutato questo preventivo online. Contattatelo se desiderate parlarne.", refused: "Preventivo rifiutato", actionTitle: "Preventivo rifiutato — azione possibile", aClient: "un cliente", client: "Cliente", email: "E-mail", phone: "Telefono", address: "Indirizzo",
+        none: "(non indicato)", noneF: "(non indicato)", original: "Preventivo iniziale", reason: "Motivo del rifiuto", message: "Messaggio del cliente", suggested: "💬 Risposta suggerita (da rileggere e adattare prima dell'invio)",
+        banner: (p, c, s) => `Demo Dealz${p} · <b>${c}</b> — settore ${s}`, q: (t) => `«${t}»` },
 };
 
 function buildDeclineSubject({ category, customer, quote, generic, lang }) {
@@ -359,6 +362,8 @@ async function sendCounterofferToCustomer({
       ? { h2: `New offer from ${companyName}`, hello: `Hello ${customer.name || ""},`, intro: `Following your message, we're offering you a new price for ${serviceNoun || "your cleaning"}:`, cta: "View the offer", subject: `New offer — ${fmtCHF(amount)}` }
       : lang === "de"
       ? { h2: `Neues Angebot von ${companyName}`, hello: `Guten Tag ${customer.name || ""}`, intro: `Aufgrund Ihrer Nachricht bieten wir Ihnen einen neuen Preis für ${serviceNoun || "Ihre Reinigung"} an:`, cta: "Angebot ansehen", subject: `Neues Angebot — ${fmtCHF(amount)}` }
+      : lang === "it"
+      ? { h2: `Nuova offerta di ${companyName}`, hello: `Buongiorno ${customer.name || ""},`, intro: `In seguito al vostro messaggio, vi proponiamo un nuovo prezzo per ${serviceNoun || "la vostra pulizia"}:`, cta: "Vedere l'offerta", subject: `Nuova offerta — ${fmtCHF(amount)}` }
       : { h2: `Nouvelle offre de ${companyName}`, hello: `Bonjour ${customer.name || ""},`, intro: `Suite à votre message, nous vous proposons un nouveau prix pour ${serviceNoun || "votre nettoyage"} :`, cta: "Voir l'offre", subject: `Nouvelle offre — ${fmtCHF(amount)}` };
   const html = `
     <h2>${t.h2}</h2>
@@ -393,6 +398,8 @@ async function sendRescheduleToCustomer({
       ? { h2: `New date proposed — ${companyName}`, hello: `Hello ${customer.name || ""},`, intro: `We're proposing the following date for ${serviceNoun || "your cleaning"}:`, cta: "View the proposal", subject: "New date proposed" }
       : lang === "de"
       ? { h2: `Neuer Termin vorgeschlagen — ${companyName}`, hello: `Guten Tag ${customer.name || ""}`, intro: `Wir schlagen Ihnen folgenden Termin für ${serviceNoun || "Ihre Reinigung"} vor:`, cta: "Vorschlag ansehen", subject: "Neuer Termin vorgeschlagen" }
+      : lang === "it"
+      ? { h2: `Nuova data proposta — ${companyName}`, hello: `Buongiorno ${customer.name || ""},`, intro: `Vi proponiamo la data seguente per ${serviceNoun || "la vostra pulizia"}:`, cta: "Vedere la proposta", subject: "Nuova data proposta" }
       : { h2: `Nouvelle date proposée — ${companyName}`, hello: `Bonjour ${customer.name || ""},`, intro: `Nous vous proposons la date suivante pour ${serviceNoun || "votre nettoyage"} :`, cta: "Voir la proposition", subject: "Nouvelle date proposée" };
   const html = `
     <h2>${t.h2}</h2>
@@ -426,6 +433,8 @@ async function sendRevisedOfferToCustomer({
       ? { h2: `Revised offer — ${companyName}`, hello: `Hello ${customer.name || ""},`, intro: "Here is your revised quote:", cta: "View the revised offer", subject: `Revised quote — ${fmtCHF(quote.total)}` }
       : lang === "de"
       ? { h2: `Überarbeitetes Angebot — ${companyName}`, hello: `Guten Tag ${customer.name || ""}`, intro: "Hier ist Ihre überarbeitete Offerte:", cta: "Überarbeitetes Angebot ansehen", subject: `Überarbeitete Offerte — ${fmtCHF(quote.total)}` }
+      : lang === "it"
+      ? { h2: `Offerta rivista — ${companyName}`, hello: `Buongiorno ${customer.name || ""},`, intro: "Ecco il vostro preventivo rivisto:", cta: "Vedere l'offerta rivista", subject: `Preventivo rivisto — ${fmtCHF(quote.total)}` }
       : { h2: `Offre révisée — ${companyName}`, hello: `Bonjour ${customer.name || ""},`, intro: "Voici votre devis révisé :", cta: "Voir l'offre révisée", subject: `Devis révisé — ${fmtCHF(quote.total)}` };
   const html = `
     <h2>${t.h2}</h2>
@@ -447,6 +456,8 @@ async function sendReplyToCustomer({ message, customer, companyName = COMPANY_NA
       ? { h2: `Reply from ${companyName}`, hello: `Hello ${customer.name || ""},`, subject: "Reply to your question" }
       : lang === "de"
       ? { h2: `Antwort von ${companyName}`, hello: `Guten Tag ${customer.name || ""}`, subject: "Antwort auf Ihre Frage" }
+      : lang === "it"
+      ? { h2: `Risposta di ${companyName}`, hello: `Buongiorno ${customer.name || ""},`, subject: "Risposta alla vostra domanda" }
       : { h2: `Réponse de ${companyName}`, hello: `Bonjour ${customer.name || ""},`, subject: "Réponse à votre question" };
   const html = `
     <h2>${t.h2}</h2>
@@ -476,6 +487,8 @@ async function sendFollowupToCustomer({
       ? { h2: "Still interested?", hello: `Hello ${customer.name || ""},`, intro: "We just wanted to make sure you had all the information you need. Your quote is still available:", cta: "Review the quote", subject: "Still interested in our offer?" }
       : lang === "de"
       ? { h2: "Noch interessiert?", hello: `Guten Tag ${customer.name || ""}`, intro: "Wir wollten uns nur vergewissern, dass Sie alle nötigen Informationen haben. Ihre Offerte ist weiterhin verfügbar:", cta: "Offerte erneut ansehen", subject: "Noch Interesse an unserem Angebot?" }
+      : lang === "it"
+      ? { h2: "Ancora interessati?", hello: `Buongiorno ${customer.name || ""},`, intro: "Volevamo solo assicurarci che aveste tutte le informazioni necessarie. Il vostro preventivo è ancora disponibile:", cta: "Rivedere il preventivo", subject: "Ancora interessati alla nostra offerta?" }
       : { h2: "Toujours intéressé(e) ?", hello: `Bonjour ${customer.name || ""},`, intro: "Nous voulions juste nous assurer que vous aviez toutes les informations nécessaires. Votre devis reste disponible :", cta: "Revoir le devis", subject: "Toujours intéressé(e) par notre offre ?" };
   const html = `
     <h2>${t.h2}</h2>
@@ -497,12 +510,14 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
   const calTitle =
     serviceNoun
       ? `${companyName} — ${customer.name || "Client"}`
-      : lang === "en" ? `Cleaning — ${customer.name || "Customer"}` : lang === "de" ? `Reinigung — ${customer.name || "Kunde"}` : `Nettoyage — ${customer.name || "Client"}`;
+      : lang === "en" ? `Cleaning — ${customer.name || "Customer"}` : lang === "de" ? `Reinigung — ${customer.name || "Kunde"}` : lang === "it" ? `Pulizia — ${customer.name || "Cliente"}` : `Nettoyage — ${customer.name || "Client"}`;
   const calDetails =
     lang === "en"
       ? `Quote accepted (${fmtCHF(quote.total)}). ${quote.items.map((i) => i.label).join(", ")}.`
       : lang === "de"
       ? `Offerte angenommen (${fmtCHF(quote.total)}). ${quote.items.map((i) => i.label).join(", ")}.`
+      : lang === "it"
+      ? `Preventivo accettato (${fmtCHF(quote.total)}). ${quote.items.map((i) => i.label).join(", ")}.`
       : `Devis accepté (${fmtCHF(quote.total)}). ${quote.items.map((i) => i.label).join(", ")}.`;
   const calLink = googleCalendarLink({
     title: calTitle,
@@ -517,6 +532,8 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
       ? { h2: "✓ Booking confirmed", thanks: (n) => (serviceNoun ? `Thank you ${n}! Your booking with ${companyName} is confirmed for ` : `Thank you ${n}! Your cleaning is confirmed for `), calLink: "Add to my Google Calendar", subject: "✓ Booking confirmed" }
       : lang === "de"
       ? { h2: "✓ Buchung bestätigt", thanks: (n) => (serviceNoun ? `Vielen Dank${n ? ", " + n : ""}! Ihre Buchung bei ${companyName} ist bestätigt für ` : `Vielen Dank${n ? ", " + n : ""}! Ihre Reinigung ist bestätigt für `), calLink: "Zu meinem Google Kalender hinzufügen", subject: "✓ Buchung bestätigt" }
+      : lang === "it"
+      ? { h2: "✓ Prenotazione confermata", thanks: (n) => (serviceNoun ? `Grazie ${n}! La vostra prenotazione presso ${companyName} è confermata per ` : `Grazie ${n}! La vostra pulizia è confermata per `), calLink: "Aggiungere al mio Google Calendar", subject: "✓ Prenotazione confermata" }
       : { h2: "✓ Réservation confirmée", thanks: (n) => (serviceNoun ? `Merci ${n} ! Votre réservation auprès de ${companyName} est confirmée pour ` : `Merci ${n} ! Votre nettoyage est confirmé pour `), calLink: "Ajouter à mon Google Agenda", subject: "✓ Réservation confirmée" };
 
   const customerHtml = `
@@ -530,6 +547,7 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
     fr: { h2: "✓ Nouvelle réservation confirmée", amount: "Montant", cal: "Ajouter à l'agenda Google de l'entreprise", feed: "📅 Ce rendez-vous apparaît tout seul dans votre agenda si vous y êtes abonné. Pas encore fait ? Ajoutez une fois ce lien dans Google Agenda (« À partir de l'URL »), Outlook (« S'abonner à partir du web ») ou Apple Calendrier (« Nouvel abonnement ») :" },
     en: { h2: "✓ New booking confirmed", amount: "Amount", cal: "Add to the company's Google Calendar", feed: "📅 This appointment shows up in your calendar by itself once you're subscribed. Not done yet? Add this link once in Google Calendar (\"From URL\"), Outlook (\"Subscribe from web\") or Apple Calendar (\"New Calendar Subscription\"):" },
     de: { h2: "✓ Neue Buchung bestätigt", amount: "Betrag", cal: "Zum Google Kalender des Unternehmens hinzufügen", feed: "📅 Dieser Termin erscheint von selbst in Ihrem Kalender, sobald Sie ihn abonniert haben. Noch nicht? Fügen Sie diesen Link einmal in Google Kalender («Per URL»), Outlook («Aus dem Web abonnieren») oder Apple Kalender («Neues Kalenderabonnement») hinzu:" },
+    it: { h2: "✓ Nuova prenotazione confermata", amount: "Importo", cal: "Aggiungere al Google Calendar dell'impresa", feed: "📅 Questo appuntamento appare da solo nella vostra agenda se vi siete abbonati. Non ancora? Aggiungete una volta questo link in Google Calendar («Da URL»), Outlook («Sottoscrivi dal web») o Calendario Apple («Nuovo calendario in abbonamento»):" },
   }[lang] || {};
   const D = DECLINE_TEXT[lang] || DECLINE_TEXT.fr;
   const companyHtml = `

@@ -109,7 +109,7 @@ async function createCheckout({ plan, billing, currency, lang, lead, baseUrl }) 
     if (billing === "monthly" && list.setup > 0) items.push({ price: await ensurePrice({ productId: SETUP.id, productName: SETUP.name, amount: list.setup, currency: cur }), quantity: 1 });
   }
 
-  const l = ["en", "de"].includes(lang) ? lang : "fr";
+  const l = ["en", "de", "it"].includes(lang) ? lang : "fr";
   const page = `${baseUrl}${l === "fr" ? "" : "/" + l}/index.html`;
   const metadata = {
     plan,

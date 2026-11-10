@@ -605,12 +605,16 @@ async function runTurnMock(history, company, lang = "fr") {
       ? `Thank you ${name}! Here is your firm, detailed quote for this service — you can accept or decline it below.`
       : lang === "de"
       ? `Vielen Dank, ${name}! Hier ist Ihre feste, detaillierte Offerte für diese Leistung — Sie können sie unten annehmen oder ablehnen.`
+      : lang === "it"
+      ? `Grazie ${name}! Ecco il vostro preventivo fisso e dettagliato per questo servizio: potete accettarlo o rifiutarlo qui sotto.`
       : `Merci ${name} ! Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.`;
   const withoutName =
     lang === "en"
       ? "Here is your firm, detailed quote for this service — you can accept or decline it below."
       : lang === "de"
       ? "Hier ist Ihre feste, detaillierte Offerte für diese Leistung — Sie können sie unten annehmen oder ablehnen."
+      : lang === "it"
+      ? "Ecco il vostro preventivo fisso e dettagliato per questo servizio: potete accettarlo o rifiutarlo qui sotto."
       : "Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.";
   const text = quote.customer.name ? withName(quote.customer.name) : withoutName;
 
