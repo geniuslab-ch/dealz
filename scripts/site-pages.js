@@ -14,7 +14,7 @@ const DOCS = path.join(__dirname, "..", "docs");
 const BASE = "https://dealz.website";
 const PRIVATE_NAMES = new Set(["quote-window.html", "offer.html", "counteroffer.html"]);
 const SKIP_DIRS = new Set(["p", "node_modules"]);
-const LANGS = ["fr", "de", "en"];
+const LANGS = ["fr", "de", "en", "it"];
 // Pages whose path differs per language (sector folders, privacy policy,
 // terms, referral page) are matched to their French path: see sector-urls.js.
 const { frenchPathOf } = require("./sector-urls");
@@ -36,8 +36,8 @@ const isPrivate = (file) => PRIVATE_NAMES.has(path.basename(file));
 const isDemo = (file) => path.basename(file) === "demo.html";
 const isIndexable = (file) => !isPrivate(file) && !isDemo(file);
 const urlOf = (file) => BASE + "/" + file.replace(/(^|\/)index\.html$/, "$1");
-const langOf = (file) => (/^(de|en)\//.test(file) ? file.slice(0, 2) : "fr");
-const bare = (file) => file.replace(/^(de|en)\//, "");
+const langOf = (file) => (/^(de|en|it)\//.test(file) ? file.slice(0, 2) : "fr");
+const bare = (file) => file.replace(/^(de|en|it)\//, "");
 const keyOf = (file) => bare(frenchPathOf(file));
 
 // Map of page key -> { fr, de, en } file paths, for the given files.

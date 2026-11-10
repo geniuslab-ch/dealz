@@ -9,7 +9,7 @@
  *   node scripts/build-sectors.js --check  # validate only
  *
  * Languages: a language is built only when EVERY sector defines that
- * language's texts (S.fr / S.en / S.de) and STR has an entry for it.
+ * language's texts (S.fr / S.en / S.de / S.it) and STR has an entry for it.
  */
 const fs = require("fs");
 const path = require("path");
@@ -350,6 +350,112 @@ const STR = {
     hubTitle: "Dealz nach Branche — Sofort-Offerten per KI für Ihr Handwerk",
     hubDesc: "Umzug, Gartenbau, Malerarbeiten, Reinigung, Pools, Catering… Entdecken Sie Dealz für Ihre Branche und testen Sie eine Demo passend zu Ihrem Handwerk.",
   },
+  it: {
+    htmlLang: "it",
+    ogLocale: "it_CH",
+    base: SECTOR_BASE.it,
+    home: "/it/index.html",
+    indexFile: "it/index.html",
+    seeDemoNav: "✨ Provate la demo",
+    proofJobSrc: "Valore predefinito: il preventivo di esempio di questa pagina<span data-currency-not=\"CHF\" hidden>, adattato ai prezzi del vostro mercato</span>.",
+    navHome: "Home", navProblem: "Il problema", navHow: "Come funziona", navPricing: "Prezzi", navContact: "Contatto", navSectors: "Settori",
+    forWho: function (s) { return "Per " + s.it.forWho; },
+    sectorsHeroEyebrow: "Dealz per settore",
+    sectorsH1: ["IL VOSTRO MESTIERE.", "IL VOSTRO DEALZ."],
+    sectorsQuestion: "Qualunque sia il vostro settore, i vostri clienti chiedono prima di tutto un prezzo.",
+    sectorsText: "Dealz si adatta alla vostra attività: domande pensate per il vostro mestiere, un prezzo calcolato secondo le vostre tariffe e un preventivo pronto da confermare. Scegliete il vostro settore per scoprire la pagina dedicata e provare una demo su un sito fittizio del vostro mestiere.",
+    discover: "Scoprite →", tryDemo: "Provate la demo",
+    sectorsCtaTitle: "Il vostro settore non è nell'elenco?",
+    sectorsCtaText: "Dealz funziona non appena potete calcolare il prezzo di un servizio a partire da qualche domanda. Parlateci del vostro mestiere.",
+    problemEyebrow: "Il problema", problemTitle: "Quante richieste di preventivo perdete?",
+    problemSub: "Ogni minuto senza risposta è un'occasione in più per i vostri concorrenti.",
+    without: "Senza Dealz", withDealz: "Con Dealz",
+    clientPrefix: "Cliente: ",
+    withoutLines: ["Azienda: «Grazie di chiamarci.»", "Il cliente chiama. Nessuno risponde.", "Il cliente manda un'e-mail. Risposta... più tardi.", "Il cliente ha già contattato 3 concorrenti."],
+    withLines: ["Dealz risponde subito, a qualsiasi ora.", "Qualche domanda rapida e mirata.", "Un prezzo fisso, calcolato secondo le vostre tariffe."],
+    withLast: "Una richiesta qualificata arriva direttamente a voi.",
+    valueEyebrow: "Perché Dealz", valueTitle: "Più richieste. Meno interruzioni.",
+    valueSub: "Dealz non sostituisce il vostro team: filtra e qualifica prima che una richiesta di preventivo arrivi sulla vostra scrivania.",
+    genericValues: [
+      { icon: "🌙", title: "Disponibile 24 ore su 24", text: "L'assistente continua a lavorare anche fuori dai vostri orari di apertura." },
+      { icon: "🏷️", title: "Le vostre tariffe, sempre aggiornate", text: "Dealz legge il vostro listino Excel. Modificate un prezzo e l'assistente si aggiorna, senza doverlo reinserire." },
+      { icon: "🔗", title: "Integrato nel vostro sito attuale", text: "Nessun nuovo sito, nessun reindirizzamento: Dealz si aggiunge direttamente al vostro, con il vostro marchio." },
+      { icon: "💸", title: "Nessuna commissione per contatto", text: "A differenza delle piattaforme di intermediazione, le vostre richieste restano vostre: tariffa fissa." },
+    ],
+    stepsEyebrow: "Come funziona", stepsTitle: "Quattro passi, nessuna complicazione",
+    step1Title: "Collegate le vostre tariffe", step2Title: "Dealz impara le vostre regole",
+    step3Title: "L'IA dialoga con i vostri clienti", step3Text: "Pone solo le domande necessarie per calcolare con precisione il prezzo della richiesta.",
+    step4Title: "Il cliente riceve un prezzo", step4Text: "Preventivo generato all'istante: voi ricevete una richiesta qualificata, pronta da convertire.",
+    discoverExp: "Scoprite l'esperienza →",
+    changeEyebrow: "Ciò che cambia tutto", changeTitle: "Dal vostro Excel a un preventivo accettato, in una sola conversazione.",
+    changeSub: "L'IA pone le domande. Le vostre regole di prezzo decidono. Non inventa mai un prezzo.",
+    offerHead: "📄 Preventivo — ", offerTotal: "Prezzo per il vostro cliente", accept: "✓ Cliente: Accetta", decline: "Rifiuta",
+    acceptedMsg: "✓ Preventivo accettato dal cliente: conferma inviata per e-mail, appuntamento aggiunto all'agenda dell'azienda.",
+    declinedMsg: "Il cliente ha rifiutato questo preventivo: può modificare la sua richiesta e riceverne subito uno nuovo.",
+    diffNote: function (total) { return "☝️ <b>CHF " + total + " è il prezzo pagato dal cliente dell'azienda, non la tariffa di Dealz.</b> I piani Dealz (da <span data-price='CAPTURE'>CHF 58.40</span>/mese) sono più in basso in questa pagina."; },
+    layerEyebrow: "Ciò che Dealz non è", layerTitle: "Dealz è il livello di vendita IA. Non un sostituto.",
+    layerSub: "Avete già i vostri strumenti di pianificazione, fatturazione e gestione. Dealz occupa un altro posto: la prima conversazione con il cliente.",
+    keep: "Voi mantenete", add: "Dealz aggiunge",
+    keepList: ["✓ Il vostro CRM attuale", "✓ La vostra contabilità", "✓ La vostra fatturazione", "✓ La vostra pianificazione", "✓ Il vostro Excel", "✓ I vostri software attuali"],
+    addList: ["+ Assistente di preventivi IA, integrato nel vostro sito attuale", "+ Sincronizzazione automatica con il vostro Excel", "+ Stime immediate", "+ Qualificazione dei contatti", "+ Generazione dei preventivi", "+ Richiamo dei clienti"],
+    layerNote: "Non sostituite il vostro software. Aggiungete un livello di vendita IA.",
+    ctaEyebrow: "Pronti a provare?", ctaTitle: "I vostri clienti chiedono già: «Quanto costa?»",
+    ctaLead: "Lasciate rispondere Dealz, mentre voi vi concentrate sul resto.",
+    ctaDemo: "✨ Provate la demo gratuita", ctaInstall: "Richiedere l'installazione",
+    ctaReassure: "Nessun impegno. Scoprite il percorso del cliente prima di decidere.",
+    contactEyebrow: "Contatto", contactTitle: "Parliamo della vostra azienda",
+    contactSub: "Rispondete a qualche domanda. Dealz vi aiuterà a trovare il piano più adatto.",
+    panelTitle: "Dealz · Configurazione", panelSub: "Qualche domanda rapida", inputPh: "Scrivete la vostra risposta…", sendLabel: "Invia",
+    emailLbl: "E-mail", zoneLbl: "Zona di intervento", zoneVal: "Svizzera · Francia · Regno Unito · Stati Uniti",
+    otherSectors: "Altri settori", otherSectorsTitle: "Dealz per tutti i mestieri di servizio",
+    footerLine: function (s) { return "Dealz — Assistente di vendita IA per " + s.it.forWho + " in Svizzera. 🇨🇭"; },
+    hubFooter: "Dealz — Assistente di vendita IA per aziende di servizi svizzere. 🇨🇭",
+    heroUsp: "Nessun nuovo sito. Nessun nuovo software.<br><b>Mantenete i vostri strumenti. Dealz si aggiunge.</b>",
+    seeAction: "Guardate Dealz in azione →", talkToUs: "Parlateci →",
+    slogan: "Keep your website. Keep your tools. Add Dealz.",
+    referral: "Già clienti? Tenete il segreto… o presentate un collega 😏",
+    allSectors: "Tutti i settori",
+    // demo
+    demoBanner: function (s) { return "Questo è il sito fittizio di un'azienda del settore «" + s.it.label + "» che ha integrato Dealz."; },
+    discoverDealz: "Scoprite Dealz →",
+    tabHome: "Home", tabServices: "Servizi", tabAbout: "Chi siamo", tabQuote: "✨ Ottenere un preventivo", tabContact: "Contatto",
+    ctaQuoteInstant: "✨ Ottenere un preventivo immediato", seeServices: "Vedere i nostri servizi",
+    whyEyebrow: function (d) { return "Perché " + d.brand; },
+    whyTitle: "Un prezzo chiaro, ancora prima di prenotare",
+    whySub: "Rispondete a qualche domanda e ottenete subito un preventivo dettagliato.",
+    whyCards: [
+      { icon: "⚡", title: "Prezzo immediato", text: "Preventivo dettagliato in meno di un minuto, a qualsiasi ora." },
+      { icon: "🎯", title: "Guidati passo dopo passo", text: "Qualche domanda semplice, nessun modulo complicato." },
+      { icon: "🔒", title: "Preventivo fisso", text: "Il prezzo indicato è il prezzo pagato." },
+    ],
+    servicesEyebrow: "Servizi",
+    aboutEyebrow: "Chi siamo",
+    contactDemoTitle: "Parlate con una persona, oppure ottenete un preventivo immediato",
+    contactDemoSub: "Preferite rispondere a qualche domanda invece di telefonare? Andate nella scheda <b>Ottenere un preventivo</b>.",
+    phoneLbl: "Telefono", mailLbl: "E-mail", zoneLbl2: "Zona di intervento", hoursLbl: "Orari",
+    devisEyebrow: "✨ Ottenere un preventivo", devisTitle: "Il vostro prezzo in meno di un minuto",
+    howTitle: "Come funziona",
+    flow: ["Descrivete la vostra esigenza", "Qualche domanda rapida", "Calcolo secondo il nostro listino", "Preventivo fisso visualizzato", "Accettate o rifiutate"],
+    quoteSub: "Di solito risposta immediata", quoteWord: "Preventivo",
+    tabPage: "📄 Scheda dedicata", tabPopup: "🪟 Pop-up", tabChat: "💬 Widget di chat", tabWhatsapp: "📱 WhatsApp Business",
+    notePage: "Scheda dedicata, come quella su cui avete appena cliccato andando su «✨ Ottenere un preventivo». Il preventivo vive su una vera pagina del vostro sito, sotto la vostra intestazione e navigazione, senza mai lasciarlo.",
+    notePopup: "Un pulsante «Preventivo» nel vostro menu apre lo stesso preventivo a schermo intero, in una finestra propria: più spazio della bolla, senza mai lasciare il vostro sito.",
+    noteChat: "Una bolla mobile sul vostro sito, in un angolo dello schermo: l'integrazione più semplice, una sola riga di codice, funziona su qualsiasi piattaforma (Wix, Shopify, WordPress, sito fatto a mano…). Cliccate sulla bolla in basso a destra per provarla.",
+    noteWhatsapp: "I vostri clienti scrivono direttamente sul vostro WhatsApp Business, senza installare nulla sul telefono.",
+    tryPopup: "Provate il pop-up →", tryWhatsapp: "Provate su WhatsApp →", openQuote: "Aprire il preventivo online", closeLbl: "Chiudi", quoteTitle: "Preventivo online",
+    gateIntro: "Per provare tutto il percorso, indicate la <b>vostra</b> e-mail: riceverete le e-mail che riceve l'azienda (nuova prenotazione, rifiuto con risposta suggerita…). Alla fine della demo, farete la parte del cliente con un <b>altro</b> indirizzo.",
+    gateCompany: "Nome della vostra azienda (facoltativo)", gateEmail: "La vostra e-mail (riceverete le e-mail dell'azienda)", gatePhone: "Telefono (facoltativo)", gateGo: "Provate la demo",
+    followTitle: "Immaginate questo sul VOSTRO sito.",
+    followLines: "I vostri prezzi. I vostri servizi. Il vostro marchio. I vostri clienti.<br />Il vostro assistente di vendita IA, disponibile 24 ore su 24.",
+    followInstall: "Richiedere l'installazione", followPricing: "Vedere i prezzi", followContact: "Contattare Dealz",
+    footerDemo: function (d) { return d.pdfCompany.name + " — sito dimostrativo, questa azienda non esiste realmente."; },
+    poweredBy: "Realizzato con",
+    sectorTitle: function (label) { return "Dealz per " + label.toLowerCase() + " — preventivi immediati con l'IA"; },
+    sectorDesc: function (pitch) { return pitch + " Dealz risponde ai vostri clienti 24 ore su 24, calcola il vostro prezzo secondo le vostre tariffe e prepara il preventivo."; },
+    demoTitle: function (name) { return name + " — Sito dimostrativo (realizzato con Dealz)"; },
+    hubTitle: "Dealz per settore — preventivi immediati con l'IA per il vostro mestiere",
+    hubDesc: "Traslochi, giardinaggio, pittura, lavanderia, piscine, catering… Scoprite Dealz per il vostro settore e provate una demo adatta al vostro mestiere.",
+  },
 };
 
 // ---------- helpers ----------
@@ -528,7 +634,7 @@ function siteNav(lang, slug, withAnchors) {
 
 // "17.0 mois" / "15.7 ans": the static text pricing-proof.js would show in CHF.
 function proofMonths(m, lang) {
-  const u = { fr: ["mois", "ans"], en: ["months", "years"], de: ["Monate", "Jahre"] }[lang];
+  const u = { fr: ["mois", "ans"], en: ["months", "years"], de: ["Monate", "Jahre"], it: ["mesi", "anni"] }[lang];
   return m >= 24 ? (m / 12).toFixed(1) + " " + u[1] : m.toFixed(1) + " " + u[0];
 }
 
