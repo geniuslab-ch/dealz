@@ -43,6 +43,7 @@
     fr: { CHF: "Prix en CHF, hors TVA.", EUR: "Prix en euros, HT.", GBP: "Prix en livres sterling, hors TVA.", USD: "Prix en dollars US, hors taxes." },
     en: { CHF: "Prices in CHF, excl. VAT.", EUR: "Prices in euros, excl. VAT.", GBP: "Prices in pounds sterling, excl. VAT.", USD: "Prices in US dollars, excl. sales tax." },
     de: { CHF: "Preise in CHF, exkl. MWST.", EUR: "Preise in Euro, zzgl. MwSt.", GBP: "Preise in britischen Pfund, zzgl. MwSt.", USD: "Preise in US-Dollar, zzgl. Steuern." },
+    it: { CHF: "Prezzi in CHF, IVA esclusa.", EUR: "Prezzi in euro, IVA esclusa.", GBP: "Prezzi in sterline, IVA esclusa.", USD: "Prezzi in dollari USA, imposte escluse." },
   };
 
   function currencyFor(country) {
@@ -185,6 +186,7 @@
     fr: ["Aperçu des prix en ", "Revenir à mes prix"],
     en: ["Previewing prices in ", "Back to my prices"],
     de: ["Vorschau der Preise in ", "Zurück zu meinen Preisen"],
+    it: ["Anteprima dei prezzi in ", "Tornare ai miei prezzi"],
   };
   function previewBar() {
     if (!preview || !document.body || document.getElementById("dealz-currency-preview")) return;

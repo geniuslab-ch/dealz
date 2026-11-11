@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <script src="/consent.js" defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SwissClean Sàrl — Sito demo (powered by Dealz)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/demo.css" />
+  <!-- SEO:START (scripts/build-seo.js) -->
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" />
+  <meta name="robots" content="noindex, follow" />
+  <meta name="description" content="Demo Dealz con SwissClean Sàrl (azienda fittizia): chiedete un preventivo sul sito o su WhatsApp, vedete il prezzo calcolato e l'offerta in PDF." />
+  <!-- SEO:END -->
+</head>
+<body class="swissclean">
+
+  <div class="sc-demo-banner">
+    <span class="tag">DEMO</span>
+    Questo è il sito fittizio di un'impresa di pulizie che ha integrato Dealz.
+    <a href="/it/index.html">Scoprite Dealz →</a>
+  </div>
+
+  <nav class="sc-nav">
+    <div class="sc-nav-logo"><span class="dot">🧽</span> SwissClean</div>
+    <div class="sc-nav-links">
+      <button data-tab="accueil" class="active">Home</button>
+      <button data-tab="prestations">Servizi</button>
+      <button data-tab="apropos">Chi siamo</button>
+      <button data-tab="devis" class="cta">✨ Ottenere un preventivo</button>
+      <button data-tab="contact">Contatto</button>
+      <span class="nav-lang">
+        <a href="/demo.html">FR</a>
+        <a href="/en/demo.html">EN</a>
+        <a href="/de/demo.html">DE</a>
+        <a href="/it/demo.html" class="active">IT</a>
+      </span>
+    </div>
+  </nav>
+
+  <!-- HOME -->
+  <section id="sc-tab-accueil" class="sc-tab active">
+    <div class="sc-hero">
+      <div class="sc-hero-inner">
+        <span class="sc-eyebrow">Regione del Lemano · Esempio fittizio</span>
+        <h1>Una casa splendente, senza pensieri.</h1>
+        <p>Pulizie di abitazioni, di fine locazione e di uffici nella Grande Ginevra e nel canton Vaud: ottenete un prezzo in pochi secondi, direttamente su questo sito.</p>
+        <div>
+          <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Preventivo immediato</button>
+          <button class="sc-btn sc-btn-secondary" data-goto="prestations">Vedere i nostri servizi</button>
+        </div>
+      </div>
+      <div class="sc-hero-strip">
+        <div class="stat"><div class="num">4.9★</div><div class="lbl">SODDISFAZIONE CLIENTI</div></div>
+        <div class="stat"><div class="num">2'300+</div><div class="lbl">PULIZIE EFFETTUATE</div></div>
+        <div class="stat"><div class="num">&lt; 1 min</div><div class="lbl">PER UN PREVENTIVO</div></div>
+      </div>
+    </div>
+
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Perché SwissClean</span>
+      <h2 class="sc-title">Un prezzo chiaro, prima ancora di prenotare</h2>
+      <p class="sc-sub">Rispondete a qualche domanda e ricevete subito un preventivo dettagliato.</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">⚡</div><h3>Prezzo immediato</h3><p>Preventivo dettagliato in meno di un minuto, a qualsiasi ora.</p></div>
+        <div class="sc-card"><div class="icon">🎯</div><h3>Passo dopo passo</h3><p>Qualche domanda semplice, nessun modulo complicato.</p></div>
+        <div class="sc-card"><div class="icon">🔒</div><h3>Preventivo fisso</h3><p>Il prezzo indicato è il prezzo che pagate.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="sc-tab-prestations" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Servizi</span>
+      <h2 class="sc-title">Cosa puliamo</h2>
+      <p class="sc-sub">Scegliete un servizio, oppure descrivete semplicemente la vostra esigenza nella scheda «Ottenere un preventivo».</p>
+      <div class="sc-cards">
+        <div class="sc-card"><div class="icon">🏠</div><h3>Pulizia regolare</h3><p>Settimanale, quindicinale o occasionale, fatturata all'ora.</p><span class="tag">da CHF 45/h</span></div>
+        <div class="sc-card"><div class="icon">📦</div><h3>Fine locazione</h3><p>Pulizia a fondo per il vostro trasloco.</p><span class="tag">da CHF 220</span></div>
+        <div class="sc-card"><div class="icon">🔥</div><h3>Pulizia del forno</h3><p>Sgrassatura completa, come opzione.</p><span class="tag">CHF 40</span></div>
+        <div class="sc-card"><div class="icon">🪟</div><h3>Pulizia delle finestre</h3><p>Dentro e fuori, senza aloni.</p><span class="tag">CHF 60</span></div>
+        <div class="sc-card"><div class="icon">🧺</div><h3>Shampoo per moquette</h3><p>Pulizia a fondo, per locale.</p><span class="tag">CHF 35/locale</span></div>
+        <div class="sc-card"><div class="icon">❄️</div><h3>Pulizia del frigorifero</h3><p>Pulizia interna completa e sgrassatura.</p><span class="tag">CHF 30</span></div>
+      </div>
+      <div style="text-align:center; margin-top: 32px;">
+        <button class="sc-btn sc-btn-primary" data-goto="devis">✨ Preventivo immediato</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="sc-tab-apropos" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Chi siamo</span>
+      <h2 class="sc-title">Un team locale, organizzato con intelligenza</h2>
+      <p class="sc-sub" style="margin-bottom:0;">Dal 2014 SwissClean pulisce abitazioni e uffici nel canton Vaud e a Ginevra. Nel 2026 abbiamo aggiunto al nostro sito un assistente di preventivi immediato: più veloce per voi, meno burocrazia per noi.</p>
+      <ul class="sc-about-list">
+        <li><span class="sc-check">✓</span><span><b>Personale assicurato e verificato</b>: ogni membro del team è controllato.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Prodotti ecologici</b>: sicuri per bambini e animali.</span></li>
+        <li><span class="sc-check">✓</span><span><b>Prezzo trasparente</b>: il preventivo ricevuto è il prezzo pagato.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="sc-tab-contact" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">Contatto</span>
+      <h2 class="sc-title">Parlate con una persona, o ottenete un preventivo immediato</h2>
+      <p class="sc-sub">Preferite rispondere a qualche domanda piuttosto che telefonare? Andate alla scheda <b>Ottenere un preventivo</b>.</p>
+      <div class="sc-contact-grid">
+        <div class="sc-contact-card"><div class="lbl">Telefono</div><div class="val">022 000 00 00</div></div>
+        <div class="sc-contact-card"><div class="lbl">E-mail</div><div class="val">hello@swissclean.demo</div></div>
+        <div class="sc-contact-card"><div class="lbl">Zona d'intervento</div><div class="val">Vaud e Ginevra</div></div>
+        <div class="sc-contact-card"><div class="lbl">Orari</div><div class="val">Lun–Sab, 8–18</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE (Dealz widget embedded here) -->
+  <section id="sc-tab-devis" class="sc-tab">
+    <div class="sc-section-inner">
+      <span class="sc-eyebrow">✨ Ottenere un preventivo</span>
+      <h2 class="sc-title">Il vostro prezzo in meno di un minuto</h2>
+      <p class="sc-devis-note">Rispondete a qualche domanda sulla vostra abitazione: riceverete un vero preventivo, che potrete accettare o rifiutare direttamente qui.</p>
+
+      <div class="devis-mode-tabs" id="devis-mode-tabs">
+        <button class="dmt-btn active" data-devis-mode="page">📄 Pagina dedicata</button>
+        <button class="dmt-btn" data-devis-mode="popup">🪟 Pop-up</button>
+        <button class="dmt-btn" data-devis-mode="chat">💬 Widget chat</button>
+        <button class="dmt-btn" data-devis-mode="whatsapp" id="devis-whatsapp-tab" style="display: none">📱 WhatsApp Business</button>
+      </div>
+
+      <div class="devis-mode-panel active" data-devis-panel="page">
+        <p class="sc-devis-note">Pagina dedicata: come quella su cui avete appena cliccato per arrivare qui, tramite «✨ Ottenere un preventivo». Il preventivo vive su una vera pagina del vostro sito, sotto la vostra intestazione e la vostra navigazione, senza mai lasciarlo.</p>
+        <div class="quote-wrap" id="quote-wrap-anchor">
+          <div class="quote-side">
+            <h3>Come funziona</h3>
+            <div class="flow-steps">
+              <div class="flow-step"><div class="num">1</div><span class="label">Descrivete la vostra esigenza</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">2</div><span class="label">Qualche domanda rapida</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">3</div><span class="label">Calcolo secondo il nostro listino</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">4</div><span class="label">Preventivo fisso mostrato</span></div>
+              <div class="flow-connector"></div>
+              <div class="flow-step"><div class="num">5</div><span class="label">Accettate o rifiutate</span></div>
+            </div>
+          </div>
+
+          <div class="quote-panel-slot" id="quote-panel-slot">
+            <!-- .quote-panel (below) is the single, real chat instance —
+                 JS moves this exact node here or into the floating bubble
+                 slot depending on the active tab, instead of duplicating
+                 it, so there's only ever one conversation/state. -->
+            <div class="quote-panel" id="quote-panel">
+              <div class="quote-panel-head">
+                <div class="title">SwissClean · Preventivo</div>
+                <div class="subtitle">Risposta di solito immediata</div>
+              </div>
+
+              <div class="dealz-lead-gate" id="dealz-lead-gate">
+                <p class="dlg-intro">Per provare tutto il percorso, inserite la <b>vostra</b> e-mail: riceverete le e-mail che riceve l'impresa (nuova prenotazione, rifiuto con risposta suggerita…). Alla fine della demo interpreterete il cliente con <b>un altro</b> indirizzo.</p>
+                <input class="dcf-input" id="dlg-company" placeholder="Nome della vostra impresa (facoltativo)" />
+                <input class="dcf-input" id="dlg-email" type="email" placeholder="La vostra e-mail (riceverete le e-mail dell'impresa)" required />
+                <input class="dcf-input" id="dlg-phone" placeholder="Telefono (facoltativo)" />
+                <button class="dcf-submit" id="dlg-submit">Provare la demo</button>
+                <p class="dlg-msg" id="dlg-msg"></p>
+              </div>
+
+              <div class="dealz-chat-body" id="dealz-chat-body" style="display: none">
+                <div class="dealz-messages" id="dealz-messages"></div>
+                <div class="dealz-inputbar">
+                  <input id="dealz-input" type="text" placeholder="Descrivete le vostre esigenze di pulizia…" autocomplete="off" />
+                  <button id="dealz-send">Invia</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="popup">
+        <p class="sc-devis-note">Un pulsante «Preventivo» nel vostro menu apre lo stesso preventivo a tutto schermo, nella sua finestra: più spazio della bolla, senza mai lasciare il vostro sito.</p>
+        <div class="devis-mode-try">
+          <button class="sc-btn sc-btn-primary" id="try-popup-btn">Provate il pop-up →</button>
+        </div>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="chat">
+        <p class="sc-devis-note">Una bolla fluttuante sul vostro sito, in un angolo dello schermo: l'integrazione più semplice, una riga di codice, funziona su qualsiasi piattaforma (Wix, Shopify, WordPress, un sito fatto a mano…). Cliccate sulla bolla in basso a destra per provarla.</p>
+      </div>
+
+      <div class="devis-mode-panel" data-devis-panel="whatsapp">
+        <p class="sc-devis-note">I vostri clienti scrivono direttamente al vostro numero WhatsApp Business: niente da installare sul loro telefono.</p>
+        <div class="devis-mode-try">
+          <a href="#" id="whatsapp-trial-link" class="sc-btn sc-btn-primary" target="_blank" rel="noopener">Provate su WhatsApp →</a>
+        </div>
+      </div>
+
+      <!-- Real floating bubble, matching embed.js's actual bubble mode —
+           shown only while the "Chat widget" tab is active; .quote-panel
+           gets moved in here (see script below), so the bubble opens the
+           exact same live conversation, not a lookalike. -->
+      <button id="demo-widget-launcher" class="demo-widget-launcher" aria-label="Aprire la chat del preventivo">💬</button>
+      <div id="demo-widget-panel-slot" class="demo-widget-panel-slot"></div>
+
+      <!-- Pop-up modal — stays on this page (backdrop + centered card),
+           not a new browser tab/window, matching what a real "pop-up"
+           should feel like. Loads quote-window.html?embedded=1 in an
+           iframe, same page real client sites get via embed.js's
+           data-dealz-mode="window". -->
+      <div id="demo-popup-overlay" class="demo-popup-overlay">
+        <div class="demo-popup-card">
+          <button id="demo-popup-close" class="demo-popup-close" aria-label="Chiudi">✕</button>
+          <iframe id="demo-popup-iframe" title="Preventivo online"></iframe>
+        </div>
+      </div>
+
+      <div class="demo-followup" id="demo-followup">
+        <h2>Immaginate tutto questo sul VOSTRO sito.</h2>
+        <div class="imagine-lines">
+          I vostri prezzi. I vostri servizi. Il vostro marchio. I vostri clienti.<br />
+          Il vostro assistente di vendita IA, disponibile a qualsiasi ora.
+        </div>
+        <div class="demo-followup-ctas">
+          <a href="/it/index.html#contact" class="btn btn-primary">Chiedere la messa in servizio</a>
+          <a href="/it/index.html#tarifs" class="btn btn-secondary">Vedere i prezzi</a>
+          <a href="mailto:dealz@dealz.website" class="btn btn-secondary">Contattare Dealz</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sc-footer">
+    SwissClean Sàrl — sito demo, questa impresa non esiste davvero.
+    Powered by <a href="/it/index.html">⚡ Dealz</a>.
+  </footer>
+
+  <script>window.DEALZ_LANG = "it";</script>
+  <script src="/demo-tabs.js"></script>
+  <script src="/pricing-engine-client.js"></script>
+  <script src="/mock-client.js"></script>
+  <script src="/quote-app.js"></script>
+  <script src="/lead-gate.js"></script>
+  <script src="/whatsapp-trial-card.js"></script>
+  <script>
+    document.addEventListener("dealz:quote-delivered", function () {
+      var el = document.getElementById("demo-followup");
+      if (!el.classList.contains("show")) {
+        el.classList.add("show");
+        el.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+
+    // Switches between the four "how this looks on your site" panels —
+    // same idea as demo-tabs.js's top nav, scoped to this section instead.
+    // The "chat" mode is the real floating-bubble behaviour, not a
+    // lookalike: the single .quote-panel node (one live conversation) is
+    // physically moved between the inline "dedicated page" slot and the
+    // fixed-position bubble slot, and only the bubble mode starts closed.
+    (function () {
+      var tabButtons = document.querySelectorAll("#devis-mode-tabs .dmt-btn");
+      var panels = document.querySelectorAll(".devis-mode-panel");
+      var quotePanel = document.getElementById("quote-panel");
+      var inlineSlot = document.getElementById("quote-panel-slot");
+      var bubbleSlot = document.getElementById("demo-widget-panel-slot");
+      var launcher = document.getElementById("demo-widget-launcher");
+
+      function setMode(mode) {
+        tabButtons.forEach(function (b) { b.classList.toggle("active", b.dataset.devisMode === mode); });
+        panels.forEach(function (p) { p.classList.toggle("active", p.dataset.devisPanel === mode); });
+
+        if (mode === "chat") {
+          bubbleSlot.appendChild(quotePanel);
+          launcher.classList.add("show");
+          bubbleSlot.classList.remove("open");
+        } else {
+          inlineSlot.appendChild(quotePanel);
+          launcher.classList.remove("show");
+          bubbleSlot.classList.remove("open");
+        }
+      }
+
+      tabButtons.forEach(function (btn) {
+        btn.addEventListener("click", function () { setMode(btn.dataset.devisMode); });
+      });
+      launcher.addEventListener("click", function () {
+        bubbleSlot.classList.toggle("open");
+      });
+    })();
+
+    // Lets the "pop-up" tab actually open the real pop-up — an in-page
+    // modal (stays on this page, unlike window.open()) — same mechanism a
+    // real client site uses via embed.js's data-dealz-mode="window".
+    (function () {
+      var overlay = document.getElementById("demo-popup-overlay");
+      var iframe = document.getElementById("demo-popup-iframe");
+      function openPopup() {
+        if (!iframe.src) iframe.src = "/quote-window.html?embedded=1&lang=it";
+        overlay.classList.add("open");
+      }
+      function closePopup() {
+        overlay.classList.remove("open");
+      }
+      document.getElementById("try-popup-btn").addEventListener("click", openPopup);
+      document.getElementById("demo-popup-close").addEventListener("click", closePopup);
+      overlay.addEventListener("click", function (e) {
+        if (e.target === overlay) closePopup();
+      });
+    })();
+  </script>
+</body>
+</html>

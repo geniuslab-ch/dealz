@@ -23,291 +23,291 @@
   // of a translated label silently producing a wrong quote.
   //
   // T(fr) is a display-only lookup: exact known French strings render
-  // translated when window.DEALZ_LANG is "en"/"de"; anything not in the
+  // translated when window.DEALZ_LANG is "en"/"de"/"it"; anything not in the
   // table (including a customer's own free-text answers) passes through
   // unchanged. Applied at a few central rendering choke-points (el(),
   // renderAssistantText, renderUserMessage) so it covers nearly every
   // string in the file without touching what actually gets sent back to
   // the engine — see sendMessage's `text` vs `displayText` split below.
   const I18N = {
-    "Quel type de nettoyage souhaitez-vous ?": { en: "What type of cleaning would you like?", de: "Welche Art von Reinigung wünschen Sie?" },
-    "Nettoyage régulier": { en: "Regular cleaning", de: "Regelmässige Reinigung" },
-    "Nettoyage ponctuel": { en: "One-off cleaning", de: "Einmalige Reinigung" },
-    "Nettoyage en profondeur": { en: "Deep cleaning", de: "Tiefenreinigung" },
-    "Nettoyage de fin de bail / état des lieux": { en: "End of tenancy / handover cleaning", de: "Endreinigung / Wohnungsübergabe" },
-    "Nettoyage après déménagement": { en: "Post-move cleaning", de: "Reinigung nach Umzug" },
-    "Nettoyage après travaux": { en: "Post-renovation cleaning", de: "Reinigung nach Bauarbeiten" },
-    "Nettoyage professionnel / bureau": { en: "Professional / office cleaning", de: "Büroreinigung" },
+    "Quel type de nettoyage souhaitez-vous ?": { en: "What type of cleaning would you like?", de: "Welche Art von Reinigung wünschen Sie?", it: "Che tipo di pulizia desiderate?" },
+    "Nettoyage régulier": { en: "Regular cleaning", de: "Regelmässige Reinigung", it: "Pulizia regolare" },
+    "Nettoyage ponctuel": { en: "One-off cleaning", de: "Einmalige Reinigung", it: "Pulizia occasionale" },
+    "Nettoyage en profondeur": { en: "Deep cleaning", de: "Tiefenreinigung", it: "Pulizia a fondo" },
+    "Nettoyage de fin de bail / état des lieux": { en: "End of tenancy / handover cleaning", de: "Endreinigung / Wohnungsübergabe", it: "Pulizia di fine locazione / riconsegna" },
+    "Nettoyage après déménagement": { en: "Post-move cleaning", de: "Reinigung nach Umzug", it: "Pulizia dopo il trasloco" },
+    "Nettoyage après travaux": { en: "Post-renovation cleaning", de: "Reinigung nach Bauarbeiten", it: "Pulizia dopo i lavori" },
+    "Nettoyage professionnel / bureau": { en: "Professional / office cleaning", de: "Büroreinigung", it: "Pulizia professionale / uffici" },
 
-    "Quel type de bien souhaitez-vous faire nettoyer ?": { en: "What type of property would you like cleaned?", de: "Welche Art von Objekt möchten Sie reinigen lassen?" },
-    "Appartement": { en: "Apartment", de: "Wohnung" },
-    "Maison": { en: "House", de: "Haus" },
-    "Studio": { en: "Studio", de: "Studio" },
-    "Bureau": { en: "Office", de: "Büro" },
-    "Commerce / local professionnel": { en: "Shop / commercial premises", de: "Geschäft / Gewerberaum" },
-    "Villa": { en: "Villa", de: "Villa" },
+    "Quel type de bien souhaitez-vous faire nettoyer ?": { en: "What type of property would you like cleaned?", de: "Welche Art von Objekt möchten Sie reinigen lassen?", it: "Che tipo di immobile desiderate far pulire?" },
+    "Appartement": { en: "Apartment", de: "Wohnung", it: "Appartamento" },
+    "Maison": { en: "House", de: "Haus", it: "Casa" },
+    "Studio": { en: "Studio", de: "Studio", it: "Monolocale" },
+    "Bureau": { en: "Office", de: "Büro", it: "Ufficio" },
+    "Commerce / local professionnel": { en: "Shop / commercial premises", de: "Geschäft / Gewerberaum", it: "Negozio / locale commerciale" },
+    "Villa": { en: "Villa", de: "Villa", it: "Villa" },
 
-    "Combien de pièces compte votre logement ?": { en: "How many rooms does your home have?", de: "Wie viele Zimmer hat Ihre Wohnung?" },
-    "1 pièce": { en: "1 room", de: "1 Zimmer" },
-    "1.5 pièces": { en: "1.5 rooms", de: "1.5 Zimmer" },
-    "2 pièces": { en: "2 rooms", de: "2 Zimmer" },
-    "2.5 pièces": { en: "2.5 rooms", de: "2.5 Zimmer" },
-    "3 pièces": { en: "3 rooms", de: "3 Zimmer" },
-    "3.5 pièces": { en: "3.5 rooms", de: "3.5 Zimmer" },
-    "4 pièces": { en: "4 rooms", de: "4 Zimmer" },
-    "4.5 pièces": { en: "4.5 rooms", de: "4.5 Zimmer" },
-    "5 pièces": { en: "5 rooms", de: "5 Zimmer" },
+    "Combien de pièces compte votre logement ?": { en: "How many rooms does your home have?", de: "Wie viele Zimmer hat Ihre Wohnung?", it: "Quanti locali ha la vostra abitazione?" },
+    "1 pièce": { en: "1 room", de: "1 Zimmer", it: "1 locale" },
+    "1.5 pièces": { en: "1.5 rooms", de: "1.5 Zimmer", it: "1.5 locali" },
+    "2 pièces": { en: "2 rooms", de: "2 Zimmer", it: "2 locali" },
+    "2.5 pièces": { en: "2.5 rooms", de: "2.5 Zimmer", it: "2.5 locali" },
+    "3 pièces": { en: "3 rooms", de: "3 Zimmer", it: "3 locali" },
+    "3.5 pièces": { en: "3.5 rooms", de: "3.5 Zimmer", it: "3.5 locali" },
+    "4 pièces": { en: "4 rooms", de: "4 Zimmer", it: "4 locali" },
+    "4.5 pièces": { en: "4.5 rooms", de: "4.5 Zimmer", it: "4.5 locali" },
+    "5 pièces": { en: "5 rooms", de: "5 Zimmer", it: "5 locali" },
 
-    "Quelle est approximativement la surface du logement ?": { en: "Roughly how big is the property?", de: "Wie gross ist die Wohnung ungefähr?" },
-    "Moins de 50 m²": { en: "Under 50 m²", de: "Unter 50 m²" },
-    "50–75 m²": { en: "50–75 m²", de: "50–75 m²" },
-    "75–100 m²": { en: "75–100 m²", de: "75–100 m²" },
-    "100–150 m²": { en: "100–150 m²", de: "100–150 m²" },
-    "150–200 m²": { en: "150–200 m²", de: "150–200 m²" },
-    "Plus de 200 m²": { en: "Over 200 m²", de: "Über 200 m²" },
-    "Je ne sais pas": { en: "I don't know", de: "Ich weiss es nicht" },
+    "Quelle est approximativement la surface du logement ?": { en: "Roughly how big is the property?", de: "Wie gross ist die Wohnung ungefähr?", it: "Qual è all'incirca la superficie dell'abitazione?" },
+    "Moins de 50 m²": { en: "Under 50 m²", de: "Unter 50 m²", it: "Meno di 50 m²" },
+    "50–75 m²": { en: "50–75 m²", de: "50–75 m²", it: "50–75 m²" },
+    "75–100 m²": { en: "75–100 m²", de: "75–100 m²", it: "75–100 m²" },
+    "100–150 m²": { en: "100–150 m²", de: "100–150 m²", it: "100–150 m²" },
+    "150–200 m²": { en: "150–200 m²", de: "150–200 m²", it: "150–200 m²" },
+    "Plus de 200 m²": { en: "Over 200 m²", de: "Über 200 m²", it: "Oltre 200 m²" },
+    "Je ne sais pas": { en: "I don't know", de: "Ich weiss es nicht", it: "Non lo so" },
 
-    "Le logement comporte-t-il plusieurs niveaux ?": { en: "Does the property have several levels?", de: "Hat die Wohnung mehrere Ebenen?" },
-    "Un seul niveau": { en: "A single level", de: "Nur eine Ebene" },
-    "2 niveaux": { en: "2 levels", de: "2 Ebenen" },
-    "3 niveaux ou plus": { en: "3 levels or more", de: "3 oder mehr Ebenen" },
+    "Le logement comporte-t-il plusieurs niveaux ?": { en: "Does the property have several levels?", de: "Hat die Wohnung mehrere Ebenen?", it: "L'abitazione è su più livelli?" },
+    "Un seul niveau": { en: "A single level", de: "Nur eine Ebene", it: "Un solo livello" },
+    "2 niveaux": { en: "2 levels", de: "2 Ebenen", it: "2 livelli" },
+    "3 niveaux ou plus": { en: "3 levels or more", de: "3 oder mehr Ebenen", it: "3 livelli o più" },
 
-    "Combien d'étages faut-il nettoyer ?": { en: "How many floors need cleaning?", de: "Wie viele Stockwerke müssen gereinigt werden?" },
+    "Combien d'étages faut-il nettoyer ?": { en: "How many floors need cleaning?", de: "Wie viele Stockwerke müssen gereinigt werden?", it: "Quanti piani vanno puliti?" },
 
-    "Combien de salles de bains et de WC faut-il nettoyer ?": { en: "How many bathrooms and toilets need cleaning?", de: "Wie viele Badezimmer und WCs müssen gereinigt werden?" },
+    "Combien de salles de bains et de WC faut-il nettoyer ?": { en: "How many bathrooms and toilets need cleaning?", de: "Wie viele Badezimmer und WCs müssen gereinigt werden?", it: "Quanti bagni e WC vanno puliti?" },
 
-    "Y a-t-il une cuisine à nettoyer ?": { en: "Is there a kitchen to clean?", de: "Gibt es eine Küche zu reinigen?" },
-    "Oui": { en: "Yes", de: "Ja" },
-    "Non": { en: "No", de: "Nein" },
-    "Cuisine ouverte": { en: "Open kitchen", de: "Offene Küche" },
-    "Cuisine fermée": { en: "Closed kitchen", de: "Geschlossene Küche" },
-    "Plusieurs cuisines": { en: "Several kitchens", de: "Mehrere Küchen" },
+    "Y a-t-il une cuisine à nettoyer ?": { en: "Is there a kitchen to clean?", de: "Gibt es eine Küche zu reinigen?", it: "C'è una cucina da pulire?" },
+    "Oui": { en: "Yes", de: "Ja", it: "Sì" },
+    "Non": { en: "No", de: "Nein", it: "No" },
+    "Cuisine ouverte": { en: "Open kitchen", de: "Offene Küche", it: "Cucina aperta" },
+    "Cuisine fermée": { en: "Closed kitchen", de: "Geschlossene Küche", it: "Cucina chiusa" },
+    "Plusieurs cuisines": { en: "Several kitchens", de: "Mehrere Küchen", it: "Più cucine" },
 
-    "Dans quel état se trouve actuellement le logement ?": { en: "What condition is the property in right now?", de: "In welchem Zustand befindet sich die Wohnung aktuell?" },
-    "Entretien normal": { en: "Normal upkeep", de: "Normaler Pflegezustand" },
-    "Peu sale": { en: "A little dirty", de: "Leicht verschmutzt" },
-    "Très poussiéreux": { en: "Very dusty", de: "Sehr staubig" },
-    "Très sale": { en: "Very dirty", de: "Sehr schmutzig" },
-    "Très encrassé": { en: "Very grimy", de: "Sehr stark verschmutzt" },
-    "Nécessite un nettoyage en profondeur": { en: "Needs a deep clean", de: "Benötigt eine Tiefenreinigung" },
+    "Dans quel état se trouve actuellement le logement ?": { en: "What condition is the property in right now?", de: "In welchem Zustand befindet sich die Wohnung aktuell?", it: "In che stato si trova attualmente l'abitazione?" },
+    "Entretien normal": { en: "Normal upkeep", de: "Normaler Pflegezustand", it: "Manutenzione normale" },
+    "Peu sale": { en: "A little dirty", de: "Leicht verschmutzt", it: "Un po' sporca" },
+    "Très poussiéreux": { en: "Very dusty", de: "Sehr staubig", it: "Molto polverosa" },
+    "Très sale": { en: "Very dirty", de: "Sehr schmutzig", it: "Molto sporca" },
+    "Très encrassé": { en: "Very grimy", de: "Sehr stark verschmutzt", it: "Molto incrostata" },
+    "Nécessite un nettoyage en profondeur": { en: "Needs a deep clean", de: "Benötigt eine Tiefenreinigung", it: "Necessita di una pulizia a fondo" },
 
-    "Le logement sera-t-il vide au moment du nettoyage ?": { en: "Will the property be empty during the cleaning?", de: "Wird die Wohnung während der Reinigung leer sein?" },
-    "Oui, complètement vide": { en: "Yes, completely empty", de: "Ja, komplett leer" },
-    "Partiellement vide": { en: "Partially empty", de: "Teilweise leer" },
-    "Non, il sera encore occupé": { en: "No, it will still be occupied", de: "Nein, sie wird noch bewohnt sein" },
+    "Le logement sera-t-il vide au moment du nettoyage ?": { en: "Will the property be empty during the cleaning?", de: "Wird die Wohnung während der Reinigung leer sein?", it: "L'abitazione sarà vuota durante la pulizia?" },
+    "Oui, complètement vide": { en: "Yes, completely empty", de: "Ja, komplett leer", it: "Sì, completamente vuota" },
+    "Partiellement vide": { en: "Partially empty", de: "Teilweise leer", it: "Parzialmente vuota" },
+    "Non, il sera encore occupé": { en: "No, it will still be occupied", de: "Nein, sie wird noch bewohnt sein", it: "No, sarà ancora abitata" },
 
-    "Souhaitez-vous inclure le nettoyage des fenêtres ?": { en: "Would you like window cleaning included?", de: "Möchten Sie die Fensterreinigung einschliessen?" },
+    "Souhaitez-vous inclure le nettoyage des fenêtres ?": { en: "Would you like window cleaning included?", de: "Möchten Sie die Fensterreinigung einschliessen?", it: "Desiderate includere la pulizia delle finestre?" },
 
-    "Quel type de nettoyage des fenêtres souhaitez-vous ?": { en: "What type of window cleaning would you like?", de: "Welche Art von Fensterreinigung wünschen Sie?" },
-    "Intérieur uniquement": { en: "Inside only", de: "Nur innen" },
-    "Intérieur + extérieur": { en: "Inside + outside", de: "Innen + aussen" },
-    "Vitres + cadres + rebords": { en: "Panes + frames + sills", de: "Scheiben + Rahmen + Fensterbänke" },
-    "Nettoyage complet": { en: "Full cleaning", de: "Komplette Reinigung" },
+    "Quel type de nettoyage des fenêtres souhaitez-vous ?": { en: "What type of window cleaning would you like?", de: "Welche Art von Fensterreinigung wünschen Sie?", it: "Che tipo di pulizia delle finestre desiderate?" },
+    "Intérieur uniquement": { en: "Inside only", de: "Nur innen", it: "Solo interno" },
+    "Intérieur + extérieur": { en: "Inside + outside", de: "Innen + aussen", it: "Interno + esterno" },
+    "Vitres + cadres + rebords": { en: "Panes + frames + sills", de: "Scheiben + Rahmen + Fensterbänke", it: "Vetri + telai + davanzali" },
+    "Nettoyage complet": { en: "Full cleaning", de: "Komplette Reinigung", it: "Pulizia completa" },
 
-    "Combien de fenêtres environ ?": { en: "Roughly how many windows?", de: "Wie viele Fenster ungefähr?" },
-    "1–5": { en: "1–5", de: "1–5" },
-    "6–10": { en: "6–10", de: "6–10" },
-    "11–15": { en: "11–15", de: "11–15" },
-    "16–20": { en: "16–20", de: "16–20" },
-    "Plus de 20": { en: "More than 20", de: "Mehr als 20" },
+    "Combien de fenêtres environ ?": { en: "Roughly how many windows?", de: "Wie viele Fenster ungefähr?", it: "Quante finestre, all'incirca?" },
+    "1–5": { en: "1–5", de: "1–5", it: "1–5" },
+    "6–10": { en: "6–10", de: "6–10", it: "6–10" },
+    "11–15": { en: "11–15", de: "11–15", it: "11–15" },
+    "16–20": { en: "16–20", de: "16–20", it: "16–20" },
+    "Plus de 20": { en: "More than 20", de: "Mehr als 20", it: "Più di 20" },
 
-    "Les vitres sont-elles difficiles d'accès (baies vitrées, hauteur, etc.) ?": { en: "Are the windows hard to access (bay windows, height, etc.)?", de: "Sind die Fenster schwer zugänglich (Fensterfronten, Höhe usw.)?" },
+    "Les vitres sont-elles difficiles d'accès (baies vitrées, hauteur, etc.) ?": { en: "Are the windows hard to access (bay windows, height, etc.)?", de: "Sind die Fenster schwer zugänglich (Fensterfronten, Höhe usw.)?", it: "Le finestre sono difficili da raggiungere (vetrate, altezza, ecc.)?" },
 
-    "Souhaitez-vous inclure le nettoyage du four ?": { en: "Would you like oven cleaning included?", de: "Möchten Sie die Backofenreinigung einschliessen?" },
+    "Souhaitez-vous inclure le nettoyage du four ?": { en: "Would you like oven cleaning included?", de: "Möchten Sie die Backofenreinigung einschliessen?", it: "Desiderate includere la pulizia del forno?" },
 
-    "Dans quel état est le four ?": { en: "What condition is the oven in?", de: "In welchem Zustand ist der Backofen?" },
-    "Très graisseux": { en: "Very greasy", de: "Sehr fettig" },
+    "Dans quel état est le four ?": { en: "What condition is the oven in?", de: "In welchem Zustand ist der Backofen?", it: "In che stato è il forno?" },
+    "Très graisseux": { en: "Very greasy", de: "Sehr fettig", it: "Molto unto" },
 
-    "Souhaitez-vous inclure le nettoyage du réfrigérateur ?": { en: "Would you like fridge cleaning included?", de: "Möchten Sie die Kühlschrankreinigung einschliessen?" },
-    "Réfrigérateur + congélateur": { en: "Fridge + freezer", de: "Kühlschrank + Gefrierfach" },
+    "Souhaitez-vous inclure le nettoyage du réfrigérateur ?": { en: "Would you like fridge cleaning included?", de: "Möchten Sie die Kühlschrankreinigung einschliessen?", it: "Desiderate includere la pulizia del frigorifero?" },
+    "Réfrigérateur + congélateur": { en: "Fridge + freezer", de: "Kühlschrank + Gefrierfach", it: "Frigorifero + congelatore" },
 
-    "Souhaitez-vous nettoyer d'autres appareils de cuisine ?": { en: "Any other kitchen appliances to clean?", de: "Möchten Sie weitere Küchengeräte reinigen lassen?" },
-    "Hotte": { en: "Extractor hood", de: "Dunstabzugshaube" },
-    "Plaques de cuisson": { en: "Stovetop", de: "Kochfeld" },
-    "Micro-ondes": { en: "Microwave", de: "Mikrowelle" },
-    "Lave-vaisselle": { en: "Dishwasher", de: "Geschirrspüler" },
-    "Congélateur": { en: "Freezer", de: "Gefrierschrank" },
-    "Aucun": { en: "None", de: "Keines" },
+    "Souhaitez-vous nettoyer d'autres appareils de cuisine ?": { en: "Any other kitchen appliances to clean?", de: "Möchten Sie weitere Küchengeräte reinigen lassen?", it: "Altri elettrodomestici da pulire?" },
+    "Hotte": { en: "Extractor hood", de: "Dunstabzugshaube", it: "Cappa aspirante" },
+    "Plaques de cuisson": { en: "Stovetop", de: "Kochfeld", it: "Piano cottura" },
+    "Micro-ondes": { en: "Microwave", de: "Mikrowelle", it: "Microonde" },
+    "Lave-vaisselle": { en: "Dishwasher", de: "Geschirrspüler", it: "Lavastoviglie" },
+    "Congélateur": { en: "Freezer", de: "Gefrierschrank", it: "Congelatore" },
+    "Aucun": { en: "None", de: "Keines", it: "Nessuno" },
 
-    "Souhaitez-vous un nettoyage de tapis ou de moquette ?": { en: "Would you like carpet or rug cleaning?", de: "Möchten Sie eine Teppich- oder Teppichbodenreinigung?" },
-    "Tapis": { en: "Rugs", de: "Teppiche" },
-    "Moquette": { en: "Carpet", de: "Teppichboden" },
-    "Tapis + moquette": { en: "Rugs + carpet", de: "Teppiche + Teppichboden" },
+    "Souhaitez-vous un nettoyage de tapis ou de moquette ?": { en: "Would you like carpet or rug cleaning?", de: "Möchten Sie eine Teppich- oder Teppichbodenreinigung?", it: "Desiderate la pulizia di tappeti o moquette?" },
+    "Tapis": { en: "Rugs", de: "Teppiche", it: "Tappeti" },
+    "Moquette": { en: "Carpet", de: "Teppichboden", it: "Moquette" },
+    "Tapis + moquette": { en: "Rugs + carpet", de: "Teppiche + Teppichboden", it: "Tappeti + moquette" },
 
-    "Quelle est approximativement la surface concernée (en nombre de pièces) ?": { en: "Roughly how many rooms does this cover?", de: "Wie viele Zimmer sind ungefähr betroffen?" },
-    "4+": { en: "4+", de: "4+" },
+    "Quelle est approximativement la surface concernée (en nombre de pièces) ?": { en: "Roughly how many rooms does this cover?", de: "Wie viele Zimmer sind ungefähr betroffen?", it: "Quanti locali sono interessati, all'incirca?" },
+    "4+": { en: "4+", de: "4+", it: "4+" },
 
-    "Souhaitez-vous nettoyer des textiles ou du mobilier ?": { en: "Any textiles or furniture to clean?", de: "Möchten Sie Textilien oder Möbel reinigen lassen?" },
-    "Canapé": { en: "Sofa", de: "Sofa" },
-    "Fauteuil": { en: "Armchair", de: "Sessel" },
-    "Matelas": { en: "Mattress", de: "Matratze" },
-    "Rideaux": { en: "Curtains", de: "Vorhänge" },
+    "Souhaitez-vous nettoyer des textiles ou du mobilier ?": { en: "Any textiles or furniture to clean?", de: "Möchten Sie Textilien oder Möbel reinigen lassen?", it: "Tessuti o mobili da pulire?" },
+    "Canapé": { en: "Sofa", de: "Sofa", it: "Divano" },
+    "Fauteuil": { en: "Armchair", de: "Sessel", it: "Poltrona" },
+    "Matelas": { en: "Mattress", de: "Matratze", it: "Materasso" },
+    "Rideaux": { en: "Curtains", de: "Vorhänge", it: "Tende" },
 
-    "Le logement est-il accessible sans ascenseur ?": { en: "Is the property accessible without a lift?", de: "Ist die Wohnung ohne Lift erreichbar?" },
-    "Rez-de-chaussée ou ascenseur": { en: "Ground floor or lift", de: "Erdgeschoss oder Lift" },
-    "1 étage sans ascenseur": { en: "1 floor, no lift", de: "1 Stockwerk ohne Lift" },
-    "2 étages sans ascenseur": { en: "2 floors, no lift", de: "2 Stockwerke ohne Lift" },
-    "3 étages ou plus sans ascenseur": { en: "3 floors or more, no lift", de: "3 oder mehr Stockwerke ohne Lift" },
+    "Le logement est-il accessible sans ascenseur ?": { en: "Is the property accessible without a lift?", de: "Ist die Wohnung ohne Lift erreichbar?", it: "L'abitazione è accessibile senza ascensore?" },
+    "Rez-de-chaussée ou ascenseur": { en: "Ground floor or lift", de: "Erdgeschoss oder Lift", it: "Pianterreno o ascensore" },
+    "1 étage sans ascenseur": { en: "1 floor, no lift", de: "1 Stockwerk ohne Lift", it: "1 piano, senza ascensore" },
+    "2 étages sans ascenseur": { en: "2 floors, no lift", de: "2 Stockwerke ohne Lift", it: "2 piani, senza ascensore" },
+    "3 étages ou plus sans ascenseur": { en: "3 floors or more, no lift", de: "3 oder mehr Stockwerke ohne Lift", it: "3 piani o più, senza ascensore" },
 
-    "Comment l'équipe pourra-t-elle accéder au logement ?": { en: "How will the team be able to access the property?", de: "Wie kann das Team die Wohnung betreten?" },
-    "Je serai présent(e)": { en: "I'll be there", de: "Ich werde anwesend sein" },
-    "Clés remises à l'équipe": { en: "Keys handed to the team", de: "Schlüssel werden dem Team übergeben" },
-    "Boîte à clés": { en: "Key box", de: "Schlüsselbox" },
-    "Concierge / réception": { en: "Caretaker / front desk", de: "Hauswart / Empfang" },
+    "Comment l'équipe pourra-t-elle accéder au logement ?": { en: "How will the team be able to access the property?", de: "Wie kann das Team die Wohnung betreten?", it: "Come potrà il team accedere all'abitazione?" },
+    "Je serai présent(e)": { en: "I'll be there", de: "Ich werde anwesend sein", it: "Sarò presente" },
+    "Clés remises à l'équipe": { en: "Keys handed to the team", de: "Schlüssel werden dem Team übergeben", it: "Chiavi consegnate al team" },
+    "Boîte à clés": { en: "Key box", de: "Schlüsselbox", it: "Cassetta portachiavi" },
+    "Concierge / réception": { en: "Caretaker / front desk", de: "Hauswart / Empfang", it: "Custode / reception" },
 
-    "Y a-t-il une possibilité de stationner facilement à proximité du logement ?": { en: "Is there easy parking near the property?", de: "Gibt es in der Nähe der Wohnung einfache Parkmöglichkeiten?" },
-    "Parking privé": { en: "Private parking", de: "Privater Parkplatz" },
-    "Parking public": { en: "Public parking", de: "Öffentlicher Parkplatz" },
+    "Y a-t-il une possibilité de stationner facilement à proximité du logement ?": { en: "Is there easy parking near the property?", de: "Gibt es in der Nähe der Wohnung einfache Parkmöglichkeiten?", it: "C'è un parcheggio facile vicino all'abitazione?" },
+    "Parking privé": { en: "Private parking", de: "Privater Parkplatz", it: "Parcheggio privato" },
+    "Parking public": { en: "Public parking", de: "Öffentlicher Parkplatz", it: "Parcheggio pubblico" },
 
-    "À partir de quelle date souhaitez-vous démarrer le nettoyage régulier ?": { en: "From what date would you like the regular cleaning to start?", de: "Ab welchem Datum möchten Sie mit der regelmässigen Reinigung beginnen?" },
-    "Quand souhaitez-vous effectuer le nettoyage ?": { en: "When would you like the cleaning done?", de: "Wann möchten Sie die Reinigung durchführen lassen?" },
+    "À partir de quelle date souhaitez-vous démarrer le nettoyage régulier ?": { en: "From what date would you like the regular cleaning to start?", de: "Ab welchem Datum möchten Sie mit der regelmässigen Reinigung beginnen?", it: "Da quale data desiderate iniziare la pulizia regolare?" },
+    "Quand souhaitez-vous effectuer le nettoyage ?": { en: "When would you like the cleaning done?", de: "Wann möchten Sie die Reinigung durchführen lassen?", it: "Quando desiderate la pulizia?" },
 
-    "Cette date de démarrage est-elle impérative ?": { en: "Is this start date fixed?", de: "Ist dieses Startdatum verbindlich?" },
-    "Cette date est-elle impérative ?": { en: "Is this date fixed?", de: "Ist dieses Datum verbindlich?" },
-    "Non, je suis flexible": { en: "No, I'm flexible", de: "Nein, ich bin flexibel" },
+    "Cette date de démarrage est-elle impérative ?": { en: "Is this start date fixed?", de: "Ist dieses Startdatum verbindlich?", it: "Questa data d'inizio è fissa?" },
+    "Cette date est-elle impérative ?": { en: "Is this date fixed?", de: "Ist dieses Datum verbindlich?", it: "Questa data è fissa?" },
+    "Non, je suis flexible": { en: "No, I'm flexible", de: "Nein, ich bin flexibel", it: "No, sono flessibile" },
 
-    "Quels travaux ont été réalisés ?": { en: "What work was carried out?", de: "Welche Arbeiten wurden durchgeführt?" },
-    "Peinture": { en: "Painting", de: "Malerarbeiten" },
-    "Rénovation": { en: "Renovation", de: "Renovation" },
-    "Construction": { en: "Construction", de: "Bauarbeiten" },
-    "Travaux de cuisine": { en: "Kitchen work", de: "Küchenarbeiten" },
-    "Travaux de salle de bains": { en: "Bathroom work", de: "Badezimmerarbeiten" },
-    "Rénovation complète": { en: "Full renovation", de: "Komplettrenovation" },
+    "Quels travaux ont été réalisés ?": { en: "What work was carried out?", de: "Welche Arbeiten wurden durchgeführt?", it: "Quali lavori sono stati eseguiti?" },
+    "Peinture": { en: "Painting", de: "Malerarbeiten", it: "Pittura" },
+    "Rénovation": { en: "Renovation", de: "Renovation", it: "Ristrutturazione" },
+    "Construction": { en: "Construction", de: "Bauarbeiten", it: "Costruzione" },
+    "Travaux de cuisine": { en: "Kitchen work", de: "Küchenarbeiten", it: "Lavori in cucina" },
+    "Travaux de salle de bains": { en: "Bathroom work", de: "Badezimmerarbeiten", it: "Lavori in bagno" },
+    "Rénovation complète": { en: "Full renovation", de: "Komplettrenovation", it: "Ristrutturazione completa" },
 
-    "Quel est le niveau de poussière ou de saleté après les travaux ?": { en: "How much dust or dirt is there after the work?", de: "Wie stark ist der Staub- oder Schmutzanfall nach den Arbeiten?" },
-    "Léger": { en: "Light", de: "Leicht" },
-    "Moyen": { en: "Moderate", de: "Mittel" },
-    "Important": { en: "Significant", de: "Stark" },
-    "Très important": { en: "Very significant", de: "Sehr stark" },
+    "Quel est le niveau de poussière ou de saleté après les travaux ?": { en: "How much dust or dirt is there after the work?", de: "Wie stark ist der Staub- oder Schmutzanfall nach den Arbeiten?", it: "Quanta polvere o sporco c'è dopo i lavori?" },
+    "Léger": { en: "Light", de: "Leicht", it: "Poco" },
+    "Moyen": { en: "Moderate", de: "Mittel", it: "Moderato" },
+    "Important": { en: "Significant", de: "Stark", it: "Molto" },
+    "Très important": { en: "Very significant", de: "Sehr stark", it: "Moltissimo" },
 
-    "À quelle fréquence souhaitez-vous le nettoyage ?": { en: "How often would you like the cleaning?", de: "Wie oft wünschen Sie die Reinigung?" },
-    "Chaque semaine": { en: "Every week", de: "Jede Woche" },
-    "Toutes les 2 semaines": { en: "Every 2 weeks", de: "Alle 2 Wochen" },
-    "Toutes les 3 semaines": { en: "Every 3 weeks", de: "Alle 3 Wochen" },
-    "Une fois par mois": { en: "Once a month", de: "Einmal im Monat" },
-    "Ponctuellement": { en: "One-off, as needed", de: "Bei Bedarf, einmalig" },
+    "À quelle fréquence souhaitez-vous le nettoyage ?": { en: "How often would you like the cleaning?", de: "Wie oft wünschen Sie die Reinigung?", it: "Con che frequenza desiderate la pulizia?" },
+    "Chaque semaine": { en: "Every week", de: "Jede Woche", it: "Ogni settimana" },
+    "Toutes les 2 semaines": { en: "Every 2 weeks", de: "Alle 2 Wochen", it: "Ogni 2 settimane" },
+    "Toutes les 3 semaines": { en: "Every 3 weeks", de: "Alle 3 Wochen", it: "Ogni 3 settimane" },
+    "Une fois par mois": { en: "Once a month", de: "Einmal im Monat", it: "Una volta al mese" },
+    "Ponctuellement": { en: "One-off, as needed", de: "Bei Bedarf, einmalig", it: "Occasionale, secondo le esigenze" },
 
-    "Quel jour de la semaine préférez-vous pour le passage de l'équipe ?": { en: "Which day of the week works best for the team's visit?", de: "Welcher Wochentag passt Ihnen für den Einsatz des Teams am besten?" },
-    "Lundi": { en: "Monday", de: "Montag" },
-    "Mardi": { en: "Tuesday", de: "Dienstag" },
-    "Mercredi": { en: "Wednesday", de: "Mittwoch" },
-    "Jeudi": { en: "Thursday", de: "Donnerstag" },
-    "Vendredi": { en: "Friday", de: "Freitag" },
-    "Samedi": { en: "Saturday", de: "Samstag" },
+    "Quel jour de la semaine préférez-vous pour le passage de l'équipe ?": { en: "Which day of the week works best for the team's visit?", de: "Welcher Wochentag passt Ihnen für den Einsatz des Teams am besten?", it: "Quale giorno della settimana è più comodo per il passaggio del team?" },
+    "Lundi": { en: "Monday", de: "Montag", it: "Lunedì" },
+    "Mardi": { en: "Tuesday", de: "Dienstag", it: "Martedì" },
+    "Mercredi": { en: "Wednesday", de: "Mittwoch", it: "Mercoledì" },
+    "Jeudi": { en: "Thursday", de: "Donnerstag", it: "Giovedì" },
+    "Vendredi": { en: "Friday", de: "Freitag", it: "Venerdì" },
+    "Samedi": { en: "Saturday", de: "Samstag", it: "Sabato" },
 
-    "À quelle heure de la journée souhaitez-vous que l'équipe passe ?": { en: "What time of day should the team come by?", de: "Zu welcher Tageszeit soll das Team vorbeikommen?" },
-    "Matin (8h–12h)": { en: "Morning (8am–12pm)", de: "Morgens (8–12 Uhr)" },
-    "Après-midi (12h–17h)": { en: "Afternoon (12pm–5pm)", de: "Nachmittags (12–17 Uhr)" },
-    "Fin de journée (17h–19h)": { en: "End of day (5pm–7pm)", de: "Am Abend (17–19 Uhr)" },
+    "À quelle heure de la journée souhaitez-vous que l'équipe passe ?": { en: "What time of day should the team come by?", de: "Zu welcher Tageszeit soll das Team vorbeikommen?", it: "In che momento della giornata deve passare il team?" },
+    "Matin (8h–12h)": { en: "Morning (8am–12pm)", de: "Morgens (8–12 Uhr)", it: "Mattina (8–12)" },
+    "Après-midi (12h–17h)": { en: "Afternoon (12pm–5pm)", de: "Nachmittags (12–17 Uhr)", it: "Pomeriggio (12–17)" },
+    "Fin de journée (17h–19h)": { en: "End of day (5pm–7pm)", de: "Am Abend (17–19 Uhr)", it: "Fine giornata (17–19)" },
 
-    "Combien de temps souhaitez-vous prévoir pour chaque nettoyage ?": { en: "How much time should be planned for each cleaning?", de: "Wie viel Zeit möchten Sie für jede Reinigung einplanen?" },
-    "1–2 heures": { en: "1–2 hours", de: "1–2 Stunden" },
-    "2–3 heures": { en: "2–3 hours", de: "2–3 Stunden" },
-    "3–4 heures": { en: "3–4 hours", de: "3–4 Stunden" },
-    "4–5 heures": { en: "4–5 hours", de: "4–5 Stunden" },
-    "Plus de 5 heures": { en: "More than 5 hours", de: "Mehr als 5 Stunden" },
+    "Combien de temps souhaitez-vous prévoir pour chaque nettoyage ?": { en: "How much time should be planned for each cleaning?", de: "Wie viel Zeit möchten Sie für jede Reinigung einplanen?", it: "Quanto tempo prevedere per ogni pulizia?" },
+    "1–2 heures": { en: "1–2 hours", de: "1–2 Stunden", it: "1–2 ore" },
+    "2–3 heures": { en: "2–3 hours", de: "2–3 Stunden", it: "2–3 ore" },
+    "3–4 heures": { en: "3–4 hours", de: "3–4 Stunden", it: "3–4 ore" },
+    "4–5 heures": { en: "4–5 hours", de: "4–5 Stunden", it: "4–5 ore" },
+    "Plus de 5 heures": { en: "More than 5 hours", de: "Mehr als 5 Stunden", it: "Più di 5 ore" },
 
-    "Le logement sera-t-il complètement vidé avant le nettoyage ?": { en: "Will the property be fully cleared out before the cleaning?", de: "Wird die Wohnung vor der Reinigung vollständig geräumt?" },
-    "Partiellement": { en: "Partially", de: "Teilweise" },
+    "Le logement sera-t-il complètement vidé avant le nettoyage ?": { en: "Will the property be fully cleared out before the cleaning?", de: "Wird die Wohnung vor der Reinigung vollständig geräumt?", it: "L'abitazione sarà completamente sgomberata prima della pulizia?" },
+    "Partiellement": { en: "Partially", de: "Teilweise", it: "Parzialmente" },
 
-    "Quand aura lieu votre état des lieux ?": { en: "When is your handover inspection?", de: "Wann findet Ihre Wohnungsübergabe statt?" },
+    "Quand aura lieu votre état des lieux ?": { en: "When is your handover inspection?", de: "Wann findet Ihre Wohnungsübergabe statt?", it: "Quando è la vostra riconsegna dell'abitazione?" },
 
-    "Avez-vous besoin d'un nettoyage avec garantie de remise en état pour l'état des lieux ?": { en: "Do you need a cleaning with a handover-condition guarantee?", de: "Benötigen Sie eine Reinigung mit Garantie für die Wohnungsübergabe?" },
+    "Avez-vous besoin d'un nettoyage avec garantie de remise en état pour l'état des lieux ?": { en: "Do you need a cleaning with a handover-condition guarantee?", de: "Benötigen Sie eine Reinigung mit Garantie für die Wohnungsübergabe?", it: "Vi serve una pulizia con garanzia di riconsegna?" },
 
-    "Y a-t-il des animaux dans le logement ?": { en: "Are there any pets in the property?", de: "Gibt es Haustiere in der Wohnung?" },
-    "Chien": { en: "Dog", de: "Hund" },
-    "Chat": { en: "Cat", de: "Katze" },
-    "Plusieurs animaux": { en: "Several pets", de: "Mehrere Haustiere" },
+    "Y a-t-il des animaux dans le logement ?": { en: "Are there any pets in the property?", de: "Gibt es Haustiere in der Wohnung?", it: "Ci sono animali nell'abitazione?" },
+    "Chien": { en: "Dog", de: "Hund", it: "Cane" },
+    "Chat": { en: "Cat", de: "Katze", it: "Gatto" },
+    "Plusieurs animaux": { en: "Several pets", de: "Mehrere Haustiere", it: "Più animali" },
 
-    "Y a-t-il une situation particulière dont notre équipe devrait tenir compte ?": { en: "Is there anything unusual our team should know about?", de: "Gibt es etwas Besonderes, das unser Team berücksichtigen sollte?" },
-    "Aucune": { en: "None", de: "Keine" },
-    "Forte accumulation de poussière": { en: "Heavy dust build-up", de: "Starke Staubansammlung" },
-    "Fumée / odeurs": { en: "Smoke / odours", de: "Rauch / Gerüche" },
-    "Beaucoup de poils": { en: "Lots of pet hair", de: "Viele Tierhaare" },
-    "Logement très encombré": { en: "Very cluttered property", de: "Sehr vollgestellte Wohnung" },
-    "Taches importantes": { en: "Significant stains", de: "Starke Flecken" },
-    "Moisissures visibles": { en: "Visible mould", de: "Sichtbarer Schimmel" },
+    "Y a-t-il une situation particulière dont notre équipe devrait tenir compte ?": { en: "Is there anything unusual our team should know about?", de: "Gibt es etwas Besonderes, das unser Team berücksichtigen sollte?", it: "C'è qualcosa di particolare che il nostro team dovrebbe sapere?" },
+    "Aucune": { en: "None", de: "Keine", it: "Nessuno" },
+    "Forte accumulation de poussière": { en: "Heavy dust build-up", de: "Starke Staubansammlung", it: "Forte accumulo di polvere" },
+    "Fumée / odeurs": { en: "Smoke / odours", de: "Rauch / Gerüche", it: "Fumo / odori" },
+    "Beaucoup de poils": { en: "Lots of pet hair", de: "Viele Tierhaare", it: "Molti peli di animali" },
+    "Logement très encombré": { en: "Very cluttered property", de: "Sehr vollgestellte Wohnung", it: "Abitazione molto ingombra" },
+    "Taches importantes": { en: "Significant stains", de: "Starke Flecken", it: "Macchie importanti" },
+    "Moisissures visibles": { en: "Visible mould", de: "Sichtbarer Schimmel", it: "Muffa visibile" },
 
     "Parfait ! Pour finaliser votre devis, merci d'indiquer vos coordonnées ci-dessous. (Vous testez cette démo pour votre entreprise ? Indiquez les coordonnées fictives d'un de vos clients — pas les vôtres.)": {
       en: "Perfect! To finalise your quote, please enter your details below. (Testing this demo for your own business? Enter fictional details for one of your customers — not your own.)",
-      de: "Perfekt! Um Ihre Offerte abzuschliessen, geben Sie bitte unten Ihre Kontaktdaten ein. (Testen Sie diese Demo für Ihr eigenes Unternehmen? Geben Sie fiktive Angaben für einen Ihrer Kunden ein — nicht Ihre eigenen.)",
+      de: "Perfekt! Um Ihre Offerte abzuschliessen, geben Sie bitte unten Ihre Kontaktdaten ein. (Testen Sie diese Demo für Ihr eigenes Unternehmen? Geben Sie fiktive Angaben für einen Ihrer Kunden ein — nicht Ihre eigenen.)", it: "Perfetto! Per completare il vostro preventivo, inserite i vostri dati qui sotto. (State provando questa demo per la vostra impresa? Inserite dati fittizi di uno dei vostri clienti, non i vostri.)",
     },
 
     // ---- quote-app.js UI chrome ----
     "Bonjour ! Je vais vous poser quelques questions rapides sur votre logement, et je vous établis un devis ferme tout de suite après.": {
       en: "Hello! I'll ask you a few quick questions about your home, then put together a firm quote right away.",
-      de: "Hallo! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Wohnung und erstelle Ihnen anschliessend sofort eine feste Offerte.",
+      de: "Hallo! Ich stelle Ihnen ein paar kurze Fragen zu Ihrer Wohnung und erstelle Ihnen anschliessend sofort eine feste Offerte.", it: "Buongiorno! Vi faccio qualche domanda rapida sulla vostra abitazione, poi vi preparo subito un preventivo fisso.",
     },
-    "En train d'écrire…": { en: "Typing…", de: "Schreibt gerade…" },
-    "Une erreur est survenue — veuillez réessayer.": { en: "Something went wrong — please try again.", de: "Ein Fehler ist aufgetreten — bitte versuchen Sie es erneut." },
-    "Une erreur est survenue.": { en: "Something went wrong.", de: "Ein Fehler ist aufgetreten." },
-    "Nom": { en: "Name", de: "Name" },
-    "E-mail": { en: "Email", de: "E-Mail" },
-    "E-mail du client (réel, différent du vôtre)": { en: "Customer email (real, not yours)", de: "E-Mail des Kunden (echt, nicht Ihre)" },
+    "En train d'écrire…": { en: "Typing…", de: "Schreibt gerade…", it: "Sta scrivendo…" },
+    "Une erreur est survenue — veuillez réessayer.": { en: "Something went wrong — please try again.", de: "Ein Fehler ist aufgetreten — bitte versuchen Sie es erneut.", it: "Si è verificato un errore, riprovate." },
+    "Une erreur est survenue.": { en: "Something went wrong.", de: "Ein Fehler ist aufgetreten.", it: "Si è verificato un errore." },
+    "Nom": { en: "Name", de: "Name", it: "Nome" },
+    "E-mail": { en: "Email", de: "E-Mail", it: "E-mail" },
+    "E-mail du client (réel, différent du vôtre)": { en: "Customer email (real, not yours)", de: "E-Mail des Kunden (echt, nicht Ihre)", it: "E-mail del cliente (reale, non la vostra)" },
     "Vous jouez maintenant le client : indiquez une adresse e-mail réelle, différente de la vôtre, pour recevoir ce que reçoit le client final.": {
       en: "You're now playing the customer: enter a real email address, different from yours, to receive what the end customer receives.",
-      de: "Sie spielen jetzt den Kunden: Geben Sie eine echte E-Mail-Adresse an, nicht Ihre eigene, um zu erhalten, was der Endkunde erhält.",
+      de: "Sie spielen jetzt den Kunden: Geben Sie eine echte E-Mail-Adresse an, nicht Ihre eigene, um zu erhalten, was der Endkunde erhält.", it: "Ora interpretate il cliente: inserite un indirizzo e-mail reale, diverso dal vostro, per ricevere ciò che riceve il cliente finale.",
     },
     "Pour tester les deux côtés, utilisez une autre adresse que celle donnée au début (les e-mails « entreprise » y arrivent déjà).": {
       en: "To test both sides, use a different address from the one given at the start (the “company” emails already go there).",
-      de: "Um beide Seiten zu testen, verwenden Sie eine andere Adresse als zu Beginn (die «Unternehmens»-E-Mails gehen bereits dorthin).",
+      de: "Um beide Seiten zu testen, verwenden Sie eine andere Adresse als zu Beginn (die «Unternehmens»-E-Mails gehen bereits dorthin).", it: "Per provare entrambi i lati, usate un indirizzo diverso da quello indicato all'inizio (le e-mail «impresa» arrivano già lì).",
     },
-    "Téléphone (optionnel)": { en: "Phone (optional)", de: "Telefon (optional)" },
-    "Adresse du logement à nettoyer": { en: "Address of the property to clean", de: "Adresse der zu reinigenden Wohnung" },
-    "Confirmer la date": { en: "Confirm the date", de: "Datum bestätigen" },
-    "Valider mes choix": { en: "Confirm my choices", de: "Auswahl bestätigen" },
-    "Aucune option": { en: "No option", de: "Keine Option" },
-    "Continuer": { en: "Continue", de: "Weiter" },
-    "(coordonnées transmises)": { en: "(contact details sent)", de: "(Kontaktdaten übermittelt)" },
+    "Téléphone (optionnel)": { en: "Phone (optional)", de: "Telefon (optional)", it: "Telefono (facoltativo)" },
+    "Adresse du logement à nettoyer": { en: "Address of the property to clean", de: "Adresse der zu reinigenden Wohnung", it: "Indirizzo dell'abitazione da pulire" },
+    "Confirmer la date": { en: "Confirm the date", de: "Datum bestätigen", it: "Confermare la data" },
+    "Valider mes choix": { en: "Confirm my choices", de: "Auswahl bestätigen", it: "Confermare le mie scelte" },
+    "Aucune option": { en: "No option", de: "Keine Option", it: "Nessuna opzione" },
+    "Continuer": { en: "Continue", de: "Weiter", it: "Continuare" },
+    "(coordonnées transmises)": { en: "(contact details sent)", de: "(Kontaktdaten übermittelt)", it: "(dati di contatto inviati)" },
 
-    "💰 Le prix est trop élevé": { en: "💰 The price is too high", de: "💰 Der Preis ist zu hoch" },
-    "📅 La date ne convient pas": { en: "📅 The date doesn't work", de: "📅 Der Termin passt nicht" },
-    "🧹 Je n'ai pas besoin de tout": { en: "🧹 I don't need all of it", de: "🧹 Ich brauche nicht alles" },
-    "🏠 Les conditions/détails ne conviennent pas": { en: "🏠 The terms/details don't suit me", de: "🏠 Die Bedingungen/Details passen nicht" },
-    "🤔 Je dois réfléchir": { en: "🤔 I need to think about it", de: "🤔 Ich muss noch überlegen" },
-    "🆚 J'ai reçu une autre offre": { en: "🆚 I got another offer", de: "🆚 Ich habe ein anderes Angebot erhalten" },
-    "❓ J'ai une autre question": { en: "❓ I have another question", de: "❓ Ich habe eine andere Frage" },
-    "⚪ Je n'ai plus besoin du service": { en: "⚪ I no longer need the service", de: "⚪ Ich benötige den Service nicht mehr" },
-    "Ou décrivez avec vos mots (ex: « Autre entreprise à CHF 420 »)": { en: "Or describe it in your own words (e.g. \"Another company quoted CHF 420\")", de: "Oder beschreiben Sie es mit eigenen Worten (z. B. «Anderes Unternehmen zu CHF 420»)" },
-    "Envoyer": { en: "Send", de: "Senden" },
+    "💰 Le prix est trop élevé": { en: "💰 The price is too high", de: "💰 Der Preis ist zu hoch", it: "💰 Il prezzo è troppo alto" },
+    "📅 La date ne convient pas": { en: "📅 The date doesn't work", de: "📅 Der Termin passt nicht", it: "📅 La data non va bene" },
+    "🧹 Je n'ai pas besoin de tout": { en: "🧹 I don't need all of it", de: "🧹 Ich brauche nicht alles", it: "🧹 Non mi serve tutto" },
+    "🏠 Les conditions/détails ne conviennent pas": { en: "🏠 The terms/details don't suit me", de: "🏠 Die Bedingungen/Details passen nicht", it: "🏠 Le condizioni/i dettagli non mi vanno bene" },
+    "🤔 Je dois réfléchir": { en: "🤔 I need to think about it", de: "🤔 Ich muss noch überlegen", it: "🤔 Devo pensarci" },
+    "🆚 J'ai reçu une autre offre": { en: "🆚 I got another offer", de: "🆚 Ich habe ein anderes Angebot erhalten", it: "🆚 Ho ricevuto un'altra offerta" },
+    "❓ J'ai une autre question": { en: "❓ I have another question", de: "❓ Ich habe eine andere Frage", it: "❓ Ho un'altra domanda" },
+    "⚪ Je n'ai plus besoin du service": { en: "⚪ I no longer need the service", de: "⚪ Ich benötige den Service nicht mehr", it: "⚪ Non ho più bisogno del servizio" },
+    "Ou décrivez avec vos mots (ex: « Autre entreprise à CHF 420 »)": { en: "Or describe it in your own words (e.g. \"Another company quoted CHF 420\")", de: "Oder beschreiben Sie es mit eigenen Worten (z. B. «Anderes Unternehmen zu CHF 420»)", it: "Oppure descrivetelo con parole vostre (ad es. «Un'altra impresa mi ha proposto CHF 420»)" },
+    "Envoyer": { en: "Send", de: "Senden", it: "Invia" },
 
     "Bien sûr. Auriez-vous deux minutes pour me dire ce qui ne convenait pas dans notre offre ?": {
       en: "Of course. Would you have two minutes to tell me what didn't work about our offer?",
-      de: "Natürlich. Hätten Sie zwei Minuten Zeit, mir zu sagen, was an unserem Angebot nicht gepasst hat?",
+      de: "Natürlich. Hätten Sie zwei Minuten Zeit, mir zu sagen, was an unserem Angebot nicht gepasst hat?", it: "Certo. Avreste due minuti per dirmi cosa non andava nella nostra offerta?",
     },
-    "Pour vous recontacter si besoin, laissez-nous vos coordonnées :": { en: "So we can follow up if needed, please leave us your details:", de: "Damit wir Sie bei Bedarf kontaktieren können, hinterlassen Sie uns bitte Ihre Kontaktdaten:" },
+    "Pour vous recontacter si besoin, laissez-nous vos coordonnées :": { en: "So we can follow up if needed, please leave us your details:", de: "Damit wir Sie bei Bedarf kontaktieren können, hinterlassen Sie uns bitte Ihre Kontaktdaten:", it: "Per poterci rifare vivi se necessario, lasciateci i vostri dati:" },
     "Merci pour votre retour ! Nous avons transmis votre message à l'équipe — vous serez recontacté(e) rapidement si une meilleure offre est possible.": {
       en: "Thanks for the feedback! We've passed your message on to the team — you'll hear back shortly if a better offer is possible.",
-      de: "Vielen Dank für Ihr Feedback! Wir haben Ihre Nachricht an das Team weitergeleitet — Sie hören bald von uns, falls ein besseres Angebot möglich ist.",
+      de: "Vielen Dank für Ihr Feedback! Wir haben Ihre Nachricht an das Team weitergeleitet — Sie hören bald von uns, falls ein besseres Angebot möglich ist.", it: "Grazie per il riscontro! Abbiamo trasmesso il vostro messaggio al team: riceverete presto una risposta se è possibile un'offerta migliore.",
     },
-    "Pour confirmer votre réservation :": { en: "To confirm your booking:", de: "Um Ihre Buchung zu bestätigen:" },
-    "✓ Confirmer la réservation": { en: "✓ Confirm the booking", de: "✓ Buchung bestätigen" },
+    "Pour confirmer votre réservation :": { en: "To confirm your booking:", de: "Um Ihre Buchung zu bestätigen:", it: "Per confermare la vostra prenotazione:" },
+    "✓ Confirmer la réservation": { en: "✓ Confirm the booking", de: "✓ Buchung bestätigen", it: "✓ Confermare la prenotazione" },
 
-    "📄 Votre devis": { en: "📄 Your quote", de: "📄 Ihre Offerte" },
-    "Génération du devis…": { en: "Generating the quote…", de: "Offerte wird erstellt…" },
-    "✓ Accepter le devis": { en: "✓ Accept the quote", de: "✓ Offerte annehmen" },
-    "Refuser": { en: "Decline", de: "Ablehnen" },
-    "Devis PDF": { en: "Quote PDF", de: "Offerte-PDF" },
-    "⬇ Télécharger le PDF": { en: "⬇ Download the PDF", de: "⬇ PDF herunterladen" },
+    "📄 Votre devis": { en: "📄 Your quote", de: "📄 Ihre Offerte", it: "📄 Il vostro preventivo" },
+    "Génération du devis…": { en: "Generating the quote…", de: "Offerte wird erstellt…", it: "Generazione del preventivo…" },
+    "✓ Accepter le devis": { en: "✓ Accept the quote", de: "✓ Offerte annehmen", it: "✓ Accettare il preventivo" },
+    "Refuser": { en: "Decline", de: "Ablehnen", it: "Rifiutare" },
+    "Devis PDF": { en: "Quote PDF", de: "Offerte-PDF", it: "Preventivo PDF" },
+    "⬇ Télécharger le PDF": { en: "⬇ Download the PDF", de: "⬇ PDF herunterladen", it: "⬇ Scaricare il PDF" },
     "Impossible de générer le PDF (connexion requise). Vous pouvez tout de même accepter ou refuser ci-dessous.": {
       en: "Couldn't generate the PDF (connection required). You can still accept or decline below.",
-      de: "Das PDF konnte nicht erstellt werden (Internetverbindung erforderlich). Sie können unten trotzdem annehmen oder ablehnen.",
+      de: "Das PDF konnte nicht erstellt werden (Internetverbindung erforderlich). Sie können unten trotzdem annehmen oder ablehnen.", it: "Impossibile generare il PDF (connessione necessaria). Potete comunque accettare o rifiutare qui sotto.",
     },
-    "DEVIS DÉTAILLÉ": { en: "DETAILED QUOTE", de: "DETAILLIERTE OFFERTE" },
-    "TOTAL": { en: "TOTAL", de: "TOTAL" },
-    "📄 Voir mon devis (PDF)": { en: "📄 View my quote (PDF)", de: "📄 Offerte ansehen (PDF)" },
-    "Merci d'avoir testé l'outil de devis intégré de Dealz !": { en: "Thanks for trying Dealz's built-in quote tool!", de: "Danke, dass Sie das integrierte Offert-Tool von Dealz getestet haben!" },
-    "Intégrer Dealz": { en: "Integrate Dealz", de: "Dealz integrieren" },
-    "Nous contacter": { en: "Contact us", de: "Kontaktieren Sie uns" },
-    "📧 Aperçu de l'e-mail (démo)": { en: "📧 Email preview (demo)", de: "📧 E-Mail-Vorschau (Demo)" },
-    "📅 Ajouter à mon Google Agenda": { en: "📅 Add to my Google Calendar", de: "📅 Zu meinem Google Kalender hinzufügen" },
+    "DEVIS DÉTAILLÉ": { en: "DETAILED QUOTE", de: "DETAILLIERTE OFFERTE", it: "PREVENTIVO DETTAGLIATO" },
+    "TOTAL": { en: "TOTAL", de: "TOTAL", it: "TOTALE" },
+    "📄 Voir mon devis (PDF)": { en: "📄 View my quote (PDF)", de: "📄 Offerte ansehen (PDF)", it: "📄 Vedere il mio preventivo (PDF)" },
+    "Merci d'avoir testé l'outil de devis intégré de Dealz !": { en: "Thanks for trying Dealz's built-in quote tool!", de: "Danke, dass Sie das integrierte Offert-Tool von Dealz getestet haben!", it: "Grazie per aver provato lo strumento di preventivi integrato di Dealz!" },
+    "Intégrer Dealz": { en: "Integrate Dealz", de: "Dealz integrieren", it: "Integrare Dealz" },
+    "Nous contacter": { en: "Contact us", de: "Kontaktieren Sie uns", it: "Contattateci" },
+    "📧 Aperçu de l'e-mail (démo)": { en: "📧 Email preview (demo)", de: "📧 E-Mail-Vorschau (Demo)", it: "📧 Anteprima e-mail (demo)" },
+    "📅 Ajouter à mon Google Agenda": { en: "📅 Add to my Google Calendar", de: "📅 Zu meinem Google Kalender hinzufügen", it: "📅 Aggiungere al mio Google Calendar" },
     "Ce devis est ferme pour autant que les réponses fournies au questionnaire soient fidèles à la réalité. Si la situation constatée sur place diffère des informations données, l'entreprise se réserve le droit d'adapter le prix en conséquence.": {
       en: "This quote is firm provided that the answers given to the questionnaire accurately reflect the actual situation. If the conditions found on site differ from the information provided, the company reserves the right to adjust the price accordingly.",
-      de: "Diese Offerte ist verbindlich, sofern die Antworten auf den Fragebogen der tatsächlichen Situation entsprechen. Weichen die Verhältnisse vor Ort von den gemachten Angaben ab, behält sich das Unternehmen vor, den Preis entsprechend anzupassen.",
+      de: "Diese Offerte ist verbindlich, sofern die Antworten auf den Fragebogen der tatsächlichen Situation entsprechen. Weichen die Verhältnisse vor Ort von den gemachten Angaben ab, behält sich das Unternehmen vor, den Preis entsprechend anzupassen.", it: "Questo preventivo è fisso a condizione che le risposte date al questionario riflettano fedelmente la situazione reale. Se le condizioni constatate sul posto differiscono dalle informazioni fornite, l'impresa si riserva il diritto di adeguare il prezzo di conseguenza.",
     },
     "Voici votre devis, ferme et détaillé pour cette prestation — vous pouvez l'accepter ou le refuser ci-dessous.": {
       en: "Here is your firm, detailed quote for this service — you can accept or decline it below.",
-      de: "Hier ist Ihre feste, detaillierte Offerte für diese Leistung — Sie können sie unten annehmen oder ablehnen.",
+      de: "Hier ist Ihre feste, detaillierte Offerte für diese Leistung — Sie können sie unten annehmen oder ablehnen.", it: "Ecco il vostro preventivo fisso e dettagliato per questo servizio: potete accettarlo o rifiutarlo qui sotto.",
     },
   };
 
@@ -321,11 +321,13 @@
       build: (m, lang) =>
         lang === "en"
           ? `Thank you ${m[1]}! Here is your firm, detailed quote for this service — you can accept or decline it below.`
+          : lang === "it"
+          ? `Grazie ${m[1]}! Ecco il vostro preventivo fisso e dettagliato per questo servizio: potete accettarlo o rifiutarlo qui sotto.`
           : `Vielen Dank, ${m[1]}! Hier ist Ihre feste, detaillierte Offerte für diese Leistung — Sie können sie unten annehmen oder ablehnen.`,
     },
     {
       re: /^Erreur\s*:\s*(.+)$/,
-      build: (m, lang) => (lang === "en" ? `Error: ${m[1]}` : `Fehler: ${m[1]}`),
+      build: (m, lang) => (lang === "en" ? `Error: ${m[1]}` : lang === "it" ? `Errore: ${m[1]}` : `Fehler: ${m[1]}`),
     },
   ];
 
@@ -369,7 +371,7 @@
   // error / not configured / no address), so a failed send is visible.
   function deliveryHtml(delivery) {
     if (!delivery) return "";
-    const lang = window.DEALZ_LANG === "en" || window.DEALZ_LANG === "de" ? window.DEALZ_LANG : "fr";
+    const lang = ["en", "de", "it"].includes(window.DEALZ_LANG) ? window.DEALZ_LANG : "fr";
     const L = {
       fr: { company: "E-mail « entreprise »", customer: "E-mail « client final »", sent: "envoyé à", spam: "vérifiez aussi vos spams",
             failed: "non envoyé", error: "erreur d'envoi", simulated: "non envoyé : l'envoi d'e-mails n'est pas configuré sur ce serveur", skipped: "aucune adresse renseignée" },
@@ -377,6 +379,8 @@
             failed: "not sent", error: "sending error", simulated: "not sent: email sending isn't configured on this server", skipped: "no address provided" },
       de: { company: "E-Mail «Unternehmen»", customer: "E-Mail «Endkunde»", sent: "gesendet an", spam: "prüfen Sie auch den Spam-Ordner",
             failed: "nicht gesendet", error: "Versandfehler", simulated: "nicht gesendet: Der E-Mail-Versand ist auf diesem Server nicht eingerichtet", skipped: "keine Adresse angegeben" },
+      it: { company: "E-mail «impresa»", customer: "E-mail «cliente finale»", sent: "inviata a", spam: "controllate anche la cartella spam",
+            failed: "non inviata", error: "errore d'invio", simulated: "non inviata: l'invio di e-mail non è configurato su questo server", skipped: "nessun indirizzo indicato" },
     }[lang];
     const lines = [];
     for (const key of ["company", "customer"]) {
@@ -634,6 +638,8 @@
               ? "Please choose a valid date (earliest: " + question.minDate + ")."
               : window.DEALZ_LANG === "de"
               ? "Bitte wählen Sie ein gültiges Datum (frühestens: " + question.minDate + ")."
+              : window.DEALZ_LANG === "it"
+              ? "Scegliete una data valida (al più presto: " + question.minDate + ")."
               : "Merci de choisir une date valide (au plus tôt : " + question.minDate + ").";
           dateMsg.className = "dlg-msg show err";
           return;
@@ -714,8 +720,8 @@
   function renderEmailPreview(container, preview) {
     if (!preview) return;
     const wrap = el("div", "dealz-email-preview");
-    const toLabel = window.DEALZ_LANG === "en" ? "To:" : window.DEALZ_LANG === "de" ? "An:" : "À :";
-    const subjectLabel = window.DEALZ_LANG === "en" ? "Subject:" : window.DEALZ_LANG === "de" ? "Betreff:" : "Objet :";
+    const toLabel = window.DEALZ_LANG === "en" ? "To:" : window.DEALZ_LANG === "de" ? "An:" : window.DEALZ_LANG === "it" ? "A:" : "À :";
+    const subjectLabel = window.DEALZ_LANG === "en" ? "Subject:" : window.DEALZ_LANG === "de" ? "Betreff:" : window.DEALZ_LANG === "it" ? "Oggetto:" : "Objet :";
     wrap.innerHTML =
       `<div class="dep-head">${T("📧 Aperçu de l'e-mail (démo)")}</div>` +
       `<div class="dep-meta"><b>${toLabel}</b> ${preview.to}<br/><b>${subjectLabel}</b> ${preview.subject}</div>` +
@@ -734,7 +740,7 @@
     );
     const actions = el("div", "dpc-actions");
     const integrateLink = el("a", "dpc-btn dpc-btn-primary", "Intégrer Dealz");
-    integrateLink.href = (window.DEALZ_LANG === "en" ? "/en" : window.DEALZ_LANG === "de" ? "/de" : "") + "/index.html#contact";
+    integrateLink.href = (["en", "de", "it"].includes(window.DEALZ_LANG) ? "/" + window.DEALZ_LANG : "") + "/index.html#contact";
     const contactLink = el("a", "dpc-btn dpc-btn-secondary", "Nous contacter");
     contactLink.href = "mailto:dealz@dealz.website";
     actions.appendChild(integrateLink);
@@ -751,6 +757,14 @@
         `by email, and the appointment has been added to the company's Google Calendar. Someone ` +
         `from the team will contact you if needed to finalise the details.` +
         `<br/><br/><i style="opacity:.7">(Static demo mode — no real email is sent here.)</i>`
+      );
+    }
+    if (window.DEALZ_LANG === "it") {
+      return (
+        `✓ Grazie! Il vostro preventivo è stato trasmesso a ${COMPANY_NAME}. Riceverete la conferma ` +
+        `via e-mail, e l'appuntamento è stato aggiunto al Google Calendar dell'impresa. Una persona ` +
+        `del team vi contatterà se necessario per definire i dettagli.` +
+        `<br/><br/><i style="opacity:.7">(Modalità demo statica: qui non viene inviata nessuna e-mail reale.)</i>`
       );
     }
     if (window.DEALZ_LANG === "de") {
@@ -793,6 +807,8 @@
           ? `✓ Booking confirmed! The appointment is ready to be added to the company's calendar.`
           : window.DEALZ_LANG === "de"
           ? `✓ Buchung bestätigt! Der Termin ist bereit, in den Kalender des Unternehmens eingetragen zu werden.`
+          : window.DEALZ_LANG === "it"
+          ? `✓ Prenotazione confermata! L'appuntamento è pronto per essere aggiunto all'agenda dell'impresa.`
           : `✓ Réservation confirmée ! Le rendez-vous est prêt à être ajouté à l'agenda de l'entreprise.`) +
           deliveryHtml(data.delivery) +
           (data.calendarLink
@@ -894,6 +910,10 @@
             ? `Vielen Dank für Ihr Feedback! Unter realen Bedingungen würde diese Nachricht per ` +
               `E-Mail an ${COMPANY_NAME} übermittelt, mit einer auf Ihren Ablehnungsgrund abgestimmten Massnahme.` +
               `<br/><br/><i style="opacity:.7">(Statischer Demo-Modus — es wird hier keine echte E-Mail versendet.)</i>`
+            : window.DEALZ_LANG === "it"
+            ? `Grazie per il riscontro! In condizioni reali, questo messaggio verrebbe trasmesso a ` +
+              `${COMPANY_NAME} via e-mail, con un'azione adattata al vostro motivo di rifiuto.` +
+              `<br/><br/><i style="opacity:.7">(Modalità demo statica: qui non viene inviata nessuna e-mail reale.)</i>`
             : `Merci pour votre retour ! En conditions réelles, ce message serait transmis à ` +
               `${COMPANY_NAME} par e-mail, avec une action adaptée à votre motif de refus.` +
               `<br/><br/><i style="opacity:.7">(Mode démonstration statique — aucun e-mail réel n'est envoyé ici.)</i>`)
@@ -958,7 +978,7 @@
   async function openPdfModal(container, quote) {
     const overlay = el("div", "dealz-pdf-overlay");
     overlay.id = "dealz-pdf-overlay";
-    const closeLabel = window.DEALZ_LANG === "en" ? "Close" : window.DEALZ_LANG === "de" ? "Schliessen" : "Fermer";
+    const closeLabel = window.DEALZ_LANG === "en" ? "Close" : window.DEALZ_LANG === "de" ? "Schliessen" : window.DEALZ_LANG === "it" ? "Chiudi" : "Fermer";
     overlay.innerHTML =
       '<div class="dealz-pdf-modal">' +
       '<div class="dealz-pdf-modal-head">' +

@@ -227,6 +227,72 @@
       aClient: "ein Kunde",
       pdfTitleDoc: "OFFERTE",
     },
+    it: {
+      typing: "Sta scrivendo…",
+      acceptDone: function (c) { return "✓ Prenotazione confermata!"; },
+      declineDone: function (c) { return "Grazie per il riscontro! " + c + " riceve un'e-mail di rifiuto con una risposta suggerita e un pulsante d'azione."; },
+      dlv: {
+        company: "E-mail «impresa» (ciò che riceve {c})",
+        customer: "E-mail «cliente finale»",
+        sent: function (to) { return "inviata a <b>" + to + "</b>: controllate anche la cartella spam."; },
+        failed: function (to, e) { return "<b>non inviata</b>" + (to ? " a " + to : "") + ": errore d'invio <code>" + (e || "sconosciuto") + "</code>"; },
+        simulated: "non inviata: l'invio di e-mail non è configurato su questo server.",
+        skipped: "nessun indirizzo indicato.",
+        intro: function (to, c) { return "📩 Demo: le e-mail che riceve " + c + " arrivano a <b>" + to + "</b> appena il cliente accetta o rifiuta il preventivo."; },
+      },
+      addCalendar: "📅 Aggiungere alla mia agenda",
+      error: function (m) { return "Errore: " + m; },
+      quoteReady: function (n) { return (n ? "Grazie " + n + "! " : "") + "Ecco il vostro preventivo fisso e dettagliato: potete accettarlo o rifiutarlo qui sotto."; },
+      contactIntro: "Ora interpretate il cliente: inserite un indirizzo e-mail reale, <b>non il vostro</b>, per ricevere ciò che riceve il cliente finale (preventivo accettato, controproposta…).",
+      name: "Nome del cliente", email: "E-mail del cliente (reale, non la vostra)", phone: "Telefono (facoltativo)", address: "Indirizzo",
+      sameEmail: "Per provare entrambi i lati, usate un indirizzo diverso da quello indicato all'inizio (le e-mail «impresa» arrivano già lì).",
+      cont: "Continuare",
+      confirmDate: "Confermare la data",
+      dateErr: function (min) { return "Scegliete una data valida (al più presto: " + min + ")."; },
+      confirmChoices: "Confermare le mie scelte",
+      noneOption: "Nessuna di queste",
+      noneChosen: "Nessuna opzione",
+      accuracy: "Questo preventivo è fisso a condizione che le risposte date al questionario riflettano fedelmente la situazione reale. Se le condizioni constatate sul posto differiscono dalle informazioni fornite, l'impresa si riserva il diritto di adeguare il prezzo di conseguenza.",
+      quoteHead: "PREVENTIVO DETTAGLIATO", total: "TOTALE", minimum: "Supplemento per importo minimo",
+      viewPdf: "📄 Vedere il mio preventivo (PDF)", yourQuote: "📄 Il vostro preventivo", generating: "Generazione del preventivo…",
+      accept: "✓ Accettare il preventivo", decline: "Rifiutare", close: "Chiudi", download: "⬇ Scaricare il PDF",
+      pdfError: "Impossibile generare il PDF (connessione necessaria). Potete comunque accettare o rifiutare qui sotto.",
+      logoHint: "💡 Con Dealz, questo preventivo porta il vostro logo, i vostri dati di contatto e le vostre condizioni.",
+      restart: "↺ Nuovo preventivo",
+      back: "← Modificare la risposta precedente",
+      declineAsk: "Certo. Avreste due minuti per dirmi cosa non andava nella nostra offerta?",
+      freePh: "Oppure descrivetelo con parole vostre…", send: "Invia",
+      declineThanks: function (c) { return "Grazie per il riscontro! In condizioni reali, questo messaggio verrebbe trasmesso a " + c + " via e-mail, con un'azione adattata al vostro motivo di rifiuto."; },
+      acceptThanks: function (c) { return "✓ Grazie! Il vostro preventivo è stato trasmesso a " + c + ". Riceverete una conferma via e-mail."; },
+      staticNote: "(Modalità demo: qui non viene inviata nessuna e-mail reale.)",
+      previewHead: "📧 Anteprima e-mail (demo)", to: "A:", subject: "Oggetto:",
+      postCta: "Grazie per aver provato l'assistente di preventivi Dealz!", integrate: "Integrare Dealz", contact: "Contattateci",
+      misunderstood: "Non ho capito bene: scegliete una delle opzioni mostrate qui sopra.",
+      afterQuote: "Il vostro preventivo è pronto qui sopra. Per uno nuovo, cliccate su «Nuovo preventivo».",
+      terms: "Preventivo fisso, valido 30 giorni.",
+      generated: function (b) { return "Documento generato automaticamente — " + b + ", sito demo."; },
+      objections: [
+        ["price", "💰 Il prezzo è troppo alto", "Prezzo troppo alto", "🔴", "Proporre uno sconto mirato o togliere un'opzione per rientrare nel budget."],
+        ["timing", "📅 La data non va bene", "Data non disponibile", "📅", "Proporre due o tre altre date libere."],
+        ["scope", "✂️ Non mi serve tutto", "Portata del servizio", "✂️", "Proporre una variante più leggera senza le opzioni superflue."],
+        ["conditions", "📋 Le condizioni/i dettagli non mi vanno bene", "Condizioni / dettagli", "📋", "Chiarire le condizioni e adattare il preventivo ai dettagli richiesti."],
+        ["thinking", "🤔 Devo pensarci", "Ha bisogno di riflettere", "🟡", "Fare un sollecito gentile tra 48 ore."],
+        ["competitor", "🆚 Ho ricevuto un'altra offerta", "Ha ricevuto un'altra offerta", "🆚", "Chiedere l'importo del concorrente, poi allinearsi o mettere in evidenza la differenza."],
+        ["information", "❓ Ho un'altra domanda", "Ha bisogno di informazioni", "❓", "Rispondere direttamente alla domanda del cliente."],
+        ["not_needed", "⚪ Non ho più bisogno del servizio", "Non ha più bisogno del servizio", "⚪", "Ringraziare il cliente e chiudere la richiesta."],
+      ],
+      other: "Altro motivo",
+      emailDeclineTitle: "Preventivo rifiutato — azione possibile",
+      client: "Cliente", clientEmail: "E-mail", clientPhone: "Telefono", clientAddress: "Indirizzo",
+      originalQuote: "Preventivo iniziale", reason: "Motivo del rifiuto", clientMsg: "Messaggio del cliente", action: "Azione suggerita",
+      notProvided: "(non indicato)",
+      bookingTitle: "✓ Prenotazione confermata",
+      bookingBody: function (n, c, t) { return "Grazie " + n + "! La vostra prenotazione presso " + c + " è confermata per <b>" + t + "</b>."; },
+      bookingFoot: "L'e-mail reale contiene anche un link «Aggiungere alla mia agenda».",
+      declineSubject: function (label, name, total) { return "Preventivo rifiutato — " + label + " — " + name + (total ? " — " + total : ""); },
+      aClient: "un cliente",
+      pdfTitleDoc: "PREVENTIVO",
+    },
   };
   var UI = UI_ALL[LANG] || UI_ALL.fr;
 
@@ -244,7 +310,7 @@
   function fmtDate(iso) {
     var d = new Date(iso + "T12:00:00");
     if (isNaN(d.getTime())) return iso;
-    return d.toLocaleDateString(LANG === "en" ? "en-CH" : LANG === "de" ? "de-CH" : "fr-CH", { year: "numeric", month: "long", day: "numeric" });
+    return d.toLocaleDateString(LANG === "en" ? "en-CH" : LANG === "de" ? "de-CH" : LANG === "it" ? "it-CH" : "fr-CH", { year: "numeric", month: "long", day: "numeric" });
   }
   function isoDatePlus(days) {
     var d = new Date(Date.now() + days * 864e5);
@@ -459,7 +525,7 @@
   // Scores each option by word overlap (both directions); a single-choice
   // question only accepts a clear, unambiguous winner — "ascenseur" alone
   // matches three floor options, so it is rejected rather than guessed.
-  var STOP = { de: 1, du: 1, des: 1, la: 1, le: 1, les: 1, un: 1, une: 1, et: 1, ou: 1, en: 1, au: 1, aux: 1, the: 1, an: 1, and: 1, or: 1, of: 1, der: 1, die: 1, das: 1, und: 1, oder: 1, ein: 1, eine: 1 };
+  var STOP = { de: 1, du: 1, des: 1, la: 1, le: 1, les: 1, un: 1, une: 1, et: 1, ou: 1, en: 1, au: 1, aux: 1, the: 1, an: 1, and: 1, or: 1, of: 1, der: 1, die: 1, das: 1, und: 1, oder: 1, ein: 1, eine: 1, del: 1, della: 1, dei: 1, delle: 1, gli: 1, una: 1, per: 1, con: 1 };
   function toks(str) {
     return norm(str).split(" ").filter(function (w) { return w && !STOP[w] && (w.length >= 3 || /^\d+$/.test(w)); });
   }

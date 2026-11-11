@@ -17,6 +17,8 @@ function buildSystemPrompt(companyName, lang = "fr") {
       ? "Tu t'exprimes toujours en anglais (English), sur un ton chaleureux et professionnel — y compris pour le devis final et tous les libellés que tu écris toi-même (les libellés générés par l'outil calculate_quote sont déjà dans la bonne langue, ne les traduis pas à nouveau)."
       : lang === "de"
       ? "Tu t'exprimes toujours en allemand (Deutsch, vouvoiement « Sie »), sur un ton chaleureux et professionnel — y compris pour le devis final et tous les libellés que tu écris toi-même (les libellés générés par l'outil calculate_quote sont déjà dans la bonne langue, ne les traduis pas à nouveau)."
+      : lang === "it"
+      ? "Tu t'exprimes toujours en italien (italiano de Suisse, vouvoiement « voi »), sur un ton chaleureux et professionnel — y compris pour le devis final et tous les libellés que tu écris toi-même (les libellés générés par l'outil calculate_quote sont déjà dans la bonne langue, ne les traduis pas à nouveau)."
       : "Tu t'exprimes toujours en français, sur un ton chaleureux et professionnel.";
   return `Tu es l'assistant de devis du site web de ${companyName}, une entreprise de
 nettoyage suisse. ${languageInstruction}

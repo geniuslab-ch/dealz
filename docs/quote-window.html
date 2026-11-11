@@ -156,6 +156,13 @@
         send: "Senden",
         close: "Schliessen",
       },
+      it: {
+        title: "Preventivo online",
+        subtitle: "Risposta di solito immediata",
+        placeholder: "Descrivete le vostre esigenze di pulizia…",
+        send: "Invia",
+        close: "Chiudi",
+      },
     };
     if (WINDOW_STRINGS[lang]) {
       var s = WINDOW_STRINGS[lang];
@@ -203,7 +210,7 @@
         .then(function (info) {
           if (!info) return;
           if (info.name) {
-            var suffix = lang === "en" ? " · Quote" : lang === "de" ? " · Offerte" : " · Devis";
+            var suffix = lang === "en" ? " · Quote" : lang === "de" ? " · Offerte" : lang === "it" ? " · Preventivo" : " · Devis";
             document.getElementById("dealz-window-title").textContent = info.name + suffix;
             document.title = info.name + suffix;
           }

@@ -51,7 +51,7 @@
   window.DEALZ_COMPANY = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-company")) || "";
   // SCALE: which team/location price grid this page uses (set in the CRM).
   window.DEALZ_GRID = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-grid")) || "";
-  // "fr" (default), "en" or "de" — quote-app.js's own T() dictionary reads
+  // "fr" (default), "en", "de" or "it" — quote-app.js's own T() dictionary reads
   // this for the bubble/inline panel; the popup modal below passes it on
   // to quote-window.html as ?lang=.
   window.DEALZ_LANG = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-lang")) || "fr";
@@ -173,11 +173,11 @@
     var WA_TEXT = {
       fr: "Bonjour, j'aimerais recevoir un devis.",
       en: "Hello, I'd like to get a quote.",
-      de: "Guten Tag, ich h\u00e4tte gerne eine Offerte.",
+      de: "Guten Tag, ich h\u00e4tte gerne eine Offerte.", it: "Buongiorno, vorrei ottenere un preventivo.",
     };
     var waText = (CURRENT_SCRIPT && CURRENT_SCRIPT.getAttribute("data-dealz-text")) || WA_TEXT[window.DEALZ_LANG] || WA_TEXT.fr;
     var waLink = "https://wa.me/" + waNumber + "?text=" + encodeURIComponent(waText);
-    var WA_LABEL = { fr: "Demander un devis sur WhatsApp", en: "Get a quote on WhatsApp", de: "Offerte auf WhatsApp anfragen" };
+    var WA_LABEL = { fr: "Demander un devis sur WhatsApp", en: "Get a quote on WhatsApp", de: "Offerte auf WhatsApp anfragen", it: "Ottenere un preventivo su WhatsApp" };
     function openWhatsapp() {
       if (!waNumber) return;
       window.open(waLink, "_blank", "noopener");

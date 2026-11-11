@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <script src="/consent.js" defer></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Passaparola — Dealz</title>
+  <meta name="description" content="Conoscete un collega che perde ancora richieste? Raccomandategli Dealz." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="/nav.js" defer></script>
+  <!-- SEO:START (scripts/build-seo.js) -->
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png" />
+  <link rel="canonical" href="https://dealz.website/it/passaparola.html" />
+  <link rel="alternate" hreflang="fr" href="https://dealz.website/parrainage.html" />
+  <link rel="alternate" hreflang="de" href="https://dealz.website/de/empfehlung.html" />
+  <link rel="alternate" hreflang="en" href="https://dealz.website/en/referral.html" />
+  <link rel="alternate" hreflang="it" href="https://dealz.website/it/passaparola.html" />
+  <link rel="alternate" hreflang="x-default" href="https://dealz.website/parrainage.html" />
+  <!-- SEO:END -->
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <img src="/images/dealz-logo-nav.png" alt="Dealz" />
+      <span class="nav-slogan">Tenete il vostro sito.<br>Tenete i vostri strumenti.<br>Aggiungete Dealz.</span>
+    </div>
+    <div class="nav-links">
+      <a href="/it/index.html">Home</a>
+      <span class="nav-lang">
+        <a href="/parrainage.html">FR</a>
+        <a href="/en/referral.html">EN</a>
+        <a href="/de/empfehlung.html">DE</a>
+        <a href="/it/passaparola.html" class="active">IT</a>
+      </span>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <span class="eyebrow">Programma passaparola</span>
+      <h1>AVETE CUSTODITO<br>IL SEGRETO ABBASTANZA.</h1>
+      <p class="hero-question">Conoscete un collega che perde ancora richieste la sera?</p>
+      <p>Ditecelo in 30 secondi. Pensiamo a tutto noi e gli mostriamo Dealz, e voi ricevete un premio sul vostro abbonamento appena si iscrive: fino a CHF 300 di sconto (annuale) o 3 mesi offerti (mensile).</p>
+    </div>
+  </section>
+
+  <section id="parrainage-form-section">
+    <div class="section-inner" style="max-width: 560px;">
+
+      <div class="referral-card" id="identify-section" style="display:none;">
+        <div class="referral-card-head">
+          <div class="title">Prima di tutto, troviamo il vostro conto</div>
+          <div class="subtitle">Non siete passati dal vostro link personale: nessun problema, basta la vostra e-mail</div>
+        </div>
+        <div id="identify-form">
+          <input class="dcf-input" id="id-email" type="email" placeholder="La vostra e-mail di cliente Dealz" required />
+          <button class="dcf-submit" id="id-submit">Continuare →</button>
+          <p class="dlg-msg" id="id-msg"></p>
+        </div>
+      </div>
+
+      <div class="referral-card" id="referral-form-section" style="display:none;">
+        <div class="referral-card-head">
+          <div class="title">Presentateci un collega</div>
+          <div class="subtitle">2 minuti, senza impegno per lui</div>
+        </div>
+
+        <div id="referral-form">
+          <input class="dcf-input" id="rf-company" placeholder="Nome della sua impresa" />
+          <input class="dcf-input" id="rf-email" type="email" placeholder="La sua e-mail professionale" required />
+          <input class="dcf-input" id="rf-phone" placeholder="Il suo telefono (facoltativo)" />
+          <textarea class="dcf-input" id="rf-note" placeholder="Un messaggio per lui (facoltativo), ad es. «Guarda, potrebbe esserti utile»" rows="3" style="resize: vertical; font-family: inherit;"></textarea>
+          <button class="dcf-submit" id="rf-submit">Inviare il consiglio →</button>
+          <p class="dlg-msg" id="rf-msg"></p>
+        </div>
+
+        <div id="referral-success" style="display:none;">
+          <p style="font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 6px;">Inviato. 🤝</p>
+          <p style="font-size: 13.5px; color: var(--muted); margin: 0;">Ora ci pensiamo noi con il vostro collega. Grazie per l'aiuto e per la fiducia.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div>Dealz — Assistente di vendita IA per artigiani e imprese di servizi. 🇨🇭 FR · DE · IT · EN</div>
+    <div class="site-footer-slogan">Tenete il vostro sito. Tenete i vostri strumenti. Aggiungete Dealz.</div>
+    <div class="site-footer-legal"><a href="/it/privacy.html">Privacy</a> · <a href="/it/condizioni.html">Condizioni</a> · <a href="mailto:info@dealz.website">info@dealz.website</a></div>
+    <div class="site-footer-nap">Dealz · Rue des Cygnes 33b, CH-1400 Yverdon-les-Bains · <a href="tel:+41786372553">078 637 25 53</a></div>
+    <div class="site-footer-social"><a href="https://www.facebook.com/profile.php?id=61596199507869" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/dealz.website" target="_blank" rel="noopener">Instagram</a> · <a href="https://www.tiktok.com/@dealz.website" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.linkedin.com/company/scharer/" target="_blank" rel="noopener">LinkedIn</a></div>
+  </footer>
+
+  <script>window.DEALZ_LANG = "it";</script>
+  <script src="/referral-form.js"></script>
+</body>
+</html>

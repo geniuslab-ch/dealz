@@ -15,7 +15,7 @@
   var MAX_AGE_MS = 180 * 24 * 60 * 60 * 1000;
 
   var lang = (document.documentElement.lang || "fr").slice(0, 2);
-  if (lang !== "de" && lang !== "en") lang = "fr";
+  if (lang !== "de" && lang !== "en" && lang !== "it") lang = "fr";
   var T = {
     fr: {
       text: "Nous utilisons Google Analytics pour mesurer l'audience du site. Il ne dépose de cookies que si vous acceptez.",
@@ -31,6 +31,11 @@
       text: "We use Google Analytics to measure the site's audience. It only sets cookies if you accept.",
       accept: "Accept", decline: "Decline", more: "Learn more",
       settings: "Cookie settings", label: "Cookies", href: "/en/privacy.html"
+    },
+    it: {
+      text: "Usiamo Google Analytics per misurare l'audience del sito. Installa cookie solo se accettate.",
+      accept: "Accetto", decline: "Rifiuto", more: "Saperne di più",
+      settings: "Impostazioni dei cookie", label: "Cookie", href: "/it/privacy.html"
     }
   }[lang];
 

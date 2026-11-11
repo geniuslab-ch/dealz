@@ -26,10 +26,11 @@ const L = {
   fr: { home: "Accueil", sectors: "Secteurs", desc: "Assistant de vente IA qui répond aux clients sur WhatsApp et sur le site, calcule le prix selon les tarifs de l'entreprise et prépare le devis 24/7." },
   en: { home: "Home", sectors: "Sectors", desc: "AI sales assistant that answers customers on WhatsApp and on the website, prices the job from the business's own rates and prepares the quote 24/7." },
   de: { home: "Startseite", sectors: "Branchen", desc: "KI-Verkaufsassistent, der Kunden auf WhatsApp und auf der Website antwortet, den Preis nach den Tarifen des Betriebs berechnet und rund um die Uhr die Offerte erstellt." },
+  it: { home: "Home", sectors: "Settori", desc: "Assistente di vendita IA che risponde ai clienti su WhatsApp e sul sito, calcola il prezzo secondo le tariffe dell'azienda e prepara il preventivo 24 ore su 24." },
 };
-const HOME = { fr: "index.html", en: "en/index.html", de: "de/index.html" };
+const HOME = { fr: "index.html", en: "en/index.html", de: "de/index.html", it: "it/index.html" };
 const { frenchPathOf } = require("./sector-urls");
-const HUB = { fr: "secteurs/index.html", en: "en/sectors/index.html", de: "de/branchen/index.html" };
+const HUB = { fr: "secteurs/index.html", en: "en/sectors/index.html", de: "de/branchen/index.html", it: "it/settori/index.html" };
 
 // Sector labels per language, from the sector data files.
 const DATA_DIR = path.join(DOCS, "secteurs", "data");
@@ -87,14 +88,14 @@ function structuredData(file) {
           "@id": BASE + "/#website",
           name: "Dealz",
           url: BASE + "/",
-          inLanguage: ["fr", "en", "de"],
+          inLanguage: ["fr", "en", "de", "it"],
           publisher: { "@id": BASE + "/#organization" },
         },
       ],
     });
   }
   const crumbs = [{ name: t.home, url: urlOf(HOME[lang]) }];
-  const m = frenchPathOf(file).replace(/^(de|en)\//, "").match(/^secteurs\/(?:([^/]+)\/)?index\.html$/);
+  const m = frenchPathOf(file).replace(/^(de|en|it)\//, "").match(/^secteurs\/(?:([^/]+)\/)?index\.html$/);
   if (!m) return "";
   crumbs.push({ name: t.sectors, url: urlOf(HUB[lang]) });
   if (m[1]) {
@@ -115,12 +116,13 @@ const DEMO_DESC = {
   fr: (company, sector) => "Démo Dealz" + (sector ? " pour le secteur " + sector.toLowerCase() + "," : "") + " avec " + company + " (entreprise fictive) : demandez un devis sur le site ou sur WhatsApp, voyez le prix calculé et l'offre en PDF.",
   en: (company, sector) => "Dealz demo" + (sector ? " for " + sector.toLowerCase() + "," : "") + " with " + company + " (a fictional company): request a quote on the website or on WhatsApp, see the calculated price and the PDF offer.",
   de: (company, sector) => "Dealz-Demo" + (sector ? " für " + sector : "") + " mit " + company + " (fiktives Unternehmen): Offerte auf der Website oder per WhatsApp anfragen, berechneten Preis und PDF-Offerte ansehen.",
+  it: (company, sector) => "Demo Dealz" + (sector ? " per il settore " + sector.toLowerCase() + "," : "") + " con " + company + " (azienda fittizia): chiedete un preventivo sul sito o su WhatsApp, vedete il prezzo calcolato e l'offerta in PDF.",
 };
 function demoDescription(file, html) {
   const lang = langOf(file);
   const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || "";
   const company = title.split(" — ")[0].trim() || "SwissClean Sàrl";
-  const m = frenchPathOf(file).replace(/^(de|en)\//, "").match(/^secteurs\/([^/]+)\/demo\.html$/);
+  const m = frenchPathOf(file).replace(/^(de|en|it)\//, "").match(/^secteurs\/([^/]+)\/demo\.html$/);
   const S = m && sectors[m[1]];
   return DEMO_DESC[lang](company, S && S[lang] ? S[lang].label : "");
 }

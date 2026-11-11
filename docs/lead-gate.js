@@ -37,6 +37,8 @@
           limit: (n) => `You've already tried the demo ${n} times — that's the maximum for open access. Contact us for a personalised demo with your own price list.` },
     de: { invalid: "Bitte geben Sie eine gültige E-Mail-Adresse an.", checking: "Wird geprüft…", error: "Ein Fehler ist aufgetreten.",
           limit: (n) => `Sie haben die Demo bereits ${n}-mal getestet — das ist das Maximum im freien Zugang. Kontaktieren Sie uns für eine persönliche Demo mit Ihrer eigenen Preisliste.` },
+    it: { invalid: "Inserite un'e-mail valida.", checking: "Verifica in corso…", error: "Si è verificato un errore.",
+          limit: (n) => `Avete già provato la demo ${n} volte: è il massimo in libero accesso. Contattateci per una demo personalizzata con il vostro listino.` },
   };
   const M = MSG[window.DEALZ_LANG] || MSG.fr;
 

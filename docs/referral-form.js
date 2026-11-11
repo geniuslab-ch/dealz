@@ -19,21 +19,21 @@
   const I18N = {
     "Merci d'indiquer un e-mail professionnel valide pour votre confrère.": {
       en: "Please provide a valid work email for your colleague.",
-      de: "Bitte geben Sie eine gültige geschäftliche E-Mail-Adresse für Ihre Kollegin oder Ihren Kollegen an.",
+      de: "Bitte geben Sie eine gültige geschäftliche E-Mail-Adresse für Ihre Kollegin oder Ihren Kollegen an.", it: "Indicate un'e-mail professionale valida per il vostro collega.",
     },
-    "Envoi…": { en: "Sending…", de: "Wird gesendet…" },
+    "Envoi…": { en: "Sending…", de: "Wird gesendet…", it: "Invio in corso…" },
     "Une erreur est survenue — réessayez dans un instant.": {
       en: "Something went wrong — please try again in a moment.",
-      de: "Etwas ist schiefgelaufen — bitte versuchen Sie es gleich nochmals.",
+      de: "Etwas ist schiefgelaufen — bitte versuchen Sie es gleich nochmals.", it: "Si è verificato un errore, riprovate tra un momento.",
     },
     "Merci d'indiquer l'e-mail associé à votre compte Dealz.": {
       en: "Please provide the email linked to your Dealz account.",
-      de: "Bitte geben Sie die mit Ihrem Dealz-Konto verknüpfte E-Mail-Adresse an.",
+      de: "Bitte geben Sie die mit Ihrem Dealz-Konto verknüpfte E-Mail-Adresse an.", it: "Indicate l'e-mail collegata al vostro conto Dealz.",
     },
-    "Vérification…": { en: "Checking…", de: "Wird geprüft…" },
+    "Vérification…": { en: "Checking…", de: "Wird geprüft…", it: "Verifica in corso…" },
     "Aucun compte client Dealz trouvé avec cet e-mail. Vérifiez l'adresse, ou utilisez le lien reçu dans votre e-mail de bienvenue.": {
       en: "No Dealz customer account found with this email. Check the address, or use the link from your welcome email.",
-      de: "Kein Dealz-Kundenkonto mit dieser E-Mail-Adresse gefunden. Überprüfen Sie die Adresse, oder verwenden Sie den Link aus Ihrer Willkommens-E-Mail.",
+      de: "Kein Dealz-Kundenkonto mit dieser E-Mail-Adresse gefunden. Überprüfen Sie die Adresse, oder verwenden Sie den Link aus Ihrer Willkommens-E-Mail.", it: "Nessun conto cliente Dealz trovato con questa e-mail. Verificate l'indirizzo, oppure usate il link della vostra e-mail di benvenuto.",
     },
   };
 
@@ -86,7 +86,7 @@
         const res = await fetch(apiUrl("/api/referral"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ referredById, companyName, contactEmail, contactPhone, note }),
+          body: JSON.stringify({ referredById, companyName, contactEmail, contactPhone, note, lang: window.DEALZ_LANG || "fr" }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) {

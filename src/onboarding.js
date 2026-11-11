@@ -18,7 +18,7 @@ const { buildProcuration } = require("./procuration");
  * by hand): nothing is prefilled, the client types everything.
  */
 
-const LANGS = ["fr", "en", "de"];
+const LANGS = ["fr", "en", "de", "it"];
 const langOf = (l) => (LANGS.includes(l) ? l : "fr");
 const BASE = () => (process.env.APP_BASE_URL && !/localhost/.test(process.env.APP_BASE_URL) ? process.env.APP_BASE_URL : "https://dealz.website").replace(/\/$/, "");
 const SESSION_RE = /^cs_(test|live)_[A-Za-z0-9]{10,200}$/;
@@ -60,6 +60,15 @@ const WELCOME = {
     cta: "Mein Einrichtungsformular ausfüllen",
     after: "Am Ende des Formulars können Sie Ihr 30-minütiges Einrichtungsgespräch mit uns direkt im Kalender buchen.",
     sign: "Ihr Dealz-Team",
+  },
+  it: {
+    subject: (c) => (c ? `La vostra messa in servizio Dealz per ${c}` : "La vostra messa in servizio Dealz: ultimo passo"),
+    hello: (n) => `Buongiorno${n ? " " + n : ""},`,
+    body: "Grazie per la vostra fiducia, abbiamo ricevuto il vostro pagamento. Perché il vostro Dealz invii preventivi precisi fin dal primo giorno, ci servono alcune informazioni sui vostri prezzi, la vostra zona e il vostro WhatsApp.",
+    time: "Il modulo richiede circa 10 minuti. Le vostre risposte restano salvate se fate una pausa.",
+    cta: "Compilare il mio modulo di messa in servizio",
+    after: "Alla fine del modulo, un calendario vi permette di prenotare subito il vostro incontro di messa in servizio di 30 minuti con noi.",
+    sign: "Il team Dealz",
   },
 };
 
@@ -184,6 +193,7 @@ const DONE = {
   fr: { subject: "Vos réponses d'intégration Dealz", intro: "Merci ! Voici une copie de vos réponses. Une correction ? Répondez simplement à cet e-mail.", book: "Pas encore réservé votre rendez-vous d'intégration de 30 minutes ? Choisissez votre créneau ici :" },
   en: { subject: "Your Dealz onboarding answers", intro: "Thank you! Here is a copy of your answers. Anything to correct? Just reply to this email.", book: "Not booked your 30-minute onboarding meeting yet? Pick your slot here:" },
   de: { subject: "Ihre Dealz-Einrichtungsantworten", intro: "Vielen Dank! Hier ist eine Kopie Ihrer Antworten. Etwas zu korrigieren? Antworten Sie einfach auf diese E-Mail.", book: "Ihr 30-minütiges Einrichtungsgespräch noch nicht gebucht? Wählen Sie hier Ihren Termin:" },
+  it: { subject: "Le vostre risposte per la messa in servizio Dealz", intro: "Grazie! Ecco una copia delle vostre risposte. Qualcosa da correggere? Rispondete semplicemente a questa e-mail.", book: "Non avete ancora prenotato il vostro incontro di messa in servizio di 30 minuti? Scegliete qui il vostro orario:" },
 };
 
 const CRM_COMPANIES_URL = "https://dealz.website/crm/companies.html";
@@ -237,10 +247,10 @@ async function submit({ body, session }) {
   const attached = cleanFiles(body.files);
 
   // Authorisation letter for the client's web agency, when they gave it.
-  const PROC_NAME = { fr: "Procuration-Dealz", en: "Authorisation-Dealz", de: "Vollmacht-Dealz" };
+  const PROC_NAME = { fr: "Procuration-Dealz", en: "Authorisation-Dealz", de: "Vollmacht-Dealz", it: "Procura-Dealz" };
   let procuration = null;
   if (a.procuration === true && str(a.agency_name)) {
-    const date = new Date().toLocaleDateString({ fr: "fr-CH", en: "en-GB", de: "de-CH" }[lang], { year: "numeric", month: "long", day: "numeric" });
+    const date = new Date().toLocaleDateString({ fr: "fr-CH", en: "en-GB", de: "de-CH", it: "it-CH" }[lang], { year: "numeric", month: "long", day: "numeric" });
     procuration = {
       filename: `${PROC_NAME[lang]}-${company.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w\-]+/g, "-").slice(0, 60)}.pdf`,
       content: buildProcuration({
@@ -267,10 +277,19 @@ async function submit({ body, session }) {
     ? `<p style="margin:10px 0 0;">📎 <b>Fichiers joints :</b> ${attached.map((f) => `${esc(f.label)} (${esc(f.filename)})`).join(" · ")}</p>`
     : "";
 
+  const it = lang === "it";
   const paid = session
-    ? `Paiement Stripe lié : ${esc(session.id)}${session.customer ? " · client " + esc(session.customer) : ""}${isPaid ? "" : " · ⚠️ paiement pas encore confirmé"}`
-    : "Formulaire ouvert sans lien de paiement (lien envoyé à la main).";
-  const teamHtml = shell(`
+    ? (it ? `Pagamento Stripe collegato: ${esc(session.id)}${session.customer ? " · cliente " + esc(session.customer) : ""}${isPaid ? "" : " · ⚠️ pagamento non ancora confermato"}`
+          : `Paiement Stripe lié : ${esc(session.id)}${session.customer ? " · client " + esc(session.customer) : ""}${isPaid ? "" : " · ⚠️ paiement pas encore confirmé"}`)
+    : it ? "Modulo aperto senza link di pagamento (link inviato a mano)." : "Formulaire ouvert sans lien de paiement (lien envoyé à la main).";
+  const teamHtml = it ? shell(`
+    <h2 style="margin:0 0 6px;font-size:19px;">📋 Modulo di messa in servizio ricevuto</h2>
+    <p style="margin:0 0 4px;"><b>${esc(company)}</b> · ${esc(str(a.contact_name))} · <a href="mailto:${esc(email)}">${esc(email)}</a> · ${esc(str(a.contact_phone))}</p>
+    <p style="margin:0;font-size:13px;color:#5b6472;">${paid} · Lingua: IT</p>
+    ${filesLine}
+    ${crmLine}
+    ${summaryHtml(team)}
+    <p style="margin-top:22px;">→ Prossimo passo: il cliente prenota l'incontro di 30 minuti su Calendly (altrimenti, le sue disponibilità sono qui sopra), poi verificare la scheda impresa nel CRM.</p>`) : shell(`
     <h2 style="margin:0 0 6px;font-size:19px;">📋 Formulaire d'intégration reçu</h2>
     <p style="margin:0 0 4px;"><b>${esc(company)}</b> · ${esc(str(a.contact_name))} · <a href="mailto:${esc(email)}">${esc(email)}</a> · ${esc(str(a.contact_phone))}</p>
     <p style="margin:0;font-size:13px;color:#5b6472;">${paid} · Langue : ${lang.toUpperCase()}</p>
@@ -280,7 +299,7 @@ async function submit({ body, session }) {
     <p style="margin-top:22px;">→ Prochaine étape : le client réserve la réunion de 30 minutes sur Calendly (sinon, ses disponibilités sont ci-dessus), puis vérifier la fiche entreprise dans le CRM.</p>`);
 
   const results = await Promise.allSettled([
-    sendEmail({ to: DEALZ_TEAM_EMAIL, subject: `📋 Intégration — ${company}`, html: teamHtml, replyTo: email, attachments: attached.map(({ filename, content }) => ({ filename, content })) }),
+    sendEmail({ to: DEALZ_TEAM_EMAIL, subject: `📋 ${it ? "Messa in servizio" : "Intégration"} — ${company}`, html: teamHtml, replyTo: email, attachments: attached.map(({ filename, content }) => ({ filename, content })) }),
     crm.post("billingEvents", { type: "onboarding", email, companyName: company, note: `📋 Formulaire d'intégration reçu${attached.length ? " (fichiers dans l'e-mail : " + attached.map((f) => f.filename).join(", ") + ")" : ""}\n\n${summaryText(team)}`.slice(0, 20000) }),
     sendEmail({ to: email, subject: DONE[lang].subject, html: shell(`<p>${esc(DONE[lang].intro)}</p>${calendlyUrl() ? `<p>${esc(DONE[lang].book)} <a href="${esc(calendlyUrl())}" style="color:#0b5fff;">${esc(calendlyUrl())}</a></p>` : ""}${summaryHtml(mine)}`), replyTo: "info@dealz.website", attachments: procuration ? [procuration] : undefined }),
   ]);

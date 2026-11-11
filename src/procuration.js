@@ -40,6 +40,17 @@ const TEXT = {
     done: (d) => `Erteilt am ${d.date}, durch elektronische Bestätigung des Dealz-Einrichtungsformulars.`,
     sign: "Name und E-Mail der Vollmachtgeberin / des Vollmachtgebers",
   },
+  it: {
+    title: "Procura",
+    subtitle: "Accesso al sito web per la messa in servizio di Dealz",
+    body: (d) => [
+      `Io, ${d.name}, in rappresentanza dell'impresa ${d.company}, autorizzo Dealz (dealz.website) a contattare ${d.agency} (${d.agencyContact}), che gestisce il sito web ${d.website}.`,
+      "Dealz può chiedere a questa persona l'accesso all'amministrazione del sito, unicamente per installare e mantenere il pulsante WhatsApp e il modulo di preventivo Dealz.",
+      "Questa procura non consente nessun'altra modifica al sito. Posso revocarla in qualsiasi momento con un'e-mail a info@dealz.website.",
+    ],
+    done: (d) => `Rilasciata il ${d.date}, tramite conferma elettronica del modulo di messa in servizio Dealz.`,
+    sign: "Nome ed e-mail del mandante",
+  },
 };
 
 // WinAnsi (cp1252) bytes for a PDF string: escape, map typographic quotes,

@@ -116,6 +116,7 @@ const STAFF_TEXT = {
   fr: { subject: (d) => `Nouvelle intervention — ${d}`, h2: "Nouvelle intervention attribuée", date: "Date", client: "Client", phone: "Téléphone", address: "Adresse", amount: "Montant", cal: "Ajouter à mon agenda", tbd: "à convenir avec le client", reminderSubject: (d) => `Rappel — intervention demain (${d})`, reminderH2: "Rappel : intervention demain" },
   en: { subject: (d) => `New job — ${d}`, h2: "New job assigned to you", date: "Date", client: "Customer", phone: "Phone", address: "Address", amount: "Amount", cal: "Add to my calendar", tbd: "to be agreed with the customer", reminderSubject: (d) => `Reminder — job tomorrow (${d})`, reminderH2: "Reminder: job tomorrow" },
   de: { subject: (d) => `Neuer Einsatz — ${d}`, h2: "Neuer Einsatz zugeteilt", date: "Datum", client: "Kunde", phone: "Telefon", address: "Adresse", amount: "Betrag", cal: "Zu meinem Kalender hinzufügen", tbd: "mit dem Kunden zu vereinbaren", reminderSubject: (d) => `Erinnerung — Einsatz morgen (${d})`, reminderH2: "Erinnerung: Einsatz morgen" },
+  it: { subject: (d) => `Nuovo intervento — ${d}`, h2: "Nuovo intervento assegnato", date: "Data", client: "Cliente", phone: "Telefono", address: "Indirizzo", amount: "Importo", cal: "Aggiungere alla mia agenda", tbd: "da concordare con il cliente", reminderSubject: (d) => `Promemoria — intervento domani (${d})`, reminderH2: "Promemoria: intervento domani" },
 };
 
 function showDay(day) {
@@ -202,6 +203,7 @@ const CUSTOMER_REMINDER = {
   fr: { subject: (c) => `Rappel — votre rendez-vous de demain avec ${c}`, h2: "À demain !", body: (n, c, d) => `Bonjour ${n},<br/>Petit rappel : ${c} intervient chez vous demain, le ${d}.` },
   en: { subject: (c) => `Reminder — your appointment tomorrow with ${c}`, h2: "See you tomorrow!", body: (n, c, d) => `Hello ${n},<br/>A quick reminder: ${c} is coming to you tomorrow, ${d}.` },
   de: { subject: (c) => `Erinnerung — Ihr Termin morgen mit ${c}`, h2: "Bis morgen!", body: (n, c, d) => `Guten Tag ${n},<br/>Eine kurze Erinnerung: ${c} kommt morgen, am ${d}, zu Ihnen.` },
+  it: { subject: (c) => `Promemoria — il vostro appuntamento di domani con ${c}`, h2: "A domani!", body: (n, c, d) => `Buongiorno ${n},<br/>Un piccolo promemoria: ${c} interviene da voi domani, il ${d}.` },
 };
 
 async function remindCustomer(company, booking) {
