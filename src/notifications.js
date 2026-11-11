@@ -609,11 +609,24 @@ async function sendBookingConfirmation({ quote, customer, notifyEmail = COMPANY_
 // ---- Install-request notification (docs/contact-flow.js's #contact flow) ----
 const { sectorLabel } = require("./sectors");
 
-function billingLabelFr(billingChoice) {
-  if (billingChoice === "yearly") return "annuel";
-  if (billingChoice === "onetime") return "paiement unique";
-  return "mensuel";
-}
+// Team e-mails follow the client's language when it is Italian (NS,
+// 2026-11-11: Ticino clients are handled in Italian); French otherwise.
+const TEAM_TXT = {
+  fr: {
+    installH2: "🚀 Nouvelle demande d'installation Dealz", company: "Entreprise", contact: "Contact", email: "E-mail", phone: "Téléphone", site: "Site web",
+    none: "(non fourni)", sector: "Secteur", general: "— (page générale)", plan: "Formule", pricesIn: " — prix en ", waLabel: "WhatsApp Business", waIncluded: "inclus dans la formule",
+    noSite: " (pas de site internet : bouton WhatsApp uniquement)", team: "Taille de l'équipe", problem: "Problème principal", sources: "Sources de demandes actuelles",
+    installSubject: "🚀 Demande d'installation", newProspect: "nouveau prospect", billing: { yearly: "annuel", onetime: "paiement unique", monthly: "mensuel" },
+    refH2: "🤝 Nouveau parrainage", refBy: "Parrainé par", refProspect: "prospect CRM", message: "Message", refSubject: "🤝 Parrainage", lang: "Langue",
+  },
+  it: {
+    installH2: "🚀 Nuova richiesta di installazione Dealz", company: "Impresa", contact: "Contatto", email: "E-mail", phone: "Telefono", site: "Sito web",
+    none: "(non indicato)", sector: "Settore", general: "— (pagina generale)", plan: "Piano", pricesIn: " — prezzi in ", waLabel: "WhatsApp Business", waIncluded: "incluso nel piano",
+    noSite: " (nessun sito web: solo pulsante WhatsApp)", team: "Dimensione del team", problem: "Problema principale", sources: "Fonti attuali delle richieste",
+    installSubject: "🚀 Richiesta di installazione", newProspect: "nuovo potenziale cliente", billing: { yearly: "annuale", onetime: "pagamento unico", monthly: "mensile" },
+    refH2: "🤝 Nuovo passaparola", refBy: "Raccomandato da", refProspect: "potenziale cliente CRM", message: "Messaggio", refSubject: "🤝 Passaparola", lang: "Lingua",
+  },
+};
 
 async function sendInstallRequestNotification({
   companyName,
@@ -631,24 +644,28 @@ async function sendInstallRequestNotification({
   sector,
   sectorLabel: sectorName,
   notifyEmail = DEALZ_TEAM_EMAIL,
+  lang = "fr",
 }) {
+  const T = TEAM_TXT[lang] || TEAM_TXT.fr;
+  const sep = lang === "fr" ? " :" : ":";
   const html = `
-    <h2>🚀 Nouvelle demande d'installation Dealz</h2>
-    <p><b>Entreprise :</b> ${companyName || "(non fourni)"}<br/>
-       <b>Contact :</b> ${contactName || "(non fourni)"}<br/>
-       <b>E-mail :</b> ${contactEmail || "(non fourni)"}<br/>
-       <b>Téléphone :</b> ${contactPhone || "(non fourni)"}<br/>
-       <b>Site web :</b> ${websiteUrl || "(non fourni)"}</p>
-    <p><b>Secteur :</b> ${sectorName || sector || "— (page générale)"}<br/>
-       <b>Formule :</b> ${planChoice || "—"} (${billingLabelFr(billingChoice)})${currency ? " — prix en " + String(currency).toUpperCase() : ""}<br/>
-       <b>WhatsApp Business :</b> inclus dans la formule${websiteUrl ? "" : " (pas de site internet : bouton WhatsApp uniquement)"}<br/>
-       <b>Taille de l'équipe :</b> ${teamSize || "—"}<br/>
-       <b>Problème principal :</b> ${mainProblem || "—"}<br/>
-       <b>Sources de demandes actuelles :</b> ${requestSources || "—"}</p>
+    <h2>${T.installH2}</h2>
+    <p><b>${T.company}${sep}</b> ${companyName || T.none}<br/>
+       <b>${T.contact}${sep}</b> ${contactName || T.none}<br/>
+       <b>${T.email}${sep}</b> ${contactEmail || T.none}<br/>
+       <b>${T.phone}${sep}</b> ${contactPhone || T.none}<br/>
+       <b>${T.site}${sep}</b> ${websiteUrl || T.none}</p>
+    <p><b>${T.sector}${sep}</b> ${sectorName || sector || T.general}<br/>
+       <b>${T.plan}${sep}</b> ${planChoice || "—"} (${T.billing[billingChoice] || T.billing.monthly})${currency ? T.pricesIn + String(currency).toUpperCase() : ""}<br/>
+       <b>${T.waLabel}${sep}</b> ${T.waIncluded}${websiteUrl ? "" : T.noSite}<br/>
+       <b>${T.team}${sep}</b> ${teamSize || "—"}<br/>
+       <b>${T.problem}${sep}</b> ${mainProblem || "—"}<br/>
+       <b>${T.sources}${sep}</b> ${requestSources || "—"}<br/>
+       <b>${T.lang}${sep}</b> ${String(lang).toUpperCase()}</p>
   `;
   return sendEmail({
     to: notifyEmail,
-    subject: `🚀 Demande d'installation${sectorName ? " (" + sectorName + ")" : ""} — ${companyName || contactEmail || "nouveau prospect"}`,
+    subject: `${T.installSubject}${sectorName ? " (" + sectorName + ")" : ""} — ${companyName || contactEmail || T.newProspect}`,
     html,
   });
 }
@@ -661,18 +678,21 @@ async function sendReferralNotification({
   contactPhone,
   note,
   notifyEmail = DEALZ_TEAM_EMAIL,
+  lang = "fr",
 }) {
+  const T = TEAM_TXT[lang] || TEAM_TXT.fr;
+  const sep = lang === "fr" ? " :" : ":";
   const html = `
-    <h2>🤝 Nouveau parrainage</h2>
-    <p><b>Parrainé par :</b> prospect CRM #${referredById}</p>
-    <p><b>Entreprise :</b> ${companyName || "(non fourni)"}<br/>
-       <b>E-mail :</b> ${contactEmail || "(non fourni)"}<br/>
-       <b>Téléphone :</b> ${contactPhone || "(non fourni)"}</p>
-    ${note ? `<p><b>Message :</b> ${note}</p>` : ""}
+    <h2>${T.refH2}</h2>
+    <p><b>${T.refBy}${sep}</b> ${T.refProspect} #${referredById}</p>
+    <p><b>${T.company}${sep}</b> ${companyName || T.none}<br/>
+       <b>${T.email}${sep}</b> ${contactEmail || T.none}<br/>
+       <b>${T.phone}${sep}</b> ${contactPhone || T.none}</p>
+    ${note ? `<p><b>${T.message}${sep}</b> ${note}</p>` : ""}
   `;
   return sendEmail({
     to: notifyEmail,
-    subject: `🤝 Parrainage — ${companyName || contactEmail || "nouveau prospect"}`,
+    subject: `${T.refSubject} — ${companyName || contactEmail || T.newProspect}`,
     html,
   });
 }

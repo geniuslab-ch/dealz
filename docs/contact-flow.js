@@ -757,6 +757,7 @@
         mainProblem: a.main_problem || "",
         requestSources: a.request_sources || "",
         sector: window.DEALZ_SECTOR || "",
+        lang: window.DEALZ_LANG || "fr",
       }),
     }).catch((err) => console.error("[install-request] failed to submit:", err));
   }

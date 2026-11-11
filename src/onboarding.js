@@ -277,10 +277,19 @@ async function submit({ body, session }) {
     ? `<p style="margin:10px 0 0;">📎 <b>Fichiers joints :</b> ${attached.map((f) => `${esc(f.label)} (${esc(f.filename)})`).join(" · ")}</p>`
     : "";
 
+  const it = lang === "it";
   const paid = session
-    ? `Paiement Stripe lié : ${esc(session.id)}${session.customer ? " · client " + esc(session.customer) : ""}${isPaid ? "" : " · ⚠️ paiement pas encore confirmé"}`
-    : "Formulaire ouvert sans lien de paiement (lien envoyé à la main).";
-  const teamHtml = shell(`
+    ? (it ? `Pagamento Stripe collegato: ${esc(session.id)}${session.customer ? " · cliente " + esc(session.customer) : ""}${isPaid ? "" : " · ⚠️ pagamento non ancora confermato"}`
+          : `Paiement Stripe lié : ${esc(session.id)}${session.customer ? " · client " + esc(session.customer) : ""}${isPaid ? "" : " · ⚠️ paiement pas encore confirmé"}`)
+    : it ? "Modulo aperto senza link di pagamento (link inviato a mano)." : "Formulaire ouvert sans lien de paiement (lien envoyé à la main).";
+  const teamHtml = it ? shell(`
+    <h2 style="margin:0 0 6px;font-size:19px;">📋 Modulo di messa in servizio ricevuto</h2>
+    <p style="margin:0 0 4px;"><b>${esc(company)}</b> · ${esc(str(a.contact_name))} · <a href="mailto:${esc(email)}">${esc(email)}</a> · ${esc(str(a.contact_phone))}</p>
+    <p style="margin:0;font-size:13px;color:#5b6472;">${paid} · Lingua: IT</p>
+    ${filesLine}
+    ${crmLine}
+    ${summaryHtml(team)}
+    <p style="margin-top:22px;">→ Prossimo passo: il cliente prenota l'incontro di 30 minuti su Calendly (altrimenti, le sue disponibilità sono qui sopra), poi verificare la scheda impresa nel CRM.</p>`) : shell(`
     <h2 style="margin:0 0 6px;font-size:19px;">📋 Formulaire d'intégration reçu</h2>
     <p style="margin:0 0 4px;"><b>${esc(company)}</b> · ${esc(str(a.contact_name))} · <a href="mailto:${esc(email)}">${esc(email)}</a> · ${esc(str(a.contact_phone))}</p>
     <p style="margin:0;font-size:13px;color:#5b6472;">${paid} · Langue : ${lang.toUpperCase()}</p>
@@ -290,7 +299,7 @@ async function submit({ body, session }) {
     <p style="margin-top:22px;">→ Prochaine étape : le client réserve la réunion de 30 minutes sur Calendly (sinon, ses disponibilités sont ci-dessus), puis vérifier la fiche entreprise dans le CRM.</p>`);
 
   const results = await Promise.allSettled([
-    sendEmail({ to: DEALZ_TEAM_EMAIL, subject: `📋 Intégration — ${company}`, html: teamHtml, replyTo: email, attachments: attached.map(({ filename, content }) => ({ filename, content })) }),
+    sendEmail({ to: DEALZ_TEAM_EMAIL, subject: `📋 ${it ? "Messa in servizio" : "Intégration"} — ${company}`, html: teamHtml, replyTo: email, attachments: attached.map(({ filename, content }) => ({ filename, content })) }),
     crm.post("billingEvents", { type: "onboarding", email, companyName: company, note: `📋 Formulaire d'intégration reçu${attached.length ? " (fichiers dans l'e-mail : " + attached.map((f) => f.filename).join(", ") + ")" : ""}\n\n${summaryText(team)}`.slice(0, 20000) }),
     sendEmail({ to: email, subject: DONE[lang].subject, html: shell(`<p>${esc(DONE[lang].intro)}</p>${calendlyUrl() ? `<p>${esc(DONE[lang].book)} <a href="${esc(calendlyUrl())}" style="color:#0b5fff;">${esc(calendlyUrl())}</a></p>` : ""}${summaryHtml(mine)}`), replyTo: "info@dealz.website", attachments: procuration ? [procuration] : undefined }),
   ]);

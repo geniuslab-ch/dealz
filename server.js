@@ -209,6 +209,7 @@ app.post("/api/install-request", rateLimit("install-request", 5), async (req, re
     mainProblem,
     requestSources,
     sector,
+    lang,
   } = req.body || {};
 
   if (!contactEmail) {
@@ -233,7 +234,7 @@ app.post("/api/install-request", rateLimit("install-request", 5), async (req, re
   };
 
   const [emailResult, crmResult] = await Promise.allSettled([
-    sendInstallRequestNotification(payload),
+    sendInstallRequestNotification({ ...payload, lang: lang === "it" ? "it" : "fr" }),
     crm.post("inboundLeads", payload),
   ]);
 
@@ -252,7 +253,7 @@ app.post("/api/install-request", rateLimit("install-request", 5), async (req, re
 // above: an internal notification e-mail, and forwarding into the CRM so
 // the referred colleague becomes a real prospect (source: "referral").
 app.post("/api/referral", rateLimit("referral", 5), async (req, res) => {
-  const { referredById, companyName, contactEmail, contactPhone, note } = req.body || {};
+  const { referredById, companyName, contactEmail, contactPhone, note, lang } = req.body || {};
 
   if (!referredById) {
     return res.status(400).json({ error: "referredById requis" });
@@ -264,7 +265,7 @@ app.post("/api/referral", rateLimit("referral", 5), async (req, res) => {
   const payload = { referredById, companyName, contactEmail, contactPhone, note };
 
   const [emailResult, crmResult] = await Promise.allSettled([
-    sendReferralNotification(payload),
+    sendReferralNotification({ ...payload, lang: lang === "it" ? "it" : "fr" }),
     crm.post("referral", payload),
   ]);
 

@@ -86,7 +86,7 @@
         const res = await fetch(apiUrl("/api/referral"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ referredById, companyName, contactEmail, contactPhone, note }),
+          body: JSON.stringify({ referredById, companyName, contactEmail, contactPhone, note, lang: window.DEALZ_LANG || "fr" }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) {

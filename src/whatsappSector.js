@@ -26,7 +26,7 @@ for (const f of fs.readdirSync(DATA_DIR).filter((f) => f.endsWith(".js")).sort()
   SECTORS[S.slug] = S;
 }
 const SLUGS = Object.keys(SECTORS);
-const LANGS = ["fr", "en", "de"];
+const LANGS = ["fr", "en", "de", "it"];
 
 // Set once by server.js — the same functions behind /api/decline,
 // /api/accept and /api/lead, so WhatsApp and the website send identical
@@ -145,6 +145,42 @@ const UI = {
     booked: (c) => `✅ Buchung bestätigt mit *${c}* — vielen Dank!`,
     end: "Danke, dass Sie Dealz getestet haben! 🙌 Für Ihre Website und Ihr WhatsApp: https://dealz.website",
   },
+  it: {
+    hello: "👋 Benvenuti nella demo WhatsApp di *Dealz*!",
+    pickSector: "Quale mestiere volete provare? Rispondete con il numero:",
+    intro: (brand, label) => `Siete clienti di *${brand}* (esempio fittizio — ${label}). Vi faccio qualche domanda, poi vi invio un preventivo fisso, calcolato con le tariffe dell'impresa.`,
+    single: "_Rispondete con il numero._",
+    multi: "_Rispondete con uno o più numeri (ad es. 1,3), oppure 0 per nessuno._",
+    backHint: "Per tornare alla domanda precedente, scrivete *indietro*.",
+    none: "Nessuna",
+    date: (min) => `_Rispondete con una data (ad es. ${min}), al più presto il ${min}._`,
+    dateErr: (min) => `Indicate una data valida, al più presto il ${min} (formato GG.MM.AAAA).`,
+    misunderstood: "Non ho capito bene: rispondete con il numero di un'opzione.",
+    askEmail: (brand) => `Ultimo passo: il vostro *indirizzo e-mail*.\n\nQui su WhatsApp interpretate il cliente. Le e-mail che riceverebbe *${brand}* (rifiuto con azione in un clic, prenotazione) arriveranno a questo indirizzo: così vedete entrambi i lati.`,
+    emailErr: "Questo indirizzo non sembra valido: riprovate (ad es. nome@impresa.ch).",
+    quoteHead: (brand) => `🧾 *Preventivo fisso — ${brand}*`,
+    total: "TOTALE",
+    minimum: "Supplemento per importo minimo",
+    accuracy: "Questo preventivo è fisso a condizione che le risposte date al questionario riflettano fedelmente la situazione reale. Se le condizioni constatate sul posto differiscono dalle informazioni fornite, l'impresa si riserva il diritto di adeguare il prezzo di conseguenza.",
+    decide: "Rispondete *1* per accettare ✅ o *2* per rifiutare ❌.",
+    decideAgain: "Rispondete *1* per accettare questo preventivo, o *2* per rifiutarlo.",
+    accepted: (brand, email) => `✅ Prenotazione confermata! *${brand}* è appena stata avvisata: l'e-mail di prenotazione è partita verso ${email}.`,
+    calendar: "📅 Aggiungere all'agenda:",
+    declineAsk: "Certo. Cosa non andava? Rispondete con il numero, oppure scrivetelo con parole vostre:",
+    declined: (brand, email) => `Grazie per il riscontro! *${brand}* ha appena ricevuto il rifiuto via e-mail (inviata a ${email}), con il motivo, una risposta suggerita e un pulsante d'azione.\n\n👉 Aprite questa e-mail e fate una controproposta: arriverà qui, su WhatsApp.`,
+    mailFailed: "⚠️ Non è stato possibile inviare l'e-mail:",
+    restart: "Per ricominciare o provare un altro mestiere, scrivete *menu*.",
+    error: "Si è verificato un problema tecnico: riprovate tra un momento, oppure scrivete *menu* per ricominciare.",
+    textOnly: "Scrivete la vostra risposta come testo: non gestisco ancora foto, messaggi vocali o file.",
+    newOffer: (c, amt) => `💬 *${c}* vi propone una nuova offerta: *${amt}*`,
+    newDate: (c, d) => `📅 *${c}* vi propone una nuova data: *${d}*`,
+    revised: (c, amt) => `🧾 *${c}* vi invia un preventivo rivisto: *${amt}*`,
+    followup: (c) => `👋 *${c}*: il vostro preventivo è ancora disponibile.`,
+    reply: (c) => `💬 Risposta di *${c}*:`,
+    viewOffer: "Vedere l'offerta e accettarla:",
+    booked: (c) => `✅ Prenotazione confermata con *${c}*, grazie!`,
+    end: "Grazie per aver provato Dealz! 🙌 Per installarlo sul vostro sito e sul vostro WhatsApp: https://dealz.website",
+  },
 };
 
 // Same reasons, same order and same category keys as the website widget.
@@ -152,6 +188,7 @@ const OBJECTIONS = {
   fr: [["price", "💰 Le prix est trop élevé"], ["timing", "📅 La date ne convient pas"], ["scope", "✂️ Je n'ai pas besoin de tout"], ["conditions", "📋 Les conditions/détails ne conviennent pas"], ["thinking", "🤔 Je dois réfléchir"], ["competitor", "🆚 J'ai reçu une autre offre"], ["information", "❓ J'ai une autre question"], ["not_needed", "⚪ Je n'ai plus besoin du service"]],
   en: [["price", "💰 The price is too high"], ["timing", "📅 The date doesn't suit me"], ["scope", "✂️ I don't need everything"], ["conditions", "📋 The terms/details don't suit me"], ["thinking", "🤔 I need to think about it"], ["competitor", "🆚 I received another offer"], ["information", "❓ I have another question"], ["not_needed", "⚪ I no longer need the service"]],
   de: [["price", "💰 Der Preis ist zu hoch"], ["timing", "📅 Das Datum passt nicht"], ["scope", "✂️ Ich brauche nicht alles"], ["conditions", "📋 Die Bedingungen/Details passen nicht"], ["thinking", "🤔 Ich muss darüber nachdenken"], ["competitor", "🆚 Ich habe ein anderes Angebot erhalten"], ["information", "❓ Ich habe eine weitere Frage"], ["not_needed", "⚪ Ich brauche die Leistung nicht mehr"]],
+  it: [["price", "💰 Il prezzo è troppo alto"], ["timing", "📅 La data non va bene"], ["scope", "✂️ Non mi serve tutto"], ["conditions", "📋 Le condizioni/i dettagli non mi vanno bene"], ["thinking", "🤔 Devo pensarci"], ["competitor", "🆚 Ho ricevuto un'altra offerta"], ["information", "❓ Ho un'altra domanda"], ["not_needed", "⚪ Non ho più bisogno del servizio"]],
 };
 
 // ---- the pre-filled first message from the "Try it on WhatsApp" button ----
@@ -160,13 +197,14 @@ const PREFILL = {
   fr: (label) => `Bonjour, je voudrais tester la démo Dealz — ${label}`,
   en: (label) => `Hello, I'd like to try the Dealz demo — ${label}`,
   de: (label) => `Hallo, ich möchte die Dealz-Demo testen — ${label}`,
+  it: (label) => `Buongiorno, vorrei provare la demo Dealz — ${label}`,
 };
 
 // Shown only when we truly have no signal yet (no sector tag, no greeting
-// word in any of the three languages) — written in all three at once since
+// word in any of the four languages) — written in all four at once since
 // we don't know which one to use for it.
-const LANGUAGE_PICKER = "🌐 *Dealz*\n\nChoisissez votre langue / Choose your language / Wählen Sie Ihre Sprache :\n\n1. 🇫🇷 Français\n2. 🇬🇧 English\n3. 🇩🇪 Deutsch";
-const LANGUAGE_BY_NUMBER = { 1: "fr", 2: "en", 3: "de" };
+const LANGUAGE_PICKER = "🌐 *Dealz*\n\nChoisissez votre langue / Choose your language / Wählen Sie Ihre Sprache / Scegliete la lingua :\n\n1. 🇫🇷 Français\n2. 🇬🇧 English\n3. 🇩🇪 Deutsch\n4. 🇮🇹 Italiano";
+const LANGUAGE_BY_NUMBER = { 1: "fr", 2: "en", 3: "de", 4: "it" };
 
 // The "#slug" tag at the end makes detection exact; labels and greetings
 // are only a fallback for people who type the message themselves.
@@ -184,6 +222,7 @@ function norm(s) {
 function detectLang(text) {
   const t = norm(text);
   if (/\b(hallo|guten|gruezi|ich|mochte|offerte)\b/.test(t)) return "de";
+  if (/\b(ciao|buongiorno|buonasera|salve|vorrei|preventivo|grazie)\b/.test(t)) return "it";
   if (/\b(hello|hi|hey|i d|like|try|quote)\b/.test(t)) return "en";
   if (/\b(bonjour|salut|je|voudrais|devis)\b/.test(t)) return "fr";
   return null;
@@ -366,8 +405,8 @@ function sessionKey(phoneNumberId, from) {
   return `wa:${phoneNumberId}:${from}`;
 }
 
-const RESTART_RE = /^(menu|menü|start|restart|demo|démo|reset|neu|nouveau|recommencer)$/i;
-const BACK_RE = /^(retour|precedent|back|zuruck|zurueck)$/;
+const RESTART_RE = /^(menu|menü|start|restart|demo|démo|reset|neu|nouveau|recommencer|ricominciare|nuovo)$/i;
+const BACK_RE = /^(retour|precedent|back|zuruck|zurueck|indietro)$/;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 async function startSector(session, slug, lang, reply) {

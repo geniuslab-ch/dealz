@@ -191,7 +191,22 @@ async function fulfil(session) {
   } catch (err) {
     console.error("[billing] onboarding welcome e-mail failed:", err.message);
   }
-  await tellTeam(`💳 Nouveau client Dealz — ${m.company_name || email} — ${label}`, [
+  if (m.lang === "it") {
+    const labelIt = `${m.plan} ${{ monthly: "mensile", yearly: "annuale", onetime: "pagamento unico" }[m.billing] || ""}${m.whatsapp === "yes" ? " + WhatsApp" : ""}`;
+    await tellTeam(`💳 Nuovo cliente Dealz — ${m.company_name || email} — ${labelIt}`, [
+      `<b>Impresa:</b> ${m.company_name || "—"}`,
+      `<b>Contatto:</b> ${m.contact_name || "—"} · ${email || "—"} · ${m.contact_phone || "—"}`,
+      `<b>Sito:</b> ${m.website_url || "—"}`,
+      `<b>Piano:</b> ${labelIt}`,
+      `<b>Pagato:</b> ${amount}`,
+      `<b>Stripe:</b> cliente ${session.customer || "—"}${session.subscription ? " · abbonamento " + session.subscription : ""}`,
+      `<b>Lingua:</b> IT`,
+      welcomeSent
+        ? `<b>Modulo di messa in servizio:</b> inviato automaticamente al cliente · <a href="${formLink}">il suo link</a>`
+        : `<b>⚠️ Modulo di messa in servizio:</b> l'e-mail al cliente non è partita, inviategli questo link a mano: <a href="${formLink}">${formLink}</a>`,
+      "→ Prossimo passo: creare l'impresa nel CRM (piano già indicato) e attendere il modulo di messa in servizio per pianificare l'incontro.",
+    ]);
+  } else await tellTeam(`💳 Nouveau client Dealz — ${m.company_name || email} — ${label}`, [
     `<b>Entreprise :</b> ${m.company_name || "—"}`,
     `<b>Contact :</b> ${m.contact_name || "—"} · ${email || "—"} · ${m.contact_phone || "—"}`,
     `<b>Site :</b> ${m.website_url || "—"}`,

@@ -805,7 +805,7 @@
         const res = await fetch("/api/onboarding", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ session: SESSION, lang: LANG, answers, files: Object.keys(files).flatMap((k) => files[k].map((x) => ({ field: k, ...x }))), summary: summary("fr"), clientSummary: summary(LANG) }),
+          body: JSON.stringify({ session: SESSION, lang: LANG, answers, files: Object.keys(files).flatMap((k) => files[k].map((x) => ({ field: k, ...x }))), summary: summary(LANG === "it" ? "it" : "fr"), clientSummary: summary(LANG) }),
         });
         if (!res.ok) throw new Error("HTTP " + res.status);
         try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
